@@ -80,6 +80,11 @@ public class Module {
     return odometrySpeeds;
   }
 
+  public void stop() {
+    io.setDriveVoltage(0);
+    io.setSteerVoltage(0);
+  }
+
   public double[] getOdometryTimestamps() {
     return inputs.odometryTimestamps;
   }

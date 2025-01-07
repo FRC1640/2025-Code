@@ -120,4 +120,3 @@ public class SparkMaxConfigurer {
     return config;
   }
 }
-

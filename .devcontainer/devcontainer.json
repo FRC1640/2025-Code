@@ -1,11 +1,16 @@
 {
     "name": "WPILib Development Container",
-    "image": "mcr.microsoft.com/devcontainers/java",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
     "customizations": {
       "vscode": {
         "extensions": [
-          "${containerWorkspaceFolder}/.devcontainer/extensions/vscode-wpilib-2025.1.1.vsix"
-        ]
+          "${containerWorkspaceFolder}/.devcontainer/extensions/vscode-wpilib-2025.1.1.vsix",
+          "vscjava.vscode-java-pack",
+          "richardwillis.vscode-spotless-gradle"
+        ],
+        "settings": {}
       }
     }
   }

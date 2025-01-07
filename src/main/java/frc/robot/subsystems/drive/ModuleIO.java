@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.modules;
+package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
@@ -15,7 +15,6 @@ public interface ModuleIO extends AutoCloseable {
 
     public boolean turnConnected = false;
     public double steerAngleDegrees;
-    public double steerRPS;
     public double steerAppliedVoltage;
     public double steerCurrentAmps;
     public double steerTempCelsius;

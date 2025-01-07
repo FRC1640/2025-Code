@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.modules;
+package frc.robot.subsystems.drive;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
@@ -76,6 +76,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     inputs.steerAngleDegrees = steeringEncoder.getDegrees();
     inputs.steerAppliedVoltage =
         steerSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
+
     inputs.steerCurrentAmps = steerSpark.getOutputCurrent();
     inputs.steerTempCelsius = steerSpark.getMotorTemperature();
     inputs.steerEncoderVoltage = steeringEncoder.getVoltage();
@@ -123,7 +124,7 @@ public class ModuleIOSparkMax implements ModuleIO {
   public void setDriveVelocity(double velocity, ModuleIOInputs inputs) {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
-    setDriveVoltage(pidSpeed * 12);
+    setDriveVoltage(pidSpeed);
   }
 
   @Override
@@ -135,7 +136,7 @@ public class ModuleIOSparkMax implements ModuleIO {
   public void setSteerPosition(Rotation2d angle, ModuleIOInputs inputs) {
     Rotation2d delta = angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     double sin = Math.sin(delta.getRadians());
-    setSteerVoltage(steerPID.calculate(sin, 0));
+    setSteerVoltage(steerPID.calculate(sin, 0) * 12);
   }
 
   @Override

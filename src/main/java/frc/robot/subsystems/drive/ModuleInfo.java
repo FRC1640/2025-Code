@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.modules;
+package frc.robot.subsystems.drive;
 
 import frc.robot.constants.RobotConstants.PivotId;
 

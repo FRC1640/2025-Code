@@ -1,0 +1,11 @@
+{
+    "name": "WPILib Development Container",
+    "image": "mcr.microsoft.com/devcontainers/java",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "${containerWorkspaceFolder}/.devcontainer/extensions/vscode-wpilib-2025.1.1.vsix"
+        ]
+      }
+    }
+  }

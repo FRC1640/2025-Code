@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.drive.modules;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -20,14 +20,15 @@ public interface ModuleIO extends AutoCloseable {
         public double steerAppliedVoltage;
         public double steerCurrentAmps;
         public double steerTempCelsius;
-        public double steerAngleVoltage;
-        public double steerAngleRelative;
+
+        public double steerEncoderVoltage;
+        public double steerEncoderRelative;
         public int rawEncoderValue;
 
         public double[] odometryTimestamps = new double[] {};
         public double[] odometryDrivePositionsMeters = new double[] {};
         public Rotation2d[] odometryTurnPositions = new Rotation2d[] {};
-        public double[] driveVelocities = new double[]{};
+        public double[] driveVelocities = new double[] {};
     }
 
     public default void updateInputs(ModuleIOInputs inputs) {
@@ -36,15 +37,18 @@ public interface ModuleIO extends AutoCloseable {
     public default void setDriveVoltage(double voltage) {
     }
 
-    public default void setDrivePercentage(double percentage) {
-    }
-
-    public default void setDriveIdleMode(boolean brake) {
-    }
-
     public default void setSteerVoltage(double voltage) {
     }
 
-    public default void setSteerPercentage(double percentage) {
+    public default void setDriveVelocity(double velocity, ModuleIOInputs inputs) {
+
+    }
+
+    public default void setSteerPosition(Rotation2d angle,ModuleIOInputs inputs) {
+    }
+
+    @Override
+    default void close() {
+
     }
 }

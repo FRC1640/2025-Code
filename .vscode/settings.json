@@ -31,6 +31,9 @@
   "[java]": {
     "editor.tabSize": 2
   },
+  "[json]": {
+    "editor.tabSize": 2
+  },
   "java.test.defaultConfig": "WPIlibUnitTests",
   "spotlessGradle.diagnostics.enable": true,
   "spotlessGradle.format.enable": true,

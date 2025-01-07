@@ -116,27 +116,22 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
-    SwerveModuleState[] percent = new SwerveModuleState[4];
-    SwerveModuleState[] unoptimized = DriveConstants.kinematics.toSwerveModuleStates(speeds);
-    for (int i = 0; i < 4; i++) {
-      percent[i] =
-          new SwerveModuleState(
-              unoptimized[i].speedMetersPerSecond / DriveConstants.maxSpeed, unoptimized[i].angle);
-    }
+    ChassisSpeeds percent =
+        new ChassisSpeeds(
+            speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
+            speeds.vyMetersPerSecond / DriveConstants.maxSpeed,
+            speeds.omegaRadiansPerSecond
+                / (DriveConstants.maxSpeed
+                    / computeMaxNorm(DriveConstants.positions, new Translation2d())));
 
-    ChassisSpeeds doubleCone =
-        doubleCone(
-            DriveConstants.kinematics.toChassisSpeeds(percent), fieldRelative, new Translation2d());
-    SwerveModuleState[] mps = new SwerveModuleState[4];
-    SwerveModuleState[] doubleConePercentStates =
-        DriveConstants.kinematics.toSwerveModuleStates(doubleCone);
-    for (int i = 0; i < 4; i++) {
-      mps[i] =
-          new SwerveModuleState(
-              doubleConePercentStates[i].speedMetersPerSecond * DriveConstants.maxSpeed,
-              doubleConePercentStates[i].angle);
-    }
-    ChassisSpeeds speedsOptimized = DriveConstants.kinematics.toChassisSpeeds(mps);
+    ChassisSpeeds doubleCone = doubleCone(percent, new Translation2d());
+    ChassisSpeeds speedsOptimized =
+        new ChassisSpeeds(
+            doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
+            doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
+            doubleCone.omegaRadiansPerSecond
+                * (DriveConstants.maxSpeed
+                    / computeMaxNorm(DriveConstants.positions, new Translation2d())));
 
     previousSetpoint =
         setpointGenerator.generateSetpoint(
@@ -151,7 +146,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public static ChassisSpeeds doubleCone(
-      ChassisSpeeds speedsPercent, boolean fieldRelative, Translation2d centerOfRotation) {
+      ChassisSpeeds speedsPercent, Translation2d centerOfRotation) {
 
     double xSpeed = speedsPercent.vxMetersPerSecond;
     double ySpeed = speedsPercent.vyMetersPerSecond;

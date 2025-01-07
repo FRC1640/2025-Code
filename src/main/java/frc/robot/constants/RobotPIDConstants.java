@@ -1,5 +1,3 @@
 package frc.robot.constants;
 
-public class RobotPIDConstants {
-    
-}
+public class RobotPIDConstants {}

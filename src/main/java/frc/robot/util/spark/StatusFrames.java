@@ -14,49 +14,59 @@ public class StatusFrames {
             limits, outCurr, primEnPos,
             primEnVel, warnings;
 
-    public StatusFrames(int status0, int status1, int status2,
-            int status3, int status4, int status5, int status6) {
-        this.faults = status0;
-        this.absEnPos = status5;
-        this.absEnVel = status6;
-        this.analPos = status3;
-        this.analVel = status3;
-        this.analVolt = status3;
-        this.motorTemp = status1;
-        this.applOutput = status0;
-        this.altEnPos = status4;
-        this.altEnVel = status4;
-        this.outCurr = status1;
-        this.busVolt = 10;
-        this.iAccum = 20;
-        this.limits = 10;
-        this.primEnPos = 20;
-        this.primEnVel = 20;
-        this.warnings = 250;
-    }
+  public StatusFrames(
+      int status0, int status1, int status2, int status3, int status4, int status5, int status6) {
+    this.faults = status0;
+    this.absEnPos = status5;
+    this.absEnVel = status6;
+    this.analPos = status3;
+    this.analVel = status3;
+    this.analVolt = status3;
+    this.motorTemp = status1;
+    this.applOutput = status0;
+    this.altEnPos = status4;
+    this.altEnVel = status4;
+    this.outCurr = status1;
+    this.busVolt = 10;
+    this.iAccum = 20;
+    this.limits = 10;
+    this.primEnPos = 20;
+    this.primEnVel = 20;
+    this.warnings = 250;
+  }
 
-    public StatusFrames(int status0, int status1, int status2,
-            int status3, int status4, int status5, int status6,
-            int busVolt, int iAccum, int limits, int primEnPos,
-            int primEnVel, int warnings) {
-        this.faults = status0;
-        this.absEnPos = status5;
-        this.absEnVel = status6;
-        this.analPos = status3;
-        this.analVel = status3;
-        this.analVolt = status3;
-        this.motorTemp = status1;
-        this.applOutput = status0;
-        this.altEnPos = status4;
-        this.altEnVel = status4;
-        this.outCurr = status1;
-        this.busVolt = busVolt;
-        this.iAccum = iAccum;
-        this.limits = limits;
-        this.primEnPos = primEnPos;
-        this.primEnVel = primEnVel;
-        this.warnings = warnings;
-    }
+  public StatusFrames(
+      int status0,
+      int status1,
+      int status2,
+      int status3,
+      int status4,
+      int status5,
+      int status6,
+      int busVolt,
+      int iAccum,
+      int limits,
+      int primEnPos,
+      int primEnVel,
+      int warnings) {
+    this.faults = status0;
+    this.absEnPos = status5;
+    this.absEnVel = status6;
+    this.analPos = status3;
+    this.analVel = status3;
+    this.analVolt = status3;
+    this.motorTemp = status1;
+    this.applOutput = status0;
+    this.altEnPos = status4;
+    this.altEnVel = status4;
+    this.outCurr = status1;
+    this.busVolt = busVolt;
+    this.iAccum = iAccum;
+    this.limits = limits;
+    this.primEnPos = primEnPos;
+    this.primEnVel = primEnVel;
+    this.warnings = warnings;
+  }
 
     public StatusFrames(int faults, int absEnPos, int absEnVel,
             int analPos, int analVel, int analVolt, int motorTemp,

@@ -11,6 +11,7 @@ java {
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
+def EVENT_BRANCH_PREFIX = "event" // drives special build behavior if branch starts with this prefix
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -142,12 +143,17 @@ gversion {
     indent       = "  "
 }
 
+String getGitBranchName() {
+    def branchName = 'git branch --show-current'.execute().text.trim()
+    return branchName
+}
+
 // Create commit with working changes on event branches
 task(eventDeploy) {
     doLast {
         if (project.gradle.startParameter.taskNames.any({ it.toLowerCase().contains("deploy") })) {
-            def branchPrefix = "event"
-            def branch = 'git branch --show-current'.execute().text.trim()
+            def branchPrefix = EVENT_BRANCH_PREFIX
+            def branch = getGitBranchName()
             def commitMessage = "Update at '${new Date().toString()}'"
 
             if (branch.startsWith(branchPrefix)) {
@@ -176,3 +182,39 @@ task(eventDeploy) {
 createVersionFile.dependsOn(eventDeploy)
 
 // Spotless formatting
+spotless {
+    def branch = getGitBranchName()
+    def isDevBranch = !branch.startsWith(EVENT_BRANCH_PREFIX)
+    enforceCheck isDevBranch
+    java {
+        target fileTree(".") {
+            include "**/*.java"
+            exclude "**/build/**", "**/build-*/**", "**/BuildConstants.java"
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        formatAnnotations()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    groovyGradle {
+        target fileTree(".") {
+            include "**/*.gradle"
+            exclude "**/build/**", "**/build-*/**"
+        }
+        greclipse()
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format "misc", {
+        target fileTree(".") {
+            include "**/*.md", "**/.gitignore"
+            exclude "**/build/**", "**/build-*/**"
+        }
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+}

@@ -4,12 +4,23 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SignalsConfig;
 
 public class StatusFrames {
-    int faults, absEnPos, absEnVel,
-        analPos, analVel, analVolt,
-        motorTemp, applOutput, busVolt,
-        altEnPos, altEnVel, iAccum,
-        limits, outCurr, primEnPos,
-        primEnVel, warnings;
+  int faults,
+      absEnPos,
+      absEnVel,
+      analPos,
+      analVel,
+      analVolt,
+      motorTemp,
+      applOutput,
+      busVolt,
+      altEnPos,
+      altEnVel,
+      iAccum,
+      limits,
+      outCurr,
+      primEnPos,
+      primEnVel,
+      warnings;
 
     public StatusFrames(int status0, int status1, int status2,
             int status3, int status4, int status5, int status6) {
@@ -89,45 +100,43 @@ public class StatusFrames {
         this.warnings = warnings;
     }
 
-    public void apply(SignalsConfig signals) {
-        signals.faultsPeriodMs(faults);
-        signals.absoluteEncoderPositionPeriodMs(absEnPos);
-        signals.absoluteEncoderVelocityPeriodMs(absEnVel);
-        signals.analogPositionPeriodMs(analPos);
-        signals.analogVelocityPeriodMs(analVel);
-        signals.analogVoltagePeriodMs(analVolt);
-        signals.motorTemperaturePeriodMs(motorTemp);
-        signals.appliedOutputPeriodMs(applOutput);
-        signals.busVoltagePeriodMs(busVolt);
-        signals.externalOrAltEncoderPosition(altEnPos);
-        signals.externalOrAltEncoderVelocity(altEnVel);
-        signals.iAccumulationPeriodMs(iAccum);
-        signals.limitsPeriodMs(limits);
-        signals.outputCurrentPeriodMs(outCurr);
-        signals.primaryEncoderPositionPeriodMs(primEnPos);
-        signals.primaryEncoderVelocityPeriodMs(primEnVel);
-        signals.warningsPeriodMs(warnings);
-    }
+  public void apply(SignalsConfig signals) {
+    signals.faultsPeriodMs(faults);
+    signals.absoluteEncoderPositionPeriodMs(absEnPos);
+    signals.absoluteEncoderVelocityPeriodMs(absEnVel);
+    signals.analogPositionPeriodMs(analPos);
+    signals.analogVelocityPeriodMs(analVel);
+    signals.analogVoltagePeriodMs(analVolt);
+    signals.motorTemperaturePeriodMs(motorTemp);
+    signals.appliedOutputPeriodMs(applOutput);
+    signals.busVoltagePeriodMs(busVolt);
+    signals.externalOrAltEncoderPosition(altEnPos);
+    signals.externalOrAltEncoderVelocity(altEnVel);
+    signals.iAccumulationPeriodMs(iAccum);
+    signals.limitsPeriodMs(limits);
+    signals.outputCurrentPeriodMs(outCurr);
+    signals.primaryEncoderPositionPeriodMs(primEnPos);
+    signals.primaryEncoderVelocityPeriodMs(primEnVel);
+    signals.warningsPeriodMs(warnings);
+  }
 
-    public boolean getFlashNecessary(SparkMax spark) {
-        return (
-            (spark.configAccessor.signals.getFaultsPeriodMs() != faults) ||
-            (spark.configAccessor.signals.getAbsoluteEncoderPositionPeriodMs() != absEnPos) ||
-            (spark.configAccessor.signals.getAbsoluteEncoderVelocityPeriodMs() != absEnVel) ||
-            (spark.configAccessor.signals.getAnalogPositionPeriodMs() != analPos) ||
-            (spark.configAccessor.signals.getAnalogVelocityPeriodMs() != analVel) ||
-            (spark.configAccessor.signals.getAnalogVelocityPeriodMs() != analVolt) ||
-            (spark.configAccessor.signals.getMotorTemperaturePeriodMs() != motorTemp) ||
-            (spark.configAccessor.signals.getAppliedOutputPeriodMs() != applOutput) ||
-            (spark.configAccessor.signals.getBusVoltagePeriodMs() != busVolt) ||
-            (spark.configAccessor.signals.getExternalOrAltEncoderPositionPeriodMs() != altEnPos) ||
-            (spark.configAccessor.signals.getExternalOrAltEncoderVelocityPeriodMs() != altEnVel) ||
-            (spark.configAccessor.signals.getIAccumulationPeriodMs() != iAccum) ||
-            (spark.configAccessor.signals.getLimitsPeriodMs() != limits) ||
-            (spark.configAccessor.signals.getOutputCurrentPeriodMs() != outCurr) ||
-            (spark.configAccessor.signals.getPrimaryEncoderPositionPeriodMs() != primEnPos) ||
-            (spark.configAccessor.signals.getPrimaryEncoderVelocityPeriodMs() != primEnVel) ||
-            (spark.configAccessor.signals.getWarningsPeriodMs() != warnings)
-        );
-    }
+  public boolean getFlashNecessary(SparkMax spark) {
+    return ((spark.configAccessor.signals.getFaultsPeriodMs() != faults)
+        || (spark.configAccessor.signals.getAbsoluteEncoderPositionPeriodMs() != absEnPos)
+        || (spark.configAccessor.signals.getAbsoluteEncoderVelocityPeriodMs() != absEnVel)
+        || (spark.configAccessor.signals.getAnalogPositionPeriodMs() != analPos)
+        || (spark.configAccessor.signals.getAnalogVelocityPeriodMs() != analVel)
+        || (spark.configAccessor.signals.getAnalogVelocityPeriodMs() != analVolt)
+        || (spark.configAccessor.signals.getMotorTemperaturePeriodMs() != motorTemp)
+        || (spark.configAccessor.signals.getAppliedOutputPeriodMs() != applOutput)
+        || (spark.configAccessor.signals.getBusVoltagePeriodMs() != busVolt)
+        || (spark.configAccessor.signals.getExternalOrAltEncoderPositionPeriodMs() != altEnPos)
+        || (spark.configAccessor.signals.getExternalOrAltEncoderVelocityPeriodMs() != altEnVel)
+        || (spark.configAccessor.signals.getIAccumulationPeriodMs() != iAccum)
+        || (spark.configAccessor.signals.getLimitsPeriodMs() != limits)
+        || (spark.configAccessor.signals.getOutputCurrentPeriodMs() != outCurr)
+        || (spark.configAccessor.signals.getPrimaryEncoderPositionPeriodMs() != primEnPos)
+        || (spark.configAccessor.signals.getPrimaryEncoderVelocityPeriodMs() != primEnVel)
+        || (spark.configAccessor.signals.getWarningsPeriodMs() != warnings));
+  }
 }

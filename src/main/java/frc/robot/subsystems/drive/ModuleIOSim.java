@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,11 +27,13 @@ public class ModuleIOSim implements ModuleIO {
     DCMotor turnGearbox = DCMotor.getNeo550(1);
     driveSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(driveGearbox, 0.025, DriveConstants.driveGearRatio),
+            LinearSystemId.createDCMotorSystem(
+                driveGearbox, 0.00019125, DriveConstants.driveGearRatio),
             driveGearbox);
     turnSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(turnGearbox, 0.004, DriveConstants.steerGearRatio),
+            LinearSystemId.createDCMotorSystem(
+                turnGearbox, 0.002174375, DriveConstants.steerGearRatio),
             turnGearbox);
   }
 
@@ -50,12 +53,12 @@ public class ModuleIOSim implements ModuleIO {
   public void setSteerPosition(Rotation2d angle, ModuleIOInputs inputs) {
     Rotation2d delta = angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     double sin = Math.sin(delta.getRadians());
-    setSteerVoltage(steerPID.calculate(sin, 0) * 12);
+    setSteerVoltage(MathUtil.clamp(steerPID.calculate(sin, 0) * 12, -12, 12));
   }
 
   @Override
   public void setSteerVoltage(double voltage) {
-    turnAppliedVolts = voltage;
+    turnAppliedVolts = -voltage;
   }
 
   @Override
@@ -75,8 +78,7 @@ public class ModuleIOSim implements ModuleIO {
     inputs.driveCurrentAmps = driveSim.getCurrentDrawAmps();
 
     inputs.turnConnected = true;
-    inputs.steerAngleDegrees =
-        Math.toDegrees(turnSim.getAngularPositionRad() / DriveConstants.steerGearRatio);
+    inputs.steerAngleDegrees += (turnSim.getAngularVelocityRPM() * 360 / 60) * 0.02;
     inputs.steerAppliedVoltage = turnAppliedVolts;
     inputs.steerCurrentAmps = turnSim.getCurrentDrawAmps();
 

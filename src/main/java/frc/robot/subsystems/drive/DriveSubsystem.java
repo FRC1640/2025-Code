@@ -9,9 +9,8 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
@@ -29,13 +28,6 @@ public class DriveSubsystem extends SubsystemBase {
   SysIdRoutine sysIdRoutine;
   private final SwerveSetpointGenerator setpointGenerator;
   private SwerveSetpoint previousSetpoint;
-  private SwerveModulePosition[] lastModulePositions = // For delta tracking
-      new SwerveModulePosition[] {
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition()
-      };
 
   public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
@@ -84,8 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
         new SwerveSetpointGenerator(
             config, // The robot configuration. This is the same config used for generating
             // trajectories and running path following commands.
-            DriveConstants.maxSpeed
-                / computeMaxNorm(DriveConstants.positions, new Translation2d()));
+            DriveConstants.maxSteerSpeed);
     previousSetpoint =
         new SwerveSetpoint(getChassisSpeeds(), getActualSwerveStates(), DriveFeedforwards.zeros(4));
   }
@@ -94,9 +85,6 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     for (var module : modules) {
       module.periodic();
-      if (DriverStation.isDisabled()) {
-        module.stop();
-      }
     }
     gyro.periodic();
   }
@@ -115,23 +103,19 @@ public class DriveSubsystem extends SubsystemBase {
     return DriveConstants.kinematics.toChassisSpeeds(getActualSwerveStates());
   }
 
-  public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
+  public void drive(ChassisSpeeds speeds) {
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
             speeds.vyMetersPerSecond / DriveConstants.maxSpeed,
-            speeds.omegaRadiansPerSecond
-                / (DriveConstants.maxSpeed
-                    / computeMaxNorm(DriveConstants.positions, new Translation2d())));
+            speeds.omegaRadiansPerSecond / DriveConstants.maxOmega);
 
     ChassisSpeeds doubleCone = doubleCone(percent, new Translation2d());
     ChassisSpeeds speedsOptimized =
         new ChassisSpeeds(
             doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
             doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
-            doubleCone.omegaRadiansPerSecond
-                * (DriveConstants.maxSpeed
-                    / computeMaxNorm(DriveConstants.positions, new Translation2d())));
+            doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega);
 
     previousSetpoint =
         setpointGenerator.generateSetpoint(
@@ -170,5 +154,13 @@ public class DriveSubsystem extends SubsystemBase {
         .mapToDouble(Translation2d::getNorm)
         .max()
         .orElseThrow(() -> new NoSuchElementException("No max norm."));
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sysIdRoutine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sysIdRoutine.dynamic(direction);
   }
 }

@@ -122,6 +122,11 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
+  public void simulationPeriodic() {
+    // System.out.println("hi");
+  }
+
+  @Override
   public void teleopPeriodic() {}
 
   @Override

@@ -3,6 +3,7 @@ package frc.robot.constants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 
 public class RobotConstants {
@@ -14,12 +15,25 @@ public class RobotConstants {
   }
 
   public static class DriveConstants {
+    public static final double wheelYPos = Units.inchesToMeters(22.75 / 2);
+    public static final double wheelXPos = Units.inchesToMeters(22.75 / 2);
+    private static final Translation2d frontLeftLocation = new Translation2d(wheelXPos, wheelYPos);
+    private static final Translation2d frontRightLocation =
+        new Translation2d(wheelXPos, -wheelYPos);
+    public static final Translation2d backLeftLocation = new Translation2d(-wheelXPos, wheelYPos);
+    public static final Translation2d backRightLocation = new Translation2d(-wheelXPos, -wheelYPos);
+    public static final Translation2d[] positions =
+        new Translation2d[] {
+          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
+        };
     public static double odometryFrequency = 200.0;
     public static final double driveGearRatio = 116 / 15;
     public static final double steerGearRatio = ((480 / 11)) * 1.0166667 * 0.99790377777778;
-    public static final double wheelYPos = Units.inchesToMeters(22.75 / 2);
-    public static final double wheelXPos = Units.inchesToMeters(22.75 / 2);
+
     public static final double maxSpeed = 4.6;
+    public static final double maxNorm =
+        DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
+    public static final double maxOmega = (maxSpeed / maxNorm);
     public static final double wheelRadius = Units.inchesToMeters(1.8892);
 
     public static final double accelLimit = 20;
@@ -28,16 +42,7 @@ public class RobotConstants {
     public static final double initalSlope = 1.25;
     public static final double finalSlope = 0;
 
-    private static final Translation2d frontLeftLocation = new Translation2d(wheelXPos, wheelYPos);
-    private static final Translation2d frontRightLocation =
-        new Translation2d(wheelXPos, -wheelYPos);
-    public static final Translation2d backLeftLocation = new Translation2d(-wheelXPos, wheelYPos);
-    public static final Translation2d backRightLocation = new Translation2d(-wheelXPos, -wheelYPos);
-
-    public static final Translation2d[] positions =
-        new Translation2d[] {
-          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
-        };
+    public static final double maxSteerSpeed = 10; // rad per second
 
     public static final SwerveDriveKinematics kinematics =
         new SwerveDriveKinematics(

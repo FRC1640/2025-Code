@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
@@ -20,6 +21,7 @@ import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -89,6 +91,12 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.periodic();
   }
 
+  public void stop() {
+    for (Module m : modules) {
+      m.stop();
+    }
+  }
+
   @AutoLogOutput(key = "Drive/SwerveStates/Measured")
   public SwerveModuleState[] getActualSwerveStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -127,6 +135,10 @@ public class DriveSubsystem extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredStateMetersPerSecond(previousSetpoint.moduleStates()[i]);
     }
+  }
+
+  public Command driveCommand(Supplier<ChassisSpeeds> speeds) {
+    return new RunCommand(() -> drive(speeds.get()), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds doubleCone(

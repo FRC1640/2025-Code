@@ -11,7 +11,8 @@ import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.drive.commands.DriveCommandFactory;
+import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 
 public class RobotContainer {
   // Subsystems
@@ -38,14 +39,13 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(
-        new DriveCommandFactory()
-            .joystickDrive(
-                driveSubsystem,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> -controller.getRightX(),
-                gyro));
+    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveSubsystem));
+    DriveWeightCommand.addPersistentWeight(
+        new JoystickDriveWeight(
+            () -> -controller.getLeftY(),
+            () -> -controller.getLeftX(),
+            () -> -controller.getRightX(),
+            gyro));
   }
 
   public Command getAutonomousCommand() {

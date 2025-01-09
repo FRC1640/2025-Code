@@ -16,7 +16,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   private final PhotonCamera camera; // the camera
   private final Transform3d cameraDisplacement; // represents position of camera relative to robot
 
-  public AprilTagVisionIOPhotonvision(String name, Transform3d cameraDisplacement) {
+  public AprilTagVisionIOPhotonvision(
+      String name, Transform3d cameraDisplacement) { // name should match camera "nickname"
     this.camera = new PhotonCamera(name);
     this.cameraDisplacement = cameraDisplacement;
   }

@@ -2,7 +2,10 @@ package frc.robot.util.dashboard;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class DashboardInit {
     /*
@@ -16,6 +19,7 @@ public class DashboardInit {
      */
     double testNumber = 12345;
     static boolean testBoolean = true;
+    private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
 
     public static void testTestInit(){
         testInit();
@@ -24,6 +28,12 @@ public class DashboardInit {
     private static void testInit(){
         ShuffleboardTab testingaaah = Shuffleboard.getTab("testingaaah");
         testingaaah.addBoolean("test??", () -> testBoolean).withSize(1,1).withPosition(0, 0);
+    }
+
+    private static void sysidInit(){
+        ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
+        sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
+        sysidChooser.addOption("Swerve", CreateSysidCommand.createCommand(driveSubsystem))
     }
     // private static void testInitButNamedBob(){
     //     Elastic.selectTab("bob");

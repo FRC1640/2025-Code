@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Extract Release Native",
+            "type": "shell",
+            "command": "${workspaceFolder}/gradlew",
+            "args": [
+                "extractReleaseNative"
+            ],
+            "windows": {
+                "command": "${workspaceFolder}/gradlew.bat"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}

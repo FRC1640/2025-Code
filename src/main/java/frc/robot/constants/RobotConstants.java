@@ -42,7 +42,7 @@ public class RobotConstants {
     public static final double initalSlope = 1.25;
     public static final double finalSlope = 0;
 
-    public static final double maxSteerSpeed = 10; // rad per second
+    public static final double maxSteerSpeed = 1000; // rad per second
 
     public static final SwerveDriveKinematics kinematics =
         new SwerveDriveKinematics(
@@ -50,13 +50,7 @@ public class RobotConstants {
 
     public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 3, 2, 0, 45);
 
-    public static final ModuleInfo FR =
-        new ModuleInfo(
-            PivotId.FR,
-            9, // 2023: and dew 1: 2
-            8, // 2023: 1, dew 1: 5
-            2,
-            -45);
+    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 9, 8, 2, -45);
 
     public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
 

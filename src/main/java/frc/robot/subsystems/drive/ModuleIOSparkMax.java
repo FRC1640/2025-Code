@@ -78,10 +78,13 @@ public class ModuleIOSparkMax implements ModuleIO {
         steerSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
 
     inputs.steerCurrentAmps = steerSpark.getOutputCurrent();
+    inputs.steerRadPerSec =
+        steerSpark.getEncoder().getVelocity() * Math.PI * 2 / 60 / DriveConstants.steerGearRatio;
     inputs.steerTempCelsius = steerSpark.getMotorTemperature();
     inputs.steerEncoderVoltage = steeringEncoder.getVoltage();
-    inputs.steerAngleDegrees =
+    inputs.steerEncoderRelative =
         (360 - (steerSpark.getEncoder().getPosition() / DriveConstants.steerGearRatio * 360)) % 360;
+    inputs.steerAngleDegrees = steeringEncoder.getDegrees() % 360;
 
     inputs.odometryTimestamps =
         timestampQueue.stream().mapToDouble((Double value) -> value).toArray();

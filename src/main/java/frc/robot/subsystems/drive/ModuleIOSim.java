@@ -79,6 +79,7 @@ public class ModuleIOSim implements ModuleIO {
 
     inputs.turnConnected = true;
     inputs.steerAngleDegrees += (turnSim.getAngularVelocityRPM() * 360 / 60) * 0.02;
+    inputs.steerRadPerSec = turnSim.getAngularVelocityRPM() * 2 * Math.PI / 60;
     inputs.steerAppliedVoltage = turnAppliedVolts;
     inputs.steerCurrentAmps = turnSim.getCurrentDrawAmps();
 

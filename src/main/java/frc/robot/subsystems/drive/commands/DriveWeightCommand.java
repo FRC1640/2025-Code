@@ -13,7 +13,7 @@ public class DriveWeightCommand {
   static ArrayList<DriveWeight> weights = new ArrayList<>();
 
   public static Command create(DriveSubsystem driveSubsystem) {
-    Command c = driveSubsystem.driveCommand(() -> getAllSpeeds());
+    Command c = driveSubsystem.runVelocityCommand(() -> getAllSpeeds());
     return c;
   }
 

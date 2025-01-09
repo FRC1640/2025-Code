@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
+import frc.robot.sensors.gyro.GyroIOSim;
+import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
@@ -18,9 +20,10 @@ public class RobotContainer {
   // Subsystems
   private final DriveSubsystem driveSubsystem;
   private final Gyro gyro;
+  private final RobotOdometry robotOdometry;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driveController = new CommandXboxController(0);
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -28,13 +31,15 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         break;
       case SIM:
-        gyro = new Gyro(new GyroIO() {});
+        gyro = new Gyro(new GyroIOSim());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
+    robotOdometry = new RobotOdometry(driveSubsystem, gyro);
+    robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     configureBindings();
   }
 
@@ -42,10 +47,12 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveSubsystem));
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX(),
+            () -> driveController.getLeftY(),
+            () -> driveController.getLeftX(),
+            () -> driveController.getRightX(),
             gyro));
+
+    driveController.start().onTrue(gyro.resetGyroCommand());
   }
 
   public Command getAutonomousCommand() {

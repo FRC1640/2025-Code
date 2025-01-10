@@ -1,4 +1,3 @@
 package frc.robot.constants;
-public class SparkConstants {
-    
-}
+
+public class SparkConstants {}

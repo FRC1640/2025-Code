@@ -1,10 +1,9 @@
 package frc.robot.sensors.apriltag;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.constants.FieldConstants;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,9 +68,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                 totalTagDistance / result.targets.size()));
       } else if (!result.targets.isEmpty()) {
         PhotonTrackedTarget target = result.targets.get(0);
-        Optional<Pose3d> tagPose =
-            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField)
-                .getTagPose(target.fiducialId); // move to constants?
+        Optional<Pose3d> tagPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
         if (tagPose.isPresent()) {
           Transform3d tagTransform =
               new Transform3d(tagPose.get().getTranslation(), tagPose.get().getRotation());

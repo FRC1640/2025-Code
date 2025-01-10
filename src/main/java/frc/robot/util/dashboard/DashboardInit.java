@@ -22,13 +22,35 @@ public class DashboardInit {
    */
 
   private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
+  private static SendableChooser<String> testChooser = new SendableChooser<String>();
+  // private static SendableChooser<Command> testChooser = new SendableChooser<Command>();
+  private static String testModes = "";
   private static DriveSubsystem driveSubsystem;
   private static CommandXboxController controller;
 
-  private static boolean sysidInit = false;
-
   public static void dashboard() {
-    sysidInit();
+    testInit();
+  }
+
+  private static void testInit() {
+    ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
+    testTab.add(testChooser).withSize(5, 5).withPosition(1, 1);
+    testChooser.setDefaultOption(
+        "none :/",
+        testModes = ""); // does this actually indicate setting testmodes to blank? need to test
+    testChooser.addOption("SYSID", testModes = "sys");
+    testChooser.addOption("PID", testModes = "pid");
+    switch (testModes) {
+      case "sys":
+        sysidInit();
+        testModes = "";
+        break;
+
+      case "pid":
+        pidInit();
+        testModes = "";
+        break;
+    }
   }
 
   private static void sysidInit() {
@@ -46,7 +68,9 @@ public class DashboardInit {
             cancel,
             () -> driveSubsystem.stop()));
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
+  }
 
-    sysidInit = true;
+  private static void pidInit() {
+    System.out.println("nothin here yet. womp womp");
   }
 }

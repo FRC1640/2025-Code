@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.util.sysid.CreateSysidCommand;
+
+
 
 public class DashboardInit {
     /*
@@ -20,7 +24,8 @@ public class DashboardInit {
     double testNumber = 12345;
     static boolean testBoolean = true;
     private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
-
+    //private static DriveSubsystem driveSubsystem;
+    private static CommandXboxController controller;
     public static void testTestInit(){
         testInit();
     }
@@ -33,7 +38,9 @@ public class DashboardInit {
     private static void sysidInit(){
         ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
         sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
-        sysidChooser.addOption("Swerve", CreateSysidCommand.createCommand(driveSubsystem))
+        // sysidChooser.addOption("SwerveSysID",
+                // CreateSysidCommand.createCommand(driveSubsystem::sysIdQuasistatic, driveSubsystem::sysIdDynamic,
+                        // "SwerveSysId",controller, ()->driveSubsystem.stopMotors()));
     }
     // private static void testInitButNamedBob(){
     //     Elastic.selectTab("bob");

@@ -42,7 +42,7 @@ public class RobotContainer {
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     configureBindings();
-    DashboardInit.testTestInit();
+    DashboardInit.dashboard();
   }
 
   private void configureBindings() {

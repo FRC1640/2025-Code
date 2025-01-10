@@ -88,7 +88,10 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer = new RobotContainer();
 
-    WebServer.start(5800, Filesystem.getDeployDirectory().getPath()); //instructed to add to get elastic config to load automatically
+    WebServer.start(
+        5800,
+        Filesystem.getDeployDirectory()
+            .getPath()); // instructed to add to get elastic config to load automatically
   }
 
   @Override

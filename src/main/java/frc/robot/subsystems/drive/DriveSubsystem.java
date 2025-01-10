@@ -3,14 +3,22 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +27,8 @@ import frc.robot.Robot;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -26,6 +36,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -77,6 +88,26 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
       config = null;
     }
+    AutoBuilder.configure(
+        () -> RobotOdometry.instance.getPose("Normal"),
+        (x) -> RobotOdometry.instance.setPose(x, "Normal"),
+        this::getChassisSpeeds,
+        (x) -> runVelocity(x, false),
+        new PPHolonomicDriveController(
+            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+        config,
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        this);
+    Pathfinding.setPathfinder(new LocalADStarAK());
+    PathPlannerLogging.setLogActivePathCallback(
+        (activePath) -> {
+          Logger.recordOutput(
+              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+        });
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (targetPose) -> {
+          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+        });
 
     setpointGenerator =
         new SwerveSetpointGenerator(
@@ -129,7 +160,7 @@ public class DriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  public void runVelocityField(ChassisSpeeds speeds) {
+  public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric) {
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
@@ -138,12 +169,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     ChassisSpeeds doubleCone = doubleCone(percent, new Translation2d());
     ChassisSpeeds speedsOptimized =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            new ChassisSpeeds(
+        fieldCentric
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                new ChassisSpeeds(
+                    doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
+                    doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
+                    doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
+                gyro.getAngleRotation2d())
+            : new ChassisSpeeds(
                 doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
                 doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
-                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
-            gyro.getAngleRotation2d());
+                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega);
 
     previousSetpoint =
         setpointGenerator.generateSetpoint(
@@ -160,7 +196,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocityField(speeds.get()), this).finallyDo(() -> stop());
+    return new RunCommand(() -> runVelocity(speeds.get(), true), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds doubleCone(

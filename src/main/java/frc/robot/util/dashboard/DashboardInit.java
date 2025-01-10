@@ -27,12 +27,7 @@ public class DashboardInit {
     //private static DriveSubsystem driveSubsystem;
     private static CommandXboxController controller;
     public static void testTestInit(){
-        testInit();
-    }
-
-    private static void testInit(){
-        ShuffleboardTab testingaaah = Shuffleboard.getTab("testingaaah");
-        testingaaah.addBoolean("test??", () -> testBoolean).withSize(1,1).withPosition(0, 0);
+        sysidInit();;
     }
 
     private static void sysidInit(){
@@ -41,32 +36,6 @@ public class DashboardInit {
         // sysidChooser.addOption("SwerveSysID",
                 // CreateSysidCommand.createCommand(driveSubsystem::sysIdQuasistatic, driveSubsystem::sysIdDynamic,
                         // "SwerveSysId",controller, ()->driveSubsystem.stopMotors()));
+        sysidTab.add(sysidChooser).withSize(5,5).withPosition(1,1);
     }
-    // private static void testInitButNamedBob(){
-    //     Elastic.selectTab("bob");
-    // }
-    //make sure inits to default layout 
-        //seems like we might be able to "load layout from robot" (once we have a robot) but auto boot would be nice
-
-        /* mechanical advantage 2024 thing
-         * public AutoSelector(String key) {
-    routineChooser = new LoggedDashboardChooser<>(key + "/Routine");
-    routineChooser.addDefaultOption(defaultRoutine.name(), defaultRoutine);
-    lastRoutine = defaultRoutine;
-    lastResponses = List.of();
-
-    // Publish questions and choosers
-    questionPublishers = new ArrayList<>();
-    questionChoosers = new ArrayList<>();
-    for (int i = 0; i < maxQuestions; i++) {
-      var publisher =
-          NetworkTableInstance.getDefault()
-              .getStringTopic("/SmartDashboard/" + key + "/Question #" + Integer.toString(i + 1))
-              .publish();
-      publisher.set("NA");
-      questionPublishers.add(publisher);
-      questionChoosers.add(
-          new SwitchableChooser(key + "/Question #" + Integer.toString(i + 1) + " Chooser"));
-    }
-         */
 }

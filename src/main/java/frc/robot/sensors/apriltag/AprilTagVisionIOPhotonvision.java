@@ -1,11 +1,14 @@
 package frc.robot.sensors.apriltag;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.MultiTargetPNPResult;
@@ -53,10 +56,48 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         Pose3d robotPose =
             new Pose3d(robotTransform.getTranslation(), robotTransform.getRotation());
         double totalTagDistance = 0;
-        for (PhotonTrackedTarget target : result.targets) {
+        for (PhotonTrackedTarget target : result.getTargets()) {
           totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
         }
         tagIds.addAll(multitag.fiducialIDsUsed);
+        poseObservations.add(
+            new PoseObservation(
+                multitag.estimatedPose.ambiguity,
+                result.getTimestampSeconds(),
+                robotPose,
+                multitag.fiducialIDsUsed.size(),
+                totalTagDistance / result.targets.size()));
+      } else if (!result.targets.isEmpty()) {
+        PhotonTrackedTarget target = result.targets.get(0);
+        Optional<Pose3d> tagPose =
+            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField)
+                .getTagPose(target.fiducialId); // move to constants?
+        if (tagPose.isPresent()) {
+          Transform3d tagTransform =
+              new Transform3d(tagPose.get().getTranslation(), tagPose.get().getRotation());
+          Transform3d cameraToTag = target.bestCameraToTarget;
+          Transform3d cameraTransform = tagTransform.plus(cameraToTag.inverse());
+          Transform3d robotTransform = cameraTransform.plus(cameraDisplacement.inverse());
+          Pose3d robotPose =
+              new Pose3d(robotTransform.getTranslation(), robotTransform.getRotation());
+          tagIds.add((short) target.fiducialId);
+          poseObservations.add(
+              new PoseObservation(
+                  target.poseAmbiguity,
+                  result.getTimestampSeconds(),
+                  robotPose,
+                  1,
+                  cameraToTag.getTranslation().getNorm()));
+        }
+      }
+      inputs.poseObservations = new PoseObservation[poseObservations.size()];
+      for (int i = 0; i < poseObservations.size(); i++) {
+        inputs.poseObservations[i] = poseObservations.get(i);
+      }
+      int index = 0;
+      for (Short id : tagIds) {
+        inputs.tagIds[index] = id;
+        index++;
       }
     }
   }

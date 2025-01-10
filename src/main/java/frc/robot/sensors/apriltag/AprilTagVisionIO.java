@@ -18,19 +18,13 @@ public interface AprilTagVisionIO {
   public static record AprilTagObservation(Rotation2d tx, Rotation2d ty) {}
 
   public static record PoseObservation(
-      double ambiguity,
-      double timestamp,
-      Pose3d pose,
-      int tagCount,
-      double averageTagDistance,
-      PoseObservationType type) {}
-  ;
+      double ambiguity, double timestamp, Pose3d pose, int tagCount, double averageTagDistance) {}
 
-  public static enum PoseObservationType {
+  /* public static enum PoseObservationType {
     MEGATAG1,
     MEGATAG2,
     PHOTONVISION
-  }
+  } */
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
 }

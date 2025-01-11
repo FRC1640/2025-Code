@@ -60,17 +60,6 @@ public class SparkConfigurer {
         config.getStatusFrames());
   }
 
-  public static SparkFlex configSparkFlex(SparkConfiguration config) {
-    return configSparkFlex(
-        config.getId(),
-        config.getIdleMode(),
-        config.isInverted(),
-        config.getCurrentLimit(),
-        config.getEncoderMeasurmentPeriod(),
-        config.getAverageEncoderDepth(),
-        config.getStatusFrames());
-  }
-
   public static SparkMax configSparkMax(
       int id,
       IdleMode idleMode,
@@ -83,6 +72,85 @@ public class SparkConfigurer {
     SparkMax spark = new SparkMax(id, MotorType.kBrushless);
     SparkMaxConfig config =
         buildSparkMaxConfig(
+            idleMode,
+            inverted,
+            smartCurrentLimit,
+            encoderMeasurementPeriod,
+            encoderAverageDepth,
+            statusFrames);
+    config.apply(limitSwitch);
+    boolean flash =
+        (inverted != spark.configAccessor.getInverted())
+            || (idleMode != spark.configAccessor.getIdleMode())
+            || (smartCurrentLimit != spark.configAccessor.getSmartCurrentLimit())
+            || (encoderMeasurementPeriod
+                != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
+            || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
+            || (statusFrames.getFlashNecessary(spark));
+    spark.configure(
+        config,
+        ResetMode.kResetSafeParameters,
+        flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
+    Logger.recordOutput("SparkFlashes/" + id, flash);
+    return spark;
+  }
+
+  public static SparkFlex configSparkFlex(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int smartCurrentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames) {
+    SparkFlex spark = new SparkFlex(id, MotorType.kBrushless);
+    SparkFlexConfig config =
+        buildSparkFlexConfig(
+            idleMode,
+            inverted,
+            smartCurrentLimit,
+            encoderMeasurementPeriod,
+            encoderAverageDepth,
+            statusFrames);
+    boolean flash =
+        (inverted != spark.configAccessor.getInverted())
+            || (idleMode != spark.configAccessor.getIdleMode())
+            || (smartCurrentLimit != spark.configAccessor.getSmartCurrentLimit())
+            || (encoderMeasurementPeriod
+                != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
+            || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
+            || (statusFrames.getFlashNecessary(spark));
+    spark.configure(
+        config,
+        ResetMode.kResetSafeParameters,
+        flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
+    Logger.recordOutput("SparkFlashes/" + id, flash);
+    return spark;
+  }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config) {
+    return configSparkFlex(
+        config.getId(),
+        config.getIdleMode(),
+        config.isInverted(),
+        config.getCurrentLimit(),
+        config.getEncoderMeasurmentPeriod(),
+        config.getAverageEncoderDepth(),
+        config.getStatusFrames());
+  }
+
+  public static SparkFlex configSparkFlex(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int smartCurrentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      LimitSwitchConfig limitSwitch) {
+    SparkFlex spark = new SparkFlex(id, MotorType.kBrushless);
+    SparkFlexConfig config =
+        buildSparkFlexConfig(
             idleMode,
             inverted,
             smartCurrentLimit,
@@ -126,74 +194,6 @@ public class SparkConfigurer {
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
     statusFrames.apply(config.signals);
     return config;
-  }
-
-  public static SparkFlex configSparkFlex(
-      int id,
-      IdleMode idleMode,
-      boolean inverted,
-      int smartCurrentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames) {
-    SparkFlex spark = new SparkFlex(id, MotorType.kBrushless);
-    SparkFlexConfig config =
-        buildSparkFlexConfig(
-            idleMode,
-            inverted,
-            smartCurrentLimit,
-            encoderMeasurementPeriod,
-            encoderAverageDepth,
-            statusFrames);
-    boolean flash =
-        (inverted != spark.configAccessor.getInverted())
-            || (idleMode != spark.configAccessor.getIdleMode())
-            || (smartCurrentLimit != spark.configAccessor.getSmartCurrentLimit())
-            || (encoderMeasurementPeriod
-                != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
-            || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
-            || (statusFrames.getFlashNecessary(spark));
-    spark.configure(
-        config,
-        ResetMode.kResetSafeParameters,
-        flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
-    Logger.recordOutput("SparkFlashes/" + id, flash);
-    return spark;
-  }
-
-  public static SparkFlex configSparkFlex(
-      int id,
-      IdleMode idleMode,
-      boolean inverted,
-      int smartCurrentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames,
-      LimitSwitchConfig limitSwitch) {
-    SparkFlex spark = new SparkFlex(id, MotorType.kBrushless);
-    SparkFlexConfig config =
-        buildSparkFlexConfig(
-            idleMode,
-            inverted,
-            smartCurrentLimit,
-            encoderMeasurementPeriod,
-            encoderAverageDepth,
-            statusFrames);
-    config.apply(limitSwitch);
-    boolean flash =
-        (inverted != spark.configAccessor.getInverted())
-            || (idleMode != spark.configAccessor.getIdleMode())
-            || (smartCurrentLimit != spark.configAccessor.getSmartCurrentLimit())
-            || (encoderMeasurementPeriod
-                != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
-            || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
-            || (statusFrames.getFlashNecessary(spark));
-    spark.configure(
-        config,
-        ResetMode.kResetSafeParameters,
-        flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
-    Logger.recordOutput("SparkFlashes/" + id, flash);
-    return spark;
   }
 
   private static SparkFlexConfig buildSparkFlexConfig(

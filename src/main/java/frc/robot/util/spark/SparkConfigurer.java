@@ -148,7 +148,7 @@ public class SparkConfigurer {
     statusFrames.apply(config.signals);
     if (Pcon.isPresent()) {config.closedLoop.p(Pcon.get().doubleValue());}
     if (Icon.isPresent()) {config.closedLoop.i(Icon.get().doubleValue());}
-    boolean bob; if (Dcon.isPresent() == true) {bob = true;} else {bob = false;} int bill; if(bob == true) {bill = (int)1.0;} else {bill = (int)-1.0;} switch(bill) {case (int)1.0: config.closedLoop.d(Dcon.get().doubleValue()); break; case (int)-1.0: System.out.println("woopsies"); break; default: System.out.println("uh oh. if this prints... Doomsday has come. Oh well!");}
+    if (Dcon.isPresent()) {config.closedLoop.d(Dcon.get().doubleValue());}
     return config;
   }
 

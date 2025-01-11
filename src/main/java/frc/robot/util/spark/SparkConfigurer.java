@@ -9,6 +9,9 @@ import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import java.util.Optional;
+
 import org.littletonrobotics.junction.Logger;
 
 public class SparkConfigurer {
@@ -23,7 +26,10 @@ public class SparkConfigurer {
       int smartCurrentLimit,
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
-      StatusFrames statusFrames) {
+      StatusFrames statusFrames,
+      Optional<Double> Pcon,
+      Optional<Double> Icon,
+      Optional<Double> Dcon) {
     SparkMax spark = new SparkMax(id, MotorType.kBrushless);
     SparkMaxConfig config =
         buildSparkMaxConfig(
@@ -32,15 +38,21 @@ public class SparkConfigurer {
             smartCurrentLimit,
             encoderMeasurementPeriod,
             encoderAverageDepth,
-            statusFrames);
+            statusFrames,
+            Pcon,
+            Icon,
+            Dcon);
     boolean flash =
-        (inverted != spark.configAccessor.getInverted())
+        ((inverted != spark.configAccessor.getInverted())
             || (idleMode != spark.configAccessor.getIdleMode())
             || (smartCurrentLimit != spark.configAccessor.getSmartCurrentLimit())
             || (encoderMeasurementPeriod
                 != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
             || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
-            || (statusFrames.getFlashNecessary(spark));
+            || (statusFrames.getFlashNecessary(spark))
+            || ((Pcon.isPresent())?!(Pcon.get().doubleValue() == spark.configAccessor.closedLoop.getP()):false)
+            || ((Icon.isPresent())?!(Icon.get().doubleValue() == spark.configAccessor.closedLoop.getI()):false)
+            || ((Dcon.isPresent())?!(Dcon.get().doubleValue() == spark.configAccessor.closedLoop.getD()):false));
     spark.configure(
         config,
         ResetMode.kResetSafeParameters,
@@ -57,7 +69,10 @@ public class SparkConfigurer {
         config.getCurrentLimit(),
         config.getEncoderMeasurmentPeriod(),
         config.getAverageEncoderDepth(),
-        config.getStatusFrames());
+        config.getStatusFrames(),
+        config.getP(),
+        config.getI(),
+        config.getD());
   }
 
   public static SparkFlex configSparkFlex(SparkConfiguration config) {
@@ -88,7 +103,10 @@ public class SparkConfigurer {
             smartCurrentLimit,
             encoderMeasurementPeriod,
             encoderAverageDepth,
-            statusFrames);
+            statusFrames,
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty());
     config.apply(limitSwitch);
     boolean flash =
         (inverted != spark.configAccessor.getInverted())
@@ -112,7 +130,10 @@ public class SparkConfigurer {
       int smartCurrentLimit,
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
-      StatusFrames statusFrames) {
+      StatusFrames statusFrames,
+      Optional<Double> Pcon,
+      Optional<Double> Icon,
+      Optional<Double> Dcon) {
     SparkMaxConfig config = new SparkMaxConfig();
     config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
     config.absoluteEncoder.averageDepth(encoderAverageDepth);
@@ -125,6 +146,9 @@ public class SparkConfigurer {
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
     statusFrames.apply(config.signals);
+    if (Pcon.isPresent()) {config.closedLoop.p(Pcon.get().doubleValue());}
+    if (Icon.isPresent()) {config.closedLoop.i(Icon.get().doubleValue());}
+    boolean bob; if (Dcon.isPresent() == true) {bob = true;} else {bob = false;} int bill; if(bob == true) {bill = (int)1.0;} else {bill = (int)-1.0;} switch(bill) {case (int)1.0: config.closedLoop.d(Dcon.get().doubleValue()); break; case (int)-1.0: System.out.println("woopsies"); break; default: System.out.println("uh oh. if this prints... Doomsday has come. Oh well!");}
     return config;
   }
 

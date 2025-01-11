@@ -1,5 +1,6 @@
 package frc.robot.util.dashboard;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -47,13 +48,10 @@ public class DashboardInit {
   }
 
   private void autoInit() {
-    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
     ShuffleboardTab autoTab = Shuffleboard.getTab("AUTO");
-    autoTab
-        .add("oh no...", "looks like autobuilder isnt configured or smth yet. welp")
-        .withSize(1, 1)
-        .withPosition(0, 0);
-    // autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
+    ;
+    autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
   }
 
   private void teleopInit() {

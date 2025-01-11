@@ -37,5 +37,5 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "spotlessGradle.diagnostics.enable": true,
   "spotlessGradle.format.enable": true,
-  "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle"
+"editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
 }

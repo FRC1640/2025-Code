@@ -184,10 +184,15 @@ public class DriveSubsystem extends SubsystemBase {
     previousSetpoint =
         setpointGenerator.generateSetpoint(
             previousSetpoint, // The previous setpoint
-            speedsOptimized, // The desired target speeds
+            speeds, // The desired target speeds
             0.02 // The loop time of the robot code, in seconds
             );
-
+    Logger.recordOutput("Drive/SwerveStates/SetpointStates", previousSetpoint.moduleStates());
+    Logger.recordOutput(
+        "Drive/SwerveStates/Input", DriveConstants.kinematics.toSwerveModuleStates(speeds));
+    Logger.recordOutput(
+        "Drive/SwerveStates/DoubleCone",
+        DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized));
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredStateMetersPerSecond(
           // previousSetpoint.moduleStates()[i]);

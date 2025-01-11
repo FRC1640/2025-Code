@@ -2,6 +2,7 @@ package frc.robot.util.spark;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -26,10 +27,7 @@ public class SparkConfigurer {
       int smartCurrentLimit,
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
-      StatusFrames statusFrames,
-      Optional<Double> Pcon,
-      Optional<Double> Icon,
-      Optional<Double> Dcon) {
+      StatusFrames statusFrames) {
     SparkMax spark = new SparkMax(id, MotorType.kBrushless);
     SparkMaxConfig config =
         buildSparkMaxConfig(
@@ -38,10 +36,7 @@ public class SparkConfigurer {
             smartCurrentLimit,
             encoderMeasurementPeriod,
             encoderAverageDepth,
-            statusFrames,
-            Pcon,
-            Icon,
-            Dcon);
+            statusFrames);
     boolean flash =
         ((inverted != spark.configAccessor.getInverted())
             || (idleMode != spark.configAccessor.getIdleMode())
@@ -49,10 +44,7 @@ public class SparkConfigurer {
             || (encoderMeasurementPeriod
                 != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
             || (encoderAverageDepth != spark.configAccessor.encoder.getQuadratureAverageDepth())
-            || (statusFrames.getFlashNecessary(spark))
-            || ((Pcon.isPresent())?!(Pcon.get().doubleValue() == spark.configAccessor.closedLoop.getP()):false)
-            || ((Icon.isPresent())?!(Icon.get().doubleValue() == spark.configAccessor.closedLoop.getI()):false)
-            || ((Dcon.isPresent())?!(Dcon.get().doubleValue() == spark.configAccessor.closedLoop.getD()):false));
+            || (statusFrames.getFlashNecessary(spark)));
     spark.configure(
         config,
         ResetMode.kResetSafeParameters,
@@ -60,6 +52,20 @@ public class SparkConfigurer {
     Logger.recordOutput("SparkFlashes/" + id, flash);
     return spark;
   }
+
+  public static SparkMax configSparkMax(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int smartCurrentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      PIDConstants PID) {
+        SparkMax config = configSparkMax(id, idleMode, inverted, smartCurrentLimit, encoderMeasurementPeriod, encoderAverageDepth, statusFrames);
+        config.configAccessor.;
+        return config;
+      }
 
   public static SparkMax configSparkMax(SparkConfiguration config) {
     return configSparkMax(
@@ -70,9 +76,7 @@ public class SparkConfigurer {
         config.getEncoderMeasurmentPeriod(),
         config.getAverageEncoderDepth(),
         config.getStatusFrames(),
-        config.getP(),
-        config.getI(),
-        config.getD());
+        config.getPID());
   }
 
   public static SparkFlex configSparkFlex(SparkConfiguration config) {
@@ -103,10 +107,7 @@ public class SparkConfigurer {
             smartCurrentLimit,
             encoderMeasurementPeriod,
             encoderAverageDepth,
-            statusFrames,
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty());
+            statusFrames);
     config.apply(limitSwitch);
     boolean flash =
         (inverted != spark.configAccessor.getInverted())
@@ -124,16 +125,13 @@ public class SparkConfigurer {
     return spark;
   }
 
-  private static SparkMaxConfig buildSparkMaxConfig(
+    private static SparkMaxConfig buildSparkMaxConfig(
       IdleMode idleMode,
       boolean inverted,
       int smartCurrentLimit,
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
-      StatusFrames statusFrames,
-      Optional<Double> Pcon,
-      Optional<Double> Icon,
-      Optional<Double> Dcon) {
+      StatusFrames statusFrames) {
     SparkMaxConfig config = new SparkMaxConfig();
     config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
     config.absoluteEncoder.averageDepth(encoderAverageDepth);
@@ -146,9 +144,6 @@ public class SparkConfigurer {
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
     statusFrames.apply(config.signals);
-    if (Pcon.isPresent()) {config.closedLoop.p(Pcon.get().doubleValue());}
-    if (Icon.isPresent()) {config.closedLoop.i(Icon.get().doubleValue());}
-    if (Dcon.isPresent()) {config.closedLoop.d(Dcon.get().doubleValue());}
     return config;
   }
 

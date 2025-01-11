@@ -2,6 +2,7 @@ package frc.robot.util.spark;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class SparkConfiguration {
@@ -12,9 +13,7 @@ public class SparkConfiguration {
   private int encoderMeasurmentPeriod;
   private int averageEncoderDepth;
   private StatusFrames statusFrames;
-  private Optional<Double> P;
-  private Optional<Double> I;
-  private Optional<Double> D;
+  private PIDConstants PID;
 
   public int getId() {
     return id;
@@ -44,16 +43,8 @@ public class SparkConfiguration {
     return statusFrames;
   }
 
-  public Optional<Double> getP() {
-    return P;
-  } 
-
-  public Optional<Double> getI() {
-    return I;
-  } 
-
-  public Optional<Double> getD() {
-    return P;
+  public PIDConstants getPID() {
+    return PID;
   } 
 
   public SparkConfiguration(
@@ -64,9 +55,7 @@ public class SparkConfiguration {
       int encoderMeasurmentPeriod,
       int averageEncoderDepth,
       StatusFrames statusFrames,
-      Optional<Double> P,
-      Optional<Double> I,
-      Optional<Double> D) {
+      PIDConstants PID) {
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
@@ -74,8 +63,6 @@ public class SparkConfiguration {
     this.encoderMeasurmentPeriod = encoderMeasurmentPeriod;
     this.averageEncoderDepth = averageEncoderDepth;
     this.statusFrames = statusFrames;
-    this.P = P;
-    this.I = I;
-    this.D = D;
+    this.PID = PID;
   }
 }

@@ -37,20 +37,23 @@ public class JoystickDriveWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
+
     Translation2d linearVelocity =
         getLinearVelocityFromJoysticks(xPercent.getAsDouble(), yPercent.getAsDouble());
     double omega = MathUtil.applyDeadband(omegaPercent.getAsDouble(), DEADBAND);
     omega = Math.copySign(omega * omega, omega);
-
-    // Convert to field relative speeds
-    double xyMult = 0.5;
-    double omegaMult = 0.3;
+    if (linearVelocity.getNorm() != 0 && linearVelocity.getNorm() > 1) {
+      linearVelocity = linearVelocity.div(linearVelocity.getNorm());
+    }
+    omega = MathUtil.clamp(omega, -1, 1);
+    double xyMult = 0.65;
+    double omegaMult = 0.4;
     if (slowMode.getAsBoolean()) {
       xyMult = 0.3;
-      omegaMult = 0.1;
+      omegaMult = 0.2;
     } else if (fastMode.getAsBoolean()) {
-      xyMult = 1;
-      omegaMult = 0.85;
+      xyMult = 0.98;
+      omegaMult = 0.5;
     }
     ChassisSpeeds speeds =
         new ChassisSpeeds(

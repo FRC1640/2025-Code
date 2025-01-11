@@ -55,7 +55,9 @@ public class RobotContainer {
             () -> driveController.getLeftY(),
             () -> driveController.getLeftX(),
             () -> driveController.getRightX(),
-            gyro));
+            gyro,
+            driveController.rightBumper(),
+            driveController.leftTrigger()));
 
     driveController.start().onTrue(gyro.resetGyroCommand());
   }

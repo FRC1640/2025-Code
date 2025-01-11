@@ -42,7 +42,7 @@ public class RobotConstants {
     public static final double initalSlope = 1.25;
     public static final double finalSlope = 0;
 
-    public static final double maxSteerSpeed = 1000; // rad per second
+    public static final double maxSteerSpeed = 20; // rad per second
 
     public static final SwerveDriveKinematics kinematics =
         new SwerveDriveKinematics(

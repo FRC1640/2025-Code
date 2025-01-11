@@ -92,7 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
         () -> RobotOdometry.instance.getPose("Normal"),
         (x) -> RobotOdometry.instance.setPose(x, "Normal"),
         this::getChassisSpeeds,
-        (x) -> runVelocity(x, false),
+        (x) -> runVelocity(x, false, 0.0),
         new PPHolonomicDriveController(
             new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
@@ -160,14 +160,14 @@ public class DriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric) {
+  public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
             speeds.vyMetersPerSecond / DriveConstants.maxSpeed,
             speeds.omegaRadiansPerSecond / DriveConstants.maxOmega);
 
-    ChassisSpeeds doubleCone = doubleCone(percent, new Translation2d());
+    ChassisSpeeds doubleCone = inceptionMode(percent, new Translation2d(), dreamLevel);
     ChassisSpeeds speedsOptimized =
         fieldCentric
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -200,11 +200,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocity(speeds.get(), true), this).finallyDo(() -> stop());
+    return new RunCommand(() -> runVelocity(speeds.get(), true, 4.0), this).finallyDo(() -> stop());
   }
 
-  public static ChassisSpeeds doubleCone(
-      ChassisSpeeds speedsPercent, Translation2d centerOfRotation) {
+  public static ChassisSpeeds inceptionMode(
+      ChassisSpeeds speedsPercent, Translation2d centerOfRotation, double dreamLevel) {
 
     double xSpeed = speedsPercent.vxMetersPerSecond;
     double ySpeed = speedsPercent.vyMetersPerSecond;
@@ -216,7 +216,10 @@ public class DriveSubsystem extends SubsystemBase {
     if (linearRotSpeed == 0 || translationalSpeed == 0) {
       k = 1;
     } else {
-      k = Math.max(linearRotSpeed, translationalSpeed) / (linearRotSpeed + translationalSpeed);
+      k =
+          Math.pow(
+              Math.max(linearRotSpeed, translationalSpeed) / (linearRotSpeed + translationalSpeed),
+              dreamLevel);
     }
     return new ChassisSpeeds(k * xSpeed, k * ySpeed, k * rot);
   }

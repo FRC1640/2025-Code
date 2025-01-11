@@ -26,6 +26,9 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
 
+  // Dashboard
+  private final DashboardInit dashboard = new DashboardInit();
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -42,7 +45,7 @@ public class RobotContainer {
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     configureBindings();
-    DashboardInit.dashboard();
+    dashboard.dashboard();
   }
 
   private void configureBindings() {

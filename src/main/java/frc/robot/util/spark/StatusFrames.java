@@ -126,7 +126,7 @@ public class StatusFrames {
   }
 
   public static StatusFrames getDefault() {
-    return new StatusFrames(100, 200, 200, 500, 500, 500, 500);
+    return new StatusFrames(20, 250, 20, 20, 20, 20, 20);
   }
 
   public boolean getFlashNecessary(SparkMax spark) {

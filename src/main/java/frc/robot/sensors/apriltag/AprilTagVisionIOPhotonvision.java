@@ -49,14 +49,14 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                 new Rotation2d()); // mechanical advantage did this, but maybe there's a better way
       }
       if (result.multitagResult.isPresent()) { // if the current result can see multiple tags?
-        MultiTargetPNPResult multitag = result.multitagResult.get();
+        MultiTargetPNPResult multitag = result.getMultiTagResult().get();
         Transform3d cameraTransform = multitag.estimatedPose.best;
         Transform3d robotTransform = cameraTransform.plus(cameraDisplacement.inverse());
         Pose3d robotPose =
             new Pose3d(robotTransform.getTranslation(), robotTransform.getRotation());
         double totalTagDistance = 0;
         for (PhotonTrackedTarget target : result.getTargets()) {
-          totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+          totalTagDistance += target.getBestCameraToTarget().getTranslation().getNorm();
         }
         tagIds.addAll(multitag.fiducialIDsUsed);
         poseObservations.add(
@@ -72,7 +72,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         if (tagPose.isPresent()) {
           Transform3d tagTransform =
               new Transform3d(tagPose.get().getTranslation(), tagPose.get().getRotation());
-          Transform3d cameraToTag = target.bestCameraToTarget;
+          Transform3d cameraToTag = target.getBestCameraToTarget();
           Transform3d cameraTransform = tagTransform.plus(cameraToTag.inverse());
           Transform3d robotTransform = cameraTransform.plus(cameraDisplacement.inverse());
           Pose3d robotPose =
@@ -87,10 +87,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                   cameraToTag.getTranslation().getNorm()));
         }
       }
-      inputs.poseObservations = new PoseObservation[poseObservations.size()];
-      for (int i = 0; i < poseObservations.size(); i++) {
-        inputs.poseObservations[i] = poseObservations.get(i);
-      }
+      inputs.poseObservations =
+          poseObservations.toArray(new PoseObservation[poseObservations.size()]);
       int index = 0;
       for (Short id : tagIds) {
         inputs.tagIds[index] = id;

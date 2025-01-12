@@ -2,17 +2,6 @@
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
   "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "bin/": true,
-    "**/.classpath": true,
-    "**/.project": true,
-    "**/.settings": true,
-    "**/.factorypath": true,
-    "**/*~": true
   },
   "files.eol": "\r\n",
   "java.configuration.updateBuildConfiguration": "automatic",

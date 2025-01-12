@@ -4,18 +4,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.alerts.RobotAlerts;
+import frc.robot.util.dashboard.Dashboard;
 
 public class RobotContainer {
   // Subsystems
@@ -25,6 +30,9 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
+
+  // Dashboard
+  private final Dashboard dashboard;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -42,6 +50,7 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
+    dashboard = new Dashboard();
     configureBindings();
   }
 
@@ -49,15 +58,31 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveSubsystem));
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
-            () -> driveController.getLeftY(),
-            () -> driveController.getLeftX(),
-            () -> driveController.getRightX(),
-            gyro));
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
+            driveController.rightBumper(),
+            driveController.leftTrigger()));
+
+    DriveWeightCommand.createWeightTrigger(
+        new DriveToNearestWeight(
+            () -> RobotOdometry.instance.getPose("Normal"),
+            () ->
+                chooseFromAlliance(
+                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            gyro),
+        driveController.a());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
   }
 
+  public <T> T chooseFromAlliance(T valueBlue, T valueRed) {
+    return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? valueRed : valueBlue;
+  }
+
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return dashboard
+        .getAutoChooserCommand()
+        .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

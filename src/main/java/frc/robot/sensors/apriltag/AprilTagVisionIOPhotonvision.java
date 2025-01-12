@@ -87,13 +87,13 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                   cameraToTag.getTranslation().getNorm()));
         }
       }
-      inputs.poseObservations =
-          poseObservations.toArray(new PoseObservation[poseObservations.size()]);
-      int index = 0;
-      for (Short id : tagIds) {
-        inputs.tagIds[index] = id;
-        index++;
-      }
+    }
+    inputs.poseObservations =
+        poseObservations.toArray(new PoseObservation[poseObservations.size()]);
+    int index = 0;
+    for (Short id : tagIds) {
+      inputs.tagIds[index] = id;
+      index++;
     }
   }
 }

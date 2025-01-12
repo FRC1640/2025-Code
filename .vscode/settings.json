@@ -33,5 +33,6 @@
   "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-  },
+},
+"java.debug.settings.onBuildFailureProceed": true,
 }

@@ -18,15 +18,15 @@ public class FieldConstants {
     new Pose2d(13.474446, 4.745482, Rotation2d.fromDegrees(240)),
     new Pose2d(13.890498, 4.0259, Rotation2d.fromDegrees(180)),
     new Pose2d(13.474446, 3.3063179999999996, Rotation2d.fromDegrees(120)),
-    new Pose2d(12.643358, 4.745482, Rotation2d.fromDegrees(60)),
+    new Pose2d(12.643358, 3.3063179999999996, Rotation2d.fromDegrees(60)),
   };
 
   public static final Pose2d[] reefPositionsBlue = new Pose2d[] {
     new Pose2d(5.321046, 4.0259, Rotation2d.fromDegrees(180)),
     new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromDegrees(480)),
-    new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(420)),
+    new Pose2d(4.073905999999999, 3.3063179999999996, Rotation2d.fromDegrees(420)),
     new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(360)),
     new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(300)),
-    new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromDegrees(240)),
+    new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)),
   };
 }

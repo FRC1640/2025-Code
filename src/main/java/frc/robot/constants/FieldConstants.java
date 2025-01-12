@@ -3,8 +3,8 @@ package frc.robot.constants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import org.photonvision.simulation.VisionSystemSim;
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.photonvision.simulation.VisionSystemSim;
 
 public class FieldConstants {
   public static final AprilTagFieldLayout aprilTagLayout =

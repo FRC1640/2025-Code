@@ -1,7 +1,5 @@
 package frc.robot.util.spark;
 
-import java.util.Optional;
-
 import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -45,7 +43,7 @@ public class SparkConfiguration {
 
   public PIDConstants getPID() {
     return PID;
-  } 
+  }
 
   public SparkConfiguration(
       int id,

@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVision;
+import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
@@ -27,8 +27,7 @@ public class RobotOdometry extends PeriodicBase {
   public static RobotOdometry instance;
   private AprilTagVision[] aprilTagVisions;
 
-  public RobotOdometry(
-      DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
+  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
     this.aprilTagVisions = aprilTagVisions;
     instance = this;

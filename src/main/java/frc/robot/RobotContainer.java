@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -14,6 +15,7 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.dashboard.Dashboard;
 
@@ -52,12 +54,17 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveSubsystem));
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
-            () -> driveController.getLeftY(),
-            () -> driveController.getLeftX(),
-            () -> driveController.getRightX(),
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
             gyro,
             driveController.rightBumper(),
             driveController.leftTrigger()));
+
+    DriveWeightCommand.createWeightTrigger(
+        new DriveToPointWeight(
+            () -> RobotOdometry.instance.getPose("Normal"), () -> new Pose2d(), gyro),
+        driveController.a());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
   }

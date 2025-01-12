@@ -15,14 +15,14 @@ public class AutoAlignHelper {
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
-  public Translation2d findNearest(Translation2d[] points, Translation2d robotPose) {
+  public Pose2d findNearest(Pose2d[] points, Pose2d robotPose) {
     if (points.length == 0) {
       return null;
     }
-    Translation2d nearest = points[0];
-    double nearestDist = robotPose.getDistance(nearest);
-    for (Translation2d point : points) {
-      double dist = robotPose.getDistance(point);
+    Pose2d nearest = points[0];
+    double nearestDist = robotPose.getTranslation().getDistance(nearest.getTranslation());
+    for (Pose2d point : points) {
+      double dist = robotPose.getTranslation().getDistance(point.getTranslation());
       if (dist < nearestDist) {
         nearest = point;
         nearestDist = dist;

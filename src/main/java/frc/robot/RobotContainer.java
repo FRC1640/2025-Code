@@ -4,18 +4,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
-import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.dashboard.Dashboard;
 
@@ -57,16 +59,23 @@ public class RobotContainer {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
-            gyro,
             driveController.rightBumper(),
             driveController.leftTrigger()));
 
     DriveWeightCommand.createWeightTrigger(
-        new DriveToPointWeight(
-            () -> RobotOdometry.instance.getPose("Normal"), () -> new Pose2d(), gyro),
+        new DriveToNearestWeight(
+            () -> RobotOdometry.instance.getPose("Normal"),
+            () ->
+                chooseFromAlliance(
+                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            gyro),
         driveController.a());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+  }
+
+  public <T> T chooseFromAlliance(T valueBlue, T valueRed) {
+    return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? valueRed : valueBlue;
   }
 
   public Command getAutonomousCommand() {

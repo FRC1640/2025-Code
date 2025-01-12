@@ -19,7 +19,6 @@ public class GyroIOSim implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    final double LOOP_PERIOD_SECS = 0.02;
     inputs.angleRadiansRaw = RobotOdometry.instance.getPose("Normal").getRotation().getRadians();
     angle = new Rotation2d(inputs.angleRadiansRaw);
 

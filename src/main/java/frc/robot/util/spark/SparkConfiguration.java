@@ -8,10 +8,10 @@ public class SparkConfiguration {
   private IdleMode idleMode;
   private boolean inverted;
   private int currentLimit;
-  private int encoderMeasurmentPeriod;
+  private int encoderMeasurementPeriod;
   private int averageEncoderDepth;
   private StatusFrames statusFrames;
-  private PIDConstants PID;
+  private PIDConstants pid;
 
   public int getId() {
     return id;
@@ -29,8 +29,8 @@ public class SparkConfiguration {
     return currentLimit;
   }
 
-  public int getEncoderMeasurmentPeriod() {
-    return encoderMeasurmentPeriod;
+  public int getEncoderMeasurementPeriod() {
+    return encoderMeasurementPeriod;
   }
 
   public int getAverageEncoderDepth() {
@@ -41,8 +41,8 @@ public class SparkConfiguration {
     return statusFrames;
   }
 
-  public PIDConstants getPID() {
-    return PID;
+  public PIDConstants getPid() {
+    return pid;
   }
 
   public SparkConfiguration(
@@ -50,17 +50,17 @@ public class SparkConfiguration {
       IdleMode idleMode,
       boolean inverted,
       int currentLimit,
-      int encoderMeasurmentPeriod,
+      int encoderMeasurementPeriod,
       int averageEncoderDepth,
       StatusFrames statusFrames,
-      PIDConstants PID) {
+      PIDConstants pid) {
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
     this.currentLimit = currentLimit;
-    this.encoderMeasurmentPeriod = encoderMeasurmentPeriod;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
     this.averageEncoderDepth = averageEncoderDepth;
     this.statusFrames = statusFrames;
-    this.PID = PID;
+    this.pid = pid;
   }
 }

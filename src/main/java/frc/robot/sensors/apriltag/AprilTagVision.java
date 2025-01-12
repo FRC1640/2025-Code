@@ -40,6 +40,7 @@ public class AprilTagVision {
   public String getCameraName() {
     return cameraName;
   }
+
   public double getStandardDeviation() {
     return standardDeviation;
   }

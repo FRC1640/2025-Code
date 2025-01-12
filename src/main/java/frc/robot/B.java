@@ -15,7 +15,6 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
-import frc.robot.util.alerts.RobotAlerts;
 
 public class RobotContainer {
   // Subsystems
@@ -38,7 +37,6 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIO() {});
         break;
     }
-    RobotAlerts alerts = new RobotAlerts();
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
@@ -60,4 +58,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
+}
+
+public class B {
+  public final Batterydrop;
 }

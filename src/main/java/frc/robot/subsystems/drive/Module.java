@@ -4,27 +4,49 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import org.littletonrobotics.junction.Logger;
+import edu.wpi.first.wpilibj.DriverStation
 
 public class Module {
   ModuleIO io;
   PivotId id;
   ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
-
+  private final int index;
+  private final Alert driveDisconnectedAlert;
+  private final Alert turnDisconnectedAlert;
   SlewRateLimiter accelLimiter = new SlewRateLimiter(DriveConstants.accelLimit);
   SlewRateLimiter deaccelLimiter = new SlewRateLimiter(DriveConstants.deaccelLimit);
 
-  public Module(ModuleIO io, PivotId id) {
+  public Module(ModuleIO io, PivotId id, int moduleIndex) {
     this.io = io;
     this.id = id;
+    this.index = moduleIndex;
+    driveDisconnectedAlert =
+        new Alert(
+            "Disconnected drive motor on module " + Integer.toString(index) + ".",
+            AlertType.kError);
+    turnDisconnectedAlert =
+        new Alert(
+            "Disconnected turn motor on module " + Integer.toString(index) + ".", AlertType.kError);
   }
 
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Modules/" + id, inputs);
+
+    io.updateInputs(inputs);
+    Logger.processInputs("Drive/Modules/" + id, inputs);
+
+    if (inputs.driveMotorCurrent == 0) {
+      DriverStation.reportError("Disconnected drive motor on module " + index + ".", false);
   }
+  }
+
+
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {
     boolean flipDriveTeleop = false;

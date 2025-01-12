@@ -45,7 +45,11 @@ public class DriveToPointWeight implements DriveWeight {
 
     // convert to robot relative from field relative
     Translation2d fieldRelative = new Translation2d(xSpeed, ySpeed);
-    fieldRelative = fieldRelative.rotateBy(gyro.getAngleRotation2d().unaryMinus());
+    fieldRelative =
+        fieldRelative.rotateBy(
+            new Rotation2d(
+                    gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
+                .unaryMinus());
     return new ChassisSpeeds(fieldRelative.getX(), fieldRelative.getY(), rotationalPID);
   }
 

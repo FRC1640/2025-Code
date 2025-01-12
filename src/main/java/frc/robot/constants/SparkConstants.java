@@ -27,7 +27,7 @@ public class SparkConstants {
     return SparkConfigurer.configSparkFlex(
         id,
         getDefault().getIdleMode(),
-        false,
+        true,
         80,
         8,
         2,

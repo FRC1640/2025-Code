@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
@@ -28,7 +27,7 @@ public class RobotContainer {
   private final CommandXboxController driveController = new CommandXboxController(0);
 
   // Dashboard
-  private final Dashboard dashboard = new Dashboard();
+  private final Dashboard dashboard;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -45,8 +44,8 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
+    dashboard = new Dashboard();
     configureBindings();
-    dashboard.dashboard(driveSubsystem, driveController);
   }
 
   private void configureBindings() {
@@ -64,7 +63,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Dashboard.getAutoChooserCommand()
+    return dashboard
+        .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

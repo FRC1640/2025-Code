@@ -117,10 +117,6 @@ public class SparkConfigurer {
     config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
     config.absoluteEncoder.averageDepth(encoderAverageDepth);
     config
-        .alternateEncoder
-        .averageDepth(encoderAverageDepth)
-        .measurementPeriod(encoderMeasurementPeriod);
-    config
         .encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);

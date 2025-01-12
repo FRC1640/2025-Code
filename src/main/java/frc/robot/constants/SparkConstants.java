@@ -11,7 +11,7 @@ import frc.robot.util.spark.StatusFrames;
 public class SparkConstants {
   public static final SparkMax getDefaultSparkMax(int id) {
     return SparkConfigurer.configSparkMax(
-        id, IdleMode.kCoast, false, 60, 20, 8, StatusFrames.getDefault());
+        id, IdleMode.kCoast, true, 60, 20, 8, StatusFrames.getDefault());
   }
 
   public static final SparkFlex getDefaultSparkFlex(int id) {
@@ -27,7 +27,7 @@ public class SparkConstants {
     return SparkConfigurer.configSparkFlex(
         id,
         getDefault().getIdleMode(),
-        getDefault().isInverted(),
+        false,
         80,
         8,
         2,

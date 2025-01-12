@@ -2,6 +2,7 @@ package frc.robot.sensors.apriltag;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import java.util.Optional;
@@ -11,10 +12,12 @@ public class AprilTagVision {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
+  private double standardDeviation;
 
-  public AprilTagVision(AprilTagVisionIO io, String cameraName) {
+  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
-    this.cameraName = cameraName;
+    cameraName = cameraConstants.name;
+    standardDeviation = cameraConstants.standardDevConstant;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
   }
 
@@ -36,6 +39,9 @@ public class AprilTagVision {
 
   public String getCameraName() {
     return cameraName;
+  }
+  public double getStandardDeviation() {
+    return standardDeviation;
   }
 
   public void periodic() {

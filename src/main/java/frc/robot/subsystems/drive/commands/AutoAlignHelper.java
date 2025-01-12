@@ -38,7 +38,7 @@ public class AutoAlignHelper {
     double dist = robot.getTranslation().getDistance(target.getTranslation());
     double linearPID = linearDrivePID.calculate(dist, 0);
     double rotationalPID =
-        rotatePID.calculate(robot.getRotation().getRadians(), target.getRotation().getRadians());
+        rotatePID.calculate(robot.getRotation().minus(target.getRotation()).getRadians(), 0);
     linearPID = MathUtil.clamp(linearPID, -1, 1);
     rotationalPID = MathUtil.clamp(rotationalPID, -1, 1);
     linearPID = MathUtil.applyDeadband(linearPID, 0.01);

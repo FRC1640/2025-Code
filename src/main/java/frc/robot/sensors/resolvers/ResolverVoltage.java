@@ -35,6 +35,7 @@ public class ResolverVoltage {
    */
   public ResolverVoltage(
       int channel, double v1, double v2, double angle1, double angle2, double offset) {
+    resolver = new AnalogInput(channel);
     slope = (angle1 - angle2) / (v1 - v2);
     this.offset = offset;
   }

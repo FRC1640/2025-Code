@@ -3,14 +3,22 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +27,8 @@ import frc.robot.Robot;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -26,6 +36,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -77,6 +88,29 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
       config = null;
     }
+    AutoBuilder.configure(
+        () -> RobotOdometry.instance.getPose("Normal"),
+        (x) -> {
+          RobotOdometry.instance.setPose(x, "Normal");
+          RobotOdometry.instance.resetGyro(x);
+        },
+        this::getChassisSpeeds,
+        (x) -> runVelocity(x, false, 0.0),
+        new PPHolonomicDriveController(
+            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+        config,
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        this);
+    Pathfinding.setPathfinder(new LocalADStarAK());
+    PathPlannerLogging.setLogActivePathCallback(
+        (activePath) -> {
+          Logger.recordOutput(
+              "Drive/Path/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+        });
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (targetPose) -> {
+          Logger.recordOutput("Drive/Path/TrajectorySetpoint", targetPose);
+        });
 
     setpointGenerator =
         new SwerveSetpointGenerator(
@@ -129,21 +163,26 @@ public class DriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  public void runVelocityField(ChassisSpeeds speeds) {
+  public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
             speeds.vyMetersPerSecond / DriveConstants.maxSpeed,
             speeds.omegaRadiansPerSecond / DriveConstants.maxOmega);
 
-    ChassisSpeeds doubleCone = doubleCone(percent, new Translation2d());
+    ChassisSpeeds doubleCone = inceptionMode(percent, new Translation2d(), dreamLevel);
     ChassisSpeeds speedsOptimized =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            new ChassisSpeeds(
+        fieldCentric
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                new ChassisSpeeds(
+                    doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
+                    doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
+                    doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
+                gyro.getAngleRotation2d())
+            : new ChassisSpeeds(
                 doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
                 doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
-                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
-            gyro.getAngleRotation2d());
+                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega);
 
     previousSetpoint =
         setpointGenerator.generateSetpoint(
@@ -151,20 +190,24 @@ public class DriveSubsystem extends SubsystemBase {
             speedsOptimized, // The desired target speeds
             0.02 // The loop time of the robot code, in seconds
             );
-
+    Logger.recordOutput("Drive/SwerveStates/SetpointStates", previousSetpoint.moduleStates());
+    Logger.recordOutput(
+        "Drive/SwerveStates/Input", DriveConstants.kinematics.toSwerveModuleStates(speeds));
+    Logger.recordOutput(
+        "Drive/SwerveStates/DoubleCone",
+        DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized));
     for (int i = 0; i < 4; i++) {
-      modules[i].setDesiredStateMetersPerSecond(
-          // previousSetpoint.moduleStates()[i]);
-          DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized)[i]);
+      modules[i].setDesiredStateMetersPerSecond(previousSetpoint.moduleStates()[i]);
+      // DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized)[i]);
     }
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocityField(speeds.get()), this).finallyDo(() -> stop());
+    return new RunCommand(() -> runVelocity(speeds.get(), true, 4.0), this).finallyDo(() -> stop());
   }
 
-  public static ChassisSpeeds doubleCone(
-      ChassisSpeeds speedsPercent, Translation2d centerOfRotation) {
+  public static ChassisSpeeds inceptionMode(
+      ChassisSpeeds speedsPercent, Translation2d centerOfRotation, double dreamLevel) {
 
     double xSpeed = speedsPercent.vxMetersPerSecond;
     double ySpeed = speedsPercent.vyMetersPerSecond;
@@ -176,7 +219,10 @@ public class DriveSubsystem extends SubsystemBase {
     if (linearRotSpeed == 0 || translationalSpeed == 0) {
       k = 1;
     } else {
-      k = Math.max(linearRotSpeed, translationalSpeed) / (linearRotSpeed + translationalSpeed);
+      k =
+          Math.pow(
+              Math.max(linearRotSpeed, translationalSpeed) / (linearRotSpeed + translationalSpeed),
+              dreamLevel);
     }
     return new ChassisSpeeds(k * xSpeed, k * ySpeed, k * rot);
   }

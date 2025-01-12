@@ -28,7 +28,7 @@ public class SparkConstants {
     return SparkConfigurer.configSparkFlex(
         id,
         getDefault().getIdleMode(),
-        getDefault().isInverted(),
+        true,
         80,
         8,
         2,

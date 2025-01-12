@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
@@ -56,6 +58,16 @@ public class RobotOdometry extends PeriodicBase {
 
   public void addEstimator(String name, SwerveDrivePoseEstimator estimator) {
     odometries.put(name, new OdometryStorage(estimator));
+  }
+
+  public void resetGyro(Pose2d newPose) {
+    gyro.setOffset(
+        gyro.getRawAngleRadians()
+            - newPose.getRotation().getRadians()
+            + (DriverStation.getAlliance().isPresent()
+                    && DriverStation.getAlliance().get() == Alliance.Red
+                ? Math.PI
+                : 0));
   }
 
   public Pose2d getPose(String estimator) {

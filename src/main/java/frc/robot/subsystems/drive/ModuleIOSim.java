@@ -64,7 +64,7 @@ public class ModuleIOSim implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
 
-    driveSim.setInputVoltage(driveAppliedVolts);
+    driveSim.setInputVoltage(-driveAppliedVolts);
     turnSim.setInputVoltage(turnAppliedVolts);
     driveSim.update(0.02);
     turnSim.update(0.02);

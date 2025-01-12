@@ -19,4 +19,8 @@ public class RobotPIDConstants {
       new FeedForwardConstants(0.21607, 2.6, 0.21035);
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
+
+  public static final PIDConstants linearDrivePID = new PIDConstants(0.6, 0, 0);
+
+  public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.3, 0.001, 0.0001);
 }

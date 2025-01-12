@@ -1,8 +1,10 @@
 {
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  },
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
-  "files.exclude": {
-  },
+  "files.exclude": {},
   "files.eol": "\r\n",
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
@@ -10,9 +12,11 @@
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     },
@@ -26,5 +30,8 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "spotlessGradle.diagnostics.enable": true,
   "spotlessGradle.format.enable": true,
-"editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+  "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
 }

@@ -70,7 +70,7 @@ public class ModuleIOSim implements ModuleIO {
     turnSim.update(0.02);
 
     inputs.driveConnected = true;
-    inputs.drivePositionMeters = driveSim.getAngularPositionRad() * DriveConstants.wheelRadius;
+    inputs.drivePositionMeters = -driveSim.getAngularPositionRad() * DriveConstants.wheelRadius;
     inputs.driveVelocityMetersPerSecond =
         driveSim.getAngularVelocityRadPerSec() * DriveConstants.wheelRadius;
 

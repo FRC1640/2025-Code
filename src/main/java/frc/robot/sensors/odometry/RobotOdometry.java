@@ -92,6 +92,9 @@ public class RobotOdometry extends PeriodicBase {
   public void updateAllOdometries() {
     for (var estimator : odometries.keySet()) {
       updateOdometryWheels(estimator);
+      for (AprilTagVision aprilTagVision : aprilTagVisions) {
+        addVisionEstimate(estimator, aprilTagVision);
+      }
     }
   }
 

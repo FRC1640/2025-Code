@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.sensors.gyro.Gyro;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -15,7 +14,6 @@ public class JoystickDriveWeight implements DriveWeight {
   private DoubleSupplier xPercent;
   private DoubleSupplier yPercent;
   private DoubleSupplier omegaPercent;
-  private Gyro gyro;
   private static final double DEADBAND = 0.02;
   private BooleanSupplier slowMode;
   private BooleanSupplier fastMode;
@@ -24,13 +22,11 @@ public class JoystickDriveWeight implements DriveWeight {
       DoubleSupplier xPercent,
       DoubleSupplier yPercent,
       DoubleSupplier omegaPercent,
-      Gyro gyro,
       BooleanSupplier slowMode,
       BooleanSupplier fastMode) {
     this.xPercent = xPercent;
     this.yPercent = yPercent;
     this.omegaPercent = omegaPercent;
-    this.gyro = gyro;
     this.slowMode = slowMode;
     this.fastMode = fastMode;
   }

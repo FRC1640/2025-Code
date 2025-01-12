@@ -57,7 +57,6 @@ public class RobotContainer {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
-            gyro,
             driveController.rightBumper(),
             driveController.leftTrigger()));
 

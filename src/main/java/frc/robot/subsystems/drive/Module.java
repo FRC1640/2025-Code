@@ -6,10 +6,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.wpilibj.DriverStation
 
 public class Module {
   ModuleIO io;
@@ -43,10 +43,8 @@ public class Module {
 
     if (inputs.driveMotorCurrent == 0) {
       DriverStation.reportError("Disconnected drive motor on module " + index + ".", false);
+    }
   }
-  }
-
-
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {
     boolean flipDriveTeleop = false;

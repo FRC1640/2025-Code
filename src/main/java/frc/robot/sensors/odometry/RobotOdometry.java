@@ -115,11 +115,11 @@ public class RobotOdometry extends PeriodicBase {
           && poseObservation.ambiguity() < 0.5
           && poseObservation.pose().getZ() < 0.75)) {
         robotPosesRejected.add(visionUpdate);
-        break;
+        continue;
       }
       if (poseObservation.tagCount() == 1 && poseObservation.ambiguity() > 0.3) {
         robotPosesRejected.add(visionUpdate);
-        break;
+        continue;
       }
       robotPosesAccepted.add(visionUpdate);
       double distFactor =

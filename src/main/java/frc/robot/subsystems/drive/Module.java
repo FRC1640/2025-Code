@@ -31,7 +31,7 @@ public class Module {
             AlertType.kError);
     turnDisconnectedAlert =
         new Alert(
-            "Disconnected turn motor on module " + Integer.toString(index) + ".", AlertType.kError);
+            "Disconnected steer motor on module " + Integer.toString(index) + ".", AlertType.kError);
   }
 
   public void periodic() {

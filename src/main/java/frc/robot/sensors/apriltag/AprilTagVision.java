@@ -7,12 +7,12 @@ import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class AprilTagVisionSubsystem {
+public class AprilTagVision {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
 
-  public AprilTagVisionSubsystem(AprilTagVisionIO io, String cameraName) {
+  public AprilTagVision(AprilTagVisionIO io, String cameraName) {
     this.io = io;
     this.cameraName = cameraName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();

@@ -12,7 +12,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
-import frc.robot.sensors.apriltag.AprilTagVisionSubsystem;
+import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
@@ -25,10 +25,10 @@ public class RobotOdometry extends PeriodicBase {
   DriveSubsystem driveSubsystem;
   Gyro gyro;
   public static RobotOdometry instance;
-  private AprilTagVisionSubsystem[] aprilTagVisions;
+  private AprilTagVision[] aprilTagVisions;
 
   public RobotOdometry(
-      DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVisionSubsystem[] aprilTagVisions) {
+      DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
     this.aprilTagVisions = aprilTagVisions;
     instance = this;
@@ -38,7 +38,7 @@ public class RobotOdometry extends PeriodicBase {
 
   @Override
   public void periodic() {
-    for (AprilTagVisionSubsystem aprilTagVision : aprilTagVisions) {
+    for (AprilTagVision aprilTagVision : aprilTagVisions) {
       aprilTagVision.periodic();
     }
     updateAllOdometries();
@@ -96,13 +96,13 @@ public class RobotOdometry extends PeriodicBase {
   public void updateAllOdometries() {
     for (var estimator : odometries.keySet()) {
       updateOdometryWheels(estimator);
-      for (AprilTagVisionSubsystem aprilTagVision : aprilTagVisions) {
+      for (AprilTagVision aprilTagVision : aprilTagVisions) {
         addVisionEstimate(estimator, aprilTagVision);
       }
     }
   }
 
-  public void addVisionEstimate(String estimator, AprilTagVisionSubsystem vision) {
+  public void addVisionEstimate(String estimator, AprilTagVision vision) {
     List<Pose2d> robotPoses = new LinkedList<>();
     List<Pose2d> robotPosesAccepted = new LinkedList<>();
     List<Pose2d> robotPosesRejected = new LinkedList<>();

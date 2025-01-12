@@ -66,10 +66,12 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
-    public static final Transform3d frontTransform =
-        new Transform3d(new Translation3d(), new Rotation3d());
-
-    public static final SimCameraProperties frontCameraProperties = new SimCameraProperties();
+    public static final CameraConstant frontCamera =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(new Translation3d(), new Rotation3d()),
+            1,
+            "Front");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.00001);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }

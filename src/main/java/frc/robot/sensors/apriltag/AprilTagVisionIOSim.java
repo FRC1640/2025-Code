@@ -3,6 +3,7 @@ package frc.robot.sensors.apriltag;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
 import org.photonvision.simulation.PhotonCameraSim;
-import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -20,11 +20,10 @@ public class AprilTagVisionIOSim implements AprilTagVisionIO {
   private final PhotonCameraSim cameraSim;
   private final Transform3d cameraDisplacement;
 
-  public AprilTagVisionIOSim(
-      String name, SimCameraProperties properties, Transform3d cameraDisplacement) {
-    this.camera = new PhotonCamera(name);
-    this.cameraSim = new PhotonCameraSim(camera, properties);
-    this.cameraDisplacement = cameraDisplacement;
+  public AprilTagVisionIOSim(CameraConstant constant) {
+    this.camera = new PhotonCamera(constant.name);
+    this.cameraSim = new PhotonCameraSim(camera, constant.cameraProperties);
+    this.cameraDisplacement = constant.transform;
     FieldConstants.fieldSim.addCamera(cameraSim, cameraDisplacement);
   }
 

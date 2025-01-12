@@ -45,16 +45,14 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOPhotonvision("Front", CameraConstants.frontTransform),
-                "Front"));
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
+                CameraConstants.frontCamera));
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOSim(
-                    "Front", CameraConstants.frontCameraProperties, CameraConstants.frontTransform),
-                "Front"));
+                new AprilTagVisionIOSim(CameraConstants.frontCamera), CameraConstants.frontCamera));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

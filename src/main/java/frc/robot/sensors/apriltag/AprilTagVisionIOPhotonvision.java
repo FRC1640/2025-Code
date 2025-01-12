@@ -3,6 +3,7 @@ package frc.robot.sensors.apriltag;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,9 +20,9 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   private final Transform3d cameraDisplacement; // represents position of camera relative to robot
 
   public AprilTagVisionIOPhotonvision(
-      String name, Transform3d cameraDisplacement) { // name should match camera "nickname"
-    this.camera = new PhotonCamera(name);
-    this.cameraDisplacement = cameraDisplacement;
+      CameraConstant constant) { // name should match camera "nickname"
+    this.camera = new PhotonCamera(constant.name);
+    this.cameraDisplacement = constant.transform;
   }
 
   @Override

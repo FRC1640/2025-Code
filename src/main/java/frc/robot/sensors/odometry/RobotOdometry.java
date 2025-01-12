@@ -114,7 +114,9 @@ public class RobotOdometry extends PeriodicBase {
         return;
       }
       double distFactor =
-          Math.pow(poseObservation.averageTagDistance(), 2.0) / poseObservation.tagCount();
+          Math.pow(poseObservation.averageTagDistance(), 2.0)
+              / poseObservation.tagCount()
+              * vision.getStandardDeviation();
       double xy = 0.02 * distFactor;
       double rot = Double.MAX_VALUE;
       if (poseObservation.ambiguity() < 0.1 && poseObservation.tagCount() > 1) {

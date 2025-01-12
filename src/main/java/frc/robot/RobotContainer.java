@@ -4,8 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
@@ -15,7 +16,7 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
-import frc.robot.util.dashboard.DashboardInit;
+import frc.robot.util.dashboard.Dashboard;
 
 public class RobotContainer {
   // Subsystems
@@ -27,7 +28,7 @@ public class RobotContainer {
   private final CommandXboxController driveController = new CommandXboxController(0);
 
   // Dashboard
-  private final DashboardInit dashboard = new DashboardInit();
+  private final Dashboard dashboard = new Dashboard();
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -45,7 +46,7 @@ public class RobotContainer {
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     configureBindings();
-    dashboard.dashboard();
+    dashboard.dashboard(driveSubsystem, driveController);
   }
 
   private void configureBindings() {
@@ -63,6 +64,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return Dashboard.getAutoChooserCommand()
+        .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

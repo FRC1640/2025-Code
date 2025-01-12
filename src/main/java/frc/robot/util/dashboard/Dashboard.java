@@ -11,47 +11,37 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.sysid.CreateSysidCommand;
 import java.util.function.BooleanSupplier;
 
-public class DashboardInit {
-
-  /*
-   * TODO: dashboard with elastic
-   *
-   * should include:
-   * - sysid setup
-   * - pid tuner? maybe?
-   * - auto setup
-   * - in match dashboard
-   */
+public class Dashboard {
 
   private SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Integer> testChooser = new SendableChooser<Integer>();
-  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-  // private ShuffleboardTab[] tabs = {
-  //   Shuffleboard.getTab("SYSID"), Shuffleboard.getTab("PID")
-  // };
-  // private SendableChooser<Command> testChooser = new SendableChooser<Command>();
-  private DriveSubsystem driveSubsystem;
-  private CommandXboxController controller;
+  private static SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
+  private static DriveSubsystem driveSubsystem;
+  private static CommandXboxController controller;
   private int testSelected = -1;
   private String meh = "nothing here yet. womp womp";
 
-  // private enum TestModes {
-  //   NONE,
-  //   SYSID,
-  //   PID
-  // }
+  // private Dashboard() {}
 
-  public void dashboard() {
-    testInit();
+  public void dashboard(DriveSubsystem driveSubsystem, CommandXboxController controller) {
+    Dashboard.driveSubsystem = driveSubsystem;
+    Dashboard.controller = controller;
+    // testInit();
     autoInit();
     teleopInit();
+    sysidInit();
+    // pidInit();
   }
 
   private void autoInit() {
     autoChooser = AutoBuilder.buildAutoChooser();
     ShuffleboardTab autoTab = Shuffleboard.getTab("AUTO");
-    ;
     autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
+  }
+
+  public static Command getAutoChooserCommand() {
+    return autoChooser.getSelected();
   }
 
   private void teleopInit() {
@@ -87,26 +77,12 @@ public class DashboardInit {
         }
         break;
     }
-    // switch (testModes) {
-    //   case 0:
-    //     if (testModes != 0) {
-    //       sysidInit();
-    //     }
-    //     break;
-
-    //   case 1:
-    //     if (testModes != 1) {
-    //       pidInit();
-    //     }
-    //     break;
-    // }
   }
 
   private void sysidInit() {
     BooleanSupplier startNext = () -> controller.b().getAsBoolean();
     BooleanSupplier cancel = () -> controller.a().getAsBoolean();
     ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
-    // Shuffleboard.selectTab("SYSID");
     sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
     sysidChooser.addOption(
         "Swerve",

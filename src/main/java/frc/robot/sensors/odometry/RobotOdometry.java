@@ -5,7 +5,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
@@ -16,9 +19,11 @@ public class RobotOdometry extends PeriodicBase {
   DriveSubsystem driveSubsystem;
   Gyro gyro;
   public static RobotOdometry instance;
+  private AprilTagVision[] aprilTagVisions;
 
-  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro) {
+  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
+    this.aprilTagVisions = aprilTagVisions;
     instance = this;
     this.gyro = gyro;
     SparkOdometryThread.getInstance().start();
@@ -26,6 +31,9 @@ public class RobotOdometry extends PeriodicBase {
 
   @Override
   public void periodic() {
+    for (AprilTagVision aprilTagVision : aprilTagVisions) {
+      aprilTagVision.periodic();
+    }
     updateAllOdometries();
   }
 
@@ -41,7 +49,9 @@ public class RobotOdometry extends PeriodicBase {
           new SwerveModulePosition(),
           new SwerveModulePosition()
         },
-        new Pose2d());
+        new Pose2d(),
+        CameraConstants.defaultDriveStandardDev,
+        CameraConstants.defaultVisionStandardDev);
   }
 
   public void addEstimator(String name, SwerveDrivePoseEstimator estimator) {
@@ -70,6 +80,19 @@ public class RobotOdometry extends PeriodicBase {
     for (var estimator : odometries.keySet()) {
       updateOdometryWheels(estimator);
     }
+  }
+
+  public void addVisionEstimate(String estimator, AprilTagVision vision) {
+    SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
+    // Pose2d visionUpdate = vision.get
+    // if (isPoseValid())
+  }
+
+  public boolean isPoseValid(Pose2d pose) {
+    return FieldConstants.width >= pose.getX()
+        && FieldConstants.height >= pose.getY()
+        && pose.getX() > 0
+        && pose.getY() > 0;
   }
 
   public void updateOdometryWheels(String estimator) {

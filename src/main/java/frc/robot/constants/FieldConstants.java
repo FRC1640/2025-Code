@@ -12,4 +12,7 @@ public class FieldConstants {
   static {
     fieldSim.addAprilTags(aprilTagLayout);
   }
+
+  public static final double height = 8.21;
+  public static final double width = 16.54;
 }

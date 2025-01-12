@@ -10,8 +10,7 @@ public interface AprilTagVisionIO {
     public boolean connected = false;
     public AprilTagObservation latestTargetObservation =
         new AprilTagObservation(new Rotation2d(), new Rotation2d());
-    public PoseObservation[] poseObservations =
-        new PoseObservation[0]; // need to learn more about how this is used outside IO
+    public PoseObservation[] poseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
   }
 
@@ -19,12 +18,6 @@ public interface AprilTagVisionIO {
 
   public static record PoseObservation(
       double ambiguity, double timestamp, Pose3d pose, int tagCount, double averageTagDistance) {}
-
-  /* public static enum PoseObservationType {
-    MEGATAG1,
-    MEGATAG2,
-    PHOTONVISION
-  } */
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
 }

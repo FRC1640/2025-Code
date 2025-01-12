@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
-import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
+import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
@@ -60,7 +60,8 @@ public class RobotContainer {
     }
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry =
-        new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
+        new RobotOdometry(
+            driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     dashboard = new Dashboard();
     configureBindings();

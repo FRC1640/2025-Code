@@ -33,10 +33,13 @@ public class AprilTagVision {
     return inputs.connected;
   }
 
-  public PoseObservation[] getPose() {
+  public PoseObservation[] getPoses() {
     return inputs.poseObservations;
   }
 
+  public String getCameraName() {
+    return cameraName;
+  }
   public double getStandardDeviation() {
     return standardDeviation;
   }
@@ -47,7 +50,7 @@ public class AprilTagVision {
     for (int i = 0; i < inputs.tagIds.length; i++) {
       Optional<Pose3d> pose = FieldConstants.aprilTagLayout.getTagPose(inputs.tagIds[i]);
       if (pose.isPresent()) {
-        Logger.recordOutput("AprilTagVision/TagPoses", pose.get());
+        Logger.recordOutput("Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses", pose.get());
       }
     }
   }

@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotOdometry extends PeriodicBase {
@@ -25,7 +27,8 @@ public class RobotOdometry extends PeriodicBase {
   public static RobotOdometry instance;
   private AprilTagVision[] aprilTagVisions;
 
-  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
+  public RobotOdometry(
+      DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
     this.aprilTagVisions = aprilTagVisions;
     instance = this;
@@ -100,19 +103,26 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public void addVisionEstimate(String estimator, AprilTagVision vision) {
-    for (PoseObservation poseObservation : vision.getPose()) {
+    List<Pose2d> robotPoses = new LinkedList<>();
+    List<Pose2d> robotPosesAccepted = new LinkedList<>();
+    List<Pose2d> robotPosesRejected = new LinkedList<>();
+    for (PoseObservation poseObservation : vision.getPoses()) {
       SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
       Pose2d visionUpdate = poseObservation.pose().toPose2d();
+      robotPoses.add(visionUpdate);
       if (!(isPoseValid(visionUpdate)
           && vision.isConnected()
           && poseObservation.tagCount() > 0
           && poseObservation.ambiguity() < 0.5
           && poseObservation.pose().getZ() < 0.75)) {
-        return;
+        robotPosesRejected.add(visionUpdate);
+        break;
       }
       if (poseObservation.tagCount() == 1 && poseObservation.ambiguity() > 0.3) {
-        return;
+        robotPosesRejected.add(visionUpdate);
+        break;
       }
+      robotPosesAccepted.add(visionUpdate);
       double distFactor =
           Math.pow(poseObservation.averageTagDistance(), 2.0)
               / poseObservation.tagCount()
@@ -127,6 +137,18 @@ public class RobotOdometry extends PeriodicBase {
       Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/distFactor", distFactor);
       odometry.addVisionMeasurement(
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
+    }
+    for (Pose2d pose : robotPoses) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPoses", pose);
+    }
+    for (Pose2d pose : robotPosesAccepted) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesAccepted", pose);
+    }
+    for (Pose2d pose : robotPosesRejected) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesRejected", pose);
     }
   }
 

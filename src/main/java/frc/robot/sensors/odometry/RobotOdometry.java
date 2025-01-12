@@ -1,5 +1,6 @@
 package frc.robot.sensors.odometry;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -7,20 +8,28 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.sensors.apriltag.AprilTagVision;
+import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotOdometry extends PeriodicBase {
   DriveSubsystem driveSubsystem;
   Gyro gyro;
   public static RobotOdometry instance;
+  private AprilTagVision[] aprilTagVisions;
 
-  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro) {
+  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
+    this.aprilTagVisions = aprilTagVisions;
     instance = this;
     this.gyro = gyro;
     SparkOdometryThread.getInstance().start();
@@ -28,6 +37,9 @@ public class RobotOdometry extends PeriodicBase {
 
   @Override
   public void periodic() {
+    for (AprilTagVision aprilTagVision : aprilTagVisions) {
+      aprilTagVision.periodic();
+    }
     updateAllOdometries();
   }
 
@@ -43,7 +55,9 @@ public class RobotOdometry extends PeriodicBase {
           new SwerveModulePosition(),
           new SwerveModulePosition()
         },
-        new Pose2d());
+        new Pose2d(),
+        CameraConstants.defaultDriveStandardDev,
+        CameraConstants.defaultVisionStandardDev);
   }
 
   public void addEstimator(String name, SwerveDrivePoseEstimator estimator) {
@@ -81,7 +95,67 @@ public class RobotOdometry extends PeriodicBase {
   public void updateAllOdometries() {
     for (var estimator : odometries.keySet()) {
       updateOdometryWheels(estimator);
+      for (AprilTagVision aprilTagVision : aprilTagVisions) {
+        addVisionEstimate(estimator, aprilTagVision);
+      }
     }
+  }
+
+  public void addVisionEstimate(String estimator, AprilTagVision vision) {
+    List<Pose2d> robotPoses = new LinkedList<>();
+    List<Pose2d> robotPosesAccepted = new LinkedList<>();
+    List<Pose2d> robotPosesRejected = new LinkedList<>();
+    for (PoseObservation poseObservation : vision.getPoses()) {
+      SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
+      Pose2d visionUpdate = poseObservation.pose().toPose2d();
+      robotPoses.add(visionUpdate);
+      if (!(isPoseValid(visionUpdate)
+          && vision.isConnected()
+          && poseObservation.tagCount() > 0
+          && poseObservation.ambiguity() < 0.5
+          && poseObservation.pose().getZ() < 0.75)) {
+        robotPosesRejected.add(visionUpdate);
+        continue;
+      }
+      if (poseObservation.tagCount() == 1 && poseObservation.ambiguity() > 0.3) {
+        robotPosesRejected.add(visionUpdate);
+        continue;
+      }
+      robotPosesAccepted.add(visionUpdate);
+      double distFactor =
+          Math.pow(poseObservation.averageTagDistance(), 2.0)
+              / poseObservation.tagCount()
+              * vision.getStandardDeviation();
+      double xy = 0.02 * distFactor;
+      double rot = Double.MAX_VALUE;
+      if (poseObservation.ambiguity() < 0.1 && poseObservation.tagCount() > 1) {
+        rot = 0.06 * distFactor;
+      }
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/xyDev", xy);
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/rotDev", rot);
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/distFactor", distFactor);
+      odometry.addVisionMeasurement(
+          visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
+    }
+    for (Pose2d pose : robotPoses) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPoses", pose);
+    }
+    for (Pose2d pose : robotPosesAccepted) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesAccepted", pose);
+    }
+    for (Pose2d pose : robotPosesRejected) {
+      Logger.recordOutput(
+          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesRejected", pose);
+    }
+  }
+
+  public boolean isPoseValid(Pose2d pose) {
+    return FieldConstants.width >= pose.getX()
+        && FieldConstants.height >= pose.getY()
+        && pose.getX() > 0
+        && pose.getY() > 0;
   }
 
   public void updateOdometryWheels(String estimator) {

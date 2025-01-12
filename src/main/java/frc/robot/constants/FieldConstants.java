@@ -1,9 +1,23 @@
 package frc.robot.constants;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.photonvision.simulation.VisionSystemSim;
 
 public class FieldConstants {
+  public static final AprilTagFieldLayout aprilTagLayout =
+      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  public static final VisionSystemSim fieldSim = new VisionSystemSim("sim field");
+
+  static {
+    fieldSim.addAprilTags(aprilTagLayout);
+  }
+
+  public static final double height = 8.21;
+  public static final double width = 16.54;
+
   public static final int kNorth = 0;
   public static final int kNorthEast = 1;
   public static final int kSouthEast = 2;

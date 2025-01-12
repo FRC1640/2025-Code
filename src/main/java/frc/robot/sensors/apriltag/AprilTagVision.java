@@ -27,10 +27,6 @@ public class AprilTagVision {
     return inputs.connected;
   }
 
-  public boolean getDisconnected() {
-    return !inputs.connected;
-  }
-
   public PoseObservation getPose() {
     return inputs.poseObservations[0];
   }

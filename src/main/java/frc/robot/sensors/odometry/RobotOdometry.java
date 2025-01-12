@@ -1,5 +1,6 @@
 package frc.robot.sensors.odometry;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -96,8 +97,26 @@ public class RobotOdometry extends PeriodicBase {
 
   public void addVisionEstimate(String estimator, AprilTagVision vision) {
     SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
-    // Pose2d visionUpdate = vision.get
-    // if (isPoseValid())
+    Pose2d visionUpdate = vision.getPose().pose().toPose2d();
+    if (!(isPoseValid(visionUpdate)
+        && vision.isConnected()
+        && vision.getPose().tagCount() > 0
+        && vision.getPose().ambiguity() < 0.5
+        && vision.getPose().pose().getZ() < 0.75)) {
+      return;
+    }
+    if (vision.getPose().tagCount() == 1 && vision.getPose().ambiguity() > 0.3) {
+      return;
+    }
+    double distFactor =
+        Math.pow(vision.getPose().averageTagDistance(), 2.0) / vision.getPose().tagCount();
+    double xy = 0.02 * distFactor;
+    double rot = Double.MAX_VALUE;
+    if (vision.getPose().ambiguity() < 0.1 && vision.getPose().tagCount() > 1) {
+      rot = 0.06 * distFactor;
+    }
+    odometry.addVisionMeasurement(
+        visionUpdate, vision.getPose().timestamp(), VecBuilder.fill(xy, xy, rot));
   }
 
   public boolean isPoseValid(Pose2d pose) {

@@ -12,6 +12,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
+import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
@@ -99,30 +100,32 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public void addVisionEstimate(String estimator, AprilTagVision vision) {
-    SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
-    Pose2d visionUpdate = vision.getPose().pose().toPose2d();
-    if (!(isPoseValid(visionUpdate)
-        && vision.isConnected()
-        && vision.getPose().tagCount() > 0
-        && vision.getPose().ambiguity() < 0.5
-        && vision.getPose().pose().getZ() < 0.75)) {
-      return;
+    for (PoseObservation poseObservation : vision.getPose()) {
+      SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
+      Pose2d visionUpdate = poseObservation.pose().toPose2d();
+      if (!(isPoseValid(visionUpdate)
+          && vision.isConnected()
+          && poseObservation.tagCount() > 0
+          && poseObservation.ambiguity() < 0.5
+          && poseObservation.pose().getZ() < 0.75)) {
+        return;
+      }
+      if (poseObservation.tagCount() == 1 && poseObservation.ambiguity() > 0.3) {
+        return;
+      }
+      double distFactor =
+          Math.pow(poseObservation.averageTagDistance(), 2.0) / poseObservation.tagCount();
+      double xy = 0.02 * distFactor;
+      double rot = Double.MAX_VALUE;
+      if (poseObservation.ambiguity() < 0.1 && poseObservation.tagCount() > 1) {
+        rot = 0.06 * distFactor;
+      }
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/xyDev", xy);
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/rotDev", rot);
+      Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/distFactor", distFactor);
+      odometry.addVisionMeasurement(
+          visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
-    if (vision.getPose().tagCount() == 1 && vision.getPose().ambiguity() > 0.3) {
-      return;
-    }
-    double distFactor =
-        Math.pow(vision.getPose().averageTagDistance(), 2.0) / vision.getPose().tagCount();
-    double xy = 0.02 * distFactor;
-    double rot = Double.MAX_VALUE;
-    if (vision.getPose().ambiguity() < 0.1 && vision.getPose().tagCount() > 1) {
-      rot = 0.06 * distFactor;
-    }
-    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/xyDev", xy);
-    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/rotDev", rot);
-    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/distFactor", distFactor);
-    odometry.addVisionMeasurement(
-        visionUpdate, vision.getPose().timestamp(), VecBuilder.fill(xy, xy, rot));
   }
 
   public boolean isPoseValid(Pose2d pose) {

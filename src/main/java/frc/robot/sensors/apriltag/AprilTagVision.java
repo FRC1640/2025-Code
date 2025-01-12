@@ -27,8 +27,8 @@ public class AprilTagVision {
     return inputs.connected;
   }
 
-  public PoseObservation getPose() {
-    return inputs.poseObservations[0];
+  public PoseObservation[] getPose() {
+    return inputs.poseObservations;
   }
 
   public void periodic() {

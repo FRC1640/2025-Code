@@ -90,7 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Normal"),
-        (x) -> RobotOdometry.instance.setPose(x, "Normal"),
+        (x) -> {
+          RobotOdometry.instance.setPose(x, "Normal");
+          RobotOdometry.instance.resetGyro(x);
+        },
         this::getChassisSpeeds,
         (x) -> runVelocity(x, false, 0.0),
         new PPHolonomicDriveController(

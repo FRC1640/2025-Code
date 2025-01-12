@@ -203,7 +203,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocity(speeds.get(), true, 4.0), this).finallyDo(() -> stop());
+    return new RunCommand(() -> runVelocity(speeds.get(), true, 2.5), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds inceptionMode(

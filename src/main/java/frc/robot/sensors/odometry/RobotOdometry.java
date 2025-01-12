@@ -118,6 +118,9 @@ public class RobotOdometry extends PeriodicBase {
     if (vision.getPose().ambiguity() < 0.1 && vision.getPose().tagCount() > 1) {
       rot = 0.06 * distFactor;
     }
+    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/xyDev", xy);
+    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/rotDev", rot);
+    Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/distFactor", distFactor);
     odometry.addVisionMeasurement(
         visionUpdate, vision.getPose().timestamp(), VecBuilder.fill(xy, xy, rot));
   }

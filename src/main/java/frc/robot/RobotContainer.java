@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
-import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
+import frc.robot.sensors.apriltag.AprilTagVisionSubsystem;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
@@ -31,7 +31,7 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
-  private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
+  private ArrayList<AprilTagVisionSubsystem> aprilTagVisions = new ArrayList<>();
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -44,14 +44,14 @@ public class RobotContainer {
       case REAL:
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
-            new AprilTagVision(
+            new AprilTagVisionSubsystem(
                 new AprilTagVisionIOPhotonvision("Front", CameraConstants.frontTransform),
                 "Front"));
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
         aprilTagVisions.add(
-            new AprilTagVision(
+            new AprilTagVisionSubsystem(
                 new AprilTagVisionIOSim(
                     "Front", CameraConstants.frontCameraProperties, CameraConstants.frontTransform),
                 "Front"));
@@ -62,7 +62,8 @@ public class RobotContainer {
     }
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry =
-        new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
+        new RobotOdometry(
+            driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVisionSubsystem[]::new));
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     dashboard = new Dashboard();
     configureBindings();

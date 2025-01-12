@@ -7,12 +7,12 @@ import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class AprilTagVision {
+public class AprilTagVisionSubsystem {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
 
-  public AprilTagVision(AprilTagVisionIO io, String cameraName) {
+  public AprilTagVisionSubsystem(AprilTagVisionIO io, String cameraName) {
     this.io = io;
     this.cameraName = cameraName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
@@ -30,8 +30,12 @@ public class AprilTagVision {
     return inputs.connected;
   }
 
-  public PoseObservation[] getPose() {
+  public PoseObservation[] getPoses() {
     return inputs.poseObservations;
+  }
+
+  public String getCameraName() {
+    return cameraName;
   }
 
   public void periodic() {
@@ -40,7 +44,7 @@ public class AprilTagVision {
     for (int i = 0; i < inputs.tagIds.length; i++) {
       Optional<Pose3d> pose = FieldConstants.aprilTagLayout.getTagPose(inputs.tagIds[i]);
       if (pose.isPresent()) {
-        Logger.recordOutput("AprilTagVision/TagPoses", pose.get());
+        Logger.recordOutput("Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses", pose.get());
       }
     }
   }

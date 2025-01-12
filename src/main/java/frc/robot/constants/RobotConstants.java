@@ -39,8 +39,8 @@ public class RobotConstants {
     public static final double accelLimit = 20;
     public static final double deaccelLimit = 11;
 
-    public static final double initalSlope = 1.25;
-    public static final double finalSlope = 0;
+    public static final double initalSlope = 3.125;
+    public static final double finalSlope = 4.375;
 
     public static final double maxSteerSpeed = 50; // rad per second
 

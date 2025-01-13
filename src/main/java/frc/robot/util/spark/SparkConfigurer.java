@@ -129,24 +129,6 @@ public class SparkConfigurer {
     return spark;
   }
 
-  private static SparkMaxConfig buildSparkMaxConfig(
-      IdleMode idleMode,
-      boolean inverted,
-      int smartCurrentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames) {
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
-    config.absoluteEncoder.averageDepth(encoderAverageDepth);
-    config
-        .encoder
-        .quadratureAverageDepth(encoderAverageDepth)
-        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
-    statusFrames.apply(config.signals);
-    return config;
-  }
-
   public static SparkFlex configSparkFlex(
       int id,
       IdleMode idleMode,

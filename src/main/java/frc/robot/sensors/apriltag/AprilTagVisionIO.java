@@ -11,7 +11,7 @@ public interface AprilTagVisionIO {
     public AprilTagObservation latestTargetObservation =
         new AprilTagObservation(new Rotation2d(), new Rotation2d());
     public PoseObservation[] poseObservations = new PoseObservation[0];
-    public int[] tagIds = new int[0];
+    public int[] tagIds = new int[1000];
   }
 
   public static record AprilTagObservation(Rotation2d tx, Rotation2d ty) {}

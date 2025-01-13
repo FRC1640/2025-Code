@@ -16,8 +16,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
-  private final PhotonCamera camera; // the camera
-  private final Transform3d cameraDisplacement; // represents position of camera relative to robot
+  protected final PhotonCamera camera; // the camera
+  protected final Transform3d cameraDisplacement; // represents position of camera relative to robot
 
   public AprilTagVisionIOPhotonvision(
       CameraConstant constant) { // name should match camera "nickname"

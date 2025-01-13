@@ -1,10 +1,18 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
   public static enum PivotId {
@@ -39,10 +47,10 @@ public class RobotConstants {
     public static final double accelLimit = 20;
     public static final double deaccelLimit = 11;
 
-    public static final double initalSlope = 1.25;
-    public static final double finalSlope = 0;
+    public static final double initalSlope = 3.125;
+    public static final double finalSlope = 4.375;
 
-    public static final double maxSteerSpeed = 1000; // rad per second
+    public static final double maxSteerSpeed = 50; // rad per second
 
     public static final SwerveDriveKinematics kinematics =
         new SwerveDriveKinematics(
@@ -55,5 +63,16 @@ public class RobotConstants {
     public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
 
     public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+  }
+
+  public static class CameraConstants {
+    public static final CameraConstant frontCamera =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(new Translation3d(), new Rotation3d()),
+            1,
+            "Front");
+    public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.00001);
+    public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
 }

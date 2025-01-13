@@ -7,38 +7,55 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.sensors.gyro.Gyro;
-import frc.robot.subsystems.drive.commands.DriveWeight;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class JoystickDriveWeight implements DriveWeight {
   private DoubleSupplier xPercent;
   private DoubleSupplier yPercent;
   private DoubleSupplier omegaPercent;
-  private Gyro gyro;
   private static final double DEADBAND = 0.02;
+  private BooleanSupplier slowMode;
+  private BooleanSupplier fastMode;
 
   public JoystickDriveWeight(
-      DoubleSupplier xPercent, DoubleSupplier yPercent, DoubleSupplier omegaPercent, Gyro gyro) {
+      DoubleSupplier xPercent,
+      DoubleSupplier yPercent,
+      DoubleSupplier omegaPercent,
+      BooleanSupplier slowMode,
+      BooleanSupplier fastMode) {
     this.xPercent = xPercent;
     this.yPercent = yPercent;
     this.omegaPercent = omegaPercent;
-    this.gyro = gyro;
+    this.slowMode = slowMode;
+    this.fastMode = fastMode;
   }
 
   @Override
   public ChassisSpeeds getSpeeds() {
+
     Translation2d linearVelocity =
         getLinearVelocityFromJoysticks(xPercent.getAsDouble(), yPercent.getAsDouble());
     double omega = MathUtil.applyDeadband(omegaPercent.getAsDouble(), DEADBAND);
     omega = Math.copySign(omega * omega, omega);
-
-    // Convert to field relative speeds & send command
+    if (linearVelocity.getNorm() != 0 && linearVelocity.getNorm() > 1) {
+      linearVelocity = linearVelocity.div(linearVelocity.getNorm());
+    }
+    omega = MathUtil.clamp(omega, -1, 1);
+    double xyMult = 0.65;
+    double omegaMult = 0.5;
+    if (slowMode.getAsBoolean()) {
+      xyMult = 0.3;
+      omegaMult = 0.2;
+    } else if (fastMode.getAsBoolean()) {
+      xyMult = 0.98;
+      omegaMult = 0.75;
+    }
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * DriveConstants.maxSpeed,
-            linearVelocity.getY() * DriveConstants.maxSpeed,
-            omega * DriveConstants.maxOmega);
+            linearVelocity.getX() * DriveConstants.maxSpeed * xyMult,
+            linearVelocity.getY() * DriveConstants.maxSpeed * xyMult,
+            omega * DriveConstants.maxOmega * omegaMult);
     return speeds;
   }
 

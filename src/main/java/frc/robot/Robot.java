@@ -128,7 +128,7 @@ public class Robot extends LoggedRobot {
   public void autonomousExit() {}
 
   @Override
-  public void teleopInit() { 
+  public void teleopInit() {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -147,7 +147,8 @@ public class Robot extends LoggedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     Dashboard.getSysidCommand().schedule();
-    CommandScheduler.getInstance().getActiveButtonLoop().clear();;
+    CommandScheduler.getInstance().getActiveButtonLoop().clear();
+    ;
   }
 
   @Override

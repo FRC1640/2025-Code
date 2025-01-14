@@ -77,17 +77,6 @@ public class SparkConfigurer {
         config.getStatusFrames());
   }
 
-  public static SparkFlex configSparkFlex(SparkConfiguration config) {
-    return configSparkFlex(
-        config.getId(),
-        config.getIdleMode(),
-        config.isInverted(),
-        config.getCurrentLimit(),
-        config.getEncoderMeasurmentPeriod(),
-        config.getAverageEncoderDepth(),
-        config.getStatusFrames());
-  }
-
   public static SparkMax configSparkMax(
       int id,
       IdleMode idleMode,
@@ -140,24 +129,6 @@ public class SparkConfigurer {
     return spark;
   }
 
-  private static SparkMaxConfig buildSparkMaxConfig(
-      IdleMode idleMode,
-      boolean inverted,
-      int smartCurrentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames) {
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
-    config.absoluteEncoder.averageDepth(encoderAverageDepth);
-    config
-        .encoder
-        .quadratureAverageDepth(encoderAverageDepth)
-        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
-    statusFrames.apply(config.signals);
-    return config;
-  }
-
   public static SparkFlex configSparkFlex(
       int id,
       IdleMode idleMode,
@@ -206,6 +177,17 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + id, flash);
     return spark;
+  }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config) {
+    return configSparkFlex(
+        config.getId(),
+        config.getIdleMode(),
+        config.isInverted(),
+        config.getCurrentLimit(),
+        config.getEncoderMeasurmentPeriod(),
+        config.getAverageEncoderDepth(),
+        config.getStatusFrames());
   }
 
   public static SparkFlex configSparkFlex(
@@ -258,6 +240,28 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + id, flash);
     return spark;
+  }
+
+  private static SparkMaxConfig buildSparkMaxConfig(
+      IdleMode idleMode,
+      boolean inverted,
+      int smartCurrentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames) {
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.idleMode(idleMode).inverted(inverted).smartCurrentLimit(smartCurrentLimit);
+    config.absoluteEncoder.averageDepth(encoderAverageDepth);
+    config
+        .alternateEncoder
+        .averageDepth(encoderAverageDepth)
+        .measurementPeriod(encoderMeasurementPeriod);
+    config
+        .encoder
+        .quadratureAverageDepth(encoderAverageDepth)
+        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    statusFrames.apply(config.signals);
+    return config;
   }
 
   private static SparkFlexConfig buildSparkFlexConfig(

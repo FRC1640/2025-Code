@@ -17,7 +17,7 @@ public interface AprilTagVisionIO {
   public static record AprilTagObservation(Rotation2d tx, Rotation2d ty) {}
 
   public static record PoseObservation(
-      double ambiguity, double timestamp, Pose3d pose, int tagCount, double averageTagDistance) {}
+      double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
 }

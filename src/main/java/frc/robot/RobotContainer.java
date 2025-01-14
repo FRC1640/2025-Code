@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -52,7 +53,10 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIOSim());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOSim(CameraConstants.frontCamera), CameraConstants.frontCamera));
+                new AprilTagVisionIOSim(
+                    CameraConstants.frontCamera,
+                    () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
+                CameraConstants.frontCamera));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

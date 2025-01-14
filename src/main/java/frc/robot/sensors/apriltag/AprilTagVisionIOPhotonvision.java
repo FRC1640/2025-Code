@@ -8,16 +8,13 @@ import frc.robot.constants.FieldConstants;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.MultiTargetPNPResult;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
-  private final PhotonCamera camera; // the camera
-  private final Transform3d cameraDisplacement; // represents position of camera relative to robot
+  protected final PhotonCamera camera; // the camera
+  protected final Transform3d cameraDisplacement; // represents position of camera relative to robot
 
   public AprilTagVisionIOPhotonvision(
       CameraConstant constant) { // name should match camera "nickname"
@@ -27,74 +24,92 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
 
   @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
-    inputs.connected = camera.isConnected(); // easy to update
-    Set<Short> tagIds = new HashSet<>(); // will be filled in in loop and sent to inputs
-    List<PoseObservation> poseObservations =
-        new LinkedList<>(); // will be sent to io after loop. Why linked?
-    for (PhotonPipelineResult result : camera.getAllUnreadResults()) { // monitor call frequency
-      if (result.hasTargets()) { // if it has a target? Must mean if it has an apriltag in view
+    inputs.connected = camera.isConnected();
+
+    // Read new camera observations
+    Set<Short> tagIds = new HashSet<>();
+    List<PoseObservation> poseObservations = new LinkedList<>();
+    for (var result : camera.getAllUnreadResults()) {
+      // Update latest target observation
+      if (result.hasTargets()) {
         inputs.latestTargetObservation =
             new AprilTagObservation(
-                new Rotation2d(
-                    result
-                        .getBestTarget()
-                        .getYaw()), // best target seems to rely on some sort of configuration
-                new Rotation2d(
-                    result
-                        .getBestTarget()
-                        .getPitch())); // sends tx (yaw) and ty (pitch) to the inputs
+                Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
+                Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
       } else {
         inputs.latestTargetObservation =
-            new AprilTagObservation(
-                new Rotation2d(),
-                new Rotation2d()); // mechanical advantage did this, but maybe there's a better way
+            new AprilTagObservation(new Rotation2d(), new Rotation2d());
       }
-      if (result.multitagResult.isPresent()) { // if the current result can see multiple tags?
-        MultiTargetPNPResult multitag = result.getMultiTagResult().get();
-        Transform3d cameraTransform = multitag.estimatedPose.best;
-        Transform3d robotTransform = cameraTransform.plus(cameraDisplacement.inverse());
-        Pose3d robotPose =
-            new Pose3d(robotTransform.getTranslation(), robotTransform.getRotation());
-        double totalTagDistance = 0;
-        for (PhotonTrackedTarget target : result.getTargets()) {
-          totalTagDistance += target.getBestCameraToTarget().getTranslation().getNorm();
+
+      // Add pose observation
+      if (result.multitagResult.isPresent()) { // Multitag result
+        var multitagResult = result.multitagResult.get();
+
+        // Calculate robot pose
+        Transform3d fieldToCamera = multitagResult.estimatedPose.best;
+        Transform3d fieldToRobot = fieldToCamera.plus(cameraDisplacement.inverse());
+        Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
+
+        // Calculate average tag distance
+        double totalTagDistance = 0.0;
+        for (var target : result.targets) {
+          totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
         }
-        tagIds.addAll(multitag.fiducialIDsUsed);
+
+        // Add tag IDs
+        tagIds.addAll(multitagResult.fiducialIDsUsed);
+
+        // Add observation
         poseObservations.add(
             new PoseObservation(
-                multitag.estimatedPose.ambiguity,
-                result.getTimestampSeconds(),
-                robotPose,
-                multitag.fiducialIDsUsed.size(),
-                totalTagDistance / result.targets.size()));
-      } else if (!result.targets.isEmpty()) {
-        PhotonTrackedTarget target = result.targets.get(0);
-        Optional<Pose3d> tagPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
+                result.getTimestampSeconds(), // Timestamp
+                robotPose, // 3D pose estimate
+                multitagResult.estimatedPose.ambiguity, // Ambiguity
+                multitagResult.fiducialIDsUsed.size(), // Tag count
+                totalTagDistance / result.targets.size() // Average tag distance
+                ));
+
+      } else if (!result.targets.isEmpty()) { // Single tag result
+        var target = result.targets.get(0);
+
+        // Calculate robot pose
+        var tagPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
         if (tagPose.isPresent()) {
-          Transform3d tagTransform =
+          Transform3d fieldToTarget =
               new Transform3d(tagPose.get().getTranslation(), tagPose.get().getRotation());
-          Transform3d cameraToTag = target.getBestCameraToTarget();
-          Transform3d cameraTransform = tagTransform.plus(cameraToTag.inverse());
-          Transform3d robotTransform = cameraTransform.plus(cameraDisplacement.inverse());
-          Pose3d robotPose =
-              new Pose3d(robotTransform.getTranslation(), robotTransform.getRotation());
+          Transform3d cameraToTarget = target.bestCameraToTarget;
+          Transform3d fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse());
+          Transform3d fieldToRobot = fieldToCamera.plus(cameraDisplacement.inverse());
+          Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
+
+          // Add tag ID
           tagIds.add((short) target.fiducialId);
+
+          // Add observation
           poseObservations.add(
               new PoseObservation(
-                  target.poseAmbiguity,
-                  result.getTimestampSeconds(),
-                  robotPose,
-                  1,
-                  cameraToTag.getTranslation().getNorm()));
+                  result.getTimestampSeconds(), // Timestamp
+                  robotPose, // 3D pose estimate
+                  target.poseAmbiguity, // Ambiguity
+                  1, // Tag count
+                  cameraToTarget.getTranslation().getNorm() // Average tag distance
+                  )); // Observation type
         }
       }
     }
-    inputs.poseObservations =
-        poseObservations.toArray(new PoseObservation[poseObservations.size()]);
-    int index = 0;
-    for (Short id : tagIds) {
-      inputs.tagIds[index] = id;
-      index++;
+
+    // Save pose observations to inputs object
+    inputs.poseObservations = new PoseObservation[poseObservations.size()];
+    Logger.recordOutput("size", poseObservations.size());
+    for (int i = 0; i < poseObservations.size(); i++) {
+      inputs.poseObservations[i] = poseObservations.get(i);
+    }
+
+    // Save tag IDs to inputs objects
+    inputs.tagIds = new int[tagIds.size()];
+    int i = 0;
+    for (int id : tagIds) {
+      inputs.tagIds[i++] = id;
     }
   }
 }

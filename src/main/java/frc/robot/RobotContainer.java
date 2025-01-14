@@ -44,7 +44,7 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro);
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
-    dashboard = new Dashboard();
+    dashboard = new Dashboard(driveSubsystem, driveController);
     configureBindings();
   }
 

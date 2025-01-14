@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.periodic.PeriodicScheduler;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -127,7 +128,7 @@ public class Robot extends LoggedRobot {
   public void autonomousExit() {}
 
   @Override
-  public void teleopInit() {
+  public void teleopInit() { 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -145,6 +146,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    Dashboard.getSysidCommand().schedule();
+    CommandScheduler.getInstance().getActiveButtonLoop().clear();;
   }
 
   @Override

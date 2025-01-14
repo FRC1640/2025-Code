@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,11 +49,15 @@ public class AprilTagVision {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("AprilTagVision/" + cameraName, inputs);
+    ArrayList<Pose3d> tagPoses = new ArrayList<>();
     for (int i = 0; i < inputs.tagIds.length; i++) {
       Optional<Pose3d> pose = FieldConstants.aprilTagLayout.getTagPose(inputs.tagIds[i]);
       if (pose.isPresent()) {
-        Logger.recordOutput("Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses", pose.get());
+        tagPoses.add(pose.get());
       }
     }
+    Logger.recordOutput(
+        "Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses",
+        tagPoses.toArray(Pose3d[]::new));
   }
 }

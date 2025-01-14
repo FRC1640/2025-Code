@@ -14,12 +14,13 @@ public class AprilTagVisionIOSim extends AprilTagVisionIOPhotonvision {
     super(constant);
     this.getPose = getPose;
     this.cameraSim = new PhotonCameraSim(camera, constant.cameraProperties);
-    FieldConstants.fieldSim.addCamera(cameraSim, cameraDisplacement);
+    FieldConstants.visionSim.addAprilTags(FieldConstants.aprilTagLayout);
+    FieldConstants.visionSim.addCamera(cameraSim, cameraDisplacement);
   }
 
   @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
-    FieldConstants.fieldSim.update(getPose.get());
+    FieldConstants.visionSim.update(getPose.get());
     super.updateInputs(inputs);
   }
 }

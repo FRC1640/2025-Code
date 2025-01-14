@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -30,10 +29,10 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   public void updateInputs(AprilTagVisionIOInputs inputs) {
     inputs.connected = camera.isConnected(); // easy to update
     Set<Short> tagIds = new HashSet<>(); // will be filled in in loop and sent to inputs
-    Logger.recordOutput("Vision/tags", camera.getAllUnreadResults().size());
     List<PoseObservation> poseObservations =
         new LinkedList<>(); // will be sent to io after loop. Why linked?
-    for (PhotonPipelineResult result : camera.getAllUnreadResults()) { // monitor call frequency
+    List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+    for (PhotonPipelineResult result : results) { // monitor call frequency
       if (result.hasTargets()) { // if it has a target? Must mean if it has an apriltag in view
         inputs.latestTargetObservation =
             new AprilTagObservation(

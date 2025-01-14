@@ -56,7 +56,7 @@ public class Dashboard {
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 
-  public static Command getSysidCommand(){
+  public static Command getSysidCommand() {
     return sysidChooser.getSelected();
   }
 }

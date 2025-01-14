@@ -5,15 +5,26 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.util.sysid.CreateSysidCommand;
+import java.util.function.BooleanSupplier;
 
 public class Dashboard {
 
-  // private SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
+  private DriveSubsystem driveSubsystem;
+  private CommandXboxController controller;
+
+  private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-  public Dashboard() {
+  public Dashboard(DriveSubsystem driveSubsystem, CommandXboxController controller) {
+    this.driveSubsystem = driveSubsystem;
+    this.controller = controller;
     autoInit();
     teleopInit();
+    sysidInit();
   }
 
   private void autoInit() {
@@ -28,20 +39,24 @@ public class Dashboard {
 
   private void teleopInit() {}
 
-  // private void sysidInit() {
-  //   BooleanSupplier startNext = controller.b();
-  //   BooleanSupplier cancel = controller.a();
-  //   ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
-  //   sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
-  //   sysidChooser.addOption(
-  //       "Swerve",
-  //       CreateSysidCommand.createCommand(
-  //           driveSubsystem::sysIdQuasistatic,
-  //           driveSubsystem::sysIdDynamic,
-  //           "Swerve",
-  //           startNext,
-  //           cancel,
-  //           () -> driveSubsystem.stop()));
-  //   sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
-  // }
+  private void sysidInit() {
+    BooleanSupplier startNext = controller.b();
+    BooleanSupplier cancel = controller.a();
+    ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
+    sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
+    sysidChooser.addOption(
+        "Swerve",
+        CreateSysidCommand.createCommand(
+            driveSubsystem::sysIdQuasistatic,
+            driveSubsystem::sysIdDynamic,
+            "Swerve",
+            startNext,
+            cancel,
+            () -> driveSubsystem.stop()));
+    sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
+  }
+
+  public static Command getSysidCommand() {
+    return sysidChooser.getSelected();
+  }
 }

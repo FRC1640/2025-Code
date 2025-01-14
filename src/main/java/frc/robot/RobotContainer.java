@@ -66,7 +66,7 @@ public class RobotContainer {
     robotOdometry =
         new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
-    dashboard = new Dashboard();
+    dashboard = new Dashboard(driveSubsystem, driveController);
     configureBindings();
   }
 

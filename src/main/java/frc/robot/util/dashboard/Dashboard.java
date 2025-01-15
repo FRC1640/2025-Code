@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -10,16 +11,41 @@ public class Dashboard {
 
   // private SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  boolean test1 = false, test2 = false, test3 = true; // placeholder booleans >:)
+  int test5 = 2; // placeholder integers :O
+  String test6 = "PHOTON VISION FEED GOES HERE"; // placeholder string >:(
 
   public Dashboard() {
     autoInit();
     teleopInit();
+    mainInit();
   }
 
   private void autoInit() {
     autoChooser = AutoBuilder.buildAutoChooser();
     ShuffleboardTab autoTab = Shuffleboard.getTab("AUTO");
     autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
+  }
+
+  private void mainInit() {
+    ShuffleboardTab mainTab = Shuffleboard.getTab("MAIN");
+    mainTab
+        .addInteger(
+            "Time Left in Match:", () -> Math.round(DriverStation.getMatchTime() * 10000) / 10000)
+        .withSize(5, 3)
+        .withPosition(0, 0);
+    mainTab.addBoolean("Coral in Bay?", () -> test1).withSize(5, 3).withPosition(0, 3);
+    mainTab.addBoolean("Algae in Bay?", () -> test2).withSize(5, 3).withPosition(0, 6);
+    mainTab.addString("Photon Vision", () -> test6).withSize(9, 9).withPosition(5, 0);
+    mainTab.addInteger("Height of Coral Getter", () -> test5).withSize(5, 3).withPosition(14, 0);
+    mainTab
+        .addBoolean("Robot Getting More Resources?", () -> test3)
+        .withSize(5, 3)
+        .withPosition(14, 3);
+    mainTab
+        .addBoolean("This is here to make all this look nice.", () -> true)
+        .withSize(5, 3)
+        .withPosition(14, 6);
   }
 
   public Command getAutoChooserCommand() {

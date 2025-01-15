@@ -1,0 +1,14 @@
+{
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost"
+  },
+  "transitory": {
+    "photonvision": {
+      "Front": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

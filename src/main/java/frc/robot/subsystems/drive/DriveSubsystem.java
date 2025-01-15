@@ -90,7 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Normal"),
-        (x) -> RobotOdometry.instance.setPose(x, "Normal"),
+        (x) -> {
+          RobotOdometry.instance.setPose(x, "Normal");
+          RobotOdometry.instance.resetGyro(x);
+        },
         this::getChassisSpeeds,
         (x) -> runVelocity(x, false, 0.0),
         new PPHolonomicDriveController(
@@ -102,11 +105,11 @@ public class DriveSubsystem extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
           Logger.recordOutput(
-              "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
+              "Drive/Path/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
         });
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
-          Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+          Logger.recordOutput("Drive/Path/TrajectorySetpoint", targetPose);
         });
 
     setpointGenerator =
@@ -200,7 +203,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocity(speeds.get(), true, 4.0), this).finallyDo(() -> stop());
+    return new RunCommand(() -> runVelocity(speeds.get(), true, 2.5), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds inceptionMode(

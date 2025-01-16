@@ -27,6 +27,8 @@ import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
 
+// import com.pathplanner.lib.auto.NamedCommands;
+
 public class RobotContainer {
   // Subsystems
   private final DriveSubsystem driveSubsystem;
@@ -101,4 +103,8 @@ public class RobotContainer {
         .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
+
+  // public void generateNamedCommands() {
+  //   NamedCommands.registerCommand("Enable Apriltags", new Instantcommand(()->driveSubsystem.));
+  // }
 }

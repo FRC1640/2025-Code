@@ -63,7 +63,20 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "enableApriltags",
+      "waypointRelativePos": 0.492857142857144,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "disableAprilTags",
+      "waypointRelativePos": 2.1999999999999993,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

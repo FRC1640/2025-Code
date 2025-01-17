@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -68,6 +69,7 @@ public class RobotContainer {
     robotOdometry =
         new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
+    generateNamedCommands();
     dashboard = new Dashboard(driveSubsystem, driveController);
     configureBindings();
   }
@@ -109,5 +111,8 @@ public class RobotContainer {
         "enableApriltags", new InstantCommand(() -> driveSubsystem.setTagsAuto(true)));
     NamedCommands.registerCommand(
         "disableApriltags", new InstantCommand(() -> driveSubsystem.setTagsAuto(false)));
+    // event trigger example
+    new EventTrigger("enableApriltags")
+        .onTrue(new InstantCommand(() -> System.out.println("apriltags enabled!")));
   }
 }

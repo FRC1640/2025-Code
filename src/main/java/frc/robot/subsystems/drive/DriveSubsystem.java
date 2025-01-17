@@ -45,6 +45,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveSetpointGenerator setpointGenerator;
   private SwerveSetpoint previousSetpoint;
   public static final Lock odometryLock = new ReentrantLock();
+  public boolean tagsAuto = false;
 
   public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
@@ -242,5 +243,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysIdRoutine.dynamic(direction);
+  }
+
+  public void setTagsAuto(boolean value) {
+    tagsAuto = value;
   }
 }

@@ -113,7 +113,8 @@ public class RobotOdometry extends PeriodicBase {
           && vision.isConnected()
           && poseObservation.tagCount() > 0
           && poseObservation.ambiguity() < 0.5
-          && poseObservation.pose().getZ() < 0.75)) {
+          && poseObservation.pose().getZ() < 0.75
+          && driveSubsystem.tagsAuto == true)) {
         robotPosesRejected.add(visionUpdate);
         continue;
       }

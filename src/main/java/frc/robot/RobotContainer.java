@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
@@ -26,8 +28,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
-
-// import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
   // Subsystems
@@ -104,7 +104,10 @@ public class RobotContainer {
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 
-  // public void generateNamedCommands() {
-  //   NamedCommands.registerCommand("Enable Apriltags", new Instantcommand(()->driveSubsystem.));
-  // }
+  public void generateNamedCommands() {
+    NamedCommands.registerCommand(
+        "enableApriltags", new InstantCommand(() -> driveSubsystem.setTagsAuto(true)));
+    NamedCommands.registerCommand(
+        "disableApriltags", new InstantCommand(() -> driveSubsystem.setTagsAuto(false)));
+  }
 }

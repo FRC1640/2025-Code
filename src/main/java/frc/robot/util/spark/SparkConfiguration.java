@@ -16,25 +16,9 @@ public class SparkConfiguration {
   private int encoderMeasurementPeriod;
   private int encoderAverageDepth;
   private StatusFrames statusFrames;
-  private Optional<PIDConstants> pid;
-  private Optional<LimitSwitchConfig> limitSwitch;
+  private PIDConstants pid;
+  private LimitSwitchConfig limitSwitch;
   private SparkBaseConfig inner;
-
-  public void limitSwitch(LimitSwitchConfig limitSwitchConfig) {
-    limitSwitch = Optional.of(limitSwitchConfig);
-  }
-
-  public boolean configuresLimitSwitch() {
-    return limitSwitch.isPresent();
-  }
-
-  public void pid(PIDConstants pid) {
-    this.pid = Optional.of(pid);
-  }
-
-  public boolean configuresPid() {
-    return pid.isPresent();
-  }
 
   public int getId() {
     return id;
@@ -65,19 +49,11 @@ public class SparkConfiguration {
   }
 
   public Optional<PIDConstants> getPID() {
-    return pid;
-  }
-  
-  public PIDConstants retrievePID() {
-    return pid.get();
+    return Optional.ofNullable(pid);
   }
 
   public Optional<LimitSwitchConfig> getLimitSwitch() {
-    return limitSwitch;
-  }
-
-  public LimitSwitchConfig retrieveLimitSwitch() {
-    return limitSwitch.get();
+    return Optional.ofNullable(limitSwitch);
   }
 
   public SparkBaseConfig getInnerConfig() {
@@ -92,8 +68,76 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
-      Optional<PIDConstants> pid,
-      Optional<LimitSwitchConfig> limitSwitch,
+      SparkMaxConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        null,
+        null,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      PIDConstants pid,
+      SparkMaxConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        pid,
+        null,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      LimitSwitchConfig limitSwitchConfig,
+      SparkMaxConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        null,
+        limitSwitchConfig,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      PIDConstants pid,
+      LimitSwitchConfig limitSwitch,
       SparkMaxConfig seed) {
     this.id = id;
     this.idleMode = idleMode;
@@ -112,12 +156,11 @@ public class SparkConfiguration {
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
-    if (pid.isPresent()) {
-      PIDConstants pidConstants = pid.get();
-      inner.closedLoop.p(pidConstants.kP).i(pidConstants.kI).d(pidConstants.kD);
+    if (pid != null) {
+      seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
     }
-    if (limitSwitch.isPresent()) {
-      ;
+    if (limitSwitch != null) {
+      seed.limitSwitch.apply(limitSwitch);
     }
     inner = seed;
   }
@@ -131,6 +174,76 @@ public class SparkConfiguration {
       int encoderAverageDepth,
       StatusFrames statusFrames,
       SparkFlexConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        null,
+        null,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      PIDConstants pid,
+      SparkFlexConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        pid,
+        null,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      LimitSwitchConfig limitSwitchConfig,
+      SparkFlexConfig seed) {
+    this(
+        id,
+        idleMode,
+        inverted,
+        currentLimit,
+        encoderMeasurementPeriod,
+        encoderAverageDepth,
+        statusFrames,
+        null,
+        limitSwitchConfig,
+        seed);
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      PIDConstants pid,
+      LimitSwitchConfig limitSwitch,
+      SparkFlexConfig seed) {
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
@@ -138,8 +251,8 @@ public class SparkConfiguration {
     this.encoderMeasurementPeriod = encoderMeasurementPeriod;
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
-    this.pid = Optional.empty();
-    this.limitSwitch = Optional.empty();
+    this.pid = pid;
+    this.limitSwitch = limitSwitch;
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.externalEncoder
@@ -148,6 +261,12 @@ public class SparkConfiguration {
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    if (pid != null) {
+      seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
+    }
+    if (limitSwitch != null) {
+      seed.limitSwitch.apply(limitSwitch);
+    }
     inner = seed;
   }
 }

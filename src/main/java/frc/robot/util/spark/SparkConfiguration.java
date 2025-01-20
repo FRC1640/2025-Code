@@ -1,5 +1,6 @@
 package frc.robot.util.spark;
 
+import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -13,6 +14,7 @@ public class SparkConfiguration {
   private int encoderMeasurementPeriod;
   private int encoderAverageDepth;
   private StatusFrames statusFrames;
+  private PIDConstants pid;
   private SparkBaseConfig inner;
 
   public int getId() {
@@ -55,6 +57,7 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
+      PIDConstants pid,
       SparkMaxConfig seed) {
     this.id = id;
     this.idleMode = idleMode;
@@ -82,6 +85,7 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
+      PIDConstants pid,
       SparkFlexConfig seed) {
     this.id = id;
     this.idleMode = idleMode;

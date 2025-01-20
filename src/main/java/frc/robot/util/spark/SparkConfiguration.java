@@ -57,6 +57,62 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
+      SparkMaxConfig seed) {
+    this.id = id;
+    this.idleMode = idleMode;
+    this.inverted = inverted;
+    this.currentLimit = currentLimit;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
+    this.encoderAverageDepth = encoderAverageDepth;
+    this.statusFrames = statusFrames;
+    this.pid = new PIDConstants(1); // TODO is this a reasonable default?
+    seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
+    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    seed.alternateEncoder
+        .averageDepth(encoderAverageDepth)
+        .measurementPeriod(encoderMeasurementPeriod);
+    seed.encoder
+        .quadratureAverageDepth(encoderAverageDepth)
+        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    inner = seed;
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      SparkFlexConfig seed) {
+    this.id = id;
+    this.idleMode = idleMode;
+    this.inverted = inverted;
+    this.currentLimit = currentLimit;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
+    this.encoderAverageDepth = encoderAverageDepth;
+    this.statusFrames = statusFrames;
+    this.pid = new PIDConstants(1); // TODO is this a reasonable default?
+    seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
+    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    seed.externalEncoder
+        .averageDepth(encoderAverageDepth)
+        .measurementPeriod(encoderMeasurementPeriod);
+    seed.encoder
+        .quadratureAverageDepth(encoderAverageDepth)
+        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    inner = seed;
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
       PIDConstants pid,
       SparkMaxConfig seed) {
     this.id = id;
@@ -66,6 +122,7 @@ public class SparkConfiguration {
     this.encoderMeasurementPeriod = encoderMeasurementPeriod;
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
+    this.pid = pid;
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.alternateEncoder
@@ -74,6 +131,7 @@ public class SparkConfiguration {
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
     inner = seed;
   }
 
@@ -94,6 +152,7 @@ public class SparkConfiguration {
     this.encoderMeasurementPeriod = encoderMeasurementPeriod;
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
+    this.pid = pid;
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.externalEncoder
@@ -102,6 +161,7 @@ public class SparkConfiguration {
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
     inner = seed;
   }
 }

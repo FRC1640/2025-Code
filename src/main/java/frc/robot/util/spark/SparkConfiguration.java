@@ -1,15 +1,19 @@
 package frc.robot.util.spark;
 
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class SparkConfiguration {
   private int id;
   private IdleMode idleMode;
   private boolean inverted;
   private int currentLimit;
-  private int encoderMeasurmentPeriod;
-  private int averageEncoderDepth;
+  private int encoderMeasurementPeriod;
+  private int encoderAverageDepth;
   private StatusFrames statusFrames;
+  private SparkBaseConfig inner;
 
   public int getId() {
     return id;
@@ -27,16 +31,20 @@ public class SparkConfiguration {
     return currentLimit;
   }
 
-  public int getEncoderMeasurmentPeriod() {
-    return encoderMeasurmentPeriod;
+  public int getEncoderMeasurementPeriod() {
+    return encoderMeasurementPeriod;
   }
 
-  public int getAverageEncoderDepth() {
-    return averageEncoderDepth;
+  public int getEncoderAverageDepth() {
+    return encoderAverageDepth;
   }
 
   public StatusFrames getStatusFrames() {
     return statusFrames;
+  }
+
+  public SparkBaseConfig getInnerConfig() {
+    return inner;
   }
 
   public SparkConfiguration(
@@ -44,15 +52,52 @@ public class SparkConfiguration {
       IdleMode idleMode,
       boolean inverted,
       int currentLimit,
-      int encoderMeasurmentPeriod,
-      int averageEncoderDepth,
-      StatusFrames statusFrames) {
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      SparkMaxConfig seed) {
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
     this.currentLimit = currentLimit;
-    this.encoderMeasurmentPeriod = encoderMeasurmentPeriod;
-    this.averageEncoderDepth = averageEncoderDepth;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
+    this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
+    seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
+    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    seed.alternateEncoder
+        .averageDepth(encoderAverageDepth)
+        .measurementPeriod(encoderMeasurementPeriod);
+    seed.encoder
+        .quadratureAverageDepth(encoderAverageDepth)
+        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    inner = seed;
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      SparkFlexConfig seed) {
+    this.id = id;
+    this.idleMode = idleMode;
+    this.inverted = inverted;
+    this.currentLimit = currentLimit;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
+    this.encoderAverageDepth = encoderAverageDepth;
+    this.statusFrames = statusFrames;
+    seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
+    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    seed.externalEncoder
+        .averageDepth(encoderAverageDepth)
+        .measurementPeriod(encoderMeasurementPeriod);
+    seed.encoder
+        .quadratureAverageDepth(encoderAverageDepth)
+        .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    inner = seed;
   }
 }

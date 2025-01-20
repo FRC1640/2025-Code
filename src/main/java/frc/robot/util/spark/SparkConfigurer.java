@@ -72,8 +72,8 @@ public class SparkConfigurer {
         config.getIdleMode(),
         config.isInverted(),
         config.getCurrentLimit(),
-        config.getEncoderMeasurmentPeriod(),
-        config.getAverageEncoderDepth(),
+        config.getEncoderMeasurementPeriod(),
+        config.getEncoderAverageDepth(),
         config.getStatusFrames());
   }
 
@@ -185,8 +185,8 @@ public class SparkConfigurer {
         config.getIdleMode(),
         config.isInverted(),
         config.getCurrentLimit(),
-        config.getEncoderMeasurmentPeriod(),
-        config.getAverageEncoderDepth(),
+        config.getEncoderMeasurementPeriod(),
+        config.getEncoderAverageDepth(),
         config.getStatusFrames());
   }
 

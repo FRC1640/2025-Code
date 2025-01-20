@@ -46,20 +46,25 @@ public class SparkConfigurer {
               || (config.getPID().get().kI != spark.configAccessor.closedLoop.getI())
               || (config.getPID().get().kD != spark.configAccessor.closedLoop.getD()));
     }
-    if (config.getLimitSwitch().isPresent()) {
-      flash = (
-        flash || (config.getLimitSwitch().get().)
-      );
-    }
+    return flash;
   }
 
   private static boolean getFlash(SparkConfiguration config, SparkFlex spark) {
-    return ((config.isInverted() != spark.configAccessor.getInverted())
-        || (config.getIdleMode() != spark.configAccessor.getIdleMode())
-        || (config.getCurrentLimit() != spark.configAccessor.getSmartCurrentLimit())
-        || (config.getEncoderMeasurementPeriod()
-            != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
-        || (config.getEncoderAverageDepth()
-            != spark.configAccessor.encoder.getQuadratureAverageDepth()));
+    boolean flash =
+        ((config.isInverted() != spark.configAccessor.getInverted())
+            || (config.getIdleMode() != spark.configAccessor.getIdleMode())
+            || (config.getCurrentLimit() != spark.configAccessor.getSmartCurrentLimit())
+            || (config.getEncoderMeasurementPeriod()
+                != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
+            || (config.getEncoderAverageDepth()
+                != spark.configAccessor.encoder.getQuadratureAverageDepth()));
+    if (config.getPID().isPresent()) {
+      flash =
+          (flash
+              || (config.getPID().get().kP != spark.configAccessor.closedLoop.getP())
+              || (config.getPID().get().kI != spark.configAccessor.closedLoop.getI())
+              || (config.getPID().get().kD != spark.configAccessor.closedLoop.getD()));
+    }
+    return flash;
   }
 }

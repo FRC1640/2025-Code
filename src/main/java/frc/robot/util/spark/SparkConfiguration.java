@@ -1,10 +1,12 @@
 package frc.robot.util.spark;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import java.util.Optional;
 
 public class SparkConfiguration {
   private int id;
@@ -15,7 +17,16 @@ public class SparkConfiguration {
   private int encoderAverageDepth;
   private StatusFrames statusFrames;
   private PIDConstants pid;
+  private Optional<LimitSwitchConfig> limitSwitch;
   private SparkBaseConfig inner;
+
+  public void limitSwitch(LimitSwitchConfig limitSwitchConfig) {
+    limitSwitch = Optional.of(limitSwitchConfig);
+  }
+
+  public boolean configuresLimitSwitch() {
+    return limitSwitch.isPresent();
+  }
 
   public int getId() {
     return id;
@@ -45,6 +56,14 @@ public class SparkConfiguration {
     return statusFrames;
   }
 
+  public PIDConstants getPID() {
+    return pid;
+  }
+
+  public Optional<LimitSwitchConfig> getLimitSwitch() {
+    return limitSwitch;
+  }
+
   public SparkBaseConfig getInnerConfig() {
     return inner;
   }
@@ -66,6 +85,7 @@ public class SparkConfiguration {
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
     this.pid = new PIDConstants(1); // TODO is this a reasonable default?
+    this.limitSwitch = Optional.empty();
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.alternateEncoder
@@ -94,6 +114,7 @@ public class SparkConfiguration {
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
     this.pid = new PIDConstants(1); // TODO is this a reasonable default?
+    this.limitSwitch = Optional.empty();
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.externalEncoder
@@ -123,6 +144,7 @@ public class SparkConfiguration {
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
     this.pid = pid;
+    this.limitSwitch = Optional.empty();
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.alternateEncoder
@@ -153,6 +175,7 @@ public class SparkConfiguration {
     this.encoderAverageDepth = encoderAverageDepth;
     this.statusFrames = statusFrames;
     this.pid = pid;
+    this.limitSwitch = Optional.empty();
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
     seed.absoluteEncoder.averageDepth(encoderAverageDepth);
     seed.externalEncoder

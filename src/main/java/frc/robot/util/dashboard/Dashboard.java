@@ -47,7 +47,11 @@ public class Dashboard {
         .withPosition(0, 0);
     mainTab.addBoolean("Coral in Bay?", () -> test1).withSize(5, 3).withPosition(0, 3);
     mainTab.addBoolean("Algae in Bay?", () -> test2).withSize(5, 3).withPosition(0, 6);
-    mainTab.addString("Photon Vision", () -> test6).withSize(9, 9).withPosition(5, 0);
+    mainTab
+        .addCamera("Photon Vision", "Peak Vision", "http://localhost:1182/stream.mjpg")
+        // the url for this has to be changed to real photon vision when implemented
+        .withSize(9, 9)
+        .withPosition(5, 0);
     mainTab.addInteger("Height of Coral Getter", () -> test5).withSize(5, 3).withPosition(14, 0);
     mainTab
         .addBoolean("Robot Getting More Resources?", () -> test3)

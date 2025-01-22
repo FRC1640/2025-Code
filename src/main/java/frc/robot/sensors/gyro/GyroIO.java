@@ -36,5 +36,4 @@ public interface GyroIO {
   }
 
   public default void setOffset(double offset) {}
-  ;
 }

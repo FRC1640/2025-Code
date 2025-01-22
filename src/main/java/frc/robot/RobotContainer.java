@@ -15,6 +15,10 @@ import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
+import frc.robot.sensors.coraldetector.CoralDetector;
+import frc.robot.sensors.coraldetector.CoralDetectorIO;
+import frc.robot.sensors.coraldetector.CoralDetectorIOPixy;
+import frc.robot.sensors.coraldetector.CoralDetectorIOSim;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
@@ -40,6 +44,8 @@ public class RobotContainer {
   // Dashboard
   private final Dashboard dashboard;
 
+  private final CoralDetector coralDetector;
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -48,6 +54,8 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
+
+        coralDetector = new CoralDetector(new CoralDetectorIOPixy());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -57,9 +65,11 @@ public class RobotContainer {
                     CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
                 CameraConstants.frontCamera));
+        coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
+        coralDetector = new CoralDetector(new CoralDetectorIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);

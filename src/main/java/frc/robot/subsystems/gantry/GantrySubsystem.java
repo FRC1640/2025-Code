@@ -18,8 +18,6 @@ public class GantrySubsystem extends SubsystemBase {
     io.updateInputs(inputs);
   }
 
-  // i think this is supposed to go into a separate command factory. but in this folder or
-  // "commands"?
   public Command gantryPIDCommand(int pos) {
     Command c =
         new Command() {

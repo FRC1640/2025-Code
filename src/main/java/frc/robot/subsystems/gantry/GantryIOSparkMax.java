@@ -2,6 +2,7 @@ package frc.robot.subsystems.gantry;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.SparkConstants;
 
 public class GantryIOSparkMax implements GantryIO {
@@ -15,6 +16,12 @@ public class GantryIOSparkMax implements GantryIO {
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
-    // go through and update stuff
+    inputs.currentAmps = carriageSpark.getOutputCurrent();
+    inputs.tempCelcius = carriageSpark.getMotorTemperature();
+    inputs.appliedVoltage = carriageSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
+
+    // inputs.rawEncoderValue = carriageEncoder.getRawValue();
+    // inputs.encoderVoltage =
+    // inputs.encoderRelative =
   }
 }

@@ -5,9 +5,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface GantryIO extends AutoCloseable {
   @AutoLog
   public class GantryIOInputs {
-    public int rawEncoderValue;
+    public double encoderPosition;
     public double encoderVoltage;
-    public double encoderRelative;
 
     public double tempCelcius;
     public double appliedVoltage;

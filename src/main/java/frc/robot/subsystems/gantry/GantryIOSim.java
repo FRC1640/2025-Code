@@ -7,6 +7,7 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 
 public class GantryIOSim implements GantryIO {
   private final DCMotorSim carriageSim;
+  private double gantryAppliedVolts = 0.0;
 
   public GantryIOSim() {
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // what are we actually using here?
@@ -18,6 +19,15 @@ public class GantryIOSim implements GantryIO {
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
-    // go through and update stuff
+    inputs.currentAmps = carriageSim.getCurrentDrawAmps();
+    inputs.appliedVoltage = gantryAppliedVolts;
+
+    carriageSim.setInputVoltage(gantryAppliedVolts);
+    carriageSim.update(.02);
+  }
+
+  @Override
+  public void setGantryVoltage(double voltage) {
+    gantryAppliedVolts = voltage;
   }
 }

@@ -20,8 +20,12 @@ public class GantryIOSparkMax implements GantryIO {
     inputs.tempCelcius = carriageSpark.getMotorTemperature();
     inputs.appliedVoltage = carriageSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
 
-    // inputs.rawEncoderValue = carriageEncoder.getRawValue();
-    // inputs.encoderVoltage =
-    // inputs.encoderRelative =
+    inputs.encoderPosition = carriageEncoder.getPosition();
+    // inputs.encoderVoltage = carriageEncoder.
+  }
+
+  @Override
+  public void setGantryVoltage(double voltage) {
+    carriageSpark.setVoltage(voltage);
   }
 }

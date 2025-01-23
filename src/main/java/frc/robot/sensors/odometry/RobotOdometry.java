@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
@@ -26,6 +28,15 @@ public class RobotOdometry extends PeriodicBase {
   Gyro gyro;
   public static RobotOdometry instance;
   private AprilTagVision[] aprilTagVisions;
+  private boolean useAutoApriltags = false;
+
+  public boolean isUseAutoApriltags() {
+    return useAutoApriltags;
+  }
+
+  public void setUseAutoApriltags(boolean useAutoApriltags) {
+    this.useAutoApriltags = useAutoApriltags;
+  }
 
   public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
@@ -109,6 +120,12 @@ public class RobotOdometry extends PeriodicBase {
       SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
       Pose2d visionUpdate = poseObservation.pose().toPose2d();
       robotPoses.add(visionUpdate);
+      if (Robot.getState() == RobotState.DISABLED) {
+        continue;
+      }
+      if (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags) {
+        continue;
+      }
       if (!(isPoseValid(visionUpdate)
           && vision.isConnected()
           && poseObservation.tagCount() > 0

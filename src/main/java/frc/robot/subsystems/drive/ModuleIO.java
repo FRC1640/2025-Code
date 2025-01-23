@@ -20,9 +20,9 @@ public interface ModuleIO extends AutoCloseable {
     public double steerCurrentAmps;
     public double steerTempCelsius;
 
-    public double steerEncoderVoltage;
+    public double steerEncoderRawValue;
     public double steerEncoderRelative;
-    public int rawEncoderValue;
+    // public int rawEncoderValue;
 
     public double[] odometryTimestamps = new double[] {};
     public double[] odometryDrivePositionsMeters = new double[] {};

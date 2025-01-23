@@ -76,6 +76,10 @@ public class RobotConstants {
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
 
+  public static class CoralDetectorConstants {
+    public static final int channel = 0;
+  }
+
   public static class GantryConstants {
     public static final double gantryGearRatio = 0.0; // UPDATE
   }

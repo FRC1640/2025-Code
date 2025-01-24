@@ -19,6 +19,7 @@ import frc.robot.sensors.coraldetector.CoralDetector;
 import frc.robot.sensors.coraldetector.CoralDetectorIO;
 import frc.robot.sensors.coraldetector.CoralDetectorIOPixy;
 import frc.robot.sensors.coraldetector.CoralDetectorIOSim;
+import frc.robot.sensors.distance.PwmDistanceSensor;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
@@ -37,9 +38,9 @@ public class RobotContainer {
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
-
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
+  PwmDistanceSensor distanceSensor = new PwmDistanceSensor(0);
 
   // Dashboard
   private final Dashboard dashboard;
@@ -110,5 +111,9 @@ public class RobotContainer {
     return dashboard
         .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
+  }
+
+  public void getTheThingyMajigy() {
+    System.out.println(distanceSensor.getDistance());
   }
 }

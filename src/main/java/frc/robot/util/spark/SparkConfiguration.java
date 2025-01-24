@@ -139,6 +139,7 @@ public class SparkConfiguration {
       PIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkMaxConfig seed) {
+    encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
@@ -149,10 +150,10 @@ public class SparkConfiguration {
     this.pid = pid;
     this.limitSwitch = limitSwitch;
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
-    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
-    seed.alternateEncoder
-        .averageDepth(encoderAverageDepth)
-        .measurementPeriod(encoderMeasurementPeriod);
+    // seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    // seed.alternateEncoder
+    //     .averageDepth(encoderAverageDepth)
+    //     .measurementPeriod(encoderMeasurementPeriod);
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
@@ -244,6 +245,7 @@ public class SparkConfiguration {
       PIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkFlexConfig seed) {
+    encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
@@ -254,10 +256,10 @@ public class SparkConfiguration {
     this.pid = pid;
     this.limitSwitch = limitSwitch;
     seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
-    seed.absoluteEncoder.averageDepth(encoderAverageDepth);
-    seed.externalEncoder
-        .averageDepth(encoderAverageDepth)
-        .measurementPeriod(encoderMeasurementPeriod);
+    // seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    // seed.externalEncoder
+    //     .averageDepth(encoderAverageDepth)
+    //     .measurementPeriod(encoderMeasurementPeriod);
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);

@@ -25,4 +25,6 @@ public class RobotPIDConstants {
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
 
   // public static final PIDConstants carriagePID = new PIDConstants(0, 0, 0); tbd
+
+  // public static final PIDConstants liftPID = new PIDConstants(0, 0, 0); also to be determined
 }

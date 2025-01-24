@@ -79,4 +79,29 @@ public class RobotConstants {
   public static class GantryConstants {
     public static final double gantryGearRatio = 0.0; // UPDATE
   }
+
+  public static class LiftConstants {
+    public static final double liftGearRatio = 0.0; // also update, thanks
+    // !!! ALL THIS IS COPIED OVER FROM MODULE, THE VARIABLES ARE NOT ACCURATE !!!
+    public static double odometryFrequency = 200.0;
+
+    public static final double maxSpeed = 4.6;
+    public static final double maxNorm =
+        DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
+    public static final double maxOmega = (maxSpeed / maxNorm);
+    public static final double wheelRadius = Units.inchesToMeters(1.8892);
+
+    public static final double accelLimit = 20;
+    public static final double deaccelLimit = 11;
+
+    public static final double initalSlope = 3.125;
+    public static final double finalSlope = 4.375;
+
+    public static final double maxSteerSpeed = 50;
+
+    // public static final ModuleInfo L = new ModuleInfo(PivotId.FL, 3, 2, 0, 45);
+
+    // public static final ModuleInfo R = new ModuleInfo(PivotId.FR, 9, 8, 2, -45);
+    // !!! ALL THIS IS COPIED OVER FROM MODULE, THE VARIABLES ARE NOT ACCURATE !!!
+  }
 }

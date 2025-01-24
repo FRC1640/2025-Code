@@ -10,7 +10,7 @@ public class GantryIOSim implements GantryIO {
   private double gantryAppliedVolts = 0.0;
 
   public GantryIOSim() {
-    DCMotor gantryGearbox = DCMotor.getNeo550(1); // what are we actually using here?
+    DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
     carriageSim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(gantryGearbox, 0, GantryConstants.gantryGearRatio),

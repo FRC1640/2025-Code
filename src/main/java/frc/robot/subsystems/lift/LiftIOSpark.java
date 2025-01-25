@@ -6,8 +6,8 @@ import frc.robot.util.spark.SparkConfigurer;
 
 public class LiftIOSpark implements LiftIO {
   public LiftIOSpark() {
-    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor1));
-    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor2));
+    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor1, false));
+    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor2, false));
   }
 
   @Override

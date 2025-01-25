@@ -2,7 +2,6 @@ package frc.robot.sensors.resolvers;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import org.littletonrobotics.junction.Logger;
 
 public class ResolverPWM {
 
@@ -31,7 +30,7 @@ public class ResolverPWM {
    * @return Angle in degrees
    */
   public double getDegrees() {
-    Logger.recordOutput("Pivot/" + channel, resolver.get());
-    return resolver.get() * 360 + offset;
+    // Logger.recordOutput("Pivot/" + channel, resolver.get());
+    return (360 - (resolver.get() * 360 - offset));
   }
 }

@@ -27,6 +27,7 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
@@ -98,6 +99,15 @@ public class RobotContainer {
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro),
         driveController.a());
+
+    DriveWeightCommand.createWeightTrigger(
+        new DriveToPointWeight(
+            () -> RobotOdometry.instance.getPose("Normal"),
+            () ->
+                chooseFromAlliance(
+                    FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
+            gyro),
+        driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
   }

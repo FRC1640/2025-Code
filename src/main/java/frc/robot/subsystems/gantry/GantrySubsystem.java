@@ -16,7 +16,7 @@ public class GantrySubsystem extends SubsystemBase {
     io.updateInputs(inputs);
   }
 
-  public Command gantryPIDCommnd(double pos) { // seperate command factory file???
+  public Command gantryPIDCommnd(double pos) {
     Command c =
         new Command() {
           @Override

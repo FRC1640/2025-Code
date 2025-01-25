@@ -10,9 +10,9 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.spark.StatusFrames;
 
 public class SparkConstants {
-  public static final SparkConfiguration getDefaultMax(int id) {
+  public static final SparkConfiguration getDefaultMax(int id, boolean inverted) {
     return new SparkConfiguration(
-        id, IdleMode.kCoast, false, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
+        id, IdleMode.kCoast, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
   }
 
   public static final SparkConfiguration getDefaultFlex(int id) {

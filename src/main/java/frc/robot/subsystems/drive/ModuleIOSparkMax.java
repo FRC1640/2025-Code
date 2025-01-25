@@ -34,14 +34,15 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   public ModuleIOSparkMax(ModuleInfo id) {
     driveSpark = SparkConstants.driveFlex(id.driveChannel);
-    steerSpark = SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerChannel));
+    steerSpark =
+        SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerChannel, false));
     timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     drivePositionQueue =
         SparkOdometryThread.getInstance()
             .registerSignal(driveSpark, () -> driveSpark.getEncoder().getPosition());
 
     driveEncoder = driveSpark.getEncoder();
-    steeringEncoder = new ResolverPWM(id.resolverChannel, id.angleOffset);
+    steeringEncoder = new ResolverPWM(id.resolverChannel, -id.angleOffset);
     driveVelocityQueue =
         SparkOdometryThread.getInstance()
             .registerSignal(driveSpark, () -> driveEncoder.getVelocity());
@@ -67,7 +68,6 @@ public class ModuleIOSparkMax implements ModuleIO {
         driveSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.driveCurrentAmps = driveSpark.getOutputCurrent();
     inputs.driveTempCelsius = driveSpark.getMotorTemperature();
-    inputs.steerAngleDegrees = steeringEncoder.getDegrees();
     inputs.steerAppliedVoltage =
         steerSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
 
@@ -78,7 +78,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     inputs.steerEncoderRawValue = steeringEncoder.getFrequency();
     inputs.steerEncoderRelative =
         (360 - (steerSpark.getEncoder().getPosition() / DriveConstants.steerGearRatio * 360)) % 360;
-    inputs.steerAngleDegrees = steeringEncoder.getDegrees() % 360;
+    inputs.steerAngleDegrees = (360 - steeringEncoder.getDegrees()) % 360;
 
     inputs.odometryTimestamps =
         timestampQueue.stream().mapToDouble((Double value) -> value).toArray();

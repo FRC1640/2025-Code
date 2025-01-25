@@ -4,16 +4,16 @@ import frc.robot.sensors.reefdetector.ReefDetectorIO.ReefDetectorIOInputs;
 import frc.robot.util.periodic.PeriodicBase;
 
 public class ReefDetector extends PeriodicBase {
-  private ReefDetectorIO coralDetectorIO;
+  private ReefDetectorIO reefDetectorIO;
   private ReefDetectorIOInputs inputs = new ReefDetectorIOInputs();
 
-  public ReefDetector(ReefDetectorIO coralDetectorIO) {
-    this.coralDetectorIO = coralDetectorIO;
+  public ReefDetector(ReefDetectorIO reefDetectorIO) {
+    this.reefDetectorIO = reefDetectorIO;
   }
 
   @Override
   public void periodic() {
-    coralDetectorIO.updateInputs(inputs);
+    reefDetectorIO.updateInputs(inputs);
   }
 
   public boolean isConnected() {

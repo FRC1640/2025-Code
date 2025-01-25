@@ -54,7 +54,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(0));
+        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -109,5 +109,9 @@ public class RobotContainer {
     return dashboard
         .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
+  }
+
+  public double getDistanceToReef() {
+    return reefDetector.getDistanceToReef();
   }
 }

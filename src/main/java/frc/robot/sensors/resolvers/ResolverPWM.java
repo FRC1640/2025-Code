@@ -7,8 +7,10 @@ public class ResolverPWM {
 
   private DutyCycleEncoder resolver;
   private double offset;
+  private int channel;
 
   public ResolverPWM(int channel, double offset) {
+    this.channel = channel;
     resolver = new DutyCycleEncoder(new DigitalInput(channel));
     this.offset = offset;
   }
@@ -28,6 +30,7 @@ public class ResolverPWM {
    * @return Angle in degrees
    */
   public double getDegrees() {
-    return resolver.get() * 360 + offset;
+    // Logger.recordOutput("Pivot/" + channel, resolver.get());
+    return (360 - (resolver.get() * 360 - offset));
   }
 }

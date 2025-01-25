@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
@@ -26,6 +28,15 @@ public class RobotOdometry extends PeriodicBase {
   Gyro gyro;
   public static RobotOdometry instance;
   private AprilTagVision[] aprilTagVisions;
+  private boolean useAutoApriltags = false;
+
+  public boolean isUseAutoApriltags() {
+    return useAutoApriltags;
+  }
+
+  public void setUseAutoApriltags(boolean useAutoApriltags) {
+    this.useAutoApriltags = useAutoApriltags;
+  }
 
   public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
     this.driveSubsystem = driveSubsystem;
@@ -109,15 +120,17 @@ public class RobotOdometry extends PeriodicBase {
       SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
       Pose2d visionUpdate = poseObservation.pose().toPose2d();
       robotPoses.add(visionUpdate);
+      if (Robot.getState() == RobotState.DISABLED) {
+        continue;
+      }
+      if (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags) {
+        continue;
+      }
       if (!(isPoseValid(visionUpdate)
           && vision.isConnected()
           && poseObservation.tagCount() > 0
-          && poseObservation.ambiguity() < 0.5
-          && poseObservation.pose().getZ() < 0.75)) {
-        robotPosesRejected.add(visionUpdate);
-        continue;
-      }
-      if (poseObservation.tagCount() == 1 && poseObservation.ambiguity() > 0.3) {
+          && poseObservation.ambiguity() < 0.2
+          && Math.abs(poseObservation.pose().getZ()) < 0.75)) {
         robotPosesRejected.add(visionUpdate);
         continue;
       }
@@ -128,7 +141,7 @@ public class RobotOdometry extends PeriodicBase {
               * vision.getStandardDeviation();
       double xy = 0.02 * distFactor;
       double rot = Double.MAX_VALUE;
-      if (poseObservation.ambiguity() < 0.1 && poseObservation.tagCount() > 1) {
+      if (poseObservation.ambiguity() < 0.05 && poseObservation.tagCount() > 1) {
         rot = 0.06 * distFactor;
       }
       Logger.recordOutput("Drive/Odometry/Vision/" + estimator + "/xyDev", xy);

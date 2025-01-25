@@ -1,18 +1,23 @@
-package frc.robot.sensors.distance;
+package frc.robot.sensors.coraldetector;
 
 import edu.wpi.first.wpilibj.Counter;
 
-public class PwmDistanceSensor {
+public class CoralDetectorIODistanceSensor implements CoralDetectorIO {
   private Counter counter;
 
-  public PwmDistanceSensor(int channel) {
+  public CoralDetectorIODistanceSensor(int channel) {
     counter = new Counter();
     counter.setUpSource(channel);
     counter.setSemiPeriodMode(true);
   }
+  @Override
+  public void updateInputs(CoralDetectorIOInputs inputs) {
+    inputs.isConnected = true;
+    inputs.doesDetect = true;
+  }
 
   /**
-   * Gets distance converted from PWM reading.
+   * Gets distance in millimeters converted from PWM reading.
    *
    * @return Distance.
    */
@@ -24,7 +29,7 @@ public class PwmDistanceSensor {
     } else if (width > 1850) {
       return -1;
     } else {
-      return Math.max(0, 2 * (width - 1000));
+      return (2.0) * ((width * 1000000.0) - 10000.0);
     }
   }
 }

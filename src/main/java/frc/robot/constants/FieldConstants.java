@@ -38,4 +38,10 @@ public class FieldConstants {
         new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(300)),
         new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)),
       };
+
+  public static final Pose2d processorPositionRed =
+      new Pose2d(6.0, 0.6, Rotation2d.fromDegrees(270));
+
+  public static final Pose2d processorPositionBlue =
+      new Pose2d(11.55, 7.5, Rotation2d.fromDegrees(90));
 }

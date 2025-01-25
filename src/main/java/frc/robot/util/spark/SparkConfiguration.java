@@ -139,6 +139,7 @@ public class SparkConfiguration {
       PIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkMaxConfig seed) {
+    encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;
@@ -244,6 +245,7 @@ public class SparkConfiguration {
       PIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkFlexConfig seed) {
+    encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
     this.id = id;
     this.idleMode = idleMode;
     this.inverted = inverted;

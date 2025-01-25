@@ -6,7 +6,7 @@ public interface LiftIO extends AutoCloseable {
   @AutoLog
   public static class LiftIOInputs {
     public double liftmotor1Position = 0.0;
-    public double lift = 0.0;
+    public double liftmotor2Position = 0.0;
     public double liftmotor1Velocity = 0.0;
     public double liftmotor2Velocity = 0.0;
     public double liftmotor1Current = 0.0;

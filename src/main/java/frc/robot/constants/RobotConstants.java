@@ -86,8 +86,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftMotor1 = 0;
-    public static final int liftMotor2 = 1;
+    public static final int liftMotor1ID = 0;
+    public static final int liftMotor2ID = 1;
   }
 
   public static class CoralDetectorConstants {

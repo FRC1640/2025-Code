@@ -1,19 +1,15 @@
 package frc.robot.subsystems.lift;
 
-import com.revrobotics.spark.SparkMax;
-import frc.robot.constants.RobotConstants;
+import frc.robot.constants.SparkConstants;
+import frc.robot.constants.RobotConstants.LiftConstants;
+import frc.robot.util.spark.SparkConfigurer;
 
 public class LiftIOSpark implements LiftIO {
-  private SparkMax liftMotor1;
-  private SparkMax liftMotor2;
-
   public LiftIOSpark() {
-    liftMotor1 =
-        new SparkMax(RobotConstants.LiftConstants.liftMotor1, SparkMax.MotorType.kBrushless);
-    liftMotor2 =
-        new SparkMax(RobotConstants.LiftConstants.liftMotor2, SparkMax.MotorType.kBrushless);
+    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor1));
+    SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(LiftConstants.liftMotor2));
   }
-
-  @Override
+  
+  @Override 
   public void updateInputs(LiftIOInputs inputs) {}
 }

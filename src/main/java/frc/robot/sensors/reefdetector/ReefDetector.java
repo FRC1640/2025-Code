@@ -20,6 +20,10 @@ public class ReefDetector extends PeriodicBase {
     return inputs.isConnected;
   }
 
+  public boolean isDetecting() {
+    return inputs.isDetecting;
+  }
+
   public double getDistanceToReef() {
     return inputs.distanceToReef;
   }

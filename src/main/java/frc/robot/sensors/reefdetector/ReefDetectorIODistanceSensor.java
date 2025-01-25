@@ -24,13 +24,14 @@ public class ReefDetectorIODistanceSensor implements ReefDetectorIO {
     } else if (width > 1850) {
       return -1;
     } else {
-      return (2.0) * ((width * 1000000.0) - 10000.0);
+      return 2.0 * ((width * 1000000.0) - 1000.0);
     }
   }
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
+    inputs.isDetecting = getDistance() < 250;
     inputs.distanceToReef = getDistance();
     inputs.deltaX = Integer.MIN_VALUE;
   }

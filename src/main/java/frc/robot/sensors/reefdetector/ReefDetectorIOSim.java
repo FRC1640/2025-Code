@@ -15,6 +15,7 @@ public class ReefDetectorIOSim implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
+    inputs.isDetecting = distanceToReefSupplier.get() < 250;
     inputs.distanceToReef = distanceToReefSupplier.get();
     inputs.deltaX = deltaXSupplier.get();
   }

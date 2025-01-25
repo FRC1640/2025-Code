@@ -14,4 +14,24 @@ public class GantrySubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
   }
+
+  public void stop() {
+    io.setGantryVoltage(0);
+  }
+
+  public double getGantryVoltage() {
+    return inputs.appliedVoltage;
+  }
+
+  public double getCarriagePosition() {
+    return inputs.encoderPosition;
+  }
+
+  public void setCarriagePosition(double pos) {
+    io.setCarriagePosition(pos, inputs);
+  }
+
+  public void setGantryVoltage(double voltage) {
+    io.setGantryVoltage(voltage);
+  }
 }

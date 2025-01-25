@@ -1,8 +1,13 @@
 package frc.robot.subsystems.lift;
 
-public class LiftIO {
+import org.littletonrobotics.junction.AutoLog;
 
-  public LiftIO() {
-    
-  }
+public interface LiftIO extends AutoCloseable {
+  @AutoLog
+  public static class LiftIOInputs {}
+
+  public default void updateInputs(LiftIOInputs inputs) {}
+
+  @Override
+  default void close() {}
 }

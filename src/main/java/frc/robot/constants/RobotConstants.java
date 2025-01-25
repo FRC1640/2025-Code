@@ -85,6 +85,11 @@ public class RobotConstants {
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
 
+  public static class LiftConstants {
+    public static final int liftMotor1 = 0;
+    public static final int liftMotor2 = 1;
+  }
+
   public static class CoralDetectorConstants {
     public static final int channel = 0;
   }

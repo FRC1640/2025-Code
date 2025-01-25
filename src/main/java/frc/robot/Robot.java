@@ -99,7 +99,6 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
-    m_robotContainer.getTheThingyMajigy();
   }
 
   @Override

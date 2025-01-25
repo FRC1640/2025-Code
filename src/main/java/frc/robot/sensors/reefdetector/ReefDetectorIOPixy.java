@@ -1,19 +1,19 @@
-package frc.robot.sensors.coraldetector;
+package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.constants.RobotConstants.CoralDetectorConstants;
 
-public class CoralDetectorIOPixy implements CoralDetectorIO {
+public class ReefDetectorIOPixy implements ReefDetectorIO {
   private final AnalogInput pixyCamInput;
 
-  public CoralDetectorIOPixy() {
+  public ReefDetectorIOPixy() {
     pixyCamInput = new AnalogInput(CoralDetectorConstants.channel);
   }
 
   @Override
   public void updateInputs(CoralDetectorIOInputs inputs) {
     inputs.isConnected = true;
-    inputs.doesDetect = true;
+    inputs.distanceToReef = 0.0;
     inputs.deltaX = pixyCamInput.getVoltage();
   }
 }

@@ -1,19 +1,14 @@
-package frc.robot.sensors.coraldetector;
+package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.Counter;
 
-public class CoralDetectorIODistanceSensor implements CoralDetectorIO {
+public class ReefDetectorIODistanceSensor implements ReefDetectorIO {
   private Counter counter;
 
-  public CoralDetectorIODistanceSensor(int channel) {
+  public ReefDetectorIODistanceSensor(int channel) {
     counter = new Counter();
     counter.setUpSource(channel);
     counter.setSemiPeriodMode(true);
-  }
-  @Override
-  public void updateInputs(CoralDetectorIOInputs inputs) {
-    inputs.isConnected = true;
-    inputs.doesDetect = true;
   }
 
   /**
@@ -31,5 +26,12 @@ public class CoralDetectorIODistanceSensor implements CoralDetectorIO {
     } else {
       return (2.0) * ((width * 1000000.0) - 10000.0);
     }
+  }
+
+  @Override
+  public void updateInputs(CoralDetectorIOInputs inputs) {
+    inputs.isConnected = true;
+    inputs.distanceToReef = getDistance();
+    inputs.deltaX = Integer.MIN_VALUE;
   }
 }

@@ -1,13 +1,13 @@
-package frc.robot.sensors.coraldetector;
+package frc.robot.sensors.reefdetector;
 
-import frc.robot.sensors.coraldetector.CoralDetectorIO.CoralDetectorIOInputs;
+import frc.robot.sensors.reefdetector.ReefDetectorIO.CoralDetectorIOInputs;
 import frc.robot.util.periodic.PeriodicBase;
 
-public class CoralDetector extends PeriodicBase {
-  private CoralDetectorIO coralDetectorIO;
+public class ReefDetector extends PeriodicBase {
+  private ReefDetectorIO coralDetectorIO;
   private CoralDetectorIOInputs inputs = new CoralDetectorIOInputs();
 
-  public CoralDetector(CoralDetectorIO coralDetectorIO) {
+  public ReefDetector(ReefDetectorIO coralDetectorIO) {
     this.coralDetectorIO = coralDetectorIO;
   }
 
@@ -20,8 +20,8 @@ public class CoralDetector extends PeriodicBase {
     return inputs.isConnected;
   }
 
-  public boolean doesDetect() {
-    return inputs.doesDetect;
+  public double getDistanceToReef() {
+    return inputs.distanceToReef;
   }
 
   public double getDeltaX() {

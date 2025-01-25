@@ -14,7 +14,7 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
   public GantryIOSparkMax() {
-    carriageSpark = SparkConstants.getDefaultSparkMax(13); // update with id
+    carriageSpark = SparkConstants.getDefaultSparkMax(13);
     carriageEncoder = carriageSpark.getEncoder();
   }
 

@@ -114,4 +114,8 @@ public class RobotContainer {
   public double getDistanceToReef() {
     return reefDetector.getDistanceToReef();
   }
+
+  public boolean getDetected() {
+    return reefDetector.isDetecting();
+  }
 }

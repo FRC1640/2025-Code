@@ -113,6 +113,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
     System.out.println(m_robotContainer.getDistanceToReef());
+    System.out.println(m_robotContainer.getDetected());
   }
 
   @Override

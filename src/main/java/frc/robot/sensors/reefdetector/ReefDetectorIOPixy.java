@@ -11,7 +11,7 @@ public class ReefDetectorIOPixy implements ReefDetectorIO {
   }
 
   @Override
-  public void updateInputs(CoralDetectorIOInputs inputs) {
+  public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
     inputs.distanceToReef = 0.0;
     inputs.deltaX = pixyCamInput.getVoltage();

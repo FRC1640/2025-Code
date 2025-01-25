@@ -22,7 +22,7 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
-import frc.robot.sensors.reefdetector.ReefDetectorIOPixy;
+import frc.robot.sensors.reefdetector.ReefDetectorIODistanceSensor;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
@@ -54,7 +54,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        reefDetector = new ReefDetector(new ReefDetectorIOPixy());
+        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(0));
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());

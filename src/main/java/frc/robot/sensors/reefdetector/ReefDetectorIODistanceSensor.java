@@ -29,7 +29,7 @@ public class ReefDetectorIODistanceSensor implements ReefDetectorIO {
   }
 
   @Override
-  public void updateInputs(CoralDetectorIOInputs inputs) {
+  public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
     inputs.distanceToReef = getDistance();
     inputs.deltaX = Integer.MIN_VALUE;

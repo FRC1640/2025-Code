@@ -148,7 +148,6 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().cancelAll();
     Dashboard.getSysidCommand().schedule();
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
-    ;
   }
 
   @Override

@@ -1,11 +1,11 @@
 package frc.robot.sensors.reefdetector;
 
-import frc.robot.sensors.reefdetector.ReefDetectorIO.CoralDetectorIOInputs;
+import frc.robot.sensors.reefdetector.ReefDetectorIO.ReefDetectorIOInputs;
 import frc.robot.util.periodic.PeriodicBase;
 
 public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO coralDetectorIO;
-  private CoralDetectorIOInputs inputs = new CoralDetectorIOInputs();
+  private ReefDetectorIOInputs inputs = new ReefDetectorIOInputs();
 
   public ReefDetector(ReefDetectorIO coralDetectorIO) {
     this.coralDetectorIO = coralDetectorIO;

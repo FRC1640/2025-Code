@@ -13,7 +13,7 @@ public class ReefDetectorIOSim implements ReefDetectorIO {
   }
 
   @Override
-  public void updateInputs(CoralDetectorIOInputs inputs) {
+  public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
     inputs.distanceToReef = distanceToReefSupplier.get();
     inputs.deltaX = deltaXSupplier.get();

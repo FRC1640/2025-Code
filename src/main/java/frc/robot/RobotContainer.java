@@ -52,8 +52,8 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
-                CameraConstants.frontCamera));
+                new AprilTagVisionIOPhotonvision(CameraConstants.backCamera),
+                CameraConstants.backCamera));
 
         coralDetector = new CoralDetector(new CoralDetectorIOPixy());
         break;
@@ -62,9 +62,9 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
-                    CameraConstants.frontCamera,
+                    CameraConstants.backCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
-                CameraConstants.frontCamera));
+                CameraConstants.backCamera));
         coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
         break;
       default:

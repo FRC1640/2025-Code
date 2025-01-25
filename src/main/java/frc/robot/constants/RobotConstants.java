@@ -77,8 +77,8 @@ public class RobotConstants {
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
-                new Translation3d(-0.356, 0.146, 0.406),
-                new Rotation3d(0, Math.toRadians(-20), Math.PI)),
+                new Translation3d(0.146, -0.356, 0.406),
+                new Rotation3d(0, Math.toRadians(1), Math.PI)),
             1,
             "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
@@ -86,6 +86,6 @@ public class RobotConstants {
   }
 
   public static class CoralDetectorConstants {
-    public static final int channel = 0;
+    public static final int channel = 5;
   }
 }

@@ -43,7 +43,7 @@ public class ModuleIOSparkMax implements ModuleIO {
             .registerSignal(driveSpark, () -> driveSpark.getEncoder().getPosition());
 
     driveEncoder = driveSpark.getEncoder();
-    steeringEncoder = new ResolverPWM(id.resolverChannel, -id.angleOffset);
+    steeringEncoder = new ResolverPWM(id.resolverChannel, id.angleOffset);
     // steeringEncoder =
     //     new ResolverVoltage(
     //         id.resolverChannel,

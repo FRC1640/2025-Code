@@ -1,6 +1,5 @@
 package frc.robot.subsystems.gantry;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GantrySubsystem extends SubsystemBase {
@@ -34,29 +33,5 @@ public class GantrySubsystem extends SubsystemBase {
 
   public void setGantryVoltage(double voltage) {
     io.setGantryVoltage(voltage, inputs);
-  }
-
-  public Command gantryPIDCommand(double pos) {
-    Command c =
-        new Command() {
-          @Override
-          public void execute() {
-            setCarriagePosition(pos);
-          }
-        };
-    return c;
-  }
-
-  public Command gantryHomeCommand() {
-    Command c =
-        new Command() {
-          @Override
-          public void execute() {
-            setCarriagePosition(0);
-            setGantryVoltage(-0.01);
-          }
-        };
-    c.addRequirements(this);
-    return c;
   }
 }

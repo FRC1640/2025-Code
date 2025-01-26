@@ -33,17 +33,17 @@ public class LiftIOSim implements LiftIO {
    * Sets the Lift Voltage
    */
   @Override
-  public void setLiftVoltage(double voltage) {
-    motor1Sim.setInputVoltage(applyLimits(motor1Sim.getAngularPositionRotations(), voltage));
-    motor2Sim.setInputVoltage(applyLimits(motor1Sim.getAngularPositionRotations(), voltage));
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+    motor1Sim.setInputVoltage(applyLimits(inputs.leaderMotorPosition, voltage));
+    motor2Sim.setInputVoltage(applyLimits(inputs.followerMotorPosition, voltage));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position) {
+  public void setLiftPosition(double position, LiftIOInputs inputs) {
     motor1Sim.setAngularVelocity(
-        clampVoltage(liftController.calculate(motor1Sim.getAngularPositionRotations(), position)));
+        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)));
   }
 
   @Override

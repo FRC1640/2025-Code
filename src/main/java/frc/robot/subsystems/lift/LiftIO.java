@@ -30,7 +30,7 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Set voltage of the motor
    */
-  public default void setLiftVoltage(double voltage) {}
+  public default void setLiftVoltage(double voltage, LiftIOInputs inputs) {}
   /*
    * Applies limits from the max and min of the motors
    */
@@ -55,5 +55,11 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setLiftPosition(double position) {}
+  public default void setLiftPosition(double position, LiftIOInputs inputs) {}
+  /*
+   * Get Inputs
+   */
+  public default LiftIOInputs getInputs() {
+    return new LiftIOInputs();
+  }
 }

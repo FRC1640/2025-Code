@@ -24,11 +24,11 @@ public class GantryIOSim implements GantryIO {
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
+    carriageSim.update(.02);
+
     inputs.currentAmps = carriageSim.getCurrentDrawAmps();
     inputs.appliedVoltage = gantryAppliedVolts;
-
     carriageSim.setInputVoltage(gantryAppliedVolts);
-    carriageSim.update(.02);
   }
 
   @Override

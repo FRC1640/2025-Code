@@ -12,7 +12,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    super.periodic();
+    liftIO.updateInputs(inputs);
   }
 
   public double getleaderMotorPosition() {

@@ -15,6 +15,8 @@ public interface LiftIO extends AutoCloseable {
     public double followerMotorCurrent = 0.0;
     public double leaderMotorVoltage = 0.0;
     public double followerMotorVoltage = 0.0;
+    public double leaderTemperature = 0.0;
+    public double followerTemperature = 0.0;
   }
 
   /*

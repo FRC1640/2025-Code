@@ -42,4 +42,12 @@ public class LiftSubsystem extends SubsystemBase {
   public double getLeaderMotorVoltage() {
     return inputs.leaderMotorVoltage;
   }
+
+  public double getLeaderTemperature() {
+    return inputs.leaderTemperature;
+  }
+
+  public double getFollowerTemperature() {
+    return inputs.followerTemperature;
+  }
 }

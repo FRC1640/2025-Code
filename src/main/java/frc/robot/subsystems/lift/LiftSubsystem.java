@@ -15,31 +15,31 @@ public class LiftSubsystem extends SubsystemBase {
     super.periodic();
   }
 
-  public double getMotor1Position() {
+  public double getleaderMotorPosition() {
     return inputs.leadermotorPosition;
   }
 
-  public double getMotor2Position() {
+  public double getfollowerMotorPosition() {
     return inputs.followermotorPosition;
   }
 
-  public double getMotor1Velocity() {
+  public double getleaderMotorVelocity() {
     return inputs.leadermotorVelocity;
   }
 
-  public double getMotor2Velocity() {
+  public double getfollowerMotorVelocity() {
     return inputs.followermotorVelocity;
   }
 
-  public double getMotor1Current() {
+  public double getleaderMotorCurrent() {
     return inputs.leadermotorCurrent;
   }
 
-  public double getMotor2Current() {
+  public double getfollowerMotorCurrent() {
     return inputs.followermotorCurrent;
   }
 
-  public double getMotor1Voltage() {
+  public double getleaderMotorVoltage() {
     return inputs.leadermotorVoltage;
   }
 }

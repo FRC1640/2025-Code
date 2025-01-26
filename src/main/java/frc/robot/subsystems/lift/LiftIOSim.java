@@ -31,4 +31,16 @@ public class LiftIOSim implements LiftIO {
     motor1Sim.setInputVoltage(clampSpeed(motor1Sim.getAngularPositionRotations(), voltage));
     motor2Sim.setInputVoltage(clampSpeed(motor1Sim.getAngularPositionRotations(), voltage));
   }
+
+  @Override
+  public void updateInputs(LiftIOInputs inputs) {
+    inputs.leadermotorPosition = motor1Sim.getAngularPositionRotations();
+    inputs.followermotorPosition = motor2Sim.getAngularPositionRotations();
+    inputs.leadermotorVelocity = motor1Sim.getAngularVelocityRadPerSec();
+    inputs.followermotorVelocity = motor2Sim.getAngularVelocityRadPerSec();
+    inputs.leadermotorCurrent = motor1Sim.getCurrentDrawAmps();
+    inputs.followermotorCurrent = motor2Sim.getCurrentDrawAmps();
+    inputs.leadermotorVoltage = motor1Sim.getInputVoltage();
+    inputs.followermotorVoltage = motor2Sim.getInputVoltage();
+  }
 }

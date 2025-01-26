@@ -16,6 +16,9 @@ public interface LiftIO extends AutoCloseable {
     public double followermotorVoltage = 0.0;
   }
 
+  /*
+   * Updates the inputs
+   */
   public default void updateInputs(LiftIOInputs inputs) {}
 
   @Override

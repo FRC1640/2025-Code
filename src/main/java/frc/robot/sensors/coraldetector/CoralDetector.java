@@ -18,7 +18,7 @@ public class CoralDetector extends PeriodicBase {
   @Override
   public void periodic() {
     coralDetectorIO.updateInputs(inputs);
-    coralDetectorDisconnectedAlert.set(inputs.isConnected);
+    coralDetectorDisconnectedAlert.set(!inputs.isConnected);
   }
 
   public boolean isConnected() {

@@ -127,6 +127,6 @@ public class RobotConstants {
     public static final double maxVortexMotorCurrent = 220;
     public static final double maxNeoMotorCurrent = 105;
     public static final double maxNeo550MotorCurrent = 100;
-    public static final double maxMotorTemp = 60; // in degrees celcius
+    public static final double maxMotorTemp = 120; // in degrees celcius
   }
 }

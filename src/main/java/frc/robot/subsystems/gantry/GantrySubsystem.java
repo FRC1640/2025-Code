@@ -16,21 +16,8 @@ public class GantrySubsystem extends SubsystemBase {
     io.updateInputs(inputs);
   }
 
-  public Command gantryPIDCommand(double pos) {
-    Command c =
-        new Command() {
-          @Override
-          public void execute() {
-            setCarriagePosition(pos);
-          }
-        };
-    return c;
-  }
-
-  public Command gantryHomeCommand() {}
-
   public void stop() {
-    io.setGantrySpeedVoltage(0);
+    io.setGantryVoltage(0, inputs);
   }
 
   public double getGantryVoltage() {
@@ -46,6 +33,30 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public void setGantryVoltage(double voltage) {
-    io.setGantrySpeedVoltage(voltage);
+    io.setGantryVoltage(voltage, inputs);
+  }
+
+  public Command gantryPIDCommand(double pos) {
+    Command c =
+        new Command() {
+          @Override
+          public void execute() {
+            setCarriagePosition(pos);
+          }
+        };
+    return c;
+  }
+
+  public Command gantryHomeCommand() {
+    Command c =
+        new Command() {
+          @Override
+          public void execute() {
+            setCarriagePosition(0);
+            setGantryVoltage(-0.01);
+          }
+        };
+    c.addRequirements(this);
+    return c;
   }
 }

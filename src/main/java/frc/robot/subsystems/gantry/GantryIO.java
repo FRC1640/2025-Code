@@ -1,5 +1,6 @@
 package frc.robot.subsystems.gantry;
 
+import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -14,33 +15,39 @@ public interface GantryIO extends AutoCloseable {
 
   public default void updateInputs(GantryIOInputs inputs) {}
 
-  public default void setGantrySpeedVoltage(double voltage) {}
-
-  public default void setGantrySpeedPercent(double speed) {}
+  public default void setGantryVoltage(double voltage, GantryIOInputs inputs) {}
 
   public default void setCarriagePosition(double pos, GantryIOInputs inputs) {}
 
   /**
-   * Modifies the inputted speed so as to not move out of limits
+   * Modifies the inputted voltage so as to not move out of limits
    *
    * @param pos the current position.
-   * @param speed the base speed to clamp.
-   * @return clamped speed.
+   * @param voltage the base voltage to clamp.
+   * @return clamped voltage.
    */
-  public default double clampSpeeds(double pos, double speed) {
-    double speedClamped = speed;
-    if (!(Double.isNaN(speedClamped) || Double.isNaN(pos))) {
+  public default double applyLimits(double pos, double voltage) {
+    double voltageClamped = voltage;
+    if (!(Double.isNaN(voltageClamped) || Double.isNaN(pos))) {
       if (pos < GantryConstants.leftLimit) {
-        speedClamped = Math.max(speed, 0);
+        voltageClamped = Math.max(voltage, 0);
       }
       if (pos > GantryConstants.rightLimit) {
-        speedClamped = Math.min(speed, 0);
+        voltageClamped = Math.min(voltage, 0);
       }
     } else {
       return 0;
     }
 
-    return speedClamped;
+    return voltageClamped;
+  }
+
+  public default double clampVoltage(double voltage) {
+    voltage = MathUtil.clamp(voltage, -12, 12);
+    if (Math.abs(voltage) < 0.001) {
+      voltage = 0;
+    }
+    return voltage;
   }
 
   @Override

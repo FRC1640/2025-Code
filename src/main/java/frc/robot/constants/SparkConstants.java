@@ -14,6 +14,11 @@ public class SparkConstants {
         id, IdleMode.kCoast, false, 60, 200, 64, StatusFrames.getDefault());
   }
 
+  public static final SparkMax getGantryDefaultSparkMax(int id) {
+    return SparkConfigurer.configSparkMax(
+        id, IdleMode.kBrake, false, 60, 200, 64, StatusFrames.getDefault());
+  }
+
   public static final SparkFlex getDefaultSparkFlex(int id) {
     return SparkConfigurer.configSparkFlex(
         id, IdleMode.kCoast, false, 60, 200, 64, StatusFrames.getDefault());

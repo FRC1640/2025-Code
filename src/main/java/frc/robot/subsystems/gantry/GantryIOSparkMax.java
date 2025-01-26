@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 
@@ -14,7 +15,7 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
   public GantryIOSparkMax() {
-    carriageSpark = SparkConstants.getDefaultSparkMax(13);
+    carriageSpark = SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID);
     carriageEncoder = carriageSpark.getEncoder();
   }
 
@@ -27,13 +28,14 @@ public class GantryIOSparkMax implements GantryIO {
   }
 
   @Override
-  public void setCarriagePosition(double pos, GantryIOInputs inputs) {
-    
-    setGantrySpeedVoltage(gantryPID.calculate(inputs.encoderPosition, pos) * 12);
+  public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
+    voltage = clampVoltage(voltage);
+    voltage = applyLimits(inputs.encoderPosition, voltage);
+    carriageSpark.setVoltage(voltage);
   }
 
   @Override
-  public void setGantrySpeedVoltage(double voltage) {
-    carriageSpark.setVoltage(voltage);
+  public void setCarriagePosition(double position, GantryIOInputs inputs) {
+    setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
   }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.lift;
 
+import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -29,7 +30,7 @@ public interface LiftIO extends AutoCloseable {
    */
   public default void setLiftVoltage(double voltage) {}
   /*
-   * Clamp the speed of the motor to prevent it from going out of bounds
+   * Applies limits from the max and min of the motors
    */
   public default double applyLimits(double motorPos, double motorSpeed) {
     if (motorPos > LiftConstants.liftMax) {
@@ -39,7 +40,16 @@ public interface LiftIO extends AutoCloseable {
     }
     return motorSpeed;
   }
-
+  /*
+   * Clamps voltage between -12 and 12
+   */
+  public default double clampVoltage(double voltage) {
+    voltage = MathUtil.clamp(voltage, -12, 12);
+    if (Math.abs(voltage) < 0.001) {
+      voltage = 0;
+    }
+    return voltage;
+  }
   /*
    * Sets the position of the motor(s) using a PID
    */

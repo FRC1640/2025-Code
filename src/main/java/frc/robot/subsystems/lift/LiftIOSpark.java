@@ -26,18 +26,19 @@ public class LiftIOSpark implements LiftIO {
     followerEncoder = followerMotor.getEncoder();
   }
   /*
-   * Set voltage of the motorF
+   * Set voltage of the motor
    */
   @Override
   public void setLiftVoltage(double voltage) {
-    leaderMotor.setVoltage(applyLimits(leaderEncoder.getPosition(), voltage));
+    leaderMotor.setVoltage(clampVoltage(applyLimits(leaderEncoder.getPosition(), voltage)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
   public void setLiftPosition(double position) {
-    leaderMotor.setVoltage(liftController.calculate(leaderEncoder.getPosition(), position));
+    leaderMotor.setVoltage(
+        clampVoltage(liftController.calculate(leaderEncoder.getPosition(), position)));
   }
 
   @Override

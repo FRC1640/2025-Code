@@ -15,31 +15,31 @@ public class LiftSubsystem extends SubsystemBase {
     liftIO.updateInputs(inputs);
   }
 
-  public double getleaderMotorPosition() {
-    return inputs.leadermotorPosition;
+  public double getLeaderMotorPosition() {
+    return inputs.leaderMotorPosition;
   }
 
-  public double getfollowerMotorPosition() {
-    return inputs.followermotorPosition;
+  public double getFollowerMotorPosition() {
+    return inputs.followerMotorPosition;
   }
 
-  public double getleaderMotorVelocity() {
-    return inputs.leadermotorVelocity;
+  public double getLeaderMotorVelocity() {
+    return inputs.leaderMotorVelocity;
   }
 
-  public double getfollowerMotorVelocity() {
-    return inputs.followermotorVelocity;
+  public double getFollowerMotorVelocity() {
+    return inputs.followerMotorVelocity;
   }
 
-  public double getleaderMotorCurrent() {
-    return inputs.leadermotorCurrent;
+  public double getLeaderMotorCurrent() {
+    return inputs.leaderMotorCurrent;
   }
 
-  public double getfollowerMotorCurrent() {
-    return inputs.followermotorCurrent;
+  public double getFollowerMotorCurrent() {
+    return inputs.followerMotorCurrent;
   }
 
-  public double getleaderMotorVoltage() {
-    return inputs.leadermotorVoltage;
+  public double getLeaderMotorVoltage() {
+    return inputs.leaderMotorVoltage;
   }
 }

@@ -26,29 +26,29 @@ public class LiftIOSpark implements LiftIO {
     followerEncoder = followerMotor.getEncoder();
   }
   /*
-   * Set voltage of the motor
+   * Set voltage of the motorF
    */
   @Override
-  public void setVoltage(double voltage) {
-    leaderMotor.setVoltage(clampSpeed(leaderEncoder.getPosition(), voltage));
+  public void setLiftVoltage(double voltage) {
+    leaderMotor.setVoltage(applyLimits(leaderEncoder.getPosition(), voltage));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setPosition(double position) {
+  public void setLiftPosition(double position) {
     leaderMotor.setVoltage(liftController.calculate(leaderEncoder.getPosition(), position));
   }
 
   @Override
   public void updateInputs(LiftIOInputs inputs) {
-    inputs.leadermotorPosition = leaderEncoder.getPosition();
-    inputs.followermotorPosition = followerEncoder.getPosition();
-    inputs.leadermotorVelocity = leaderEncoder.getVelocity();
-    inputs.followermotorVelocity = followerEncoder.getVelocity();
-    inputs.leadermotorCurrent = leaderMotor.getOutputCurrent();
-    inputs.followermotorCurrent = followerMotor.getOutputCurrent();
-    inputs.leadermotorVoltage = leaderMotor.getAppliedOutput();
-    inputs.followermotorVoltage = followerMotor.getAppliedOutput();
+    inputs.leaderMotorPosition = leaderEncoder.getPosition();
+    inputs.followerMotorPosition = followerEncoder.getPosition();
+    inputs.leaderMotorVelocity = leaderEncoder.getVelocity();
+    inputs.followerMotorVelocity = followerEncoder.getVelocity();
+    inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
+    inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
+    inputs.leaderMotorVoltage = leaderMotor.getAppliedOutput();
+    inputs.followerMotorVoltage = followerMotor.getAppliedOutput();
   }
 }

@@ -6,14 +6,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface LiftIO extends AutoCloseable {
   @AutoLog
   public static class LiftIOInputs {
-    public double leadermotorPosition = 0.0;
-    public double followermotorPosition = 0.0;
-    public double leadermotorVelocity = 0.0;
-    public double followermotorVelocity = 0.0;
-    public double leadermotorCurrent = 0.0;
-    public double followermotorCurrent = 0.0;
-    public double leadermotorVoltage = 0.0;
-    public double followermotorVoltage = 0.0;
+    public double leaderMotorPosition = 0.0;
+    public double followerMotorPosition = 0.0;
+    public double leaderMotorVelocity = 0.0;
+    public double followerMotorVelocity = 0.0;
+    public double leaderMotorCurrent = 0.0;
+    public double followerMotorCurrent = 0.0;
+    public double leaderMotorVoltage = 0.0;
+    public double followerMotorVoltage = 0.0;
   }
 
   /*
@@ -27,11 +27,11 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Set voltage of the motor
    */
-  public default void setVoltage(double voltage) {}
+  public default void setLiftVoltage(double voltage) {}
   /*
    * Clamp the speed of the motor to prevent it from going out of bounds
    */
-  public default double clampSpeed(double motorPos, double motorSpeed) {
+  public default double applyLimits(double motorPos, double motorSpeed) {
     if (motorPos > LiftConstants.liftMax) {
       return Math.min(0, motorSpeed);
     } else if (motorPos < LiftConstants.liftMin) {
@@ -43,5 +43,5 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setPosition(double position) {}
+  public default void setLiftPosition(double position) {}
 }

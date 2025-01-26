@@ -1,6 +1,8 @@
 package frc.robot.sensors.gyro;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.littletonrobotics.junction.Logger;
@@ -8,6 +10,7 @@ import org.littletonrobotics.junction.Logger;
 public class Gyro {
   private GyroIO io;
   private GyroIOInputsAutoLogged inputs = new GyroIOInputsAutoLogged();
+  private final Alert gyroDisconnectedAlert = new Alert("Gyro disconnected.", AlertType.kError);
 
   public Gyro(GyroIO io) {
     this.io = io;
@@ -16,6 +19,7 @@ public class Gyro {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Gyro", inputs);
+    gyroDisconnectedAlert.set(!inputs.isConnected);
   }
 
   public void reset() {

@@ -2,6 +2,8 @@ package frc.robot.sensors.apriltag;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
@@ -14,6 +16,8 @@ public class AprilTagVision {
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
   private double standardDeviation;
+  private final Alert aprilTagVisionDisconnectedAlert =
+      new Alert("April tag vision disconnected.", AlertType.kError);
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
@@ -59,5 +63,6 @@ public class AprilTagVision {
     Logger.recordOutput(
         "Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses",
         tagPoses.toArray(Pose3d[]::new));
+    aprilTagVisionDisconnectedAlert.set(!inputs.connected);
   }
 }

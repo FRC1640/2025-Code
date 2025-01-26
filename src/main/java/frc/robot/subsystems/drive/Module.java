@@ -4,14 +4,23 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
+import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
   ModuleIO io;
   PivotId id;
   ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+  private final Alert moduleDriveDisconnectedAlert =
+      new Alert("Module drive Disconnected.", AlertType.kError);
+  private final Alert moduleTurnDisconnectedAlert =
+      new Alert("Module turn Disconnected.", AlertType.kError);
+  private final Alert moduleDriveTempWarning = new Alert("Drive motor is hot.", AlertType.kWarning);
+  private final Alert moduleTurnTempWarning = new Alert("Turn motor is hot.", AlertType.kWarning);
 
   SlewRateLimiter accelLimiter = new SlewRateLimiter(DriveConstants.accelLimit);
   SlewRateLimiter deaccelLimiter = new SlewRateLimiter(DriveConstants.deaccelLimit);
@@ -24,6 +33,10 @@ public class Module {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Modules/" + id, inputs);
+    moduleDriveDisconnectedAlert.set(!inputs.driveConnected);
+    moduleTurnDisconnectedAlert.set(!inputs.turnConnected);
+    moduleDriveTempWarning.set(inputs.driveTempCelsius > WarningThresholdConstants.maxMotorTemp);
+    moduleTurnTempWarning.set(inputs.steerTempCelsius > WarningThresholdConstants.maxMotorTemp);
   }
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {

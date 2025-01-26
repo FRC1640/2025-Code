@@ -86,8 +86,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftMotor1ID = 0;
-    public static final int liftMotor2ID = 1;
+    public static final int liftleaderMotorID = 0;
+    public static final int liftfollowerMotorID = 1;
     public static final double motorRatio = 0.77777773;
 
     public static final double liftMax = 0;

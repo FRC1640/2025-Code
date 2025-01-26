@@ -7,20 +7,20 @@ import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 
 public class LiftIOSpark implements LiftIO {
-  RelativeEncoder motorEncoder1;
-  RelativeEncoder motorEncoder2;
-  SparkMax motor1;
-  SparkMax motor2;
+  RelativeEncoder leaderEncoder;
+  RelativeEncoder followerEncoder;
+  SparkMax leaderMotor;
+  SparkMax followerMotor;
 
   public LiftIOSpark() {
-    motor1 =
+    leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftMotor1ID, false));
-    motor2 =
+            SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false));
+    followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftMotor2ID, false));
-    motorEncoder1 = motor1.getEncoder();
-    motorEncoder2 = motor2.getEncoder();
+            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false));
+    leaderEncoder = leaderMotor.getEncoder();
+    followerEncoder = followerMotor.getEncoder();
   }
 
   /*
@@ -28,13 +28,13 @@ public class LiftIOSpark implements LiftIO {
    */
   @Override
   public void setSpeed(double speed) {
-    motor1.set(clampSpeed(motorEncoder1.getPosition(), speed));
+    leaderMotor.set(clampSpeed(leaderEncoder.getPosition(), speed));
   }
   /*
    * Set voltage of the motor
    */
   @Override
   public void setVoltage(double voltage) {
-    motor1.setVoltage(clampSpeed(motorEncoder1.getPosition(), voltage));
+    leaderMotor.setVoltage(clampSpeed(leaderEncoder.getPosition(), voltage));
   }
 }

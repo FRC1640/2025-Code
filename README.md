@@ -4,6 +4,7 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/FRC1640/2025-Code?quickstart=1)
 
-[Documentation](docs/README.md)
+# __[Documentation](docs/README.md)__
+
 
 Robot code for the 2025 FRC season.

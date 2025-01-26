@@ -9,6 +9,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
+import java.util.function.Function;
+import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
@@ -25,6 +27,26 @@ public class AutoAlignHelper {
       double dist = robotPose.getTranslation().getDistance(point.getTranslation());
       if (dist < nearestDist) {
         nearest = point;
+        nearestDist = dist;
+      }
+    }
+    return nearest;
+  }
+
+  public Pose2d findNearest(
+      Pose2d[] points, Pose2d robotPose, Function<Pose2d, Pose2d> poseFunction) {
+    if (points.length == 0) {
+      return null;
+    }
+    Pose2d nearest = new Pose2d();
+    double nearestDist = Double.MAX_VALUE;
+    for (Pose2d point : points) {
+      double dist =
+          robotPose.getTranslation().getDistance(poseFunction.apply(point).getTranslation());
+      if (dist < nearestDist) {
+        Logger.recordOutput("INPUT", point);
+        Logger.recordOutput("OUTPUT", poseFunction.apply(point));
+        nearest = poseFunction.apply(point);
         nearestDist = dist;
       }
     }
@@ -48,6 +70,7 @@ public class AutoAlignHelper {
 
     double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
     double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
+    Logger.recordOutput("Drive/AutoAlignPosition", target);
 
     // convert to robot relative from field relative
     Translation2d fieldRelative = new Translation2d(xSpeed, ySpeed);

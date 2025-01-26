@@ -18,7 +18,7 @@ public class LiftIOSpark implements LiftIO {
             SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false));
+            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
   }

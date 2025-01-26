@@ -112,8 +112,8 @@ public class RobotConstants {
     public static final int liftfollowerMotorID = 1;
     public static final double gearRatio = 0.77777773;
 
-    public static final double liftMax = 0;
-    public static final double liftMin = 0;
+    public static final double liftMax = 123;
+    public static final double liftMin = -200;
   }
 
   public static class CoralDetectorConstants {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class GantrySubsystem extends SubsystemBase {
   GantryIOInputsAutoLogged inputs = new GantryIOInputsAutoLogged();
@@ -13,6 +14,7 @@ public class GantrySubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    Logger.processInputs("Gantry/", inputs);
   }
 
   public void stop() {
@@ -28,7 +30,7 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public void setCarriagePosition(double pos) {
-    io.setCarriagePosition(pos, inputs);
+    io.setGantryPosition(pos, inputs);
   }
 
   public void setGantryVoltage(double voltage) {

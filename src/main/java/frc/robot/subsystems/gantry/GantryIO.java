@@ -17,7 +17,7 @@ public interface GantryIO extends AutoCloseable {
 
   public default void setGantryVoltage(double voltage, GantryIOInputs inputs) {}
 
-  public default void setCarriagePosition(double pos, GantryIOInputs inputs) {}
+  public default void setGantryPosition(double pos, GantryIOInputs inputs) {}
 
   /**
    * Modifies the inputted voltage so as to not move out of limits

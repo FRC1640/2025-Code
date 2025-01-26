@@ -1,6 +1,5 @@
 package frc.robot.subsystems.gantry;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -9,37 +8,35 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 
 public class GantryIOSim implements GantryIO {
-  private final DCMotorSim carriageSim;
+  private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
   public GantryIOSim() {
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
-    carriageSim =
+    gantrySim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(gantryGearbox, 0, GantryConstants.gantryGearRatio),
+            LinearSystemId.createDCMotorSystem(
+                gantryGearbox, 0.00019125, GantryConstants.gantryGearRatio),
             gantryGearbox);
   }
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
-    carriageSim.update(.02);
+    gantrySim.update(.02);
 
-    inputs.currentAmps = carriageSim.getCurrentDrawAmps();
-    inputs.appliedVoltage = gantryAppliedVolts;
-    carriageSim.setInputVoltage(gantryAppliedVolts);
+    inputs.currentAmps = gantrySim.getCurrentDrawAmps();
+    inputs.encoderPosition = gantrySim.getAngularPositionRad();
   }
 
   @Override
-  public void setCarriagePosition(double pos, GantryIOInputs inputs) {
-    setGantryVoltage(
-        MathUtil.clamp(gantryPID.calculate(inputs.encoderPosition, pos) * 12, -12, 12), inputs);
+  public void setGantryPosition(double pos, GantryIOInputs inputs) {
+    setGantryVoltage(clampVoltage(gantryPID.calculate(inputs.encoderPosition, pos)), inputs);
   }
 
   @Override
-  public void setGantryVoltage(
-      double voltage, GantryIOInputs inputs) { // TODO: this definiteily need to be changed
-    gantryAppliedVolts = voltage;
+  public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
+    gantrySim.setInputVoltage(clampVoltage(applyLimits(inputs.encoderPosition, voltage)));
   }
 }

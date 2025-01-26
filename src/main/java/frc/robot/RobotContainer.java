@@ -30,6 +30,16 @@ import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.gantry.GantryIO;
+import frc.robot.subsystems.gantry.GantryIOSim;
+import frc.robot.subsystems.gantry.GantryIOSparkMax;
+import frc.robot.subsystems.gantry.GantrySubsystem;
+import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
+import frc.robot.subsystems.lift.LiftIO;
+import frc.robot.subsystems.lift.LiftIOSim;
+import frc.robot.subsystems.lift.LiftIOSpark;
+import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
 
@@ -38,10 +48,13 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
+  private final GantrySubsystem gantrySubsystem;
+  private final LiftSubsystem liftSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard
   private final Dashboard dashboard;
@@ -58,6 +71,8 @@ public class RobotContainer {
                 CameraConstants.frontCamera));
 
         coralDetector = new CoralDetector(new CoralDetectorIOPixy());
+        gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
+        liftSubsystem = new LiftSubsystem(new LiftIOSpark());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -68,10 +83,14 @@ public class RobotContainer {
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
                 CameraConstants.frontCamera));
         coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
+        gantrySubsystem = new GantrySubsystem(new GantryIOSim());
+        liftSubsystem = new LiftSubsystem(new LiftIOSim());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
         coralDetector = new CoralDetector(new CoralDetectorIO() {});
+        gantrySubsystem = new GantrySubsystem(new GantryIO() {});
+        liftSubsystem = new LiftSubsystem(new LiftIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -79,6 +98,12 @@ public class RobotContainer {
         new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
     robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
     dashboard = new Dashboard(driveSubsystem, driveController);
+    GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
+    gantrySubsystem.setDefaultCommand(
+        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getLeftY() * 6));
     configureBindings();
   }
 

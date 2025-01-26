@@ -37,8 +37,8 @@ public class LiftIOSpark implements LiftIO {
    */
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
-    leaderMotor.setVoltage(
-        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)));
+    setLiftVoltage(
+        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)), inputs);
   }
 
   @Override

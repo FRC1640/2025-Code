@@ -10,35 +10,33 @@ import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 
 public class GantryIOSparkMax implements GantryIO {
-  private final SparkMax carriageSpark;
-  private final RelativeEncoder carriageEncoder;
+  private final SparkMax gantrySpark;
+  private final RelativeEncoder gantryEncoder;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
   public GantryIOSparkMax() {
-    carriageSpark =
+    gantrySpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID));
-    carriageEncoder = carriageSpark.getEncoder();
+    gantryEncoder = gantrySpark.getEncoder();
   }
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
-    inputs.currentAmps = carriageSpark.getOutputCurrent();
-    inputs.tempCelcius = carriageSpark.getMotorTemperature();
-    inputs.appliedVoltage = carriageSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
-    inputs.encoderPosition = carriageEncoder.getPosition();
+    inputs.currentAmps = gantrySpark.getOutputCurrent();
+    inputs.tempCelcius = gantrySpark.getMotorTemperature();
+    inputs.appliedVoltage = gantrySpark.getAppliedOutput() * RobotController.getBatteryVoltage();
+    inputs.encoderPosition = gantryEncoder.getPosition();
   }
 
   @Override
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
-    voltage = clampVoltage(voltage);
-    voltage = applyLimits(inputs.encoderPosition, voltage);
-    carriageSpark.setVoltage(voltage);
+    gantrySpark.setVoltage(applyLimits(inputs.encoderPosition, clampVoltage(voltage)));
   }
 
   @Override
-  public void setCarriagePosition(double position, GantryIOInputs inputs) {
+  public void setGantryPosition(double position, GantryIOInputs inputs) {
     setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
   }
 }

@@ -6,5 +6,6 @@
 
 # __[Documentation](docs/README.md)__
 
+https://frc1640.github.io/2025-Code/
 
 Robot code for the 2025 FRC season.

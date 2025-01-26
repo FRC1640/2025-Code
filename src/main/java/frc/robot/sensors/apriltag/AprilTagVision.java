@@ -5,11 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class AprilTagVision {
+public class AprilTagVision extends PeriodicBase {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
@@ -46,6 +47,7 @@ public class AprilTagVision {
     return standardDeviation;
   }
 
+  @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("AprilTagVision/" + cameraName, inputs);

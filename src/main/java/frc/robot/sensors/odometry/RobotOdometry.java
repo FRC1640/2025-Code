@@ -18,6 +18,7 @@ import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,8 +28,14 @@ public class RobotOdometry extends PeriodicBase {
   DriveSubsystem driveSubsystem;
   Gyro gyro;
   public static RobotOdometry instance;
-  private AprilTagVision[] aprilTagVisions;
   private boolean useAutoApriltags = false;
+  public HashMap<String, OdometryStorage> odometries = new HashMap<>();
+  public HashMap<String, AprilTagVision> visionMap = new HashMap<>();
+
+  public enum VisionUpdateMode {
+    PHOTONVISION,
+    TRIG
+  }
 
   public boolean isUseAutoApriltags() {
     return useAutoApriltags;
@@ -38,25 +45,22 @@ public class RobotOdometry extends PeriodicBase {
     this.useAutoApriltags = useAutoApriltags;
   }
 
-  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] aprilTagVisions) {
+  public RobotOdometry(DriveSubsystem driveSubsystem, Gyro gyro, AprilTagVision[] cameras) {
     this.driveSubsystem = driveSubsystem;
-    this.aprilTagVisions = aprilTagVisions;
     instance = this;
     this.gyro = gyro;
+    for (AprilTagVision aprilTagVision : cameras) {
+      visionMap.put(aprilTagVision.getCameraName(), aprilTagVision);
+    }
     SparkOdometryThread.getInstance().start();
   }
 
   @Override
   public void periodic() {
-    for (AprilTagVision aprilTagVision : aprilTagVisions) {
-      aprilTagVision.periodic();
-    }
     updateAllOdometries();
   }
 
-  public HashMap<String, OdometryStorage> odometries = new HashMap<>();
-
-  public static SwerveDrivePoseEstimator getDefaultEstimator() {
+  public static SwerveDrivePoseEstimator getDefaultEstimator(Pose2d initalPose) {
     return new SwerveDrivePoseEstimator(
         DriveConstants.kinematics,
         new Rotation2d(),
@@ -71,8 +75,51 @@ public class RobotOdometry extends PeriodicBase {
         CameraConstants.defaultVisionStandardDev);
   }
 
-  public void addEstimator(String name, SwerveDrivePoseEstimator estimator) {
-    odometries.put(name, new OdometryStorage(estimator));
+  public void branchEstimator(String name, String[] cameras, VisionUpdateMode visionUpdateMode) {
+    if (!odometries.containsKey(name)) {
+      odometries.put(
+          name,
+          new OdometryStorage(
+              getDefaultEstimator(new Pose2d()),
+              Arrays.stream(cameras).map((x) -> visionMap.get(x)).toArray(AprilTagVision[]::new),
+              visionUpdateMode));
+    }
+  }
+
+  public void branchEstimator(
+      String name, AprilTagVision[] cameras, VisionUpdateMode visionUpdateMode) {
+    if (!odometries.containsKey(name)) {
+      odometries.put(
+          name, new OdometryStorage(getDefaultEstimator(new Pose2d()), cameras, visionUpdateMode));
+    }
+  }
+
+  public void branchEstimator(
+      String name, AprilTagVision[] cameras, VisionUpdateMode visionUpdateMode, String branchFrom) {
+    if (odometries.containsKey(branchFrom) && !odometries.containsKey(name)) {
+      odometries.put(
+          name,
+          new OdometryStorage(
+              getDefaultEstimator(odometries.get(branchFrom).estimator.getEstimatedPosition()),
+              cameras,
+              visionUpdateMode));
+    }
+  }
+
+  public void branchEstimator(
+      String name, String[] cameras, VisionUpdateMode visionUpdateMode, String branchFrom) {
+    if (odometries.containsKey(branchFrom) && !odometries.containsKey(name)) {
+      odometries.put(
+          name,
+          new OdometryStorage(
+              getDefaultEstimator(odometries.get(branchFrom).estimator.getEstimatedPosition()),
+              Arrays.stream(cameras).map((x) -> visionMap.get(x)).toArray(AprilTagVision[]::new),
+              visionUpdateMode));
+    }
+  }
+
+  public void pruneBranch(String estimator) {
+    odometries.remove(estimator);
   }
 
   public void resetGyro(Pose2d newPose) {
@@ -106,7 +153,7 @@ public class RobotOdometry extends PeriodicBase {
   public void updateAllOdometries() {
     for (var estimator : odometries.keySet()) {
       updateOdometryWheels(estimator);
-      for (AprilTagVision aprilTagVision : aprilTagVisions) {
+      for (AprilTagVision aprilTagVision : odometries.get(estimator).getVisions()) {
         addVisionEstimate(estimator, aprilTagVision);
       }
     }

@@ -25,6 +25,7 @@ import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.sensors.odometry.RobotOdometry.VisionUpdateMode;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
@@ -65,7 +66,7 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCamera,
-                    () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
+                    () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
         coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
         break;
@@ -75,9 +76,9 @@ public class RobotContainer {
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
-    robotOdometry =
-        new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
-    robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
+    AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
+    robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
+    robotOdometry.branchEstimator("Main", visionArray, VisionUpdateMode.PHOTONVISION);
     dashboard = new Dashboard(driveSubsystem, driveController);
     configureBindings();
   }
@@ -94,7 +95,7 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToNearestWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
@@ -104,7 +105,7 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),

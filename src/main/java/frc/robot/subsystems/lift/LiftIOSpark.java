@@ -23,15 +23,5 @@ public class LiftIOSpark implements LiftIO {
     motorEncoder2 = motor2.getEncoder();
   }
 
-  @Override
-  public void updateInputs(LiftIOInputs inputs) {
-    inputs.liftmotor1Position = motorEncoder1.getPosition();
-    inputs.liftmotor2Position = motorEncoder2.getPosition();
-    inputs.liftmotor1Velocity = motorEncoder1.getVelocity();
-    inputs.liftmotor2Velocity = motorEncoder2.getVelocity();
-    inputs.liftmotor1Current = motor1.getOutputCurrent();
-    inputs.liftmotor2Current = motor2.getOutputCurrent();
-    inputs.liftmotor1Voltage = motor1.getAppliedOutput();
-    inputs.liftmotor2Voltage = motor2.getAppliedOutput();
-  }
+  public void SpinMotor() {}
 }

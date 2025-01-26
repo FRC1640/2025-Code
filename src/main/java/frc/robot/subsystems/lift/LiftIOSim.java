@@ -29,5 +29,6 @@ public class LiftIOSim implements LiftIO {
   @Override
   public void setVoltage(double voltage) {
     motor1Sim.setInputVoltage(clampSpeed(motor1Sim.getAngularPositionRotations(), voltage));
+    motor2Sim.setInputVoltage(clampSpeed(motor1Sim.getAngularPositionRotations(), voltage));
   }
 }

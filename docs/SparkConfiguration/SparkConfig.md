@@ -35,7 +35,6 @@ followerMotor = SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(Lift
 #### configSparkMax
 ```
 configSparkMax(SparkConfiguration config, (optional) SparkMax leader)
-
 ```
 #### SparkConfiguration:
 

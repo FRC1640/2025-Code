@@ -19,6 +19,16 @@ public class SparkConfigurer {
     return spark;
   }
 
+  public static SparkMax configSparkMax(SparkConfiguration config, SparkMax leader) {
+    config.follow(leader);
+    return configSparkMax(config, leader);
+  }
+
+  public static SparkMax configSparkMax(SparkConfiguration config, SparkFlex leader) {
+    config.follow(leader);
+    return configSparkMax(config, leader);
+  }
+
   public static SparkFlex configSparkFlex(SparkConfiguration config) {
     SparkFlex spark = new SparkFlex(config.getId(), MotorType.kBrushless);
     boolean flash = getFlash(config, spark);
@@ -28,6 +38,16 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + config.getId(), flash);
     return spark;
+  }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config, SparkMax leader) {
+    config.follow(leader);
+    return configSparkFlex(config, leader);
+  }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config, SparkFlex leader) {
+    config.follow(leader);
+    return configSparkFlex(config, leader);
   }
 
   private static boolean getFlash(SparkConfiguration config, SparkMax spark) {

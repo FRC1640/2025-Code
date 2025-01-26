@@ -116,7 +116,7 @@ public class RobotOdometry extends PeriodicBase {
     List<Pose2d> robotPoses = new LinkedList<>();
     List<Pose2d> robotPosesAccepted = new LinkedList<>();
     List<Pose2d> robotPosesRejected = new LinkedList<>();
-    for (PoseObservation poseObservation : vision.getPoses()) {
+    for (PoseObservation poseObservation : vision.getPhotonResults()) {
       SwerveDrivePoseEstimator odometry = odometries.get(estimator).estimator;
       Pose2d visionUpdate = poseObservation.pose().toPose2d();
       robotPoses.add(visionUpdate);

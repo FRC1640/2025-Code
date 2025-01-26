@@ -1,6 +1,5 @@
 package frc.robot.subsystems.lift;
 
-import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
@@ -14,10 +13,9 @@ public class LiftIOSpark implements LiftIO {
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
-  PIDController liftPID;
+  PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
 
   public LiftIOSpark() {
-    liftPID = PIDConstants.constructPID(RobotPIDConstants.liftPID);
     leaderMotor =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false));
@@ -38,5 +36,7 @@ public class LiftIOSpark implements LiftIO {
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setPosition(double position) {}
+  public void setPosition(double position) {
+    leaderMotor.setVoltage(liftController.calculate(leaderEncoder.getPosition(), position));
+  }
 }

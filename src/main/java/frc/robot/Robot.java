@@ -4,8 +4,7 @@
 
 package frc.robot;
 
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.CanBridge;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -50,9 +49,8 @@ public class Robot extends LoggedRobot {
     return state;
   }
 
-  private LaserCan laserCan;
-
   public Robot() {
+    CanBridge.runTCP();
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -111,14 +109,14 @@ public class Robot extends LoggedRobot {
         Filesystem.getDeployDirectory()
             .getPath()); // instructed to add to get elastic config to load automatically
 
-    laserCan = new LaserCan(43);
-    try { // example config; might not be necessary with gui config
-      laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
-      laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    } catch (ConfigurationFailedException e) {
-      System.out.println("Configuration failed! " + e);
-    }
+    // laserCan = new LaserCan(43);
+    // try { // example config; might not be necessary with gui config
+    //   laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
+    //   laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+    //   laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+    // } catch (ConfigurationFailedException e) {
+    //   System.out.println("Configuration failed! " + e);
+    // }
   }
 
   @Override
@@ -127,12 +125,13 @@ public class Robot extends LoggedRobot {
     PeriodicScheduler.getInstance().run();
     System.out.println(m_robotContainer.getDistanceToReef()); // useful?
     System.out.println(m_robotContainer.getDetected()); // useful?
-    LaserCan.Measurement measurement = laserCan.getMeasurement();
-    if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-      System.out.println("target distance: " + measurement.distance_mm + "mm");
-    } else {
-      System.out.println("example measurement valid condiions failed");
-    }
+    // LaserCan.Measurement measurement = laserCan.getMeasurement();
+    // if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)
+    // {
+    //   System.out.println("target distance: " + measurement.distance_mm + "mm");
+    // } else {
+    //   System.out.println("example measurement valid condiions failed");
+    // }
   }
 
   @Override

@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralDetectorIO {
   @AutoLog
-  public static class CoralDetectorIOInputs {
+  public class CoralDetectorIOInputs {
     public boolean isConnected = false;
     public boolean doesDetect = false;
     public double deltaX = 0.0;

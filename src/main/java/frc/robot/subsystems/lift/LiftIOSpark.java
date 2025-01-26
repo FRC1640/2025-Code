@@ -23,5 +23,18 @@ public class LiftIOSpark implements LiftIO {
     motorEncoder2 = motor2.getEncoder();
   }
 
-  public void SpinMotor() {}
+  /*
+   * Set speed % between -1 and 1
+   */
+  @Override
+  public void setSpeed(double speed) {
+    motor1.set(clampSpeed(motorEncoder1.getPosition(), speed));
+  }
+  /*
+   * Set voltage of the motor
+   */
+  @Override
+  public void setVoltage(double voltage) {
+    motor1.setVoltage(clampSpeed(motorEncoder1.getPosition(), voltage));
+  }
 }

@@ -89,6 +89,9 @@ public class RobotConstants {
     public static final int liftMotor1ID = 0;
     public static final int liftMotor2ID = 1;
     public static final double motorRatio = 0.77777773;
+
+    public static final double liftMax = 0;
+    public static final double liftMin = 0;
   }
 
   public static class CoralDetectorConstants {

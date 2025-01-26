@@ -25,4 +25,9 @@ public class LiftIOSim implements LiftIO {
                 motor2SimGearbox, 0.00019125, RobotConstants.LiftConstants.motorRatio),
             motor2SimGearbox);
   }
+
+  @Override
+  public void setVoltage(double voltage) {
+    motor1Sim.setInputVoltage(clampSpeed(motor1Sim.getAngularPositionRotations(), voltage));
+  }
 }

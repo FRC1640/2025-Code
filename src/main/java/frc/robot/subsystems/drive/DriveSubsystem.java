@@ -91,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Main"),
         (x) -> {
-          RobotOdometry.instance.setPose(x, "Main");
+          RobotOdometry.instance.setPose("Main", x);
           RobotOdometry.instance.resetGyro(x);
         },
         this::getChassisSpeeds,

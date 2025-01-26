@@ -11,12 +11,21 @@ public class OdometryStorage {
   public Rotation2d rawGyroRotation = new Rotation2d();
   private AprilTagVision[] visions;
   private VisionUpdateMode updateMode;
+  private String name;
+
+  public String getName() {
+    return name;
+  }
 
   public OdometryStorage(
-      SwerveDrivePoseEstimator estimator, AprilTagVision[] visions, VisionUpdateMode updateMode) {
+      String name,
+      SwerveDrivePoseEstimator estimator,
+      AprilTagVision[] visions,
+      VisionUpdateMode updateMode) {
     this.estimator = estimator;
     this.visions = visions;
     this.updateMode = updateMode;
+    this.name = name;
   }
 
   public AprilTagVision[] getVisions() {
@@ -34,4 +43,9 @@ public class OdometryStorage {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
+
+  @Override
+  public int hashCode() {
+    return estimator.hashCode();
+  }
 }

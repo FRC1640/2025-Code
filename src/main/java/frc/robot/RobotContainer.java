@@ -25,7 +25,6 @@ import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
-import frc.robot.sensors.odometry.RobotOdometry.VisionUpdateMode;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
@@ -78,7 +77,6 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    robotOdometry.branchEstimator("Main", visionArray, VisionUpdateMode.PHOTONVISION);
     dashboard = new Dashboard(driveSubsystem, driveController);
     configureBindings();
   }

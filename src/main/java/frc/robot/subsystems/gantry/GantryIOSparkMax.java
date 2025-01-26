@@ -28,11 +28,12 @@ public class GantryIOSparkMax implements GantryIO {
 
   @Override
   public void setCarriagePosition(double pos, GantryIOInputs inputs) {
-    setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, pos) * 12);
+    
+    setGantrySpeedVoltage(gantryPID.calculate(inputs.encoderPosition, pos) * 12);
   }
 
   @Override
-  public void setGantryVoltage(double voltage) {
+  public void setGantrySpeedVoltage(double voltage) {
     carriageSpark.setVoltage(voltage);
   }
 }

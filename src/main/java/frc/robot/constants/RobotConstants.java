@@ -83,5 +83,7 @@ public class RobotConstants {
   public static class GantryConstants {
     public static final double gantryGearRatio = 0.0; // UPDATE
     public static final double pulleyRadiusIn = .5; // inches for now / placeholder
+    public static final double leftLimit = 0.0; // change these jawns ( ͡° ͜ʖ ͡°)
+    public static final double rightLimit = 12.0; // TODO: Change these jawns
   }
 }

@@ -33,12 +33,12 @@ public class GantryIOSim implements GantryIO {
 
   @Override
   public void setCarriagePosition(double pos, GantryIOInputs inputs) {
-    setGantryVoltage(
+    setGantrySpeedVoltage(
         MathUtil.clamp(gantryPID.calculate(inputs.encoderPosition, pos) * 12, -12, 12));
   }
 
   @Override
-  public void setGantryVoltage(double voltage) {
+  public void setGantrySpeedVoltage(double voltage) {
     gantryAppliedVolts = voltage;
   }
 }

@@ -1,6 +1,8 @@
 package frc.robot.util.spark;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -58,6 +60,22 @@ public class SparkConfiguration {
 
   public SparkBaseConfig getInnerConfig() {
     return inner;
+  }
+
+  public void follow(SparkMax leader) {
+    inner.follow(leader, leader.configAccessor.getInverted() != inverted);
+  }
+
+  public void follow(SparkMax leader, boolean inverted) {
+    inner.follow(leader, inverted);
+  }
+
+  public void follow(SparkFlex leader) {
+    inner.follow(leader, leader.configAccessor.getInverted() != inverted);
+  }
+
+  public void follow(SparkFlex leader, boolean inverted) {
+    inner.follow(leader, inverted);
   }
 
   public SparkConfiguration(

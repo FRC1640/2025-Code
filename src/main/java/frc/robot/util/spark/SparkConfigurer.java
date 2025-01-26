@@ -19,6 +19,21 @@ public class SparkConfigurer {
     return spark;
   }
 
+  /*
+   * Configure a SparkMax with given SparkConfiguration config and what Leader it is set to
+   */
+  public static SparkMax configSparkMax(SparkConfiguration config, SparkMax leader) {
+    config.follow(leader);
+    return configSparkMax(config, leader);
+  }
+
+  public static SparkMax configSparkMax(SparkConfiguration config, SparkFlex leader) {
+    config.follow(leader);
+    return configSparkMax(config, leader);
+  }
+  /*
+   * Configure a spark flex with the given configuration
+   */
   public static SparkFlex configSparkFlex(SparkConfiguration config) {
     SparkFlex spark = new SparkFlex(config.getId(), MotorType.kBrushless);
     boolean flash = getFlash(config, spark);
@@ -29,6 +44,19 @@ public class SparkConfigurer {
     Logger.recordOutput("SparkFlashes/" + config.getId(), flash);
     return spark;
   }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config, SparkMax leader) {
+    config.follow(leader);
+    return configSparkFlex(config, leader);
+  }
+
+  public static SparkFlex configSparkFlex(SparkConfiguration config, SparkFlex leader) {
+    config.follow(leader);
+    return configSparkFlex(config, leader);
+  }
+  /*
+   * Check if the spark needs to be flashed for settings that are currently flashed
+   */
 
   private static boolean getFlash(SparkConfiguration config, SparkMax spark) {
     boolean flash =
@@ -48,6 +76,9 @@ public class SparkConfigurer {
     }
     return flash;
   }
+  /*
+   * Check if the spark needs to be flashed for settings that are currently flashed
+   */
 
   private static boolean getFlash(SparkConfiguration config, SparkFlex spark) {
     boolean flash =

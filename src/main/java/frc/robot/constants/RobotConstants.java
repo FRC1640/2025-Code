@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +16,20 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
+  public class RobotDimensions {
+    public static final double robotWidth = Units.inchesToMeters(29.9);
+    public static final double robotLength = Units.inchesToMeters(29.9);
+    public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public static Pose2d addRobotDim(Pose2d pose2d) {
+    Translation2d translation =
+        pose2d
+            .getTranslation()
+            .minus(new Translation2d(RobotDimensions.robotWidth, 0).rotateBy(pose2d.getRotation()));
+    return new Pose2d(translation, pose2d.getRotation());
+  }
+
   public static enum PivotId {
     FL,
     FR,

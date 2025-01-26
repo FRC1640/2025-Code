@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -53,8 +54,8 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.backCamera),
-                CameraConstants.backCamera));
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
+                CameraConstants.frontCamera));
 
         coralDetector = new CoralDetector(new CoralDetectorIOPixy());
         break;
@@ -63,9 +64,9 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
-                    CameraConstants.backCamera,
+                    CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
-                CameraConstants.backCamera));
+                CameraConstants.frontCamera));
         coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
         break;
       default:
@@ -97,7 +98,8 @@ public class RobotContainer {
             () ->
                 chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            gyro),
+            gyro,
+            (x) -> RobotConstants.addRobotDim(x)),
         driveController.a());
 
     DriveWeightCommand.createWeightTrigger(

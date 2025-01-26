@@ -19,6 +19,7 @@ public class FieldConstants {
   public static final int kSouth = 3;
   public static final int kSouthWest = 4;
   public static final int kNorthWest = 5;
+
   public static final Pose2d[] reefPositionsRed =
       new Pose2d[] {
         new Pose2d(12.227305999999999, 4.0259, Rotation2d.fromDegrees(360)),

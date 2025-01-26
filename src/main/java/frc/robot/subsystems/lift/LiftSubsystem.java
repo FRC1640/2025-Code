@@ -16,30 +16,30 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public double getMotor1Position() {
-    return inputs.liftmotor1Position;
+    return inputs.leadermotorPosition;
   }
 
   public double getMotor2Position() {
-    return inputs.liftmotor2Position;
+    return inputs.followermotorPosition;
   }
 
   public double getMotor1Velocity() {
-    return inputs.liftmotor1Velocity;
+    return inputs.leadermotorVelocity;
   }
 
   public double getMotor2Velocity() {
-    return inputs.liftmotor2Velocity;
+    return inputs.followermotorVelocity;
   }
 
   public double getMotor1Current() {
-    return inputs.liftmotor1Current;
+    return inputs.leadermotorCurrent;
   }
 
   public double getMotor2Current() {
-    return inputs.liftmotor2Current;
+    return inputs.followermotorCurrent;
   }
 
   public double getMotor1Voltage() {
-    return inputs.liftmotor1Voltage;
+    return inputs.leadermotorVoltage;
   }
 }

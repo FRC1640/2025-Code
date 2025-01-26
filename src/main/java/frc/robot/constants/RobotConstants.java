@@ -17,8 +17,8 @@ import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
   public class RobotDimensions {
-    public static final double robotWidth = Units.inchesToMeters(29.9);
-    public static final double robotLength = Units.inchesToMeters(29.9);
+    public static final double robotWidth = Units.inchesToMeters(36);
+    public static final double robotLength = Units.inchesToMeters(36);
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -26,7 +26,9 @@ public class RobotConstants {
     Translation2d translation =
         pose2d
             .getTranslation()
-            .minus(new Translation2d(RobotDimensions.robotWidth, 0).rotateBy(pose2d.getRotation()));
+            .minus(
+                new Translation2d(RobotDimensions.robotWidth / 2, 0)
+                    .rotateBy(pose2d.getRotation()));
     return new Pose2d(translation, pose2d.getRotation());
   }
 
@@ -84,7 +86,12 @@ public class RobotConstants {
     public static final CameraConstant frontCamera =
         new CameraConstant(
             new SimCameraProperties(),
-            new Transform3d(new Translation3d(), new Rotation3d()),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(29.5 / 2),
+                    -Units.inchesToMeters(29.5 / 2 - 8),
+                    Units.inchesToMeters(10.5)),
+                new Rotation3d()),
             1,
             "Front");
 

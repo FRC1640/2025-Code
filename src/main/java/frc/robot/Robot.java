@@ -35,6 +35,19 @@ public class Robot extends LoggedRobot {
     REPLAY
   };
 
+  public static enum RobotState {
+    DISABLED,
+    AUTONOMOUS,
+    TELEOP,
+    TEST
+  }
+
+  private static RobotState state = RobotState.DISABLED;
+
+  public static RobotState getState() {
+    return state;
+  }
+
   public Robot() {
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -104,6 +117,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     DriveWeightCommand.removeAllWeights();
+    state = RobotState.DISABLED;
   }
 
   @Override
@@ -115,6 +129,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    state = RobotState.AUTONOMOUS;
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -129,6 +144,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    state = RobotState.TELEOP;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -145,6 +161,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void testInit() {
+    state = RobotState.TEST;
     CommandScheduler.getInstance().cancelAll();
     Dashboard.getSysidCommand().schedule();
     CommandScheduler.getInstance().getActiveButtonLoop().clear();

@@ -13,7 +13,7 @@ import frc.robot.util.spark.StatusFrames;
 public class SparkConstants {
   public static final SparkConfiguration getGantryDefaultSparkMax(int id) {
     return new SparkConfiguration(
-        id, IdleMode.kBrake, false, 60, 200, 64, StatusFrames.getDefault(), new SparkMaxConfig());
+        id, IdleMode.kBrake, false, 60, 50, 16, StatusFrames.getDefault(), new SparkMaxConfig());
   }
 
   public static final SparkConfiguration getDefaultMax(int id, boolean inverted) {

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -97,7 +98,8 @@ public class RobotContainer {
             () ->
                 chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            gyro),
+            gyro,
+            (x) -> RobotConstants.addRobotDim(x)),
         driveController.a());
 
     DriveWeightCommand.createWeightTrigger(

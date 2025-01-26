@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.spark.SparkConfigurer;
 
 public class GantryIOSparkMax implements GantryIO {
   private final SparkMax carriageSpark;
@@ -15,7 +16,9 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
   public GantryIOSparkMax() {
-    carriageSpark = SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID);
+    carriageSpark =
+        SparkConfigurer.configSparkMax(
+            SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID));
     carriageEncoder = carriageSpark.getEncoder();
   }
 

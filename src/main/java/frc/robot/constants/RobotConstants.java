@@ -88,4 +88,14 @@ public class RobotConstants {
   public static class CoralDetectorConstants {
     public static final int channel = 0;
   }
+
+  // TODO replace with actual values
+  public static class WarningThresholdConstants {
+    // current thresholds are in amps and are currently set at the stall current. Consult with team
+    // for actual values later.
+    public static final double maxVortexMotorCurrent = 220;
+    public static final double maxNeoMotorCurrent = 105;
+    public static final double maxNeo550MotorCurrent = 100;
+    public static final double maxMotorTemp = 60; // in degrees celcius
+  }
 }

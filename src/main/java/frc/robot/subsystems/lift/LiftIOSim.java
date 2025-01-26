@@ -17,12 +17,12 @@ public class LiftIOSim implements LiftIO {
     motor1Sim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                motor1SimGearbox, 0.00019125, RobotConstants.LiftConstants.motorRatio),
+                motor1SimGearbox, 0.00019125, RobotConstants.LiftConstants.gearRatio),
             motor1SimGearbox);
     motor2Sim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                motor2SimGearbox, 0.00019125, RobotConstants.LiftConstants.motorRatio),
+                motor2SimGearbox, 0.00019125, RobotConstants.LiftConstants.gearRatio),
             motor2SimGearbox);
   }
 

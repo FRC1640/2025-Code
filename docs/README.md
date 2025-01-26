@@ -2,4 +2,4 @@
 ### Information
 [April Tag Positions](AprilTagPositions/GetApriltagPositions.md)
 
-[Jake's Spark Config](SparkConfiguration/SparkConfig.md)
+[Jake's RevLib Spark Config](SparkConfiguration/SparkConfig.md)

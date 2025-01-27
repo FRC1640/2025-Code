@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -11,6 +12,12 @@ import frc.robot.util.spark.StatusFrames;
 
 public class SparkConstants {
   public static final SparkConfiguration getDefaultMax(int id, boolean inverted) {
+    return new SparkConfiguration(
+        id, IdleMode.kCoast, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
+  }
+
+  public static final SparkConfiguration getDefaultMax(
+      int id, boolean inverted, boolean follower, SparkMax followerOf) {
     return new SparkConfiguration(
         id, IdleMode.kCoast, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
   }

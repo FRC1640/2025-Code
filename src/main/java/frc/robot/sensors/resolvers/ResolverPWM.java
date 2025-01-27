@@ -31,6 +31,6 @@ public class ResolverPWM {
    */
   public double getDegrees() {
     // Logger.recordOutput("Pivot/" + channel, resolver.get());
-    return (360 - (resolver.get() * 360 - offset));
+    return ((resolver.get() * 360 + offset));
   }
 }

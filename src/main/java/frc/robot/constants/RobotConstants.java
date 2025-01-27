@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +16,22 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
+  public class RobotDimensions {
+    public static final double robotWidth = Units.inchesToMeters(36);
+    public static final double robotLength = Units.inchesToMeters(36);
+    public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public static Pose2d addRobotDim(Pose2d pose2d) {
+    Translation2d translation =
+        pose2d
+            .getTranslation()
+            .minus(
+                new Translation2d(RobotDimensions.robotWidth / 2, 0)
+                    .rotateBy(pose2d.getRotation()));
+    return new Pose2d(translation, pose2d.getRotation());
+  }
+
   public static enum PivotId {
     FL,
     FR,
@@ -69,7 +86,12 @@ public class RobotConstants {
     public static final CameraConstant frontCamera =
         new CameraConstant(
             new SimCameraProperties(),
-            new Transform3d(new Translation3d(), new Rotation3d()),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(29.5 / 2),
+                    -Units.inchesToMeters(29.5 / 2 - 8),
+                    Units.inchesToMeters(10.5)),
+                new Rotation3d()),
             1,
             "Front");
 
@@ -77,15 +99,24 @@ public class RobotConstants {
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
-                new Translation3d(-0.356, 0.146, 0.406),
-                new Rotation3d(0, Math.toRadians(-20), Math.PI)),
+                new Translation3d(0.146, -0.356, 0.406),
+                new Rotation3d(0, Math.toRadians(1), Math.PI)),
             1,
             "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
 
+  public static class LiftConstants {
+    public static final int liftleaderMotorID = 0;
+    public static final int liftfollowerMotorID = 1;
+    public static final double gearRatio = 0.77777773;
+
+    public static final double liftMax = 0;
+    public static final double liftMin = 0;
+  }
+
   public static class CoralDetectorConstants {
-    public static final int channel = 0;
+    public static final int channel = 5;
   }
 }

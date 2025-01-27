@@ -43,3 +43,19 @@ The board features four surface-mount configuration jumpers that determine its o
 ![alt text](image-4.png)
 
 ![alt text](image-5.png)
+
+### Example Code:
+```java
+public double getDistance() {
+    double width = counter.getPeriod();
+    if (width == 0) {
+      System.out.println("timeout");
+      return -1;
+    } else if (width > 1850) {
+      return -1;
+    } else {
+      return 2.0 * ((width * 1000000.0) - 1000.0);
+    }
+}
+```
+This returns distance in MM

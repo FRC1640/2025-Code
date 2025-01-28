@@ -55,10 +55,10 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void setLiftPosition(double pos) {
-    liftIO.setLiftPosition(pos, liftIO.getInputs());
+    liftIO.setLiftPosition(pos, inputs);
   }
 
   public void setLiftVoltage(double voltage) {
-    liftIO.setLiftVoltage(voltage, liftIO.getInputs());
+    liftIO.setLiftVoltage(voltage, inputs);
   }
 }

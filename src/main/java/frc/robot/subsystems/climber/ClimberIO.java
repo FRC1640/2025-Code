@@ -7,16 +7,22 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimberIO extends AutoCloseable {
   @AutoLog
   public static class ClimberIOInputs {
-    public double leaderMotorPosition = 0.0;
-    public double followerMotorPosition = 0.0;
-    public double leaderMotorVelocity = 0.0;
-    public double followerMotorVelocity = 0.0;
-    public double leaderMotorCurrent = 0.0;
-    public double followerMotorCurrent = 0.0;
-    public double leaderMotorVoltage = 0.0;
-    public double followerMotorVoltage = 0.0;
-    public double leaderTemperature = 0.0;
-    public double followerTemperature = 0.0;
+    // may need more for pneumatic stuff not entirely sure
+    public double liftMotorPosition = 0.0;
+    public double winch1MotorPosition = 0.0;
+    public double winch2MotorPosition = 0.0;
+    public double liftMotorVelocity = 0.0;
+    public double winch1MotorVelocity = 0.0;
+    public double winch2MotorVelocity = 0.0;
+    public double liftMotorCurrent = 0.0;
+    public double winch1MotorCurrent = 0.0;
+    public double winch2MotorCurrent = 0.0;
+    public double liftMotorVoltage = 0.0;
+    public double winch1MotorVoltage = 0.0;
+    public double winch2MotorVoltage = 0.0;
+    public double liftTemperature = 0.0;
+    public double winch1Temperature = 0.0;
+    public double winch2Temperature = 0.0;
   }
 
   /*

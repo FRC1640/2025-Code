@@ -2,22 +2,34 @@ package frc.robot.util.alerts;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 
-public class AlertsManager {
+public class AlertsManager extends PeriodicBase {
 
-  public static ArrayList<Alert> alerts;
-  public static ArrayList<BooleanSupplier> alertConditions;
+  private static ArrayList<Alert> alerts = new ArrayList<Alert>();
+  private static ArrayList<BooleanSupplier> alertConditions = new ArrayList<BooleanSupplier>();
 
+  public AlertsManager() {}
+
+  /**
+   * Creates a new alert. Call this method once when instantiating the device/subsystem.
+   *
+   * @param condition
+   * @param message
+   * @param type
+   */
   public static void addAlert(BooleanSupplier condition, String message, AlertType type) {
     Alert alert = new Alert(message, type);
     alerts.add(alert);
     alertConditions.add(condition);
-    new Trigger(condition)
-        .onTrue(new InstantCommand(() -> alert.set(true)))
-        .onFalse(new InstantCommand(() -> alert.set(false)));
+  }
+
+  @Override
+  public void periodic() {
+    for (int i = 0; i < alerts.size(); i++) {
+      alerts.get(i).set(alertConditions.get(i).getAsBoolean());
+    }
   }
 }

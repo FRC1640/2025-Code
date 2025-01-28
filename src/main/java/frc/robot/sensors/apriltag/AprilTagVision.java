@@ -2,11 +2,11 @@ package frc.robot.sensors.apriltag;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import frc.robot.util.alerts.AlertsManager;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -16,14 +16,14 @@ public class AprilTagVision {
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
   private double standardDeviation;
-  private final Alert aprilTagVisionDisconnectedAlert =
-      new Alert("April tag vision disconnected.", AlertType.kError);
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.name;
     standardDeviation = cameraConstants.standardDevConstant;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
+    AlertsManager.addAlert(
+        () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
   }
 
   public Rotation2d getTx() {
@@ -63,6 +63,5 @@ public class AprilTagVision {
     Logger.recordOutput(
         "Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses",
         tagPoses.toArray(Pose3d[]::new));
-    aprilTagVisionDisconnectedAlert.set(!inputs.connected);
   }
 }

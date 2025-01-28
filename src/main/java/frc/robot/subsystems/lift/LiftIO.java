@@ -18,7 +18,6 @@ public interface LiftIO extends AutoCloseable {
     public double leaderTemperature = 0.0;
     public double followerTemperature = 0.0;
   }
-
   /*
    * Updates the inputs
    */
@@ -30,17 +29,31 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Set voltage of the motor
    */
-  public default void setLiftVoltage(double voltage) {}
+  public default void setLiftVoltage(double voltage, LiftIOInputs inputs) {}
   /*
    * Applies limits from the max and min of the motors
    */
-  public default double applyLimits(double motorPos, double motorSpeed) {
-    if (motorPos > LiftConstants.liftMax) {
-      return Math.min(0, motorSpeed);
-    } else if (motorPos < LiftConstants.liftMin) {
-      return Math.max(0, motorSpeed);
+  /**
+   * Modifies the inputted voltage so as to not move out of limits
+   *
+   * @param pos the current position.
+   * @param voltage the base voltage to clamp.
+   * @return clamped voltage.
+   */
+  public default double applyLimits(double pos, double voltage) {
+    double voltageClamped = voltage;
+    if (!(Double.isNaN(voltageClamped) || Double.isNaN(pos))) {
+      if (pos < LiftConstants.liftMin) {
+        voltageClamped = Math.max(voltage, 0);
+      }
+      if (pos > LiftConstants.liftMax) {
+        voltageClamped = Math.min(voltage, 0);
+      }
+    } else {
+      return 0;
     }
-    return motorSpeed;
+
+    return voltageClamped;
   }
   /*
    * Clamps voltage between -12 and 12
@@ -55,5 +68,5 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setLiftPosition(double position) {}
+  public default void setLiftPosition(double position, LiftIOInputs inputs) {}
 }

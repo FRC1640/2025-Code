@@ -110,10 +110,10 @@ public class RobotConstants {
   public static class LiftConstants {
     public static final int liftleaderMotorID = 0;
     public static final int liftfollowerMotorID = 1;
-    public static final double gearRatio = 0.77777773;
+    public static final double gearRatio = 10;
 
-    public static final double liftMax = 0;
-    public static final double liftMin = 0;
+    public static final double liftMax = 10;
+    public static final double liftMin = -20;
   }
 
   public static class CoralDetectorConstants {
@@ -124,5 +124,13 @@ public class RobotConstants {
     public static final int climberLiftMotorID = 0;
     public static final int climberWinchMotor1ID = 1;
     public static final int climberWinchMotor2ID = 2;
+  }
+
+  public static class GantryConstants {
+    public static final int gantrySparkID = 13; // UPDATE
+    public static final double gantryGearRatio = 10; // UPDATE
+    public static final double pulleyRadiusIn = .5; // inches for now / placeholder
+    public static final double leftLimit = 0.0; // change these jawns ( ͡° ͜ʖ ͡°)
+    public static final double rightLimit = 12.0; // TODO: Change these jawns
   }
 }

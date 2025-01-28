@@ -16,15 +16,15 @@ import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
-import frc.robot.sensors.coraldetector.CoralDetector;
-import frc.robot.sensors.coraldetector.CoralDetectorIO;
-import frc.robot.sensors.coraldetector.CoralDetectorIOPixy;
-import frc.robot.sensors.coraldetector.CoralDetectorIOSim;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.sensors.reefdetector.ReefDetector;
+import frc.robot.sensors.reefdetector.ReefDetectorIO;
+import frc.robot.sensors.reefdetector.ReefDetectorIODistanceSensor;
+import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
@@ -51,7 +51,6 @@ public class RobotContainer {
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
-
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
@@ -59,7 +58,7 @@ public class RobotContainer {
   // Dashboard
   private final Dashboard dashboard;
 
-  private final CoralDetector coralDetector;
+  private final ReefDetector reefDetector;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -70,7 +69,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        coralDetector = new CoralDetector(new CoralDetectorIOPixy());
+        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         liftSubsystem = new LiftSubsystem(new LiftIOSpark());
         break;
@@ -82,13 +81,13 @@ public class RobotContainer {
                     CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
                 CameraConstants.frontCamera));
-        coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
+        reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim());
         liftSubsystem = new LiftSubsystem(new LiftIOSim());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
-        coralDetector = new CoralDetector(new CoralDetectorIO() {});
+        reefDetector = new ReefDetector(new ReefDetectorIO() {});
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         break;
@@ -147,5 +146,13 @@ public class RobotContainer {
     return dashboard
         .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
+  }
+
+  public double getDistanceToReef() {
+    return reefDetector.getDistanceToReef();
+  }
+
+  public boolean getDetected() {
+    return reefDetector.isDetecting();
   }
 }

@@ -103,7 +103,7 @@ public class RobotContainer {
     gantrySubsystem.setDefaultCommand(
         gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
     liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getLeftY() * 6));
+        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
     configureBindings();
   }
 

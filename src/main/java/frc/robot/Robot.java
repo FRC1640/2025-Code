@@ -108,30 +108,12 @@ public class Robot extends LoggedRobot {
         5800,
         Filesystem.getDeployDirectory()
             .getPath()); // instructed to add to get elastic config to load automatically
-
-    // laserCan = new LaserCan(43);
-    // try { // example config; might not be necessary with gui config
-    //   laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
-    //   laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    //   laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    // } catch (ConfigurationFailedException e) {
-    //   System.out.println("Configuration failed! " + e);
-    // }
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
-    System.out.println(m_robotContainer.getDistanceToReef()); // useful?
-    System.out.println(m_robotContainer.getDetected()); // useful?
-    // LaserCan.Measurement measurement = laserCan.getMeasurement();
-    // if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT)
-    // {
-    //   System.out.println("target distance: " + measurement.distance_mm + "mm");
-    // } else {
-    //   System.out.println("example measurement valid condiions failed");
-    // }
   }
 
   @Override

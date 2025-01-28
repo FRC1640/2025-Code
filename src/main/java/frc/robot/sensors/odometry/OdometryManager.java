@@ -1,33 +1,36 @@
 package frc.robot.sensors.odometry;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.util.periodic.PeriodicBase;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class OdometryManager extends PeriodicBase {
   private SwerveDriveKinematics kinematics;
   private Supplier<Rotation2d> headingSupplier;
   private Supplier<SwerveModulePosition[]> positionsSupplier;
 
-  private Map<SwerveDrivePoseEstimator, Consumer<SwerveDrivePoseEstimator>> updatersMap = new HashMap<>();
+  private Map<SwerveDrivePoseEstimator, Consumer<SwerveDrivePoseEstimator>> updatersMap =
+      new HashMap<>();
   private Map<SwerveDrivePoseEstimator, String> namesMap = new HashMap<>();
 
-  public OdometryManager(SwerveDriveKinematics kinematics, Supplier<Rotation2d> headingSupplier, Supplier<SwerveModulePosition[]> positionsSupplier) {
+  public OdometryManager(
+      SwerveDriveKinematics kinematics,
+      Supplier<Rotation2d> headingSupplier,
+      Supplier<SwerveModulePosition[]> positionsSupplier) {
     this.kinematics = kinematics;
     this.headingSupplier = headingSupplier;
     this.positionsSupplier = positionsSupplier;
   }
 
-  public void register(SwerveDrivePoseEstimator estimator, String name, Consumer<SwerveDrivePoseEstimator> updater) {
+  public void register(
+      SwerveDrivePoseEstimator estimator, String name, Consumer<SwerveDrivePoseEstimator> updater) {
     if (estimator == null) {
       throw new IllegalArgumentException("Cannot register null pose estimator");
     }
@@ -46,7 +49,8 @@ public class OdometryManager extends PeriodicBase {
     namesMap.put(estimator, name);
   }
 
-  public void modify(SwerveDrivePoseEstimator estimator, Consumer<SwerveDrivePoseEstimator> updater) {
+  public void modify(
+      SwerveDrivePoseEstimator estimator, Consumer<SwerveDrivePoseEstimator> updater) {
     if (!updatersMap.containsKey(estimator)) {
       throw new IllegalArgumentException("Cannot modify pose estimator that is not registered");
     }
@@ -67,9 +71,11 @@ public class OdometryManager extends PeriodicBase {
     return true;
   }
 
-  public SwerveDrivePoseEstimator branch(SwerveDrivePoseEstimator from, String name, Consumer<SwerveDrivePoseEstimator> updater) {
+  public SwerveDrivePoseEstimator branch(
+      SwerveDrivePoseEstimator from, String name, Consumer<SwerveDrivePoseEstimator> updater) {
     if (!updatersMap.containsKey(from)) {
-      throw new IllegalArgumentException("Cannot branch from pose estimator that is not registered");
+      throw new IllegalArgumentException(
+          "Cannot branch from pose estimator that is not registered");
     }
     if (updater == null) {
       throw new IllegalArgumentException("Cannot branch from pose estimator with a null updater");
@@ -78,7 +84,12 @@ public class OdometryManager extends PeriodicBase {
       throw new IllegalArgumentException("Cannot branch from pose estimator with null name");
     }
 
-    SwerveDrivePoseEstimator branchedEstimator = new SwerveDrivePoseEstimator(kinematics, headingSupplier.get(), positionsSupplier.get(), from.getEstimatedPosition());
+    SwerveDrivePoseEstimator branchedEstimator =
+        new SwerveDrivePoseEstimator(
+            kinematics,
+            headingSupplier.get(),
+            positionsSupplier.get(),
+            from.getEstimatedPosition());
 
     updatersMap.put(branchedEstimator, updater);
     namesMap.put(branchedEstimator, name);
@@ -88,7 +99,8 @@ public class OdometryManager extends PeriodicBase {
 
   public SwerveDrivePoseEstimator branch(SwerveDrivePoseEstimator from, String name) {
     if (!updatersMap.containsKey(from)) {
-      throw new IllegalArgumentException("Cannot branch from pose estimator that is not registered");
+      throw new IllegalArgumentException(
+          "Cannot branch from pose estimator that is not registered");
     }
 
     var sourceUpdater = updatersMap.get(from);

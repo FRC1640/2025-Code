@@ -1,8 +1,5 @@
 package frc.robot.sensors.odometry;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,6 +8,8 @@ import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import java.util.LinkedList;
+import java.util.List;
 
 public class OdometryUpdaters {
   private static boolean USE_APRILTAGS_IN_AUTO = false;

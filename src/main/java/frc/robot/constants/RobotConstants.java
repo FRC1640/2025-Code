@@ -119,4 +119,10 @@ public class RobotConstants {
   public static class CoralDetectorConstants {
     public static final int channel = 5;
   }
+
+  public static class ClimberConstants {
+    public static final int climberLiftMotorID = 0;
+    public static final int climberWinchMotor1ID = 1;
+    public static final int climberWinchMotor2ID = 2;
+  }
 }

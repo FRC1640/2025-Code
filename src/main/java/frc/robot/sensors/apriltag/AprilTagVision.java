@@ -34,13 +34,16 @@ public class AprilTagVision {
               observation.targetPose().getTranslation(), observation.targetPose().getRotation());
       double x =
           observation.distance()
-              * Math.cos(observation.ty().getDegrees())
-              * Math.sin(observation.tx().getDegrees());
+              * Math.cos(observation.ty().getRadians())
+              * Math.sin(observation.tx().getRadians());
       double y =
-          observation.distance()
-              * Math.cos(observation.ty().getDegrees())
-              * Math.cos(observation.tx().getDegrees());
-      double z = observation.distance() * Math.sin(observation.ty().getDegrees());
+          -observation.distance()
+              * Math.cos(observation.ty().getRadians())
+              * Math.cos(observation.tx().getRadians());
+      double z = observation.distance() * Math.sin(observation.ty().getRadians());
+      Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/x", x);
+      Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/y", y);
+      Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/z", z);
       Transform3d cameraToTarget = new Transform3d(new Translation3d(x, y, z), gyroRotation);
       Transform3d fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse());
       Transform3d fieldToRobot = fieldToCamera.plus(inputs.cameraDisplacement.inverse());
@@ -80,5 +83,10 @@ public class AprilTagVision {
     Logger.recordOutput(
         "Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses",
         tagPoses.toArray(Pose3d[]::new));
+    ArrayList<PoseObservation> trig = calculateTrigResults(new Rotation3d());
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/length", trig.size());
+    for (PoseObservation observation : trig) {
+      Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate", observation.pose());
+    }
   }
 }

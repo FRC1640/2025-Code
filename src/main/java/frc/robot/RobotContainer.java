@@ -79,7 +79,7 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCamera,
-                    () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
+                    () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim());
@@ -93,9 +93,8 @@ public class RobotContainer {
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
-    robotOdometry =
-        new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
-    robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
+    AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
+    robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, driveController);
     GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
     LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
@@ -118,7 +117,7 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToNearestWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
@@ -128,7 +127,7 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),

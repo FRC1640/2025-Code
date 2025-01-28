@@ -29,16 +29,16 @@ public class LiftIOSpark implements LiftIO {
    * Set voltage of the motor
    */
   @Override
-  public void setLiftVoltage(double voltage) {
-    leaderMotor.setVoltage(clampVoltage(applyLimits(leaderEncoder.getPosition(), voltage)));
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+    leaderMotor.setVoltage(clampVoltage(applyLimits(inputs.leaderMotorPosition, voltage)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position) {
-    leaderMotor.setVoltage(
-        clampVoltage(liftController.calculate(leaderEncoder.getPosition(), position)));
+  public void setLiftPosition(double position, LiftIOInputs inputs) {
+    setLiftVoltage(
+        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)), inputs);
   }
 
   @Override

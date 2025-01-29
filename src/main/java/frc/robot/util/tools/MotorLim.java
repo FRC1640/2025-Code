@@ -8,15 +8,16 @@ public class MotorLim {
    *
    * @param pos the current position.
    * @param voltage the base voltage to clamp.
+   * @param limit the limits for the motor
    * @return clamped voltage.
    */
-  public static double applyLimits(double pos, double voltage, MotorLimit ideaParm) {
+  public static double applyLimits(double pos, double voltage, Limit limit) {
     double voltageClamped = voltage;
     if (!(Double.isNaN(voltageClamped) || Double.isNaN(pos))) {
-      if (pos < ideaParm.low) {
+      if (pos < limit.low) {
         voltageClamped = Math.max(voltage, 0);
       }
-      if (pos > ideaParm.high) {
+      if (pos > limit.high) {
         voltageClamped = Math.min(voltage, 0);
       }
     } else {
@@ -26,7 +27,7 @@ public class MotorLim {
     return voltageClamped;
   }
 
-  /*
+  /**
    * Clamps voltage of a motor
    *
    * @param voltage the voltage of the motor

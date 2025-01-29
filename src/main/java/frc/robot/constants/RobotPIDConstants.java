@@ -26,5 +26,6 @@ public class RobotPIDConstants {
 
   public static final PIDConstants gantryPID = new PIDConstants(0, 0, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
-  public static final PIDConstants climberPID = new PIDConstants(0, 0, 0);
+  public static final PIDConstants climberLiftPID = new PIDConstants(0, 0, 0);
+  public static final PIDConstants climberWinchPID = new PIDConstants(0, 0, 0);
 }

@@ -122,8 +122,8 @@ public class RobotConstants {
 
   public static class ClimberConstants {
     public static final int climberLiftMotorID = 0;
-    public static final int climberWinchMotor1ID = 1;
-    public static final int climberWinchMotor2ID = 2;
+    public static final int climberWinch1MotorID = 1;
+    public static final int climberWinch2MotorID = 2;
     public static final double gearRatio = 5; // figure that out later pls
 
     public static final double liftMax = 0; // figure out later

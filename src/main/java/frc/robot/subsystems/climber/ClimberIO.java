@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.math.MathUtil;
+import frc.robot.constants.RobotConstants.ClimberConstants;
+
 // import frc.robot.constants.RobotConstants.ClimberConstants;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -32,11 +34,28 @@ public interface ClimberIO extends AutoCloseable {
 
   @Override
   default void close() {}
-
-  /*
-   * Set voltage of the motor
+  /**
+   * Modifies the inputted voltage so as to not move out of limits
+   *
+   * @param pos the current position.
+   * @param voltage the base voltage to clamp.
+   * @return clamped voltage.
    */
-  public default void setClimberVoltage(double voltage) {}
+  public default double applyLimits(double pos, double voltage) {
+    double voltageClamped = voltage;
+    if (!(Double.isNaN(voltageClamped) || Double.isNaN(pos))) {
+      if (pos < ClimberConstants.liftMin) {
+        voltageClamped = Math.max(voltage, 0);
+      }
+      if (pos > ClimberConstants.liftMax) {
+        voltageClamped = Math.min(voltage, 0);
+      }
+    } else {
+      return 0;
+    }
+
+    return voltageClamped;
+  }
   /*
    * Clamps voltage between -12 and 12
    */
@@ -50,5 +69,17 @@ public interface ClimberIO extends AutoCloseable {
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setClimberPosition(double position) {}
+  public default void setClimberLiftPosition(double position, ClimberIOInputs inputs) {}
+  /*
+   * Set voltage of the motor
+   */
+  public default void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {}
+  /*
+   * Sets the position of the motor(s) using a PID
+   */
+  public default void setClimberWinchPosition(double position, ClimberIOInputs inputs) {}
+  /*
+   * Set voltage of the motor
+   */
+  public default void setClimberWinchVoltage(double voltage, ClimberIOInputs inputs) {}
 }

@@ -6,8 +6,8 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
-import frc.robot.util.mlsmmo.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
+import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSpark implements LiftIO {
   RelativeEncoder leaderEncoder;

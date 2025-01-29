@@ -13,7 +13,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.util.mlsmmo.MotorLimit;
+import frc.robot.util.tools.MotorLimit;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {

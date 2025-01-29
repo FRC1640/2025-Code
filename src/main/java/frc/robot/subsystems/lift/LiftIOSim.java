@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.mlsmmo.MotorLim;
+import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;

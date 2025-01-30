@@ -30,7 +30,7 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
   private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFF(RobotPIDConstants.driveFF);
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
   private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
 
   public ModuleIOSparkMax(ModuleInfo id) {

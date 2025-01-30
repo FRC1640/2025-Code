@@ -2,7 +2,10 @@ package frc.robot.subsystems.lift;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
@@ -15,6 +18,16 @@ public class LiftIOSpark implements LiftIO {
   SparkMax leaderMotor;
   SparkMax followerMotor;
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
+  ElevatorFeedforward elevatorFeedforward =
+      RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
+
+  ProfiledPIDController profiledPIDController =
+      new ProfiledPIDController(
+          RobotPIDConstants.liftPID.kP,
+          RobotPIDConstants.liftPID.kI,
+          RobotPIDConstants.liftPID.kD,
+          LiftConstants.constraints,
+          0.02);
 
   public LiftIOSpark() {
     leaderMotor =
@@ -46,6 +59,21 @@ public class LiftIOSpark implements LiftIO {
   }
 
   @Override
+  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
+    profiledPIDController.setGoal(position);
+    setLiftVoltage(
+        MotorLim.clampVoltage(
+            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+                + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
+        inputs);
+  }
+
+  @Override
+  public void resetLiftMotionProfile(LiftIOInputs inputs) {
+    profiledPIDController.reset(inputs.leaderMotorPosition);
+  }
+
+  @Override
   public void updateInputs(LiftIOInputs inputs) {
     inputs.leaderMotorPosition = leaderEncoder.getPosition();
     inputs.followerMotorPosition = followerEncoder.getPosition();
@@ -53,8 +81,10 @@ public class LiftIOSpark implements LiftIO {
     inputs.followerMotorVelocity = followerEncoder.getVelocity();
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
-    inputs.leaderMotorVoltage = leaderMotor.getAppliedOutput();
-    inputs.followerMotorVoltage = followerMotor.getAppliedOutput();
+    inputs.leaderMotorVoltage =
+        leaderMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
+    inputs.followerMotorVoltage =
+        followerMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
   }

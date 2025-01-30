@@ -32,4 +32,8 @@ public interface LiftIO extends AutoCloseable {
    * Sets the position of the motor(s) using a PID
    */
   public default void setLiftPosition(double position, LiftIOInputs inputs) {}
+
+  public default void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {}
+
+  public default void resetLiftMotionProfile(LiftIOInputs inputs) {}
 }

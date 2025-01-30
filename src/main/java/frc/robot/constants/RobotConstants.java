@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
@@ -116,6 +117,10 @@ public class RobotConstants {
     public static final double liftMax = 10;
     public static final double liftMin = -20;
     public static final Limit liftLimits = new Limit(-20, 10);
+    public static final double liftMaxSpeed = 1;
+    public static final double liftMaxAccel = 1;
+    public static final TrapezoidProfile.Constraints constraints =
+        new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
   }
 
   public static class CoralDetectorConstants {

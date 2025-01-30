@@ -7,12 +7,8 @@
 
 #
 [![Documentation]][Link]
-
-###### [Open Documentation Locally](docs/README.md)
-
-#
 [Documentation]: https://img.shields.io/badge/Documentation-37a779?style=for-the-badge
-[Link]: https://frc1640.github.io/2025-Code/
+[Link]: docs/README.md
 
 
 

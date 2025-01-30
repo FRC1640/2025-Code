@@ -145,4 +145,9 @@ public class RobotConstants {
     // left -> right limit
     public static final Limit gantryLimits = new Limit(0.0, 12.0);
   }
+
+  public static class IntakeConstants {
+    public static final double gearRatio = 0;
+    public static final int intakeSparkID = 14; // if you dont update this i will find you
+  }
 }

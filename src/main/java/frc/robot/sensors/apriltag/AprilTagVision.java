@@ -114,11 +114,10 @@ public class AprilTagVision {
     // testing
     Rotation2d gyroRotation = RobotOdometry.instance.getPose("Normal").getRotation();
     calculateTrigResults(new Rotation3d(0, 0, gyroRotation.getRadians()));
-    ArrayList<
-    for (PoseObservation observation : trigPoses.values()) {
-      Logger.recordOutput(
-          "AprilTagVision/" + cameraName + "/TrigEstimate/TagPoses" , observation.pose());
-      id++;
+    PoseObservation[] observations = new PoseObservation[trigPoses.size()];
+    for (Integer id : trigPoses.keySet()) {
+      observations[id - 1] = trigPoses.get(id);
     }
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/TagPoses", observations);
   }
 }

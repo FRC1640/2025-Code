@@ -19,7 +19,7 @@ public class ModuleIOSim implements ModuleIO {
 
   private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
   private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFF(RobotPIDConstants.driveFF);
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
   private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
 
   public ModuleIOSim(ModuleInfo id) {

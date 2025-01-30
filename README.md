@@ -1,4 +1,6 @@
 # 2025-Code
+Robot code for the 2025 FRC season.
+
 
 [![CI](https://github.com/FRC1640/2025-Code/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/FRC1640/2025-Code/actions/workflows/ci.yaml)
 
@@ -10,7 +12,3 @@
 
 [Documentation]: https://img.shields.io/badge/Documentation-37a779?style=for-the-badge
 [Link]: docs/README.md
-
-
-
-Robot code for the 2025 FRC season.

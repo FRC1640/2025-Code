@@ -115,7 +115,7 @@ public class RobotConstants {
 
     public static final double liftMax = 10;
     public static final double liftMin = -20;
-    public static final Limit liftLimits = new Limit(10, -20);
+    public static final Limit liftLimits = new Limit(-20, 10);
   }
 
   public static class CoralDetectorConstants {

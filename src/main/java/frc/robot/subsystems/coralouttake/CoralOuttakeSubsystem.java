@@ -1,14 +1,14 @@
-package frc.robot.subsystems.coralplacer;
+package frc.robot.subsystems.coralouttake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class CoralPlacerSubsystem extends SubsystemBase {
+public class CoralOuttakeSubsystem extends SubsystemBase {
 
-  CoralPlacerIOInputsAutoLogged inputs = new CoralPlacerIOInputsAutoLogged();
-  CoralPlacerIO io;
+  CoralOuttakeIOInputsAutoLogged inputs = new CoralOuttakeIOInputsAutoLogged();
+  CoralOuttakeIO io;
 
-  public CoralPlacerSubsystem(CoralPlacerIO io) {
+  public CoralOuttakeSubsystem(CoralOuttakeIO io) {
     this.io = io;
   }
 

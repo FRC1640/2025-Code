@@ -1,15 +1,15 @@
-package frc.robot.subsystems.coralplacer;
+package frc.robot.subsystems.coralouttake;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 
-public class CoralPlacerIOSim implements CoralPlacerIO {
+public class CoralOuttakeIOSim implements CoralOuttakeIO {
   private final DCMotorSim intakeSim;
   private double appliedVoltage;
 
-  public CoralPlacerIOSim() {
+  public CoralOuttakeIOSim() {
     DCMotor intakeGearbox = DCMotor.getNeo550(1);
     intakeSim =
         new DCMotorSim(
@@ -19,7 +19,7 @@ public class CoralPlacerIOSim implements CoralPlacerIO {
   }
 
   @Override
-  public void updateInputs(CoralPlacerIOInputs inputs) {
+  public void updateInputs(CoralOuttakeIOInputs inputs) {
     intakeSim.setInputVoltage(appliedVoltage);
     intakeSim.update(.02);
   }

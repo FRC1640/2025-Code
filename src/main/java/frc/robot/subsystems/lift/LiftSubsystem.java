@@ -85,4 +85,12 @@ public class LiftSubsystem extends SubsystemBase {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysIdRoutine.dynamic(direction);
   }
+
+  public void runLiftMotionProfile(double pos) {
+    liftIO.setLiftPositionMotionProfile(pos, inputs);
+  }
+
+  public void resetLiftMotionProfile() {
+    liftIO.resetLiftMotionProfile(inputs);
+  }
 }

@@ -88,4 +88,9 @@ public class LiftIOSim implements LiftIO {
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }
+
+  @Override
+  public void resetLiftMotionProfile(LiftIOInputs inputs) {
+    profiledPIDController.reset(inputs.leaderMotorPosition);
+  }
 }

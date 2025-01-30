@@ -19,10 +19,10 @@ import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
-import frc.robot.sensors.coraldetector.CoralDetector;
-import frc.robot.sensors.coraldetector.CoralDetectorIO;
-import frc.robot.sensors.coraldetector.CoralDetectorIOPixy;
-import frc.robot.sensors.coraldetector.CoralDetectorIOSim;
+import frc.robot.sensors.coraldetector.ReefDetector;
+import frc.robot.sensors.coraldetector.ReefDetectorIO;
+import frc.robot.sensors.coraldetector.ReefDetectorIOPixy;
+import frc.robot.sensors.coraldetector.ReefDetectorIOSim;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
@@ -51,7 +51,7 @@ public class RobotContainer {
   // Dashboard
   private final Dashboard dashboard;
 
-  private final CoralDetector coralDetector;
+  private final ReefDetector coralDetector;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -62,7 +62,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        coralDetector = new CoralDetector(new CoralDetectorIOPixy());
+        coralDetector = new ReefDetector(new ReefDetectorIOPixy());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -72,11 +72,11 @@ public class RobotContainer {
                     CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
                 CameraConstants.frontCamera));
-        coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
+        coralDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
-        coralDetector = new CoralDetector(new CoralDetectorIO() {});
+        coralDetector = new ReefDetector(new ReefDetectorIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);

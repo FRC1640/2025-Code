@@ -3,10 +3,10 @@ package frc.robot.sensors.coraldetector;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.constants.RobotConstants.CoralDetectorConstants;
 
-public class CoralDetectorIOPixy implements CoralDetectorIO {
+public class ReefDetectorIOPixy implements ReefDetectorIO {
   private final AnalogInput pixyCamInput;
 
-  public CoralDetectorIOPixy() {
+  public ReefDetectorIOPixy() {
     pixyCamInput = new AnalogInput(CoralDetectorConstants.channel);
   }
 

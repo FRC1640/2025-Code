@@ -2,7 +2,7 @@ package frc.robot.sensors.coraldetector;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface CoralDetectorIO {
+public interface ReefDetectorIO {
   @AutoLog
   public static class ReefDetectorIOInputs {
     public boolean isConnected = false;

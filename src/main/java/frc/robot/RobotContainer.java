@@ -25,6 +25,10 @@ import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSparkMax;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
@@ -50,6 +54,7 @@ public class RobotContainer {
   private final RobotOdometry robotOdometry;
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
+  private final ClimberSubsystem climberSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
 
   // Controller
@@ -73,6 +78,7 @@ public class RobotContainer {
         coralDetector = new CoralDetector(new CoralDetectorIOPixy());
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         liftSubsystem = new LiftSubsystem(new LiftIOSpark());
+        climberSubsystem = new ClimberSubsystem(new ClimberIOSparkMax());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -85,12 +91,14 @@ public class RobotContainer {
         coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim());
         liftSubsystem = new LiftSubsystem(new LiftIOSim());
+        climberSubsystem = new ClimberSubsystem(new ClimberIOSparkMax());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
         coralDetector = new CoralDetector(new CoralDetectorIO() {});
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
+        climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -100,10 +108,14 @@ public class RobotContainer {
     dashboard = new Dashboard(driveSubsystem, driveController);
     GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
     LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
+    ClimberCommandFactory climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
     gantrySubsystem.setDefaultCommand(
         gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.climberLiftApplyVoltageCommand(
+            () -> operatorController.getLeftY() * 6));
     configureBindings();
   }
 

@@ -1,16 +1,16 @@
 # How to get positions of April Tags
 #### 1. Get the reefscape information
-```
+```java
 var layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 ```
 #### 2. Get the April Tags you want
-```
+```java
 layout.getTagPose(id);
 ```
 __This returns in METERS and QUATERNIONS__
 
 #### To get all Tags (List\<AprilTag>)
-```
+```java
 layout.getTags();
 ```
 ### Misc

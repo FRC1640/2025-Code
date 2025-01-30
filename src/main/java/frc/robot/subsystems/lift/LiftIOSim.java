@@ -5,7 +5,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;
@@ -33,17 +35,22 @@ public class LiftIOSim implements LiftIO {
    * Sets the Lift Voltage
    */
   @Override
-  public void setLiftVoltage(double voltage) {
-    motor1Sim.setInputVoltage(applyLimits(motor1Sim.getAngularPositionRotations(), voltage));
-    motor2Sim.setInputVoltage(applyLimits(motor1Sim.getAngularPositionRotations(), voltage));
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+    motor1Sim.setInputVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
+    motor2Sim.setInputVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.followerMotorPosition, voltage, LiftConstants.liftLimits)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position) {
-    motor1Sim.setAngularVelocity(
-        clampVoltage(liftController.calculate(motor1Sim.getAngularPositionRotations(), position)));
+  public void setLiftPosition(double position, LiftIOInputs inputs) {
+    setLiftVoltage(
+        MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
+        inputs);
   }
 
   @Override

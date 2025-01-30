@@ -8,9 +8,14 @@ import java.util.function.DoubleSupplier;
 public class IntakeCommandFactory {
   IntakeSubsystem intakeSubsystem;
 
-  public Command setIntakeVoltage(DoubleSupplier voltage) {
+  public IntakeCommandFactory(IntakeSubsystem intakeSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+  }
+
+  public Command testSetIntakeVoltage(DoubleSupplier voltage, DoubleSupplier voltage2) {
     return new RunCommand(
-            () -> intakeSubsystem.setIntakeVoltage(voltage.getAsDouble()), intakeSubsystem)
+            () -> intakeSubsystem.setIntakeVoltage(voltage.getAsDouble() - voltage2.getAsDouble()),
+            intakeSubsystem)
         .finallyDo(() -> intakeSubsystem.setIntakeVoltage(0));
   }
 }

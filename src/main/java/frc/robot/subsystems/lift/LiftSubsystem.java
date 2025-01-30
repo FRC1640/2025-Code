@@ -1,14 +1,19 @@
 package frc.robot.subsystems.lift;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+
 import org.littletonrobotics.junction.Logger;
 
 public class LiftSubsystem extends SubsystemBase {
   LiftIO liftIO;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
+  SysIdRoutine sysIdRoutine;
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
+    sysIdRoutine = new SimpleMotorSysidRoutine().createNewRoutine(this::setLiftVoltage, this::getFoll, null, null, null, null)
   }
 
   @Override

@@ -7,6 +7,7 @@ import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
+import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSpark implements LiftIO {
   RelativeEncoder leaderEncoder;
@@ -30,7 +31,9 @@ public class LiftIOSpark implements LiftIO {
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
-    leaderMotor.setVoltage(clampVoltage(applyLimits(inputs.leaderMotorPosition, voltage)));
+    leaderMotor.setVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -38,7 +41,8 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
-        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)), inputs);
+        MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
+        inputs);
   }
 
   @Override

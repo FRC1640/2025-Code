@@ -13,6 +13,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.tools.Limit;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -114,6 +115,7 @@ public class RobotConstants {
 
     public static final double liftMax = 10;
     public static final double liftMin = -20;
+    public static final Limit liftLimits = new Limit(-20, 10);
   }
 
   public static class CoralDetectorConstants {
@@ -124,7 +126,7 @@ public class RobotConstants {
     public static final int gantrySparkID = 13; // UPDATE
     public static final double gantryGearRatio = 10; // UPDATE
     public static final double pulleyRadiusIn = .5; // inches for now / placeholder
-    public static final double leftLimit = 0.0; // change these jawns ( ͡° ͜ʖ ͡°)
-    public static final double rightLimit = 12.0; // TODO: Change these jawns
+    // left -> right limit
+    public static final Limit gantryLimits = new Limit(0.0, 12.0);
   }
 }

@@ -2,10 +2,10 @@ package frc.robot.sensors.coraldetector;
 
 import java.util.function.Supplier;
 
-public class ReefDetectorIOSim implements ReefDetectorIO {
+public class CoralDetectorIOSim implements CoralDetectorIO {
   private Supplier<Double> deltaXSupplier;
 
-  public ReefDetectorIOSim(Supplier<Double> deltaXSupplier) {
+  public CoralDetectorIOSim(Supplier<Double> deltaXSupplier) {
     this.deltaXSupplier = deltaXSupplier;
   }
 

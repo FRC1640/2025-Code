@@ -1,15 +1,15 @@
 package frc.robot.sensors.coraldetector;
 
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.robot.sensors.coraldetector.ReefDetectorIO.ReefDetectorIOInputs;
+import frc.robot.sensors.coraldetector.CoralDetectorIO.ReefDetectorIOInputs;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 
-public class ReefDetector extends PeriodicBase {
-  private ReefDetectorIO coralDetectorIO;
+public class CoralDetector extends PeriodicBase {
+  private CoralDetectorIO coralDetectorIO;
   private ReefDetectorIOInputs inputs = new ReefDetectorIOInputs();
 
-  public ReefDetector(ReefDetectorIO coralDetectorIO) {
+  public CoralDetector(CoralDetectorIO coralDetectorIO) {
     this.coralDetectorIO = coralDetectorIO;
   }
 

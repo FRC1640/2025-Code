@@ -5,11 +5,12 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 
-public class IntakeOutakeIOSim implements IntakeOutakeIO {
+public class CoralaratorIOSim implements CoralaratorIO {
   private final DCMotorSim intakeSim;
   private double appliedVoltage;
-  public IntakeOutakeIOSim() {
-    DCMotor intakeGearbox = DCMotor.getNeo550(1); // 550 confirmed
+
+  public CoralaratorIOSim() {
+    DCMotor intakeGearbox = DCMotor.getNeo550(1);
     intakeSim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
@@ -18,11 +19,13 @@ public class IntakeOutakeIOSim implements IntakeOutakeIO {
   }
 
   @Override
-  public void updateInputs(IntakeOutakeIOInputs inputs) {
+  public void updateInputs(CoralaratorIOInputs inputs) {
+    intakeSim.setInputVoltage(appliedVoltage);
     intakeSim.update(.02);
   }
+
   @Override
   public void setIntakeVoltage(double voltage) {
-    this.appliedVoltage = voltage;
+    appliedVoltage = voltage;
   }
 }

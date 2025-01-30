@@ -6,13 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
+import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
@@ -40,6 +43,7 @@ import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
 
@@ -54,6 +58,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final AlertsManager alertsManager;
 
   // Dashboard
   private final Dashboard dashboard;
@@ -96,6 +101,11 @@ public class RobotContainer {
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, driveController);
+    alertsManager = new AlertsManager();
+    AlertsManager.addAlert(
+        () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
+        "Low battery voltage.",
+        AlertType.kWarning);
     GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
     LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     gantrySubsystem.setDefaultCommand(
@@ -145,13 +155,5 @@ public class RobotContainer {
     return dashboard
         .getAutoChooserCommand()
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
-  }
-
-  public double getDistanceToReef() {
-    return reefDetector.getDistanceToReef();
-  }
-
-  public boolean getDetected() {
-    return reefDetector.isDetecting();
   }
 }

@@ -6,6 +6,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.tools.MotorLim;
 
 public class GantryIOSim implements GantryIO {
   private final DCMotorSim gantrySim;
@@ -32,11 +33,14 @@ public class GantryIOSim implements GantryIO {
 
   @Override
   public void setGantryPosition(double pos, GantryIOInputs inputs) {
-    setGantryVoltage(clampVoltage(gantryPID.calculate(inputs.encoderPosition, pos)), inputs);
+    setGantryVoltage(
+        MotorLim.clampVoltage(gantryPID.calculate(inputs.encoderPosition, pos)), inputs);
   }
 
   @Override
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
-    gantrySim.setInputVoltage(clampVoltage(applyLimits(inputs.encoderPosition, voltage)));
+    gantrySim.setInputVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.encoderPosition, voltage, GantryConstants.gantryLimits)));
   }
 }

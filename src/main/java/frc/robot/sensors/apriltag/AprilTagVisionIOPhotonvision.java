@@ -59,7 +59,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                     : FieldConstants.aprilTagLayout
                         .getTagPose(result.getBestTarget().fiducialId)
                         .get(),
-                result.getTimestampSeconds()));
+                result.getTimestampSeconds(),
+                closestTarget.getFiducialId()));
         Logger.recordOutput(
             "AprilTagVision/" + camera.getName() + "/TrigEstimate/DEBUG/TagXYRotation",
             closestTargetPose.get().getRotation().getZ());

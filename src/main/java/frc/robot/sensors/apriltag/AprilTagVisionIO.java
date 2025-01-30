@@ -16,7 +16,12 @@ public interface AprilTagVisionIO {
   }
 
   public static record TrigTargetObservation(
-      Rotation2d tx, Rotation2d ty, double distance, Pose3d targetPose, double timestamp) {}
+      Rotation2d tx,
+      Rotation2d ty,
+      double distance,
+      Pose3d targetPose,
+      double timestamp,
+      int fiducialId) {}
 
   public static record PoseObservation(
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}

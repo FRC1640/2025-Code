@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intakeoutake;
+package frc.robot.subsystems.coralplacer;
 
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.RobotController;
@@ -7,17 +7,17 @@ import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
-public class IntakeIOSparkMax implements IntakeIO {
+public class CoralPlacerIOSparkMax implements CoralPlacerIO {
   private final SparkMax intakeSpark;
 
-  public IntakeIOSparkMax() {
+  public CoralPlacerIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(IntakeConstants.intakeSparkID, false));
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(CoralPlacerIOInputs inputs) {
     inputs.tempCelcius = intakeSpark.getMotorTemperature();
     inputs.appliedVoltage = intakeSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
   }

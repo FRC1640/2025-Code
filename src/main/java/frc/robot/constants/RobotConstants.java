@@ -127,4 +127,9 @@ public class RobotConstants {
     public static final double leftLimit = 0.0; // change these jawns ( ͡° ͜ʖ ͡°)
     public static final double rightLimit = 12.0; // TODO: Change these jawns
   }
+
+  public static class IntakeConstants {
+    public static final double gearRatio = 0;
+    public static final int intakeSparkID = 14; // if you dont update this i will find you
+  }
 }

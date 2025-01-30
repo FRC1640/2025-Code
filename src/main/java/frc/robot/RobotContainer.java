@@ -38,9 +38,9 @@ import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
-import frc.robot.subsystems.intakeoutake.IntakeOutakeIOInputsAutoLogged;
-import frc.robot.subsystems.intakeoutake.IntakeOutakeIOSim;
-import frc.robot.subsystems.intakeoutake.IntakeOutakeIOSparkMax;
+import frc.robot.subsystems.intakeoutake.CoralaratorIO;
+import frc.robot.subsystems.intakeoutake.IntakeIOSim;
+import frc.robot.subsystems.intakeoutake.IntakeIOSparkMax;
 import frc.robot.subsystems.intakeoutake.IntakeSubsystem;
 import frc.robot.subsystems.lift.LiftIO;
 import frc.robot.subsystems.lift.LiftIOSim;
@@ -58,7 +58,7 @@ public class RobotContainer {
   private final RobotOdometry robotOdometry;
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
-  private final IntakeSubsystem intakeSubsystem;
+  private final IntakeSubsystem CoralaratorSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -82,7 +82,7 @@ public class RobotContainer {
         reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         liftSubsystem = new LiftSubsystem(new LiftIOSpark());
-        intakeSubsystem = new IntakeSubsystem(new IntakeOutakeIOSparkMax());
+        CoralaratorSubsystem = new IntakeSubsystem(new IntakeIOSparkMax());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -95,14 +95,14 @@ public class RobotContainer {
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim());
         liftSubsystem = new LiftSubsystem(new LiftIOSim());
-        intakeSubsystem = new IntakeSubsystem(new IntakeOutakeIOSim());
+        CoralaratorSubsystem = new IntakeSubsystem(new IntakeIOSim());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
         reefDetector = new ReefDetector(new ReefDetectorIO() {});
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
-        intakeSubsystem = new IntakeSubsystem(null)
+        CoralaratorSubsystem = new IntakeSubsystem(new CoralaratorIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);

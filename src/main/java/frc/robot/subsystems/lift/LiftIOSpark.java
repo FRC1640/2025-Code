@@ -3,6 +3,7 @@ package frc.robot.subsystems.lift;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
@@ -53,8 +54,10 @@ public class LiftIOSpark implements LiftIO {
     inputs.followerMotorVelocity = followerEncoder.getVelocity();
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
-    inputs.leaderMotorVoltage = leaderMotor.getAppliedOutput();
-    inputs.followerMotorVoltage = followerMotor.getAppliedOutput();
+    inputs.leaderMotorVoltage =
+        leaderMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
+    inputs.followerMotorVoltage =
+        followerMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
   }

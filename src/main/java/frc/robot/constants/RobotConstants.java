@@ -122,6 +122,17 @@ public class RobotConstants {
     public static final int channel = 5;
   }
 
+  // TODO replace with actual values
+  public static class WarningThresholdConstants {
+    // current thresholds are in amps and are currently set at the stall current. Consult with team
+    // for actual values later.
+    public static final double maxVortexMotorCurrent = 90;
+    public static final double maxNeoMotorCurrent = 80;
+    public static final double maxNeo550MotorCurrent = 70;
+    public static final double maxMotorTemp = 60; // in degrees celcius
+    public static final double minBatteryVoltage = 10.5;
+  }
+
   public static class GantryConstants {
     public static final int gantrySparkID = 13; // UPDATE
     public static final double gantryGearRatio = 10; // UPDATE

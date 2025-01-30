@@ -2,9 +2,11 @@ package frc.robot.sensors.apriltag;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
+import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,6 +23,8 @@ public class AprilTagVision extends PeriodicBase {
     cameraName = cameraConstants.name;
     standardDeviation = cameraConstants.standardDevConstant;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
+    AlertsManager.addAlert(
+        () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
   }
 
   public Rotation2d getTx() {

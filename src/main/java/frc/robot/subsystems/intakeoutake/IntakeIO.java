@@ -2,17 +2,17 @@ package frc.robot.subsystems.intakeoutake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface CoralaratorIO extends AutoCloseable {
+public interface IntakeIO extends AutoCloseable {
 
   @AutoLog
-  public class CoralaratorIOInputs {
+  public class IntakeIOInputs {
     public double tempCelcius;
     public double appliedVoltage;
   }
 
   public default void setIntakeVoltage(double voltage) {}
 
-  public default void updateInputs(CoralaratorIOInputs inputs) {}
+  public default void updateInputs(IntakeIOInputs inputs) {}
 
   @Override
   default void close() {}

@@ -7,17 +7,17 @@ import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
-public class CoralaratorIOSparkMax implements CoralaratorIO {
+public class IntakeIOSparkMax implements IntakeIO {
   private final SparkMax intakeSpark;
 
-  public CoralaratorIOSparkMax() {
+  public IntakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(IntakeConstants.intakeSparkID, false));
   }
 
   @Override
-  public void updateInputs(CoralaratorIOInputs inputs) {
+  public void updateInputs(IntakeIOInputs inputs) {
     inputs.tempCelcius = intakeSpark.getMotorTemperature();
     inputs.appliedVoltage = intakeSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
   }

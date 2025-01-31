@@ -1,5 +1,6 @@
 package frc.robot.sensors.apriltag;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -14,8 +15,6 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,74 +22,60 @@ public class AprilTagVision extends PeriodicBase {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
-  private double standardDeviation;
+  public final double standardDeviation;
 
-  private Map<Integer, PoseObservation> trigPoses = new HashMap<Integer, PoseObservation>();
+  public double getStandardDeviation() {
+    return standardDeviation;
+  }
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.name;
-    standardDeviation = cameraConstants.standardDevConstant;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
-    for (int i = 1; i <= FieldConstants.tagCount; i++) {
-      trigPoses.put(i, new PoseObservation(0, new Pose3d(), 0, 0, 0));
-    }
+    this.standardDeviation = cameraConstants.standardDevConstant;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
   }
 
-  public void calculateTrigResults(Rotation3d gyroRotation) {
+  public Optional<Pose2d> calculateTrigResults(Rotation3d gyroRotation) {
     // trig solution
-    for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      addTrigResult(observation, gyroRotation);
+    ArrayList<PoseObservation> trigPoses = new ArrayList<>();
+    if (inputs.trigTargetObservations.length == 0) {
+      return Optional.empty();
     }
+    for (TrigTargetObservation observation : inputs.trigTargetObservations) {
+      trigPoses.add(calculateTrigResult(observation, gyroRotation));
+    }
+    double bestDist = Double.MAX_VALUE;
+    Pose2d bestPose = new Pose2d();
+    for (PoseObservation poseObservation : trigPoses) {
+      if (poseObservation.averageTagDistance() < bestDist) {
+        bestDist = poseObservation.averageTagDistance();
+        bestPose = poseObservation.pose().toPose2d();
+      }
+    }
+    // Logger.recordOutput(cameraName, null);
+    return Optional.of(bestPose);
   }
 
-  public void addTrigResult(TrigTargetObservation observation, Rotation3d gyroRotation) {
-    // trig solution
-    if (trigPoses.containsKey(observation.fiducialId())
-        && observation.timestamp() <= trigPoses.get(observation.fiducialId()).timestamp()) {
-      return;
-    }
-
-    // TODO get multiple tx's and ty's and average them?
-
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/fieldToTarget",
-        new Pose3d(
-            observation.targetTransform().getTranslation(),
-            observation.targetTransform().getRotation()));
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/origin",
-        new Transform3d(0, 0, 0, new Rotation3d()));
-
+  public PoseObservation calculateTrigResult(
+      TrigTargetObservation observation, Rotation3d gyroRotation) {
     // calculate
     double deltaH = observation.targetTransform().getZ() - io.getCameraDisplacement().getZ();
-    double distance2d =
-        deltaH
-            / Math.tan(
-                -observation.ty().getRadians() - io.getCameraDisplacement().getRotation().getY());
-    double x = -distance2d * Math.cos(observation.tx().getRadians() - gyroRotation.getZ());
-    double y = distance2d * Math.sin(observation.tx().getRadians() - gyroRotation.getZ());
+    double distance2d = observation.distance2D();
+    double x = distance2d * Math.cos((observation.tx().getRadians() - gyroRotation.getZ()));
+    double y = distance2d * Math.sin(-(observation.tx().getRadians() - gyroRotation.getZ()));
     double z = 0;
-
-    // logs for debugging
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/x", x);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/y", y);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/z", z);
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/DEBUG/transform/xy_sum", x + y);
-
     // calculate transforms
     Transform3d cameraToTarget = new Transform3d(new Translation3d(x, y, z), new Rotation3d());
-    Transform3d fieldToCamera = observation.targetTransform().plus(cameraToTarget.inverse());
+    Transform3d fieldToCamera =
+        new Transform3d(observation.targetTransform().getTranslation(), new Rotation3d())
+            .plus(cameraToTarget.inverse());
     Transform3d fieldToRobot = fieldToCamera.plus(inputs.cameraDisplacement.inverse());
 
     // convert and record
     Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), gyroRotation);
-    trigPoses.put(
-        observation.fiducialId(),
-        new PoseObservation(observation.timestamp(), robotPose, 0, 1, observation.distance()));
+    return new PoseObservation(observation.timestamp(), robotPose, 0, 1, observation.distance());
   }
 
   public PoseObservation[] getPhotonResults() {
@@ -103,10 +88,6 @@ public class AprilTagVision extends PeriodicBase {
 
   public String getCameraName() {
     return cameraName;
-  }
-
-  public double getStandardDeviation() {
-    return standardDeviation;
   }
 
   @Override
@@ -124,10 +105,11 @@ public class AprilTagVision extends PeriodicBase {
         "Drive/Odometry/Vision/Camera_" + cameraName + "/TagPoses",
         tagPoses.toArray(Pose3d[]::new));
     // testing
-    Rotation2d gyroRotation = RobotOdometry.instance.getPose("Normal").getRotation();
-    calculateTrigResults(new Rotation3d(0, 0, gyroRotation.getRadians()));
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/TagPoses",
-        trigPoses.get(inputs.closestTagId).pose());
+    Rotation2d gyroRotation = RobotOdometry.instance.getPose("Main").getRotation();
+    Optional<Pose2d> robotTrig =
+        calculateTrigResults(new Rotation3d(0, 0, gyroRotation.getRadians()));
+
+    Pose2d robotPose = robotTrig.orElse(null);
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose", robotPose);
   }
 }

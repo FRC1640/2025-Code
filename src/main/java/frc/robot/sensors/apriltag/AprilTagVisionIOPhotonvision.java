@@ -2,7 +2,6 @@ package frc.robot.sensors.apriltag;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
@@ -44,49 +43,21 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
       // Update latest target observation
       if (result.hasTargets()) {
         // calculate closest target
-        PhotonTrackedTarget closestTarget = result.getBestTarget(); // default closest
-        double closestDistance = Integer.MAX_VALUE; // all distances will be less
         for (PhotonTrackedTarget target : result.getTargets()) { // get every target and iterate
-          Optional<Pose3d> targetPose =
-              FieldConstants.aprilTagLayout.getTagPose(target.fiducialId); // get the pose
-          if (targetPose.isPresent()) { // if it's valid...
-            double deltaH = targetPose.get().getZ() - cameraDisplacement.getZ();
-            double distance =
-                deltaH
-                    / Math.sin(
-                        target.getPitch()
-                            + cameraDisplacement.getRotation().getY()); // calculate distance to tag
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              closestTarget = target;
-            }
-          }
+          Optional<Pose3d> targetPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
+          double deltaH = targetPose.get().getZ() - cameraDisplacement.getZ();
+          double distance =
+              deltaH / Math.sin(target.getPitch() + cameraDisplacement.getRotation().getY());
+          trigObservations.add(
+              new TrigTargetObservation(
+                  Rotation2d.fromDegrees(target.getYaw()),
+                  Rotation2d.fromDegrees(target.getPitch()),
+                  target.getBestCameraToTarget().getTranslation().getNorm(),
+                  FieldConstants.aprilTagLayout.getTagPose(target.fiducialId).get(),
+                  result.getTimestampSeconds(),
+                  target.getFiducialId(),
+                  target.bestCameraToTarget.getTranslation().toTranslation2d().getNorm()));
         }
-        inputs.closestTagId = closestTarget.fiducialId;
-        var closestTargetPose = FieldConstants.aprilTagLayout.getTagPose(closestTarget.fiducialId);
-        Transform3d targetTransform =
-            new Transform3d(
-                closestTargetPose.isPresent()
-                    ? closestTargetPose.get().getTranslation()
-                    : FieldConstants.aprilTagLayout
-                        .getTagPose(result.getBestTarget().fiducialId)
-                        .get()
-                        .getTranslation(),
-                new Rotation3d());
-        trigObservations.add(
-            new TrigTargetObservation(
-                Rotation2d.fromDegrees(closestTarget.getYaw()),
-                Rotation2d.fromDegrees(closestTarget.getPitch()),
-                closestDistance,
-                targetTransform,
-                result.getTimestampSeconds(),
-                closestTarget.getFiducialId()));
-        Logger.recordOutput(
-            "AprilTagVision/" + camera.getName() + "/TrigEstimate/DEBUG/TagXYRotation",
-            closestTargetPose.get().getRotation().getZ());
-        Logger.recordOutput(
-            "AprilTagVision/" + camera.getName() + "/TrigEstimate/DEBUG/bestTarget",
-            FieldConstants.aprilTagLayout.getTagPose(result.getBestTarget().fiducialId).get());
       }
 
       // Add pose observation

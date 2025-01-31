@@ -44,8 +44,6 @@ public class AutoAlignHelper {
       double dist =
           robotPose.getTranslation().getDistance(poseFunction.apply(point).getTranslation());
       if (dist < nearestDist) {
-        Logger.recordOutput("INPUT", point);
-        Logger.recordOutput("OUTPUT", poseFunction.apply(point));
         nearest = poseFunction.apply(point);
         nearestDist = dist;
       }

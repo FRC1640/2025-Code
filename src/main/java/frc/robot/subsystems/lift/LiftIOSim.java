@@ -1,17 +1,31 @@
 package frc.robot.subsystems.lift;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
+  ElevatorFeedforward elevatorFeedforward =
+      RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
+
+  ProfiledPIDController profiledPIDController =
+      new ProfiledPIDController(
+          RobotPIDConstants.liftPID.kP,
+          RobotPIDConstants.liftPID.kI,
+          RobotPIDConstants.liftPID.kD,
+          LiftConstants.constraints,
+          0.02);
 
   public LiftIOSim() {
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);
@@ -34,8 +48,12 @@ public class LiftIOSim implements LiftIO {
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
-    motor1Sim.setInputVoltage(clampVoltage(applyLimits(inputs.leaderMotorPosition, voltage)));
-    motor2Sim.setInputVoltage(clampVoltage(applyLimits(inputs.followerMotorPosition, voltage)));
+    motor1Sim.setInputVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
+    motor2Sim.setInputVoltage(
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(inputs.followerMotorPosition, voltage, LiftConstants.liftLimits)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -43,7 +61,8 @@ public class LiftIOSim implements LiftIO {
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
-        clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)), inputs);
+        MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
+        inputs);
   }
 
   @Override
@@ -58,5 +77,20 @@ public class LiftIOSim implements LiftIO {
     inputs.followerMotorCurrent = motor2Sim.getCurrentDrawAmps();
     inputs.leaderMotorVoltage = motor1Sim.getInputVoltage();
     inputs.followerMotorVoltage = motor2Sim.getInputVoltage();
+  }
+
+  @Override
+  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
+    profiledPIDController.setGoal(position);
+    setLiftVoltage(
+        MotorLim.clampVoltage(
+            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+                + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
+        inputs);
+  }
+
+  @Override
+  public void resetLiftMotionProfile(LiftIOInputs inputs) {
+    profiledPIDController.reset(inputs.leaderMotorPosition);
   }
 }

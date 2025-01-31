@@ -19,7 +19,7 @@ public class ModuleIOSim implements ModuleIO {
 
   private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
   private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFF(RobotPIDConstants.driveFF);
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
   private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
 
   public ModuleIOSim(ModuleInfo id) {
@@ -77,7 +77,7 @@ public class ModuleIOSim implements ModuleIO {
     inputs.driveAppliedVoltage = driveAppliedVolts;
     inputs.driveCurrentAmps = driveSim.getCurrentDrawAmps();
 
-    inputs.turnConnected = true;
+    inputs.steerConnected = true;
     inputs.steerAngleDegrees += (turnSim.getAngularVelocityRPM() * 360 / 60) * 0.02;
     inputs.steerRadPerSec = turnSim.getAngularVelocityRPM() * 2 * Math.PI / 60;
     inputs.steerAppliedVoltage = turnAppliedVolts;

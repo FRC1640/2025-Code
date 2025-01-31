@@ -37,7 +37,6 @@ public class CoralOuttakeCommandFactory {
                             FieldConstants.coralStationPosBlue,
                             FieldConstants.coralStationPosRed)))) {
               intakeSubsystem.setIntakeVoltage(passiveSpeed);
-              System.out.println(passiveSpeed);
             } else {
               intakeSubsystem.setIntakeVoltage(0);
             }

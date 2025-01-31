@@ -7,8 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -50,6 +48,7 @@ import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
+import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
 
 public class RobotContainer {
@@ -96,7 +95,7 @@ public class RobotContainer {
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim());
         liftSubsystem = new LiftSubsystem(new LiftIOSim());
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim());
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -124,9 +123,7 @@ public class RobotContainer {
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
     coralOuttakeSubsystem.setDefaultCommand(
-        coralOuttakeCommandFactory.setIntakeVoltage(
-            () -> operatorController.getRightTriggerAxis() * 6));
-
+        coralOuttakeCommandFactory.intakeCoral(0.8, () -> robotOdometry.getPose("Main")));
     configureBindings();
   }
 
@@ -144,7 +141,7 @@ public class RobotContainer {
         new DriveToNearestWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
-                chooseFromAlliance(
+                AllianceManager.chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
             (x) -> RobotConstants.addRobotDim(x)),
@@ -154,16 +151,12 @@ public class RobotContainer {
         new DriveToPointWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
-                chooseFromAlliance(
+                AllianceManager.chooseFromAlliance(
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
             gyro),
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
-  }
-
-  public <T> T chooseFromAlliance(T valueBlue, T valueRed) {
-    return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? valueRed : valueBlue;
   }
 
   public Command getAutonomousCommand() {

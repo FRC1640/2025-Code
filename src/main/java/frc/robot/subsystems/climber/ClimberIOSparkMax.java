@@ -3,6 +3,8 @@ package frc.robot.subsystems.climber;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
@@ -18,6 +20,8 @@ public class ClimberIOSparkMax implements ClimberIO {
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   PIDController winchController = RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
 
+  DoubleSolenoid doubleSolenoid;
+
   public ClimberIOSparkMax() {
     liftMotor =
         SparkConfigurer.configSparkMax(
@@ -31,6 +35,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftEncoder = liftMotor.getEncoder();
     winch1Encoder = winch1Motor.getEncoder();
     winch2Encoder = winch2Motor.getEncoder();
+    doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
   }
   /*
    * Set voltage of the lift motor
@@ -81,5 +86,14 @@ public class ClimberIOSparkMax implements ClimberIO {
     inputs.liftMotorTemperature = liftMotor.getMotorTemperature();
     inputs.winchMotor1Temperature = winch1Motor.getMotorTemperature();
     inputs.winchMotor2Temperature = winch2Motor.getMotorTemperature();
+  }
+
+  @Override
+  public void setSolenoidState(boolean forward, ClimberIOInputs inputs) {
+    if (forward) {
+      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    } else {
+      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
   }
 }

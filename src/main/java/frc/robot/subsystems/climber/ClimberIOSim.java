@@ -3,9 +3,10 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.SolenoidSim;
+import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotPIDConstants;
 
@@ -13,7 +14,7 @@ public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim motor1Sim; // lift
   private final DCMotorSim motor2Sim; // winch1
   private final DCMotorSim motor3Sim; // winch2
-  private final SolenoidSim solenoidSim;
+  private final DoubleSolenoidSim doubleSolenoidSim;
   ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   PIDController winchController = RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
@@ -38,7 +39,7 @@ public class ClimberIOSim implements ClimberIO {
             LinearSystemId.createDCMotorSystem(
                 motor3SimGearbox, 0.00019125, RobotConstants.ClimberConstants.gearRatio),
             motor3SimGearbox);
-    solenoidSim = new SolenoidSim(PneumaticsModuleType.REVPH, 0);
+    doubleSolenoidSim = new DoubleSolenoidSim(PneumaticsModuleType.REVPH, 0, 1);
   }
 
   /*
@@ -77,8 +78,12 @@ public class ClimberIOSim implements ClimberIO {
    * Set solenoid state (activated/not activated)
    */
   @Override
-  public void setSolenoidState(boolean active, ClimberIOInputs inputs) {
-    solenoidSim.setOutput(active);
+  public void setSolenoidState(boolean forward, ClimberIOInputs inputs) {
+    if (forward) {
+      doubleSolenoidSim.set(DoubleSolenoid.Value.kForward);
+    } else {
+      doubleSolenoidSim.set(DoubleSolenoid.Value.kReverse);
+    }
   }
 
   @Override

@@ -93,4 +93,12 @@ public class ClimberSubsystem extends SubsystemBase {
   public void setClimberWinchVoltage(double voltage) {
     climberIO.setClimberWinchVoltage(voltage, inputs);
   }
+
+  public boolean getSolenoidState() {
+    return inputs.solenoidForward;
+  }
+
+  public void setSolenoidState(boolean forward) {
+    climberIO.setSolenoidState(forward, inputs);
+  }
 }

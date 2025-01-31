@@ -22,60 +22,80 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorPosition;
   }
 
-  public double getWinch1MotorPosition() {
+  public double getWinchMotor1Position() {
     return inputs.winchMotor1Position;
   }
 
-  public double getWinch2MotorPosition() {
+  public double getWinchMotor2Position() {
     return inputs.winchMotor2Position;
+  }
+
+  public double getWinchMotorPosition() {
+    return ((inputs.winchMotor1Position + inputs.winchMotor2Position) / 2.0);
   }
 
   public double getLiftMotorVelocity() {
     return inputs.liftMotorVelocity;
   }
 
-  public double getWinch1MotorVelocity() {
+  public double getWinchMotor1Velocity() {
     return inputs.winchMotor1Velocity;
   }
 
-  public double getWinch2MotorVelocity() {
+  public double getWinchMotor2Velocity() {
     return inputs.winchMotor2Velocity;
+  }
+
+  public double getWinchMotorVelocity() {
+    return ((inputs.winchMotor1Velocity + inputs.winchMotor2Velocity) / 2.0);
   }
 
   public double getLiftMotorCurrent() {
     return inputs.liftMotorCurrent;
   }
 
-  public double getWinch1MotorCurrent() {
+  public double getWinchMotor1Current() {
     return inputs.winchMotor1Current;
   }
 
-  public double getWinch2MotorCurrent() {
+  public double getWinchMotor2Current() {
     return inputs.winchMotor2Current;
+  }
+
+  public double getWinchMotorCurrent() {
+    return ((inputs.winchMotor1Current + inputs.winchMotor2Current) / 2.0);
   }
 
   public double getLiftMotorVoltage() {
     return inputs.liftMotorVoltage;
   }
 
-  public double getWinch1MotorVoltage() {
+  public double getWinchMotor1Voltage() {
     return inputs.winchMotor1Voltage;
   }
 
-  public double getWinch2MotorVoltage() {
+  public double getWinchMotor2Voltage() {
     return inputs.winchMotor2Voltage;
+  }
+
+  public double getWinchMotorVoltage() {
+    return ((inputs.winchMotor1Voltage + inputs.winchMotor2Voltage) / 2.0);
   }
 
   public double getLiftTemperature() {
     return inputs.liftMotorTemperature;
   }
 
-  public double getWinch1Temperature() {
+  public double getWinchMotor1Temperature() {
     return inputs.winchMotor1Temperature;
   }
 
-  public double getWinch2Temperature() {
+  public double getWinchMotor2Temperature() {
     return inputs.winchMotor2Temperature;
+  }
+
+  public double getWinchMotorTemperature() {
+    return ((inputs.winchMotor1Temperature + inputs.winchMotor2Temperature) / 2.0);
   }
 
   public void setClimberLiftPosition(double pos) {

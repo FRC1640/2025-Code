@@ -52,7 +52,7 @@ MotorLim.applyLimits(double pos, double voltage, Limit limit)
 - Example usage:
   ```java
   spark.setVoltage(MotorLim.clampVoltage(11)); // Sets voltage to 11V
-  spark.setVoltage(MotorLim.clampVoltage(200)); // Clamped to 12V (safe limit)
+  spark.setVoltage(MotorLim.clampVoltage(200)); // Clamped to prevent from going past 12V
   ```
 
 ---

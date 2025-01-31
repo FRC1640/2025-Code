@@ -31,7 +31,7 @@ public class CoralOuttakeCommandFactory {
           public void execute() {
             if (!intakeSubsystem.isCoralDetected()
                 && (IntakeConstants.distanceRequired
-                    > DistanceManager.getNearestPosition(
+                    > DistanceManager.getNearestPositionDistance(
                         robotPose.get(),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue,

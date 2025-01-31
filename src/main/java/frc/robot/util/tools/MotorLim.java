@@ -35,13 +35,9 @@ public class MotorLim {
    */
   public static double clampVoltage(double voltage) {
     voltage = MathUtil.clamp(voltage, -12, 12);
-
-    if (voltage > 0 && voltage < 0.001) {
-      voltage = 11.9;
-    } else if (voltage < 0 && voltage > -0.001) {
-      voltage = -11.9;
+    if (Math.abs(voltage) < 0.001) {
+      voltage = 0;
     }
-
     return voltage;
   }
 }

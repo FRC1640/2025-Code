@@ -75,10 +75,30 @@ public class LiftIOSpark implements LiftIO {
 
   @Override
   public void updateInputs(LiftIOInputs inputs) {
-    inputs.leaderMotorPosition = leaderEncoder.getPosition();
-    inputs.followerMotorPosition = followerEncoder.getPosition();
-    inputs.leaderMotorVelocity = leaderEncoder.getVelocity();
-    inputs.followerMotorVelocity = followerEncoder.getVelocity();
+    inputs.leaderMotorPosition =
+        leaderEncoder.getPosition()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
+    inputs.followerMotorPosition =
+        followerEncoder.getPosition()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
+    inputs.leaderMotorVelocity =
+        leaderEncoder.getVelocity()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
+    inputs.followerMotorVelocity =
+        followerEncoder.getVelocity()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
     inputs.leaderMotorVoltage =

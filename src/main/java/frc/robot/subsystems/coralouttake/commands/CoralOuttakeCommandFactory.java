@@ -36,7 +36,7 @@ public class CoralOuttakeCommandFactory {
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue,
                             FieldConstants.coralStationPosRed)))) {
-              intakeSubsystem.setIntakeVoltage(passiveSpeed);
+              intakeSubsystem.setIntakeVoltage(passiveSpeed * 12);
             } else {
               intakeSubsystem.setIntakeVoltage(0);
             }

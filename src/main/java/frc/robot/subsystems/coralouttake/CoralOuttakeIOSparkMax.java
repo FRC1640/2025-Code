@@ -24,9 +24,7 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
     inputs.tempCelcius = intakeSpark.getMotorTemperature();
     inputs.appliedVoltage = intakeSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.coralDetected = !coralDetector.get();
-    if (CoralOuttakeConstants.encoderOnIntakeMotor) {
-      inputs.outtakeVelocity = intakeSpark.getEncoder().getVelocity();
-    }
+    inputs.outtakeVelocity = intakeSpark.getEncoder().getVelocity();
   }
 
   @Override

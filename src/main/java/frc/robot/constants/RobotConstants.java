@@ -151,6 +151,5 @@ public class RobotConstants {
     public static final int intakeSparkID = 14; // if you dont update this i will find you
     public static final int coralDetectorChannel = 25; // update this too
     public static final double distanceRequired = 2;
-    public static final boolean encoderOnIntakeMotor = false; // unsure so this boolean is here
   }
 }

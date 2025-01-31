@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.FieldConstants;
-import frc.robot.constants.RobotConstants.IntakeConstants;
+import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
@@ -30,7 +30,7 @@ public class CoralOuttakeCommandFactory {
           @Override
           public void execute() {
             if (!intakeSubsystem.isCoralDetected()
-                && (IntakeConstants.distanceRequired
+                && (CoralOuttakeConstants.distanceRequired
                     > DistanceManager.getNearestPositionDistance(
                         robotPose.get(),
                         AllianceManager.chooseFromAlliance(

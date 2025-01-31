@@ -3,6 +3,7 @@ package frc.robot.subsystems.coralouttake;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import java.util.function.BooleanSupplier;
 
@@ -28,7 +29,9 @@ public class CoralOuttakeIOSim implements CoralOuttakeIO {
     intakeSim.update(.02);
     inputs.coralDetected = coralDetect.getAsBoolean();
     inputs.appliedVoltage = appliedVoltage;
-    inputs.outtakeVelocity = intakeSim.getAngularPositionRad();
+    if (CoralOuttakeConstants.encoderOnIntakeMotor) {
+      inputs.outtakeVelocity = intakeSim.getAngularPositionRad();
+    }
   }
 
   @Override

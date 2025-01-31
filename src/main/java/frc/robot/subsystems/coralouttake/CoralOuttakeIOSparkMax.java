@@ -3,7 +3,7 @@ package frc.robot.subsystems.coralouttake;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.constants.RobotConstants.IntakeConstants;
+import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
@@ -15,8 +15,8 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   public CoralOuttakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(IntakeConstants.intakeSparkID, false));
-    coralDetector = new DigitalInput(IntakeConstants.coralDetectorChannel);
+            SparkConstants.getDefaultMax(CoralOuttakeConstants.intakeSparkID, false));
+    coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
   }
 
   @Override
@@ -24,7 +24,9 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
     inputs.tempCelcius = intakeSpark.getMotorTemperature();
     inputs.appliedVoltage = intakeSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.coralDetected = !coralDetector.get();
-    // idk what do do here inputs.outtakeVelocity =
+    if (CoralOuttakeConstants.encoderOnIntakeMotor) {
+      inputs.outtakeVelocity = intakeSpark.getEncoder().getVelocity();
+    }
   }
 
   @Override

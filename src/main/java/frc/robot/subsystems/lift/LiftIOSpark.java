@@ -23,9 +23,9 @@ public class LiftIOSpark implements LiftIO {
 
   ProfiledPIDController profiledPIDController =
       new ProfiledPIDController(
-          RobotPIDConstants.liftPID.kP,
-          RobotPIDConstants.liftPID.kI,
-          RobotPIDConstants.liftPID.kD,
+          RobotPIDConstants.liftProfiledPIDConstants.kP,
+          RobotPIDConstants.liftProfiledPIDConstants.kI,
+          RobotPIDConstants.liftProfiledPIDConstants.kD,
           LiftConstants.constraints,
           0.02);
 
@@ -63,7 +63,7 @@ public class LiftIOSpark implements LiftIO {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+            profiledPIDController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }

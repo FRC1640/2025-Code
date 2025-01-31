@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -9,12 +10,30 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.tools.Limit;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
+  public class RobotDimensions {
+    public static final double robotWidth = Units.inchesToMeters(36);
+    public static final double robotLength = Units.inchesToMeters(36);
+    public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public static Pose2d addRobotDim(Pose2d pose2d) {
+    Translation2d translation =
+        pose2d
+            .getTranslation()
+            .minus(
+                new Translation2d(RobotDimensions.robotWidth / 2, 0)
+                    .rotateBy(pose2d.getRotation()));
+    return new Pose2d(translation, pose2d.getRotation());
+  }
+
   public static enum PivotId {
     FL,
     FR,
@@ -69,7 +88,12 @@ public class RobotConstants {
     public static final CameraConstant frontCamera =
         new CameraConstant(
             new SimCameraProperties(),
-            new Transform3d(new Translation3d(), new Rotation3d()),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(29.5 / 2),
+                    -Units.inchesToMeters(29.5 / 2 - 8),
+                    Units.inchesToMeters(10.5)),
+                new Rotation3d()),
             1,
             "Front");
 
@@ -77,15 +101,51 @@ public class RobotConstants {
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
-                new Translation3d(-0.356, 0.146, 0.406),
-                new Rotation3d(0, Math.toRadians(-20), Math.PI)),
+                new Translation3d(0.146, -0.356, 0.406),
+                new Rotation3d(0, Math.toRadians(1), Math.PI)),
             1,
             "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
 
+  public static class LiftConstants {
+    public static final int liftleaderMotorID = 0;
+    public static final int liftfollowerMotorID = 1;
+    public static final double gearRatio = 5;
+    public static final Limit liftLimits = new Limit(0, 2);
+    public static final double liftMaxSpeed = 0.4;
+    public static final double liftMaxAccel = 10;
+    public static final TrapezoidProfile.Constraints constraints =
+        new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
+    public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+  }
+
   public static class CoralDetectorConstants {
-    public static final int channel = 0;
+    public static final int channel = 5;
+  }
+
+  // TODO replace with actual values
+  public static class WarningThresholdConstants {
+    // current thresholds are in amps and are currently set at the stall current. Consult with team
+    // for actual values later.
+    public static final double maxVortexMotorCurrent = 90;
+    public static final double maxNeoMotorCurrent = 80;
+    public static final double maxNeo550MotorCurrent = 70;
+    public static final double maxMotorTemp = 60; // in degrees celcius
+    public static final double minBatteryVoltage = 10.5;
+  }
+
+  public static class GantryConstants {
+    public static final int gantrySparkID = 13; // UPDATE
+    public static final double gantryGearRatio = 10; // UPDATE
+    public static final double pulleyRadiusIn = .5; // inches for now / placeholder
+    // left -> right limit
+    public static final Limit gantryLimits = new Limit(0.0, 12.0);
+  }
+
+  public static class IntakeConstants {
+    public static final double gearRatio = 0;
+    public static final int intakeSparkID = 14; // if you dont update this i will find you
   }
 }

@@ -19,7 +19,7 @@ public class GyroIOSim implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.angleRadiansRaw = RobotOdometry.instance.getPose("Normal").getRotation().getRadians();
+    inputs.angleRadiansRaw = RobotOdometry.instance.getPose("Main").getRotation().getRadians();
     angle = new Rotation2d(inputs.angleRadiansRaw);
 
     inputs.odometryYawTimestamps = new double[] {Timer.getFPGATimestamp()};

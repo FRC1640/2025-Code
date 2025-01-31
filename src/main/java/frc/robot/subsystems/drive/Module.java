@@ -4,8 +4,11 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
+import frc.robot.constants.RobotConstants.WarningThresholdConstants;
+import frc.robot.util.alerts.AlertsManager;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
@@ -19,6 +22,26 @@ public class Module {
   public Module(ModuleIO io, PivotId id) {
     this.io = io;
     this.id = id;
+    AlertsManager.addAlert(
+        () -> !inputs.driveConnected, id.toString() + " drive disconnected.", AlertType.kError);
+    AlertsManager.addAlert(
+        () -> !inputs.steerConnected, id.toString() + " steer disconnected.", AlertType.kError);
+    AlertsManager.addAlert(
+        () -> inputs.driveCurrentAmps > WarningThresholdConstants.maxVortexMotorCurrent,
+        id.toString() + " drive motor over-current.",
+        AlertType.kWarning);
+    AlertsManager.addAlert(
+        () -> inputs.steerCurrentAmps > WarningThresholdConstants.maxVortexMotorCurrent,
+        id.toString() + " steer motor over-current.",
+        AlertType.kWarning);
+    AlertsManager.addAlert(
+        () -> inputs.driveTempCelsius > WarningThresholdConstants.maxMotorTemp,
+        id.toString() + " drive motor is hot.",
+        AlertType.kWarning);
+    AlertsManager.addAlert(
+        () -> inputs.steerTempCelsius > WarningThresholdConstants.maxMotorTemp,
+        id.toString() + " steer motor is hot.",
+        AlertType.kWarning);
   }
 
   public void periodic() {

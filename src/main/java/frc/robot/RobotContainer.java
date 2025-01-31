@@ -6,29 +6,49 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
+import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOSim;
-import frc.robot.sensors.coraldetector.CoralDetector;
-import frc.robot.sensors.coraldetector.CoralDetectorIO;
-import frc.robot.sensors.coraldetector.CoralDetectorIOPixy;
-import frc.robot.sensors.coraldetector.CoralDetectorIOSim;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.gyro.GyroIO;
 import frc.robot.sensors.gyro.GyroIONavX;
 import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.sensors.reefdetector.ReefDetector;
+import frc.robot.sensors.reefdetector.ReefDetectorIO;
+import frc.robot.sensors.reefdetector.ReefDetectorIODistanceSensor;
+import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
+import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
+import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.gantry.GantryIO;
+import frc.robot.subsystems.gantry.GantryIOSim;
+import frc.robot.subsystems.gantry.GantryIOSparkMax;
+import frc.robot.subsystems.gantry.GantrySubsystem;
+import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
+import frc.robot.subsystems.lift.LiftIO;
+import frc.robot.subsystems.lift.LiftIOSim;
+import frc.robot.subsystems.lift.LiftIOSpark;
+import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import java.util.ArrayList;
 
@@ -37,15 +57,23 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
+  private final GantrySubsystem gantrySubsystem;
+  private final LiftSubsystem liftSubsystem;
+  private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
-
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final AlertsManager alertsManager;
 
   // Dashboard
   private final Dashboard dashboard;
 
-  private final CoralDetector coralDetector;
+  private final ReefDetector reefDetector;
+
+  private final GantryCommandFactory gantryCommandFactory;
+  private final LiftCommandFactory liftCommandFactory;
+  private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -56,7 +84,10 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        coralDetector = new CoralDetector(new CoralDetectorIOPixy());
+        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
+        gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
+        liftSubsystem = new LiftSubsystem(new LiftIOSpark());
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -64,20 +95,42 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCamera,
-                    () -> new Pose3d(RobotOdometry.instance.getPose("Normal"))),
+                    () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
-        coralDetector = new CoralDetector(new CoralDetectorIOSim(() -> 0.0));
+        reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
+        gantrySubsystem = new GantrySubsystem(new GantryIOSim());
+        liftSubsystem = new LiftSubsystem(new LiftIOSim());
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim());
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
-        coralDetector = new CoralDetector(new CoralDetectorIO() {});
+        reefDetector = new ReefDetector(new ReefDetectorIO() {});
+        gantrySubsystem = new GantrySubsystem(new GantryIO() {});
+        liftSubsystem = new LiftSubsystem(new LiftIO() {});
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
-    robotOdometry =
-        new RobotOdometry(driveSubsystem, gyro, aprilTagVisions.toArray(AprilTagVision[]::new));
-    robotOdometry.addEstimator("Normal", RobotOdometry.getDefaultEstimator());
-    dashboard = new Dashboard(driveSubsystem, driveController);
+    AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
+    robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
+    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController);
+    alertsManager = new AlertsManager();
+    AlertsManager.addAlert(
+        () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
+        "Low battery voltage.",
+        AlertType.kWarning);
+
+    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    liftCommandFactory = new LiftCommandFactory(liftSubsystem);
+    coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
+    gantrySubsystem.setDefaultCommand(
+        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getLeftY() * 6));
+    coralOuttakeSubsystem.setDefaultCommand(
+        coralOuttakeCommandFactory.setIntakeVoltage(
+            () -> operatorController.getRightTriggerAxis() * 6));
+
     configureBindings();
   }
 
@@ -93,16 +146,17 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToNearestWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            gyro),
+            gyro,
+            (x) -> RobotConstants.addRobotDim(x)),
         driveController.a());
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
-            () -> RobotOdometry.instance.getPose("Normal"),
+            () -> RobotOdometry.instance.getPose("Main"),
             () ->
                 chooseFromAlliance(
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
@@ -110,6 +164,8 @@ public class RobotContainer {
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
   }
 
   public <T> T chooseFromAlliance(T valueBlue, T valueRed) {

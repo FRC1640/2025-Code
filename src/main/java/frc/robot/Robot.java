@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import au.grapplerobotics.CanBridge;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -49,6 +50,7 @@ public class Robot extends LoggedRobot {
   }
 
   public Robot() {
+    CanBridge.runTCP();
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -165,7 +167,6 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().cancelAll();
     Dashboard.getSysidCommand().schedule();
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
-    ;
   }
 
   @Override

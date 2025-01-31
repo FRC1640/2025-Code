@@ -5,18 +5,21 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class AprilTagVision {
+public class AprilTagVision extends PeriodicBase {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
@@ -32,6 +35,8 @@ public class AprilTagVision {
     for (int i = 1; i <= FieldConstants.tagCount; i++) {
       trigPoses.put(i, new PoseObservation(0, new Pose3d(), 0, 0, 0));
     }
+    AlertsManager.addAlert(
+        () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
   }
 
   public void calculateTrigResults(Rotation3d gyroRotation) {
@@ -104,6 +109,7 @@ public class AprilTagVision {
     return standardDeviation;
   }
 
+  @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("AprilTagVision/" + cameraName, inputs);

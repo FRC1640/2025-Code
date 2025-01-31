@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.util.sysid.CreateSysidCommand;
 import java.util.function.BooleanSupplier;
 
@@ -18,9 +19,14 @@ public class Dashboard {
 
   private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  private LiftSubsystem liftSubsystem;
 
-  public Dashboard(DriveSubsystem driveSubsystem, CommandXboxController controller) {
+  public Dashboard(
+      DriveSubsystem driveSubsystem,
+      LiftSubsystem liftSubsystem,
+      CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
+    this.liftSubsystem = liftSubsystem;
     this.controller = controller;
     autoInit();
     teleopInit();
@@ -53,6 +59,15 @@ public class Dashboard {
             startNext,
             cancel,
             () -> driveSubsystem.stop()));
+    sysidChooser.addOption(
+        "Lift",
+        CreateSysidCommand.createCommand(
+            liftSubsystem::sysIdQuasistatic,
+            liftSubsystem::sysIdDynamic,
+            "Lift",
+            startNext,
+            cancel,
+            () -> liftSubsystem.setLiftVoltage(0)));
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 

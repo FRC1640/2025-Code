@@ -3,6 +3,9 @@ package frc.robot.subsystems.lift;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+// import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -13,6 +16,13 @@ public class LiftSubsystem extends SubsystemBase {
   LiftIO liftIO;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   SysIdRoutine sysIdRoutine;
+
+  private Mechanism2d liftMechanism = new Mechanism2d(3, 3); // what will this do? a mystery
+  private MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
+  // private MechanismLigament2d liftLigament =
+  //     liftMechanism.append( // append method doesn't seem to work as in docs? tbd
+  //         new MechanismLigament2d(
+  //             "second stage", getFollowerMotorPosition(), getFollowerMotorCurrent()));
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;

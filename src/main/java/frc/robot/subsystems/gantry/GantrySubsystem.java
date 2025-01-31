@@ -1,11 +1,14 @@
 package frc.robot.subsystems.gantry;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class GantrySubsystem extends SubsystemBase {
   GantryIOInputsAutoLogged inputs = new GantryIOInputsAutoLogged();
   GantryIO io;
+
+  private Mechanism2d targetingMechanism = new Mechanism2d(1, 1);
 
   public GantrySubsystem(GantryIO io) {
     this.io = io;

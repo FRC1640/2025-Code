@@ -11,20 +11,23 @@ public interface ClimberIO extends AutoCloseable {
   public static class ClimberIOInputs {
     // may need more for pneumatic stuff not entirely sure
     public double liftMotorPosition = 0.0;
-    public double winch1MotorPosition = 0.0;
-    public double winch2MotorPosition = 0.0;
     public double liftMotorVelocity = 0.0;
-    public double winch1MotorVelocity = 0.0;
-    public double winch2MotorVelocity = 0.0;
     public double liftMotorCurrent = 0.0;
-    public double winch1MotorCurrent = 0.0;
-    public double winch2MotorCurrent = 0.0;
     public double liftMotorVoltage = 0.0;
-    public double winch1MotorVoltage = 0.0;
-    public double winch2MotorVoltage = 0.0;
-    public double liftTemperature = 0.0;
-    public double winch1Temperature = 0.0;
-    public double winch2Temperature = 0.0;
+    public double liftMotorTemperature = 0.0;
+
+    public double winchMotor1Position = 0.0;
+    public double winchMotor2Position = 0.0;
+    public double winchMotor1Velocity = 0.0;
+    public double winchMotor2Velocity = 0.0;
+    public double winchMotor1Current = 0.0;
+    public double winchMotor2Current = 0.0;
+    public double winchMotor1Voltage = 0.0;
+    public double winchMotor2Voltage = 0.0;
+    public double winchMotor1Temperature = 0.0;
+    public double winchMotor2Temperature = 0.0;
+
+    public boolean solenoidActive = false;
   }
 
   /*
@@ -82,4 +85,8 @@ public interface ClimberIO extends AutoCloseable {
    * Set voltage of the motor
    */
   public default void setClimberWinchVoltage(double voltage, ClimberIOInputs inputs) {}
+  /*
+   * Set solenoid state (activated/not activated)
+   */
+  public default void setSolenoidState(boolean active, ClimberIOInputs inputs) {}
 }

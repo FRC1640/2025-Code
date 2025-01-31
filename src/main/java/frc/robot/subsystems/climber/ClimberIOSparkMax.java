@@ -52,8 +52,8 @@ public class ClimberIOSparkMax implements ClimberIO {
    */
   @Override
   public void setClimberWinchVoltage(double voltage, ClimberIOInputs inputs) {
-    winch1Motor.setVoltage(clampVoltage(applyLimits(inputs.winch1MotorPosition, voltage)));
-    winch2Motor.setVoltage(clampVoltage(applyLimits(inputs.winch2MotorPosition, voltage)));
+    winch1Motor.setVoltage(clampVoltage(applyLimits(inputs.winchMotor1Position, voltage)));
+    winch2Motor.setVoltage(clampVoltage(applyLimits(inputs.winchMotor2Position, voltage)));
   }
   /*
    * Sets the position of the winch motors using a PID
@@ -67,19 +67,19 @@ public class ClimberIOSparkMax implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.liftMotorPosition = liftEncoder.getPosition();
-    inputs.winch1MotorPosition = winch1Encoder.getPosition();
-    inputs.winch2MotorPosition = winch2Encoder.getPosition();
+    inputs.winchMotor1Position = winch1Encoder.getPosition();
+    inputs.winchMotor2Position = winch2Encoder.getPosition();
     inputs.liftMotorVelocity = liftEncoder.getVelocity();
-    inputs.winch1MotorVelocity = winch1Encoder.getVelocity();
-    inputs.winch2MotorVelocity = winch2Encoder.getVelocity();
+    inputs.winchMotor1Velocity = winch1Encoder.getVelocity();
+    inputs.winchMotor2Velocity = winch2Encoder.getVelocity();
     inputs.liftMotorCurrent = liftMotor.getOutputCurrent();
-    inputs.winch1MotorCurrent = winch1Motor.getOutputCurrent();
-    inputs.winch2MotorCurrent = winch2Motor.getOutputCurrent();
+    inputs.winchMotor1Current = winch1Motor.getOutputCurrent();
+    inputs.winchMotor2Current = winch2Motor.getOutputCurrent();
     inputs.liftMotorVoltage = liftMotor.getAppliedOutput();
-    inputs.winch1MotorVoltage = winch1Motor.getAppliedOutput();
-    inputs.winch2MotorVoltage = winch2Motor.getAppliedOutput();
-    inputs.liftTemperature = liftMotor.getMotorTemperature();
-    inputs.winch1Temperature = winch1Motor.getMotorTemperature();
-    inputs.winch2Temperature = winch2Motor.getMotorTemperature();
+    inputs.winchMotor1Voltage = winch1Motor.getAppliedOutput();
+    inputs.winchMotor2Voltage = winch2Motor.getAppliedOutput();
+    inputs.liftMotorTemperature = liftMotor.getMotorTemperature();
+    inputs.winchMotor1Temperature = winch1Motor.getMotorTemperature();
+    inputs.winchMotor2Temperature = winch2Motor.getMotorTemperature();
   }
 }

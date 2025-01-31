@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
-import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;
@@ -90,13 +89,9 @@ public class LiftIOSim implements LiftIO {
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
-    Logger.recordOutput(
-        "TEST",
-        profiledPIDController.calculate(inputs.leaderMotorPosition, position)
-            + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity));
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+            profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }

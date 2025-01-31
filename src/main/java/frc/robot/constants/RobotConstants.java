@@ -114,8 +114,8 @@ public class RobotConstants {
     public static final int liftfollowerMotorID = 1;
     public static final double gearRatio = 5;
     public static final Limit liftLimits = new Limit(0, 2);
-    public static final double liftMaxSpeed = 0.1;
-    public static final double liftMaxAccel = 0.1;
+    public static final double liftMaxSpeed = 0.4;
+    public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);

@@ -63,7 +63,7 @@ public class LiftIOSpark implements LiftIO {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, position)
+            profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }

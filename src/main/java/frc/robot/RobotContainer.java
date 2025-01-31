@@ -124,9 +124,9 @@ public class RobotContainer {
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
+        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
     liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
+        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getLeftY() * 6));
     coralOuttakeSubsystem.setDefaultCommand(
         coralOuttakeCommandFactory.setIntakeVoltage(
             () -> operatorController.getRightTriggerAxis() * 6));

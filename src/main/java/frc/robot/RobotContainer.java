@@ -71,6 +71,10 @@ public class RobotContainer {
 
   private final ReefDetector reefDetector;
 
+  private final GantryCommandFactory gantryCommandFactory;
+  private final LiftCommandFactory liftCommandFactory;
+  private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -115,14 +119,14 @@ public class RobotContainer {
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
         "Low battery voltage.",
         AlertType.kWarning);
-    GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
-    LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
-    CoralOuttakeCommandFactory coralOuttakeCommandFactory =
-        new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
+
+    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    liftCommandFactory = new LiftCommandFactory(liftSubsystem);
+    coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
+        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
     liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
+        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getLeftY() * 6));
     coralOuttakeSubsystem.setDefaultCommand(
         coralOuttakeCommandFactory.setIntakeVoltage(
             () -> operatorController.getRightTriggerAxis() * 6));
@@ -160,6 +164,8 @@ public class RobotContainer {
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
   }
 
   public <T> T chooseFromAlliance(T valueBlue, T valueRed) {

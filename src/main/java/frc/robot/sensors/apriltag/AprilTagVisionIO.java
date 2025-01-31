@@ -13,13 +13,14 @@ public interface AprilTagVisionIO {
     public PoseObservation[] photonPoseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
     public Transform3d cameraDisplacement;
+    public int closestTagId;
   }
 
   public static record TrigTargetObservation(
       Rotation2d tx,
       Rotation2d ty,
       double distance,
-      Pose3d targetPose,
+      Transform3d targetTransform,
       double timestamp,
       int fiducialId) {}
 
@@ -27,4 +28,8 @@ public interface AprilTagVisionIO {
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
+
+  public default Transform3d getCameraDisplacement() {
+    return null;
+  }
 }

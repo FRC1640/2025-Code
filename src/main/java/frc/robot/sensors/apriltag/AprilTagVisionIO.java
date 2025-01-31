@@ -22,7 +22,8 @@ public interface AprilTagVisionIO {
       Pose3d targetTransform,
       double timestamp,
       int fiducialId,
-      double distance2D) {}
+      double distance2D,
+      Transform3d camToTarget) {}
 
   public static record PoseObservation(
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}

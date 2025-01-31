@@ -56,7 +56,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                   FieldConstants.aprilTagLayout.getTagPose(target.fiducialId).get(),
                   result.getTimestampSeconds(),
                   target.getFiducialId(),
-                  target.bestCameraToTarget.getTranslation().toTranslation2d().getNorm()));
+                  target.bestCameraToTarget.getTranslation().toTranslation2d().getNorm(),
+                  target.bestCameraToTarget));
         }
       }
 

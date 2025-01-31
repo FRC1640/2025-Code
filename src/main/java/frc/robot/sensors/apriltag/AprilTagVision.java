@@ -60,21 +60,40 @@ public class AprilTagVision extends PeriodicBase {
 
   public PoseObservation calculateTrigResult(
       TrigTargetObservation observation, Rotation3d gyroRotation) {
-    // calculate
-    double deltaH = observation.targetTransform().getZ() - io.getCameraDisplacement().getZ();
-    double distance2d = observation.distance2D();
-    double x = distance2d * Math.cos((observation.tx().getRadians() - gyroRotation.getZ()));
-    double y = distance2d * Math.sin(-(observation.tx().getRadians() - gyroRotation.getZ()));
-    double z = 0;
-    // calculate transforms
-    Transform3d cameraToTarget = new Transform3d(new Translation3d(x, y, z), new Rotation3d());
-    Transform3d fieldToCamera =
-        new Transform3d(observation.targetTransform().getTranslation(), new Rotation3d())
-            .plus(cameraToTarget.inverse());
-    Transform3d fieldToRobot = fieldToCamera.plus(inputs.cameraDisplacement.inverse());
+    // Get camera displacement details
+    Transform3d cameraDisplacement = inputs.cameraDisplacement;
+    Translation3d cameraToRobot = cameraDisplacement.getTranslation();
+    Rotation3d cameraRotation = cameraDisplacement.getRotation();
 
-    // convert and record
-    Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), gyroRotation);
+    // Calculate vertical offset between camera and tag
+    double deltaZ = observation.targetTransform().getZ() - cameraToRobot.getZ();
+
+    // get distance
+    double distance2d = observation.camToTarget().getTranslation().toTranslation2d().getNorm();
+
+    double tx = -observation.tx().getRadians();
+
+    // Calculate local translation in camera's coordinate system
+    Translation3d cameraToTagCameraFrame =
+        new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
+
+    // Rotate through coordinate systems:
+    Translation3d cameraToTagFieldFrame =
+        cameraToTagCameraFrame.rotateBy(cameraRotation).rotateBy(gyroRotation);
+
+    // Calculate camera position in field coordinates
+    Translation3d fieldToCamera =
+        observation.targetTransform().getTranslation().minus(cameraToTagFieldFrame);
+
+    // Convert camera displacement to field coordinates
+    Translation3d cameraDisplacementField = cameraToRobot.rotateBy(gyroRotation);
+
+    // Calculate robot position in field coordinates
+    Translation3d fieldToRobotTranslation = fieldToCamera.minus(cameraDisplacementField);
+
+    // Create final pose using gyro-reported rotation
+    Pose3d robotPose = new Pose3d(fieldToRobotTranslation, gyroRotation);
+
     return new PoseObservation(observation.timestamp(), robotPose, 0, 1, observation.distance());
   }
 

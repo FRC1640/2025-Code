@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -17,16 +18,13 @@ public class LiftSubsystem extends SubsystemBase {
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   SysIdRoutine sysIdRoutine;
 
-  private Mechanism2d liftMechanism = new Mechanism2d(3, 3); // what will this do? a mystery
-  // private MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
-  // private MechanismLigament2d liftLigament =
-  MechanismLigament2d firstAppend = new MechanismLigament2d("first append", 2, 2);
-  private MechanismLigament2d liftLigamentTwo = new MechanismLigament2d("second append", 1, 1);
+  private Mechanism2d liftMechanism = new Mechanism2d(3, 3);
+  MechanismLigament2d liftHeight = new MechanismLigament2d("lift", 2, 90);
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
-    MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
-    liftMechanismRoot.append(firstAppend);
+    MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
+    liftMechanismRoot.append(liftHeight);
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(
@@ -40,8 +38,11 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    firstAppend.setAngle(45);
+    inputs.leaderMotorPosition = 1.5;
+    liftHeight.setLength(inputs.leaderMotorPosition); // conversion?
     liftIO.updateInputs(inputs);
+    SmartDashboard.putData("lift :/", liftMechanism); // to be unstipidified
+    // Logger.recordOutput("Lift/mechanism", liftMechanism);
     Logger.processInputs("Lift/", inputs);
   }
 

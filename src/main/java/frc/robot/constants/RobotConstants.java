@@ -139,7 +139,8 @@ public class RobotConstants {
   public static class GantryConstants {
     public static final int gantrySparkID = 13; // UPDATE
     public static final double gantryGearRatio = 27; // prototype values
-    public static final double pulleyRadiusIn = .5; // inches for now / placeholder
+    public static final double pulleyRadius =
+        Units.inchesToMeters(0.5); // inches for now / placeholder
     // left -> right limit
     public static final Limit gantryLimits = new Limit(0.0, 12.0);
     public static final int gantryLimitSwitchDIOPort = 4;

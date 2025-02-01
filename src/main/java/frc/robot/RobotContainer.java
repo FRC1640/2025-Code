@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 // import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
@@ -98,7 +99,7 @@ public class RobotContainer {
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
-        gantrySubsystem = new GantrySubsystem(new GantryIOSim());
+        gantrySubsystem = new GantrySubsystem(new GantryIOSim(operatorController.b()));
         // liftSubsystem = new LiftSubsystem(new LiftIOSim());
         // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
         break;
@@ -160,6 +161,17 @@ public class RobotContainer {
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    // gantry button bindings:
+    operatorController
+        .rightBumper()
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));
+
+    operatorController
+        .leftBumper()
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
+
+    operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 
     // operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:

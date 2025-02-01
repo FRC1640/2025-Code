@@ -10,6 +10,7 @@ public interface GantryIO extends AutoCloseable {
     public double appliedVoltage;
     public double currentAmps;
     public boolean isLimitSwitchPressed;
+    public double encoderVelocity;
   }
 
   public default void updateInputs(GantryIOInputs inputs) {}

@@ -31,8 +31,20 @@ public class GantryIOSparkMax implements GantryIO {
     inputs.currentAmps = gantrySpark.getOutputCurrent();
     inputs.tempCelcius = gantrySpark.getMotorTemperature();
     inputs.appliedVoltage = gantrySpark.getAppliedOutput() * RobotController.getBatteryVoltage();
-    inputs.encoderPosition = gantryEncoder.getPosition();
+    inputs.encoderPosition =
+        gantryEncoder.getPosition()
+            / GantryConstants.gantryGearRatio
+            * GantryConstants.pulleyRadius
+            * 2
+            * Math.PI;
     inputs.isLimitSwitchPressed = gantryLimitSwitch.get();
+    inputs.encoderVelocity =
+        gantryEncoder.getVelocity()
+            / 60
+            * 2
+            * Math.PI
+            / GantryConstants.gantryGearRatio
+            * GantryConstants.pulleyRadius;
   }
 
   @Override

@@ -30,7 +30,6 @@ public class RobotConstants {
     public static final RobotType robotType = RobotType.Duex25;
 
     // subsystems
-    public static final boolean driveSubsystemEnabled = RobotSwitch.robotTypeValue(true, true);
     public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
     public static final boolean liftSubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
     public static final boolean coralOuttakeSubsystemEnabled =

@@ -124,8 +124,9 @@ public class RobotContainer {
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     // liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     // coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-    gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
+    // gantrySubsystem.setDefaultCommand(
+    //     gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() *
+    // 6));
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
     configureBindings();
@@ -165,7 +166,7 @@ public class RobotContainer {
     // gantry button bindings:
 
     operatorController.x().whileTrue(gantryCommandFactory.gantrySweep(true));
-    operatorController.b().whileTrue(gantryCommandFactory.gantrySweep(true));
+    operatorController.b().whileTrue(gantryCommandFactory.gantrySweep(false));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));

@@ -15,6 +15,8 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
+import frc.robot.util.tools.RobotSwitch;
+import frc.robot.util.tools.RobotSwitch.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -22,6 +24,20 @@ public class RobotConstants {
     public static final double robotWidth = Units.inchesToMeters(36);
     public static final double robotLength = Units.inchesToMeters(36);
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public class RobotConfigConstants {
+    public static final RobotType robotType = RobotType.Do25;
+
+    // subsystems
+    public static final boolean driveSubsystemEnabled = RobotSwitch.robotTypeValue(true, true);
+    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
+    public static final boolean liftSubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
+    public static final boolean coralOuttakeSubsystemEnabled =
+        RobotSwitch.robotTypeValue(true, false);
+
+    // sensors
+    public static final boolean reefDetectorEnabled = RobotSwitch.robotTypeValue(true, false);
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {

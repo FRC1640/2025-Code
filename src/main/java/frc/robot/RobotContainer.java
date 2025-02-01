@@ -14,6 +14,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -83,11 +84,26 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
-
-        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
-        gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
-        liftSubsystem = new LiftSubsystem(new LiftIOSpark());
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
+        if (RobotConfigConstants.reefDetectorEnabled) {
+          reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
+        } else {
+          reefDetector = new ReefDetector(new ReefDetectorIO() {});
+        }
+        if (RobotConfigConstants.gantrySubsystemEnabled) {
+          gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
+        } else {
+          gantrySubsystem = new GantrySubsystem(new GantryIO() {});
+        }
+        if (RobotConfigConstants.liftSubsystemEnabled) {
+          liftSubsystem = new LiftSubsystem(new LiftIOSpark());
+        } else {
+          liftSubsystem = new LiftSubsystem(new LiftIO() {});
+        }
+        if (RobotConfigConstants.coralOuttakeSubsystemEnabled) {
+          coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
+        } else {
+          coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
+        }
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());

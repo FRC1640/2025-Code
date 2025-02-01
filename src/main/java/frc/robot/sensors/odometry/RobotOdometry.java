@@ -160,9 +160,11 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public void addVisionEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
+
     List<Pose2d> robotPoses = new LinkedList<>();
     List<Pose2d> robotPosesAccepted = new LinkedList<>();
     List<Pose2d> robotPosesRejected = new LinkedList<>();
+
     for (PoseObservation poseObservation : vision.getPhotonResults()) {
       SwerveDrivePoseEstimator odometry = odometryStorage.estimator;
       Pose2d visionUpdate = poseObservation.pose().toPose2d();
@@ -199,16 +201,13 @@ public class RobotOdometry extends PeriodicBase {
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
     for (Pose2d pose : robotPoses) {
-      Logger.recordOutput(
-          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPoses", pose);
+      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPoses", pose);
     }
     for (Pose2d pose : robotPosesAccepted) {
-      Logger.recordOutput(
-          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesAccepted", pose);
+      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPosesAccepted", pose);
     }
     for (Pose2d pose : robotPosesRejected) {
-      Logger.recordOutput(
-          "Drive/Odometry/Vision/Camera_" + vision.getCameraName() + "/RobotPosesRejected", pose);
+      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejected", pose);
     }
   }
 

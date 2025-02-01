@@ -29,11 +29,19 @@ public class GantrySubsystem extends SubsystemBase {
     return inputs.encoderPosition;
   }
 
+  public boolean isLimitSwitchPressed() {
+    return inputs.isLimitSwitchPressed;
+  }
+
   public void setCarriagePosition(double pos) {
     io.setGantryPosition(pos, inputs);
   }
 
   public void setGantryVoltage(double voltage) {
     io.setGantryVoltage(voltage, inputs);
+  }
+
+  public void resetEncoder() {
+    io.resetEncoder();
   }
 }

@@ -142,6 +142,10 @@ public class RobotConstants {
     public static final double pulleyRadiusIn = .5; // inches for now / placeholder
     // left -> right limit
     public static final Limit gantryLimits = new Limit(0.0, 12.0);
+    public static final int gantryLimitSwitchDIOPort = 4;
+
+    public static final double gantryHomeFastVoltage = 6;
+    public static final double gantryHomeSlowVoltage = 3;
   }
 
   public static class CoralOuttakeConstants {

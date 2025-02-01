@@ -9,6 +9,7 @@ public interface GantryIO extends AutoCloseable {
     public double tempCelcius;
     public double appliedVoltage;
     public double currentAmps;
+    public boolean isLimitSwitchPressed;
   }
 
   public default void updateInputs(GantryIOInputs inputs) {}
@@ -16,6 +17,8 @@ public interface GantryIO extends AutoCloseable {
   public default void setGantryVoltage(double voltage, GantryIOInputs inputs) {}
 
   public default void setGantryPosition(double pos, GantryIOInputs inputs) {}
+
+  public default void resetEncoder() {}
 
   @Override
   default void close() {}

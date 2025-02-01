@@ -2,6 +2,8 @@ package frc.robot.subsystems.gantry.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import java.util.function.DoubleSupplier;
 
@@ -21,6 +23,27 @@ public class GantryCommandFactory {
   public Command gantryApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
             () -> gantrySubsystem.setGantryVoltage(voltage.getAsDouble()), gantrySubsystem)
+        .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
+  }
+
+  public Command gantryHomeCommand() {
+    return new RunCommand(
+            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeFastVoltage),
+            gantrySubsystem)
+        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(
+            () -> gantrySubsystem.setGantryVoltage(-1 * GantryConstants.gantryHomeFastVoltage),
+            gantrySubsystem)
+        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(
+            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeSlowVoltage),
+            gantrySubsystem)
+        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(
+            () -> gantrySubsystem.setGantryVoltage(-1 * GantryConstants.gantryHomeSlowVoltage),
+            gantrySubsystem)
+        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(() -> gantrySubsystem.resetEncoder(), gantrySubsystem)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 }

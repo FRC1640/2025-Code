@@ -4,6 +4,7 @@ import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import frc.robot.constants.RobotConstants.ReefDetectorConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
@@ -15,9 +16,9 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
     try {
       laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
       laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
     } catch (ConfigurationFailedException e) {
-      System.out.println("Configuration failed! " + e);
+      Logger.recordOutput("LaserCAN Configuration failed! " + e.toString(), false);
       isConnected = false;
     }
   }

@@ -51,6 +51,7 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
+import org.ironmaple.simulation.SimulatedArena;
 
 public class RobotContainer {
   // Subsystems
@@ -90,6 +91,7 @@ public class RobotContainer {
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
         break;
       case SIM:
+        SimulatedArena.getInstance();
         gyro = new Gyro(new GyroIOSim());
         aprilTagVisions.add(
             new AprilTagVision(

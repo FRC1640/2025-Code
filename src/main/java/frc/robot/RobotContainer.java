@@ -70,6 +70,10 @@ public class RobotContainer {
 
   private final ReefDetector reefDetector;
 
+  private final GantryCommandFactory gantryCommandFactory;
+  private final LiftCommandFactory liftCommandFactory;
+  private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -114,12 +118,12 @@ public class RobotContainer {
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
         "Low battery voltage.",
         AlertType.kWarning);
-    GantryCommandFactory gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
-    LiftCommandFactory liftCommandFactory = new LiftCommandFactory(liftSubsystem);
-    CoralOuttakeCommandFactory coralOuttakeCommandFactory =
-        new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
+
+    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    liftCommandFactory = new LiftCommandFactory(liftSubsystem);
+    coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
+        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
     configureBindings();
@@ -156,8 +160,9 @@ public class RobotContainer {
 
     driveController.start().onTrue(gyro.resetGyroCommand());
 
+    operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:
-    // operatorController.rightTrigger().whileTrue(coralouttake)
+    operatorController.rightTrigger().whileTrue(coralouttake)
   }
 
   public Command getAutonomousCommand() {

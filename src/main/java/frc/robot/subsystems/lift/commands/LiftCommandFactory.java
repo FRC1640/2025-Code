@@ -24,7 +24,10 @@ public class LiftCommandFactory {
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {
     return new RunCommand(
-            () -> liftSubsystem.runLiftMotionProfile(pos.getAsDouble()), liftSubsystem)
+            () -> {
+              liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
+            },
+            liftSubsystem)
         .finallyDo(
             () -> {
               liftSubsystem.setLiftVoltage(0);

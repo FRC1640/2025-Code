@@ -6,6 +6,4 @@
 
 [RevLib Spark Config](/docs/SparkConfiguration/SparkConfig.md)
 
-[MotorLim](/docs/MotorLim/main.md)
-
 [Utility Tools](/docs/tools/main.md)

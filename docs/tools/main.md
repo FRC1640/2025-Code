@@ -92,4 +92,4 @@ The boolean can be replaced by any data type, so it can also be:
 ```java
 int value = RobotSwitch.robotTypeValue(1,2);
 ```
-If the robot is Duex 2025, it will return 1, and if the robot is Prime 2025, it will return 2. 
+If the robot is Duex 2025, it will return 1, and if the robot is Prime 2025, it will return 2.

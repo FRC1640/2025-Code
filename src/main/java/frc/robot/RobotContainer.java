@@ -122,8 +122,6 @@ public class RobotContainer {
         gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getLeftX() * 6));
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
-    coralOuttakeSubsystem.setDefaultCommand(
-        coralOuttakeCommandFactory.intakeCoral(0.8, () -> robotOdometry.getPose("Main")));
     configureBindings();
   }
 
@@ -157,6 +155,9 @@ public class RobotContainer {
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    // intake button bindings:
+    // operatorController.rightTrigger().whileTrue(coralouttake)
   }
 
   public Command getAutonomousCommand() {

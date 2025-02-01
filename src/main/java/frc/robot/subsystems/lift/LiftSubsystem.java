@@ -4,7 +4,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-// import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,14 +18,15 @@ public class LiftSubsystem extends SubsystemBase {
   SysIdRoutine sysIdRoutine;
 
   private Mechanism2d liftMechanism = new Mechanism2d(3, 3); // what will this do? a mystery
-  private MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
+  // private MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
   // private MechanismLigament2d liftLigament =
-  //     liftMechanism.append( // append method doesn't seem to work as in docs? tbd
-  //         new MechanismLigament2d(
-  //             "second stage", getFollowerMotorPosition(), getFollowerMotorCurrent()));
+  MechanismLigament2d firstAppend = new MechanismLigament2d("first append", 2, 2);
+  private MechanismLigament2d liftLigamentTwo = new MechanismLigament2d("second append", 1, 1);
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
+    MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 1);
+    liftMechanismRoot.append(firstAppend);
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(
@@ -39,7 +40,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    firstAppend.setAngle(45);
     liftIO.updateInputs(inputs);
     Logger.processInputs("Lift/", inputs);
   }

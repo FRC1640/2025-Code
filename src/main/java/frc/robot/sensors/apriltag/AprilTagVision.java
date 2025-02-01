@@ -37,7 +37,7 @@ public class AprilTagVision extends PeriodicBase {
     return standardDeviation;
   }
 
-  public double getDistFactor(PoseObservation observation) {
+  public double getPhotonDistFactor(PoseObservation observation) {
     double distFactor =
         Math.pow(observation.averageTagDistance(), 2.0)
             / observation.tagCount()
@@ -46,22 +46,34 @@ public class AprilTagVision extends PeriodicBase {
     return distFactor;
   }
 
-  public double getXyStdDev(PoseObservation observation) {
-    double xyStdDev = 0.1 * getDistFactor(observation);
+  public double getPhotonXyStdDev(PoseObservation observation) {
+    double xyStdDev = 0.1 * getPhotonDistFactor(observation);
     Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDev", xyStdDev);
     return xyStdDev;
   }
 
-  public double getRotStdDev(PoseObservation observation) {
+  public double getPhotonRotStdDev(PoseObservation observation) {
     double rot = Double.MAX_VALUE;
     if (observation.ambiguity() < 0.05 && observation.tagCount() > 1) {
-      rot = 0.06 * getDistFactor(observation);
+      rot = 0.06 * getPhotonDistFactor(observation);
     }
     Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/rot", rot);
     return rot;
   }
 
-  public Optional<Pose2d> calculateTrigResults(Rotation3d gyroRotation) {
+  public double getTrigDistFactor(PoseObservation observation) { // TODO
+    return getPhotonDistFactor(observation);
+  }
+
+  public double getTrigXyStdDev(PoseObservation observation) { // TODO
+    return getPhotonXyStdDev(observation);
+  }
+
+  public double getTrigRotStdDev(PoseObservation observation) { // TODO
+    return getPhotonRotStdDev(observation);
+  }
+
+  public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
     if (inputs.trigTargetObservations.length == 0) {
@@ -72,9 +84,12 @@ public class AprilTagVision extends PeriodicBase {
     }
     // double bestDist = Double.MAX_VALUE;
     // Pose2d bestPose = new Pose2d();
+
+    // calculate averages
     double averageX = 0;
     double averageY = 0;
     double total = 0;
+    double averageDistance = 0;
     for (PoseObservation poseObservation : trigPoses) {
       // if (poseObservation.averageTagDistance() < bestDist) {
       // bestDist = poseObservation.averageTagDistance();
@@ -84,17 +99,27 @@ public class AprilTagVision extends PeriodicBase {
       averageX += distFactor * poseObservation.pose().getX();
       averageY += distFactor * poseObservation.pose().getY();
       total += distFactor;
+      averageDistance += poseObservation.averageTagDistance();
     }
     averageX /= total;
     averageY /= total;
-    Pose2d averagePose = new Pose2d(averageX, averageY, gyroRotation.toRotation2d());
+    averageDistance /= trigPoses.size();
+    Pose2d averagePose = new Pose2d(averageX, averageY, gyroRotation);
+
+    PoseObservation observation =
+        new PoseObservation(
+            trigPoses.get(trigPoses.size() - 1).timestamp(),
+            new Pose3d(averagePose),
+            0,
+            trigPoses.size(),
+            averageDistance);
     // Logger.recordOutput(cameraName, null);
     // return Optional.of(bestPose);
-    return Optional.of(averagePose);
+    return Optional.of(observation);
   }
 
   public PoseObservation calculateTrigResult(
-      TrigTargetObservation observation, Rotation3d gyroRotation) {
+      TrigTargetObservation observation, Rotation2d gyroRotation) {
     // Get camera displacement details
     Transform3d cameraDisplacement = inputs.cameraDisplacement;
     Translation3d cameraToRobot = cameraDisplacement.getTranslation();
@@ -116,7 +141,9 @@ public class AprilTagVision extends PeriodicBase {
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =
-        cameraToTagCameraFrame.rotateBy(cameraRotation).rotateBy(gyroRotation);
+        cameraToTagCameraFrame
+            .rotateBy(cameraRotation)
+            .rotateBy(new Rotation3d(0, 0, gyroRotation.getRadians()));
 
     // Calculate camera position in field coordinates
     Translation3d fieldToCamera =
@@ -127,13 +154,15 @@ public class AprilTagVision extends PeriodicBase {
             .minus(cameraToTagFieldFrame);
 
     // Convert camera displacement to field coordinates
-    Translation3d cameraDisplacementField = cameraToRobot.rotateBy(gyroRotation);
+    Translation3d cameraDisplacementField =
+        cameraToRobot.rotateBy(new Rotation3d(0, 0, gyroRotation.getRadians()));
 
     // Calculate robot position in field coordinates
     Translation3d fieldToRobotTranslation = fieldToCamera.minus(cameraDisplacementField);
 
     // Create final pose using gyro-reported rotation
-    Pose3d robotPose = new Pose3d(fieldToRobotTranslation, gyroRotation);
+    Pose3d robotPose =
+        new Pose3d(fieldToRobotTranslation, new Rotation3d(0, 0, gyroRotation.getRadians()));
 
     return new PoseObservation(
         observation.timestamp(),
@@ -170,10 +199,10 @@ public class AprilTagVision extends PeriodicBase {
         "AprilTagVision/" + cameraName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
     // testing
     Rotation2d gyroRotation = RobotOdometry.instance.getPose("Main").getRotation();
-    Optional<Pose2d> robotTrig =
-        calculateTrigResults(new Rotation3d(0, 0, gyroRotation.getRadians()));
+    Optional<PoseObservation> robotTrig = getTrigResult(gyroRotation);
 
-    Pose2d robotPose = robotTrig.orElse(null);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose", robotPose);
+    PoseObservation robotPose = robotTrig.orElse(null);
+    Logger.recordOutput(
+        "AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose", robotPose.pose());
   }
 }

@@ -84,26 +84,28 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
-        if (RobotConfigConstants.reefDetectorEnabled) {
-          reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
-        } else {
-          reefDetector = new ReefDetector(new ReefDetectorIO() {});
-        }
-        if (RobotConfigConstants.gantrySubsystemEnabled) {
-          gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
-        } else {
-          gantrySubsystem = new GantrySubsystem(new GantryIO() {});
-        }
-        if (RobotConfigConstants.liftSubsystemEnabled) {
-          liftSubsystem = new LiftSubsystem(new LiftIOSpark());
-        } else {
-          liftSubsystem = new LiftSubsystem(new LiftIO() {});
-        }
-        if (RobotConfigConstants.coralOuttakeSubsystemEnabled) {
-          coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
-        } else {
-          coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
-        }
+        reefDetector =
+            new ReefDetector(
+                RobotConfigConstants.reefDetectorEnabled
+                    ? new ReefDetectorIODistanceSensor(4)
+                    : new ReefDetectorIO() {});
+        gantrySubsystem =
+            new GantrySubsystem(
+                RobotConfigConstants.gantrySubsystemEnabled
+                    ? new GantryIOSparkMax()
+                    : new GantryIO() {});
+        liftSubsystem =
+            new LiftSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSpark() : new LiftIO() {});
+
+        coralOuttakeSubsystem =
+            new CoralOuttakeSubsystem(
+                RobotConfigConstants.coralOuttakeSubsystemEnabled
+                    ? new CoralOuttakeIOSparkMax()
+                    : new CoralOuttakeIO() {
+                      {
+                      }
+                    });
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());

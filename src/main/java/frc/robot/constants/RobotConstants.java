@@ -27,7 +27,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Do25;
+    public static final RobotType robotType = RobotType.Duex25;
 
     // subsystems
     public static final boolean driveSubsystemEnabled = RobotSwitch.robotTypeValue(true, true);

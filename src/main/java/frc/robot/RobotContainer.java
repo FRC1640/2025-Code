@@ -85,7 +85,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        reefDetector = new ReefDetector(new ReefDetectorIOLaserCAN(15));
+        reefDetector = new ReefDetector(new ReefDetectorIOLaserCAN());
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         // liftSubsystem = new LiftSubsystem(new LiftIOSpark());
         // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());

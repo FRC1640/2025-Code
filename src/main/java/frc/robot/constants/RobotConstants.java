@@ -121,8 +121,9 @@ public class RobotConstants {
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
   }
 
-  public static class CoralDetectorConstants {
-    public static final int channel = 5;
+  public static class ReefDetectorConstants {
+    public static final int channel = 15;
+    public static final double detectionThresh = 2000;
   }
 
   // TODO replace with actual values
@@ -137,7 +138,7 @@ public class RobotConstants {
   }
 
   public static class GantryConstants {
-    public static final int gantrySparkID = 13; // UPDATE
+    public static final int gantrySparkID = 12;
     public static final double gantryGearRatio = 27; // prototype values
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5); // inches for now / placeholder

@@ -95,10 +95,12 @@ public class AprilTagVision extends PeriodicBase {
     Rotation3d cameraRotation = cameraDisplacement.getRotation();
 
     // Calculate vertical offset between camera and tag
-    double deltaZ = observation.targetTransform().getZ() - cameraToRobot.getZ();
+    double deltaZ =
+        FieldConstants.aprilTagLayout.getTagPose(observation.fiducialId()).get().getZ()
+            - cameraToRobot.getZ();
 
     // get distance
-    double distance2d = observation.camToTarget().getTranslation().toTranslation2d().getNorm();
+    double distance2d = observation.cameraToTarget().getTranslation().toTranslation2d().getNorm();
 
     double tx = -observation.tx().getRadians();
 
@@ -112,7 +114,11 @@ public class AprilTagVision extends PeriodicBase {
 
     // Calculate camera position in field coordinates
     Translation3d fieldToCamera =
-        observation.targetTransform().getTranslation().minus(cameraToTagFieldFrame);
+        FieldConstants.aprilTagLayout
+            .getTagPose(observation.fiducialId())
+            .get()
+            .getTranslation()
+            .minus(cameraToTagFieldFrame);
 
     // Convert camera displacement to field coordinates
     Translation3d cameraDisplacementField = cameraToRobot.rotateBy(gyroRotation);
@@ -123,7 +129,12 @@ public class AprilTagVision extends PeriodicBase {
     // Create final pose using gyro-reported rotation
     Pose3d robotPose = new Pose3d(fieldToRobotTranslation, gyroRotation);
 
-    return new PoseObservation(observation.timestamp(), robotPose, 0, 1, observation.distance());
+    return new PoseObservation(
+        observation.timestamp(),
+        robotPose,
+        0,
+        1,
+        observation.cameraToTarget().getTranslation().getNorm());
   }
 
   public PoseObservation[] getPhotonResults() {

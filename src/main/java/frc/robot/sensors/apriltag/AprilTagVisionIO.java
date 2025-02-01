@@ -16,21 +16,10 @@ public interface AprilTagVisionIO {
   }
 
   public static record TrigTargetObservation(
-      Rotation2d tx,
-      Rotation2d ty,
-      double distance,
-      Pose3d targetTransform,
-      double timestamp,
-      int fiducialId,
-      double distance2D,
-      Transform3d camToTarget) {}
+      double timestamp, Rotation2d tx, Rotation2d ty, Transform3d cameraToTarget, int fiducialId) {}
 
   public static record PoseObservation(
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
-
-  public default Transform3d getCameraDisplacement() {
-    return null;
-  }
 }

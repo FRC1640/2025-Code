@@ -25,11 +25,6 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   }
 
   @Override
-  public Transform3d getCameraDisplacement() {
-    return cameraDisplacement;
-  }
-
-  @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
     inputs.cameraDisplacement = cameraDisplacement;
     inputs.connected = camera.isConnected();
@@ -50,14 +45,11 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
               deltaH / Math.sin(target.getPitch() + cameraDisplacement.getRotation().getY());
           trigObservations.add(
               new TrigTargetObservation(
+                  result.getTimestampSeconds(),
                   Rotation2d.fromDegrees(target.getYaw()),
                   Rotation2d.fromDegrees(target.getPitch()),
-                  target.getBestCameraToTarget().getTranslation().getNorm(),
-                  FieldConstants.aprilTagLayout.getTagPose(target.fiducialId).get(),
-                  result.getTimestampSeconds(),
-                  target.getFiducialId(),
-                  target.bestCameraToTarget.getTranslation().toTranslation2d().getNorm(),
-                  target.bestCameraToTarget));
+                  target.bestCameraToTarget,
+                  target.getFiducialId()));
         }
       }
 
@@ -90,7 +82,6 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                 ));
 
       } else if (!result.targets.isEmpty()) { // Single tag result
-        // TODO Photonvision solution --leaving it in for now, but will this waste processing power?
         var target = result.targets.get(0);
 
         // Calculate robot pose

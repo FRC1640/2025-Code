@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
+import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -162,7 +163,12 @@ public class RobotContainer {
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:
-    operatorController.rightTrigger().whileTrue(coralouttake)
+    coralOuttakeCommandFactory.constructTriggers();
+    operatorController
+        .rightTrigger()
+        .whileTrue(
+            coralOuttakeCommandFactory.setIntakeVoltage(
+                () -> CoralOuttakeConstants.passiveSpeed * 12));
   }
 
   public Command getAutonomousCommand() {

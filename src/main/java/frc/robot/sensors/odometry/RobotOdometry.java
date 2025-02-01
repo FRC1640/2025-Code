@@ -159,6 +159,12 @@ public class RobotOdometry extends PeriodicBase {
     odometries.get(name).estimator.resetPose(pose);
   }
 
+  public void setAllPose(Pose2d pose) {
+    for (OdometryStorage odometryStorage : odometries.values()) {
+      odometryStorage.estimator.resetPose(pose);
+    }
+  }
+
   public void addVisionEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
     List<Pose2d> robotPoses = new LinkedList<>();
     List<Pose2d> robotPosesAccepted = new LinkedList<>();

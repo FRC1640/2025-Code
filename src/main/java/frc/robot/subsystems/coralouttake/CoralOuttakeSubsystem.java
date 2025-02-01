@@ -26,6 +26,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     return inputs.tempCelcius;
   }
 
+  public boolean isCoralDetected() {
+    return inputs.coralDetected;
+  }
+
   public double returnAppliedVoltage() {
     return inputs.appliedVoltage;
   }

@@ -26,7 +26,7 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
-import frc.robot.sensors.reefdetector.ReefDetectorIODistanceSensor;
+import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
 // import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 // import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
@@ -85,7 +85,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
 
-        reefDetector = new ReefDetector(new ReefDetectorIODistanceSensor(4));
+        reefDetector = new ReefDetector(new ReefDetectorIOLaserCAN(15));
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         // liftSubsystem = new LiftSubsystem(new LiftIOSpark());
         // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
@@ -121,7 +121,7 @@ public class RobotContainer {
         "Low battery voltage.",
         AlertType.kWarning);
 
-    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     // liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     // coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     gantrySubsystem.setDefaultCommand(
@@ -163,6 +163,9 @@ public class RobotContainer {
     driveController.start().onTrue(gyro.resetGyroCommand());
 
     // gantry button bindings:
+
+    operatorController.x().whileTrue(gantryCommandFactory.gantrySweep(true));
+    operatorController.b().whileTrue(gantryCommandFactory.gantrySweep(true));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));

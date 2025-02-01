@@ -4,14 +4,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import java.util.function.DoubleSupplier;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
+  private ReefDetector reefDetector;
 
-  public GantryCommandFactory(GantrySubsystem gantrySubsystem) {
+  public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
+    this.reefDetector = reefDetector;
   }
 
   public Command gantryPIDCommand(DoubleSupplier pos) {
@@ -45,5 +48,9 @@ public class GantryCommandFactory {
         .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(() -> gantrySubsystem.resetEncoder(), gantrySubsystem)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
+  }
+
+  public Command gantrySweep(boolean left) {
+    return gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting());
   }
 }

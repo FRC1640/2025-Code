@@ -32,14 +32,18 @@ The relationship between measured distance d (in mm) and pulse width t (in µs) 
 The timing uncertainty is approximately ±5%. As objects approach the sensor, the output pulse width will approach 1.0 ms, while an object detected at 130 cm will produce a 1.65 ms pulse width. The sensor uses a pulse width of 2.0 ms to indicate no detection. The pulse period T ranges from around 9 ms to 10 ms, depending on the proximity of the detected object.
 
 The maximum detection range depends on object reflectivity and ambient lighting conditions. In our tests, the sensor was able to reliably detect a white sheet of paper out to its maximum range of 130 cm, and it could reliably detect a hand out to around 80 cm away. The following graph shows the measured distances of three units versus their actual distances from a variety of targets at several different ranges:
+
 ![alt text](image.png)
+
 Three connections are necessary to use this module: VIN, GND, and OUT. These pins are accessible through a row of 0.1″-pitch through holes, which work with standard 0.1″ (2.54 mm) male headers and 0.1″ female headers (available separately). The VIN pin should be connected to a 3 V to 5.5 V source, and GND should be connected to 0 volts. The sensor outputs its digital pulses on the OUT pin. The low level of the pulses is 0 V, and the high level is VIN. A red LED on the back side of the board also lights whenever an object is detected (the closer the object, the brighter the LED).
+
 ![alt text](image-3.png)
 
 Jumper settings (irs17a)
 The board features four surface-mount configuration jumpers that determine its operation mode. Different versions of the Pololu Digital Distance Sensors ship with the appropriate jumpers pre-populated with 0 Ω resistors. These resistors can be desoldered from the populated spots or solder bridges can be added across the unpopulated spots to convert one sensor version into another. This sensor can be converted into any other irs17a version as listed in the following table. (For more information about how the different output types work, see the product pages for representative versions.)
 
 (The one installed is #4071)
+
 ![alt text](image-4.png)
 
 ![alt text](image-5.png)

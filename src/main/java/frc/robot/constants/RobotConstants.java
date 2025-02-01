@@ -138,14 +138,17 @@ public class RobotConstants {
 
   public static class GantryConstants {
     public static final int gantrySparkID = 13; // UPDATE
-    public static final double gantryGearRatio = 10; // UPDATE
+    public static final double gantryGearRatio = 27;
     public static final double pulleyRadiusIn = .5; // inches for now / placeholder
     // left -> right limit
     public static final Limit gantryLimits = new Limit(0.0, 12.0);
   }
 
-  public static class IntakeConstants {
+  public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
     public static final int intakeSparkID = 14; // if you dont update this i will find you
+    public static final int coralDetectorChannel = 25; // update this too
+    public static final double distanceRequired = 2;
+    public static final double passiveSpeed = 0.1;
   }
 }

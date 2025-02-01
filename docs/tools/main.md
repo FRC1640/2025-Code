@@ -13,8 +13,9 @@
   - [**Distance Manager**](#distance-manager)
     - [**Import:**](#import-2)
     - [**Finding the Nearest Position**](#finding-the-nearest-position)
-  - [Robot Type Switcher](#robot-type-switcher)
-    - [Variable Switcher for Robots](#variable-switcher-for-robots)
+  - [**Robot Type Switcher**](#robot-type-switcher)
+    - [**Variable Switcher for Robots**](#variable-switcher-for-robots)
+    - [**Import:**](#import-3)
 ---
 ## **Alliance Manager**
 ### **Import:**
@@ -72,13 +73,15 @@ DistanceManager.getNearestPosition(Pose2d robotPos, Pose2d[] checkPoints)
 - Finds the closest point to `robotPos` from an array of checkpoints (`checkPoints`).
 - Useful for pathfinding and navigation.
 
-## Robot Type Switcher
+## **Robot Type Switcher**
 In [RobotConstants.java](/src/main/java/frc/robot/constants/RobotConstants.java), in the RobotConfigConstants class, set the Robot Type in the robotType variable. There are the following options:
 - Duex25
 - Prime25
 Duex25 is the setting if the robot is the Duex 2025 robot, and Prime25 is Prime 2025 robot.
-### Variable Switcher for Robots
+
+### **Variable Switcher for Robots**
 You can set any variable like this using the switcher:
+### **Import:**
 First, import this class:
 ```java
 import frc.robot.util.tools.RobotSwitch;

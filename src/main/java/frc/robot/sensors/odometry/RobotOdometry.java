@@ -184,19 +184,12 @@ public class RobotOdometry extends PeriodicBase {
         continue;
       }
       robotPosesAccepted.add(visionUpdate);
-      double distFactor =
-          Math.pow(poseObservation.averageTagDistance(), 2.0)
-              / poseObservation.tagCount()
-              * vision.getStandardDeviation();
-      double xy = 0.1 * distFactor;
-      double rot = Double.MAX_VALUE;
+      double distFactor = vision.getDistFactor(poseObservation);
+      double xy = vision.getXyStdDev(poseObservation);
+      double rot = vision.getRotStdDev(poseObservation);
       if (poseObservation.ambiguity() < 0.05 && poseObservation.tagCount() > 1) {
         rot = 0.06 * distFactor;
       }
-      Logger.recordOutput("Drive/Odometry/Vision/" + odometryStorage.getName() + "/xyDev", xy);
-      Logger.recordOutput("Drive/Odometry/Vision/" + odometryStorage.getName() + "/rotDev", rot);
-      Logger.recordOutput(
-          "Drive/Odometry/Vision/" + odometryStorage.getName() + "/distFactor", distFactor);
       odometry.addVisionMeasurement(
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }

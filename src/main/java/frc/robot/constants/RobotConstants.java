@@ -146,9 +146,9 @@ public class RobotConstants {
     public static final Limit liftLimits = new Limit(0, 1);
     public static final Limit winchLimits = new Limit(0, 1);
     public static final ResolverVoltageInfo winchResolverInfo =
-        new ResolverVoltageInfo(3, 0, 5, 0, 100, null);
+        new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =
-        new ResolverVoltageInfo(3, 0, 5, 0, 100, null);
+        new ResolverVoltageInfo(8, 0, 5, 0, 100, null);
 
     public static final double gearRatio = 5;
 

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
+import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 // import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
@@ -28,6 +29,11 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
+import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
+import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 // import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 // import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 // import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -60,7 +66,7 @@ public class RobotContainer {
   private final RobotOdometry robotOdometry;
   private final GantrySubsystem gantrySubsystem;
   // private final LiftSubsystem liftSubsystem;
-  // private final CoralOuttakeSubsystem coralOuttakeSubsystem;
+  private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -74,7 +80,7 @@ public class RobotContainer {
 
   private final GantryCommandFactory gantryCommandFactory;
   // private final LiftCommandFactory liftCommandFactory;
-  // private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
+  private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -88,7 +94,7 @@ public class RobotContainer {
         reefDetector = new ReefDetector(new ReefDetectorIOLaserCAN());
         gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
         // liftSubsystem = new LiftSubsystem(new LiftIOSpark());
-        // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
         break;
       case SIM:
         gyro = new Gyro(new GyroIOSim());
@@ -101,14 +107,14 @@ public class RobotContainer {
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
         gantrySubsystem = new GantrySubsystem(new GantryIOSim(operatorController.b()));
         // liftSubsystem = new LiftSubsystem(new LiftIOSim());
-        // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
         reefDetector = new ReefDetector(new ReefDetectorIO() {});
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         // liftSubsystem = new LiftSubsystem(new LiftIO() {});
-        // coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -123,7 +129,7 @@ public class RobotContainer {
 
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     // liftCommandFactory = new LiftCommandFactory(liftSubsystem);
-    // coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
+    coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     // gantrySubsystem.setDefaultCommand(
     //     gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() *
     // 6));
@@ -180,11 +186,11 @@ public class RobotContainer {
     // operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:
     // coralOuttakeCommandFactory.constructTriggers();
-    // operatorController
-    //    .rightTrigger()
-    //    .whileTrue(
-    //        coralOuttakeCommandFactory.setIntakeVoltage(
-    //            () -> CoralOuttakeConstants.passiveSpeed * 12));
+    operatorController
+        .rightTrigger()
+        .whileTrue(
+            coralOuttakeCommandFactory.setIntakeVoltage(
+                () -> CoralOuttakeConstants.passiveSpeed * 12));
   }
 
   // public Command getAutonomousCommand() {

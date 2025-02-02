@@ -6,7 +6,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
@@ -20,12 +19,8 @@ public class LiftIOSim implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      new ProfiledPIDController(
-          RobotPIDConstants.liftPID.kP,
-          RobotPIDConstants.liftPID.kI,
-          RobotPIDConstants.liftPID.kD,
-          LiftConstants.constraints,
-          0.02);
+      RobotPIDConstants.costructProfiledPIDController(
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSim() {
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);
@@ -34,12 +29,12 @@ public class LiftIOSim implements LiftIO {
     motor1Sim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                motor1SimGearbox, 0.00019125, RobotConstants.LiftConstants.gearRatio),
+                motor1SimGearbox, 0.00019125, LiftConstants.gearRatio),
             motor1SimGearbox);
     motor2Sim =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                motor2SimGearbox, 0.00019125, RobotConstants.LiftConstants.gearRatio),
+                motor2SimGearbox, 0.00019125, LiftConstants.gearRatio),
             motor2SimGearbox);
   }
 
@@ -69,10 +64,18 @@ public class LiftIOSim implements LiftIO {
   public void updateInputs(LiftIOInputs inputs) {
     motor1Sim.update(.02);
     motor2Sim.update(.02);
-    inputs.leaderMotorPosition = motor1Sim.getAngularPositionRotations();
-    inputs.followerMotorPosition = motor2Sim.getAngularPositionRotations();
-    inputs.leaderMotorVelocity = motor1Sim.getAngularVelocityRadPerSec();
-    inputs.followerMotorVelocity = motor2Sim.getAngularVelocityRadPerSec();
+    inputs.leaderMotorPosition =
+        motor1Sim.getAngularPositionRad() * LiftConstants.sprocketRadius / LiftConstants.gearRatio;
+    inputs.followerMotorPosition =
+        motor2Sim.getAngularPositionRad() * LiftConstants.sprocketRadius / LiftConstants.gearRatio;
+    inputs.leaderMotorVelocity =
+        motor1Sim.getAngularVelocityRadPerSec()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio;
+    inputs.followerMotorVelocity =
+        motor2Sim.getAngularVelocityRadPerSec()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio;
     inputs.leaderMotorCurrent = motor1Sim.getCurrentDrawAmps();
     inputs.followerMotorCurrent = motor2Sim.getCurrentDrawAmps();
     inputs.leaderMotorVoltage = motor1Sim.getInputVoltage();
@@ -84,7 +87,7 @@ public class LiftIOSim implements LiftIO {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+            profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }

@@ -112,15 +112,13 @@ public class RobotConstants {
   public static class LiftConstants {
     public static final int liftleaderMotorID = 0;
     public static final int liftfollowerMotorID = 1;
-    public static final double gearRatio = 10;
-
-    public static final double liftMax = 10;
-    public static final double liftMin = -20;
-    public static final Limit liftLimits = new Limit(-20, 10);
-    public static final double liftMaxSpeed = 1;
-    public static final double liftMaxAccel = 1;
+    public static final double gearRatio = 5;
+    public static final Limit liftLimits = new Limit(0, 2);
+    public static final double liftMaxSpeed = 0.4;
+    public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
+    public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
   }
 
   public static class CoralDetectorConstants {
@@ -140,14 +138,17 @@ public class RobotConstants {
 
   public static class GantryConstants {
     public static final int gantrySparkID = 13; // UPDATE
-    public static final double gantryGearRatio = 10; // UPDATE
+    public static final double gantryGearRatio = 27;
     public static final double pulleyRadiusIn = .5; // inches for now / placeholder
     // left -> right limit
     public static final Limit gantryLimits = new Limit(0.0, 12.0);
   }
 
-  public static class IntakeConstants {
+  public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
     public static final int intakeSparkID = 14; // if you dont update this i will find you
+    public static final int coralDetectorChannel = 25; // update this too
+    public static final double distanceRequired = 2;
+    public static final double passiveSpeed = 0.1;
   }
 }

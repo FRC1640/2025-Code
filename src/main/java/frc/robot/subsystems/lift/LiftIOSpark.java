@@ -22,12 +22,8 @@ public class LiftIOSpark implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      new ProfiledPIDController(
-          RobotPIDConstants.liftPID.kP,
-          RobotPIDConstants.liftPID.kI,
-          RobotPIDConstants.liftPID.kD,
-          LiftConstants.constraints,
-          0.02);
+      RobotPIDConstants.costructProfiledPIDController(
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
     leaderMotor =
@@ -63,7 +59,7 @@ public class LiftIOSpark implements LiftIO {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, inputs.leaderMotorVelocity)
+            profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
   }
@@ -75,10 +71,32 @@ public class LiftIOSpark implements LiftIO {
 
   @Override
   public void updateInputs(LiftIOInputs inputs) {
-    inputs.leaderMotorPosition = leaderEncoder.getPosition();
-    inputs.followerMotorPosition = followerEncoder.getPosition();
-    inputs.leaderMotorVelocity = leaderEncoder.getVelocity();
-    inputs.followerMotorVelocity = followerEncoder.getVelocity();
+    inputs.leaderMotorPosition =
+        leaderEncoder.getPosition()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
+    inputs.followerMotorPosition =
+        followerEncoder.getPosition()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2;
+    inputs.leaderMotorVelocity =
+        leaderEncoder.getVelocity()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2
+            / 60;
+    inputs.followerMotorVelocity =
+        followerEncoder.getVelocity()
+            * LiftConstants.sprocketRadius
+            / LiftConstants.gearRatio
+            * Math.PI
+            * 2
+            / 60;
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
     inputs.leaderMotorVoltage =

@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
+import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
 
@@ -28,19 +29,41 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Deux25;
 
     // subsystems
-    public static final boolean gantrySubsystemEnabled = true;
+    public static final boolean gantrySubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux25, false)
+            .addValue(RobotType.Prime25, false)
+            .get();
 
-    public static final boolean liftSubsystemEnabled = true;
+    public static final boolean liftSubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux25, true)
+            .addValue(RobotType.Prime25, false)
+            .get();
 
-    public static final boolean coralOuttakeSubsystemEnabled = true;
+    public static final boolean coralOuttakeSubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux25, false)
+            .addValue(RobotType.Prime25, false)
+            .get();
     // sensors
-    public static final boolean reefDetectorEnabled = true;
+    public static final boolean reefDetectorEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux25, true)
+            .addValue(RobotType.Prime25, false)
+            .get();
+    ;
 
     // odometry
-    public static final boolean gyroEnabled = true;
+    public static final boolean gyroEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux25, false)
+            .addValue(RobotType.Prime25, false)
+            .get();
+    ;
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {

@@ -78,7 +78,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
-        gyro = new Gyro(new GyroIONavX());
+        gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIONavX() : new GyroIO() {});
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),

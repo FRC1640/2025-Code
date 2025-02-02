@@ -15,8 +15,8 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final ResolverVoltage liftEncoder;
   private final ResolverVoltage winchEncoder;
   private final SparkMax liftSpark;
-  private final SparkMax winch1Spark;
-  private final SparkMax winch2Spark;
+  private final SparkMax winchLeaderSpark;
+  private final SparkMax winchFollowerSpark;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
@@ -28,13 +28,13 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
-    winch1Spark =
+    winchLeaderSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberWinch1MotorID, false));
-    winch2Spark =
+    winchFollowerSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false),
-            winch1Spark);
+            winchLeaderSpark);
     liftEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
     winchEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
     doubleSolenoid =
@@ -65,10 +65,10 @@ public class ClimberIOSparkMax implements ClimberIO {
    */
   @Override
   public void setClimberWinchVoltage(double voltage, ClimberIOInputs inputs) {
-    winch1Spark.setVoltage(
+    winchLeaderSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchMotor1Position, voltage, ClimberConstants.winchLimits)));
+                inputs.winchLeaderMotorPosition, voltage, ClimberConstants.winchLimits)));
   }
   /*
    * Sets the position of the winch motors using a PID
@@ -82,16 +82,17 @@ public class ClimberIOSparkMax implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.liftMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
-    inputs.winchMotor1Position = winchEncoder.getDegrees(); // says degrees but really in meters
+    inputs.winchLeaderMotorPosition =
+        winchEncoder.getDegrees(); // says degrees but really in meters
     inputs.liftMotorCurrent = liftSpark.getOutputCurrent();
-    inputs.winchMotor1Current = winch1Spark.getOutputCurrent();
-    inputs.winchMotor2Current = winch2Spark.getOutputCurrent();
+    inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
+    inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();
     inputs.liftMotorVoltage = liftSpark.getAppliedOutput();
-    inputs.winchMotor1Voltage = winch1Spark.getAppliedOutput();
-    inputs.winchMotor2Voltage = winch2Spark.getAppliedOutput();
+    inputs.winchLeaderMotorVoltage = winchLeaderSpark.getAppliedOutput();
+    inputs.winchFollowerMotorVoltage = winchFollowerSpark.getAppliedOutput();
     inputs.liftMotorTemperature = liftSpark.getMotorTemperature();
-    inputs.winchMotor1Temperature = winch1Spark.getMotorTemperature();
-    inputs.winchMotor2Temperature = winch2Spark.getMotorTemperature();
+    inputs.winchLeaderMotorTemperature = winchLeaderSpark.getMotorTemperature();
+    inputs.winchFollowerMotorTemperature = winchFollowerSpark.getMotorTemperature();
   }
 
   @Override

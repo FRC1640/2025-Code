@@ -14,8 +14,8 @@ import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim liftSim;
-  private final DCMotorSim winch1Sim; // winch motor 1
-  private final DCMotorSim winch2Sim; // winch motor 2
+  private final DCMotorSim winch1Sim; // winch leader motor
+  private final DCMotorSim winch2Sim; // winch follower motor
   private final DoubleSolenoidSim doubleSolenoidSim;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
@@ -63,17 +63,18 @@ public class ClimberIOSim implements ClimberIO {
     winch1Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchMotor1Position, voltage, ClimberConstants.winchLimits)));
+                inputs.winchLeaderMotorPosition, voltage, ClimberConstants.winchLimits)));
     winch2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchMotor2Position, voltage, ClimberConstants.winchLimits)));
+                inputs.winchFollowerMotorPosition, voltage, ClimberConstants.winchLimits)));
   }
 
   @Override
   public void setClimberWinchPosition(double position, ClimberIOInputs inputs) {
     setClimberWinchVoltage(
-        MotorLim.clampVoltage(winchPID.calculate(inputs.winchMotor1Position, position)), inputs);
+        MotorLim.clampVoltage(winchPID.calculate(inputs.winchLeaderMotorPosition, position)),
+        inputs);
   }
 
   @Override
@@ -91,16 +92,16 @@ public class ClimberIOSim implements ClimberIO {
     winch1Sim.update(.02);
     winch2Sim.update(.02);
     inputs.liftMotorPosition = liftSim.getAngularPositionRotations();
-    inputs.winchMotor1Position = winch1Sim.getAngularPositionRotations();
-    inputs.winchMotor2Position = winch2Sim.getAngularPositionRotations();
+    inputs.winchLeaderMotorPosition = winch1Sim.getAngularPositionRotations();
+    inputs.winchFollowerMotorPosition = winch2Sim.getAngularPositionRotations();
     inputs.liftMotorVelocity = liftSim.getAngularVelocityRadPerSec();
-    inputs.winchMotor1Velocity = winch1Sim.getAngularVelocityRadPerSec();
-    inputs.winchMotor2Velocity = winch2Sim.getAngularVelocityRadPerSec();
+    inputs.winchLeaderMotorVelocity = winch1Sim.getAngularVelocityRadPerSec();
+    inputs.winchFollowerMotorVelocity = winch2Sim.getAngularVelocityRadPerSec();
     inputs.liftMotorCurrent = liftSim.getCurrentDrawAmps();
-    inputs.winchMotor1Current = winch1Sim.getCurrentDrawAmps();
-    inputs.winchMotor2Current = winch2Sim.getCurrentDrawAmps();
+    inputs.winchLeaderMotorCurrent = winch1Sim.getCurrentDrawAmps();
+    inputs.winchFollowerMotorCurrent = winch2Sim.getCurrentDrawAmps();
     inputs.liftMotorVoltage = liftSim.getInputVoltage();
-    inputs.winchMotor1Voltage = winch1Sim.getInputVoltage();
-    inputs.winchMotor2Voltage = winch2Sim.getInputVoltage();
+    inputs.winchLeaderMotorVoltage = winch1Sim.getInputVoltage();
+    inputs.winchFollowerMotorVoltage = winch2Sim.getInputVoltage();
   }
 }

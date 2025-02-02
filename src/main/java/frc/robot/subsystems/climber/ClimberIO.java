@@ -12,16 +12,16 @@ public interface ClimberIO extends AutoCloseable {
     public double liftMotorVoltage = 0.0;
     public double liftMotorTemperature = 0.0;
 
-    public double winchMotor1Position = 0.0;
-    public double winchMotor2Position = 0.0;
-    public double winchMotor1Velocity = 0.0;
-    public double winchMotor2Velocity = 0.0;
-    public double winchMotor1Current = 0.0;
-    public double winchMotor2Current = 0.0;
-    public double winchMotor1Voltage = 0.0;
-    public double winchMotor2Voltage = 0.0;
-    public double winchMotor1Temperature = 0.0;
-    public double winchMotor2Temperature = 0.0;
+    public double winchLeaderMotorPosition = 0.0;
+    public double winchFollowerMotorPosition = 0.0;
+    public double winchLeaderMotorVelocity = 0.0;
+    public double winchFollowerMotorVelocity = 0.0;
+    public double winchLeaderMotorCurrent = 0.0;
+    public double winchFollowerMotorCurrent = 0.0;
+    public double winchLeaderMotorVoltage = 0.0;
+    public double winchFollowerMotorVoltage = 0.0;
+    public double winchLeaderMotorTemperature = 0.0;
+    public double winchFollowerMotorTemperature = 0.0;
 
     public boolean solenoidForward = false;
   }

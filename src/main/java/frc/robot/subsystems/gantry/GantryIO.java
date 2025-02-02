@@ -1,5 +1,6 @@
 package frc.robot.subsystems.gantry;
 
+import frc.robot.util.tools.Bounds;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GantryIO extends AutoCloseable {
@@ -11,6 +12,7 @@ public interface GantryIO extends AutoCloseable {
     public double currentAmps;
     public boolean isLimitSwitchPressed;
     public double encoderVelocity;
+    public Bounds gantryLimits;
   }
 
   public default void updateInputs(GantryIOInputs inputs) {}

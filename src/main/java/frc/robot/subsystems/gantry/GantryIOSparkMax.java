@@ -9,6 +9,7 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
+import frc.robot.util.tools.Bounds;
 import frc.robot.util.tools.MotorLim;
 
 public class GantryIOSparkMax implements GantryIO {
@@ -45,13 +46,14 @@ public class GantryIOSparkMax implements GantryIO {
             * Math.PI
             / GantryConstants.gantryGearRatio
             * GantryConstants.pulleyRadius;
+    inputs.gantryLimits = new Bounds(-12.0, inputs.isLimitSwitchPressed);
   }
 
   @Override
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
     gantrySpark.setVoltage(
         MotorLim.applyLimits(
-            inputs.encoderPosition, MotorLim.clampVoltage(voltage), GantryConstants.gantryLimits));
+            inputs.encoderPosition, MotorLim.clampVoltage(voltage), inputs.gantryLimits));
   }
 
   @Override

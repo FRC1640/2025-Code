@@ -14,7 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.util.tools.Limit;
+import frc.robot.util.tools.Bounds;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -113,7 +113,7 @@ public class RobotConstants {
     public static final int liftleaderMotorID = 0;
     public static final int liftfollowerMotorID = 1;
     public static final double gearRatio = 5;
-    public static final Limit liftLimits = new Limit(0, 2);
+    public static final Bounds liftLimits = new Bounds(0, 2);
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
@@ -142,7 +142,6 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limit gantryLimits = new Limit(-12.0, 0.0);
     public static final int gantryLimitSwitchDIOPort = 4;
 
     public static final double gantryHomeFastVoltage = 6; // prototype values

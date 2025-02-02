@@ -3,6 +3,7 @@ package frc.robot.subsystems.gantry.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
@@ -11,6 +12,7 @@ import java.util.function.DoubleSupplier;
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
+  private boolean runAtStartup = true;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -52,5 +54,10 @@ public class GantryCommandFactory {
 
   public Command gantryDriftCommand(boolean left) {
     return gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting());
+  }
+
+  public void constructTriggers() {
+    new Trigger(() -> runAtStartup)
+        .whileTrue(gantryHomeCommand().finallyDo(() -> runAtStartup = false));
   }
 }

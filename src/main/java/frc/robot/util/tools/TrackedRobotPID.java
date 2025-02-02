@@ -32,6 +32,26 @@ public class TrackedRobotPID {
     public static double[] getValues(Function<PIDController, Double> function) {
       return pidsTrack.stream().mapToDouble(function::apply).toArray();
     }
+
+    public static void logValuesID() {
+      for (int i = 0; i < pidsTrack.size(); i++) {
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/error", pidsTrack.get(i).getError());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/setPoint", pidsTrack.get(i).getSetpoint());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/atSetPoint", pidsTrack.get(i).atSetpoint());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/errorDerivative",
+            pidsTrack.get(i).getErrorDerivative());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/errorTolerance", pidsTrack.get(i).getErrorTolerance());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
+        // Information of the Values
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
+      }
+    }
   }
 
   // Profiled
@@ -60,55 +80,35 @@ public class TrackedRobotPID {
     public static double[] getValues(Function<ProfiledPIDController, Double> function) {
       return pidsTrack.stream().mapToDouble(function::apply).toArray();
     }
+
+    public static void logValuesID() {
+      for (int i = 0; i < pidsTrack.size(); i++) {
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/profiledPID", true);
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/positionError", pidsTrack.get(i).getPositionError());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/VelocityError", pidsTrack.get(i).getVelocityError());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/atSetpoint", pidsTrack.get(i).atSetpoint());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/velocityTolerance",
+            pidsTrack.get(i).getVelocityTolerance());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/positionTolerance",
+            pidsTrack.get(i).getPositionTolerance());
+        // Information of the Values
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
+      }
+    }
   }
 
   public static void updateLogPID() {
     // Regular PIDs
-    Logger.recordOutput("PIDTrack/PID/id", PIDTrack.getIDNames());
-
-    Logger.recordOutput("PIDTrack/PID/info/error", PIDTrack.getValues(PIDController::getError));
-    Logger.recordOutput(
-        "PIDTrack/PID/info/setPoint", PIDTrack.getValues(PIDController::getSetpoint));
-    Logger.recordOutput("PIDTrack/PID/info/atSetPoint", PIDTrack.getAtSetPoint());
-    Logger.recordOutput(
-        "PIDTrack/PID/info/errorDerivative", PIDTrack.getValues(PIDController::getErrorDerivative));
-    Logger.recordOutput(
-        "PIDTrack/PID/info/errorTolerance", PIDTrack.getValues(PIDController::getErrorTolerance));
-    Logger.recordOutput("PIDTrack/PID/info/period", PIDTrack.getValues(PIDController::getPeriod));
-    // Information of the Values
-    Logger.recordOutput("PIDTrack/PID/info/setValues/kP", PIDTrack.getValues(PIDController::getP));
-    Logger.recordOutput("PIDTrack/PID/info/setValues/kI", PIDTrack.getValues(PIDController::getI));
-    Logger.recordOutput("PIDTrack/PID/info/setValues/kD", PIDTrack.getValues(PIDController::getD));
-
+    PIDTrack.logValuesID();
     // Profiled PIDs
-    Logger.recordOutput("PIDTrack/ProfiledPID/id", ProfiledPIDTrack.getIDNames());
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/positionError",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getPositionError));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/getVelocityError",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getVelocityError));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/accumulatedError",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getAccumulatedError));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/velocityTolerance",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getVelocityTolerance));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/positionTolerance",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getPositionTolerance));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/period",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getPeriod));
-    // Information of the Values
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/setValues/kP",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getP));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/setValues/kI",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getI));
-    Logger.recordOutput(
-        "PIDTrack/ProfiledPID/info/setValues/kD",
-        ProfiledPIDTrack.getValues(ProfiledPIDController::getD));
+    ProfiledPIDTrack.logValuesID();
   }
 }

@@ -17,6 +17,7 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitch.RobotType;
+import frc.robot.util.tools.RobotSwitchType;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -30,16 +31,16 @@ public class RobotConstants {
     public static final RobotType robotType = RobotType.Prime25;
 
     // subsystems
-    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, true);
+    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
     public static final boolean liftSubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
     public static final boolean coralOuttakeSubsystemEnabled =
-        RobotSwitch.robotTypeValue(true, false);
+        new RobotSwitchType<Boolean>(true).addValue(RobotType.Duex25, false).get();
 
     // sensors
     public static final boolean reefDetectorEnabled = RobotSwitch.robotTypeValue(true, false);
 
     // odometry
-    public static final boolean gyroEnabled = RobotSwitch.robotTypeValue(true, true);
+    public static final boolean gyroEnabled = true;
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {

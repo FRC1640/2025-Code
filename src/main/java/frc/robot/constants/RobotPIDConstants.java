@@ -13,6 +13,14 @@ public class RobotPIDConstants {
   public static final PIDController constructPID(PIDConstants constants) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
     PID.pidsTrack.add(j);
+    PID.idName.add("PID" + (PID.pidsTrack.size() - 1));
+    return j;
+  }
+
+  public static final PIDController constructPID(PIDConstants constants, String pidTrackedName) {
+    PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
+    PID.pidsTrack.add(j);
+    PID.idName.add(pidTrackedName);
     return j;
   }
 
@@ -23,8 +31,10 @@ public class RobotPIDConstants {
 
   public static final ProfiledPIDController costructProfiledPIDController(
       PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
-    return new ProfiledPIDController(
-        pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDController k =
+        new ProfiledPIDController(
+            pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    return k;
   }
 
   public static final ElevatorFeedforward constructFFElevator(FeedForwardConstants constants) {

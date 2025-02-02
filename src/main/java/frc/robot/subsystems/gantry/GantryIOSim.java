@@ -12,7 +12,7 @@ public class GantryIOSim implements GantryIO {
   private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private final PIDController gantryPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
 
   public GantryIOSim() {
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed

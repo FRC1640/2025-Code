@@ -1,13 +1,14 @@
 package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.Counter;
+import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 
 public class ReefDetectorIODistanceSensor implements ReefDetectorIO {
   private Counter counter;
 
-  public ReefDetectorIODistanceSensor(int channel) {
+  public ReefDetectorIODistanceSensor() {
     counter = new Counter();
-    counter.setUpSource(channel);
+    counter.setUpSource(ReefDetectorConstants.channel);
     counter.setSemiPeriodMode(true);
   }
 

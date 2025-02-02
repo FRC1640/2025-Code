@@ -1,13 +1,13 @@
 package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.robot.sensors.reefdetector.ReefDetectorIO.ReefDetectorIOInputs;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
+import org.littletonrobotics.junction.Logger;
 
 public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO reefDetectorIO;
-  private ReefDetectorIOInputs inputs = new ReefDetectorIOInputs();
+  private ReefDetectorIOInputsAutoLogged inputs = new ReefDetectorIOInputsAutoLogged();
 
   public ReefDetector(ReefDetectorIO reefDetectorIO) {
     this.reefDetectorIO = reefDetectorIO;
@@ -18,6 +18,7 @@ public class ReefDetector extends PeriodicBase {
   @Override
   public void periodic() {
     reefDetectorIO.updateInputs(inputs);
+    Logger.processInputs("ReefDetector", inputs);
   }
 
   public boolean isConnected() {

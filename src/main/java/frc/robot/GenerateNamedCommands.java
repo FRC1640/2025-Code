@@ -11,8 +11,8 @@ public class GenerateNamedCommands {
 
   public void generateNamedCommands(RobotOdometry odometry) {
     NamedCommands.registerCommand(
-        "EnableAprilTags", new InstantCommand(() -> odometry.setUseAutoApriltags(true)));
+        "EnableAprilTags", new InstantCommand(() -> odometry.setAutoApriltags(true)));
     NamedCommands.registerCommand(
-        "DisableAprilTags", new InstantCommand(() -> odometry.setUseAutoApriltags(false)));
+        "DisableAprilTags", new InstantCommand(() -> odometry.setAutoApriltags(false)));
   }
 }

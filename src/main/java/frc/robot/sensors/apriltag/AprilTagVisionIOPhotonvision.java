@@ -8,9 +8,11 @@ import frc.robot.constants.FieldConstants;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   protected final PhotonCamera camera; // the camera
@@ -24,21 +26,31 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
 
   @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
+    inputs.cameraDisplacement = cameraDisplacement;
     inputs.connected = camera.isConnected();
 
     // Read new camera observations
     Set<Short> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
+    List<TrigTargetObservation> trigObservations = new LinkedList<>();
+
     for (var result : camera.getAllUnreadResults()) {
       // Update latest target observation
       if (result.hasTargets()) {
-        inputs.latestTargetObservation =
-            new AprilTagObservation(
-                Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
-                Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
-      } else {
-        inputs.latestTargetObservation =
-            new AprilTagObservation(new Rotation2d(), new Rotation2d());
+        // calculate closest target
+        for (PhotonTrackedTarget target : result.getTargets()) { // get every target and iterate
+          Optional<Pose3d> targetPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
+          double deltaH = targetPose.get().getZ() - cameraDisplacement.getZ();
+          double distance =
+              deltaH / Math.sin(target.getPitch() + cameraDisplacement.getRotation().getY());
+          trigObservations.add(
+              new TrigTargetObservation(
+                  result.getTimestampSeconds(),
+                  Rotation2d.fromDegrees(target.getYaw()),
+                  Rotation2d.fromDegrees(target.getPitch()),
+                  target.bestCameraToTarget,
+                  target.getFiducialId()));
+        }
       }
 
       // Add pose observation
@@ -50,10 +62,15 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         Transform3d fieldToRobot = fieldToCamera.plus(cameraDisplacement.inverse());
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
-        // Calculate average tag distance
+        // Calculate average & minimum tag distance
         double totalTagDistance = 0.0;
+        double minimumTagDistance = Double.MAX_VALUE;
         for (var target : result.targets) {
-          totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+          double distance = target.bestCameraToTarget.getTranslation().getNorm();
+          totalTagDistance += distance;
+          if (distance < minimumTagDistance) {
+            minimumTagDistance = distance;
+          }
         }
 
         // Add tag IDs
@@ -66,8 +83,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                 robotPose, // 3D pose estimate
                 multitagResult.estimatedPose.ambiguity, // Ambiguity
                 multitagResult.fiducialIDsUsed.size(), // Tag count
-                totalTagDistance / result.targets.size() // Average tag distance
-                ));
+                totalTagDistance / result.targets.size(), // Average tag distance
+                minimumTagDistance));
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
@@ -92,17 +109,17 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                   robotPose, // 3D pose estimate
                   target.poseAmbiguity, // Ambiguity
                   1, // Tag count
-                  cameraToTarget.getTranslation().getNorm() // Average tag distance
-                  )); // Observation type
+                  cameraToTarget.getTranslation().getNorm(), // Average tag distance
+                  cameraToTarget.getTranslation().getNorm())); // Observation type
         }
       }
     }
 
     // Save pose observations to inputs object
-    inputs.poseObservations = new PoseObservation[poseObservations.size()];
+    inputs.photonPoseObservations = new PoseObservation[poseObservations.size()];
     Logger.recordOutput("size", poseObservations.size());
     for (int i = 0; i < poseObservations.size(); i++) {
-      inputs.poseObservations[i] = poseObservations.get(i);
+      inputs.photonPoseObservations[i] = poseObservations.get(i);
     }
 
     // Save tag IDs to inputs objects
@@ -111,5 +128,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
     for (int id : tagIds) {
       inputs.tagIds[i++] = id;
     }
+
+    inputs.trigTargetObservations =
+        trigObservations.toArray(new TrigTargetObservation[trigObservations.size()]);
   }
 }

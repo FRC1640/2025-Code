@@ -7,14 +7,17 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
+import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {
   private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
+  private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
 
-  public GantryIOSim() {
+  public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
+    this.gantryLimitSwitch = gantryLimitSwitch;
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
     gantrySim =
         new DCMotorSim(
@@ -28,7 +31,16 @@ public class GantryIOSim implements GantryIO {
     gantrySim.update(.02);
 
     inputs.currentAmps = gantrySim.getCurrentDrawAmps();
-    inputs.encoderPosition = gantrySim.getAngularPositionRad();
+    inputs.encoderPosition =
+        gantrySim.getAngularPositionRad()
+            / GantryConstants.gantryGearRatio
+            * GantryConstants.pulleyRadius;
+    inputs.isLimitSwitchPressed = gantryLimitSwitch.getAsBoolean();
+    inputs.appliedVoltage = gantrySim.getInputVoltage();
+    inputs.encoderVelocity =
+        gantrySim.getAngularVelocityRadPerSec()
+            / GantryConstants.gantryGearRatio
+            * GantryConstants.pulleyRadius;
   }
 
   @Override

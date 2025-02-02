@@ -19,12 +19,8 @@ public class LiftIOSim implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      new ProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants.kP,
-          RobotPIDConstants.liftProfiledPIDConstants.kI,
-          RobotPIDConstants.liftProfiledPIDConstants.kD,
-          LiftConstants.constraints,
-          0.02);
+      RobotPIDConstants.costructProfiledPIDController(
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSim() {
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);

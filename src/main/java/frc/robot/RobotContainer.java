@@ -113,7 +113,7 @@ public class RobotContainer {
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
         reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
-        gantrySubsystem = new GantrySubsystem(new GantryIOSim(operatorController.b()));
+        gantrySubsystem = new GantrySubsystem(new GantryIOSim(operatorController.y()));
         liftSubsystem = new LiftSubsystem(new LiftIOSim());
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
         break;
@@ -138,8 +138,9 @@ public class RobotContainer {
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-    gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
+    // gantrySubsystem.setDefaultCommand(
+    //     gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() *
+    // 6));
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
     configureBindings();

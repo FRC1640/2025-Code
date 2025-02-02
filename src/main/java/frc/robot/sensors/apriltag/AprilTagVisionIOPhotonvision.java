@@ -62,10 +62,15 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         Transform3d fieldToRobot = fieldToCamera.plus(cameraDisplacement.inverse());
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
-        // Calculate average tag distance
+        // Calculate average & minimum tag distance
         double totalTagDistance = 0.0;
+        double minimumTagDistance = Double.MAX_VALUE;
         for (var target : result.targets) {
-          totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+          double distance = target.bestCameraToTarget.getTranslation().getNorm();
+          totalTagDistance += distance;
+          if (distance < minimumTagDistance) {
+            minimumTagDistance = distance;
+          }
         }
 
         // Add tag IDs
@@ -78,8 +83,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                 robotPose, // 3D pose estimate
                 multitagResult.estimatedPose.ambiguity, // Ambiguity
                 multitagResult.fiducialIDsUsed.size(), // Tag count
-                totalTagDistance / result.targets.size() // Average tag distance
-                ));
+                totalTagDistance / result.targets.size(), // Average tag distance
+                minimumTagDistance));
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
@@ -104,8 +109,8 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
                   robotPose, // 3D pose estimate
                   target.poseAmbiguity, // Ambiguity
                   1, // Tag count
-                  cameraToTarget.getTranslation().getNorm() // Average tag distance
-                  )); // Observation type
+                  cameraToTarget.getTranslation().getNorm(), // Average tag distance
+                  cameraToTarget.getTranslation().getNorm())); // Observation type
         }
       }
     }

@@ -39,16 +39,16 @@ public class AprilTagVision extends PeriodicBase {
 
   public double getPhotonDistFactor(PoseObservation observation) {
     double distFactor =
-        Math.pow(observation.averageTagDistance(), 2.0)
+        Math.pow(observation.minimumTagDistance(), 2.0)
             / observation.tagCount()
             * getStandardDeviation();
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/distFactor", distFactor);
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/distFactorPhoton", distFactor);
     return distFactor;
   }
 
   public double getPhotonXyStdDev(PoseObservation observation) {
     double xyStdDev = 0.1 * getPhotonDistFactor(observation);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDev", xyStdDev);
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDevPhoton", xyStdDev);
     return xyStdDev;
   }
 
@@ -57,7 +57,7 @@ public class AprilTagVision extends PeriodicBase {
     if (getRotationValidPhotonObservation(observation)) {
       rot = 0.06 * getPhotonDistFactor(observation);
     }
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/rot", rot);
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/rotPhoton", rot);
     return rot;
   }
 
@@ -65,16 +65,19 @@ public class AprilTagVision extends PeriodicBase {
     return (observation.ambiguity() < 0.05 && observation.tagCount() > 1);
   }
 
-  public double getTrigDistFactor(PoseObservation observation) { // TODO
-    return getPhotonDistFactor(observation);
+  public double getTrigDistFactor(PoseObservation observation) {
+    double distFactor =
+        Math.pow(observation.averageTagDistance(), 2)
+            / observation.tagCount()
+            * getStandardDeviation();
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/distFactorTrig", distFactor);
+    return distFactor;
   }
 
-  public double getTrigXyStdDev(PoseObservation observation) { // TODO
-    return getPhotonXyStdDev(observation);
-  }
-
-  public double getTrigRotStdDev(PoseObservation observation) { // TODO
-    return getPhotonRotStdDev(observation);
+  public double getTrigXyStdDev(PoseObservation observation) {
+    double xy = 0.01 * getTrigDistFactor(observation);
+    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDevTrig", xy);
+    return xy;
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
@@ -83,12 +86,8 @@ public class AprilTagVision extends PeriodicBase {
     if (inputs.trigTargetObservations.length == 0) {
       return Optional.empty();
     }
-    double lowestDistance = Double.MAX_VALUE;
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
       PoseObservation result = calculateTrigResult(observation, gyroRotation);
-      if (result.averageTagDistance() < lowestDistance) {
-        lowestDistance = result.averageTagDistance();
-      }
       trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
@@ -99,16 +98,20 @@ public class AprilTagVision extends PeriodicBase {
     double averageY = 0;
     double total = 0;
     double averageDistance = 0;
+    double minimumDistance = Double.MAX_VALUE;
     for (PoseObservation poseObservation : trigPoses) {
       // if (poseObservation.averageTagDistance() < bestDist) {
       // bestDist = poseObservation.averageTagDistance();
       // bestPose = poseObservation.pose().toPose2d();
       // }
-      double distFactor = (1 / Math.pow(poseObservation.averageTagDistance(), 2));
+      double distFactor = (1 / Math.pow(poseObservation.minimumTagDistance(), 2));
       averageX += distFactor * poseObservation.pose().getX();
       averageY += distFactor * poseObservation.pose().getY();
       total += distFactor;
-      averageDistance += poseObservation.averageTagDistance();
+      averageDistance += poseObservation.minimumTagDistance();
+      if (poseObservation.minimumTagDistance() < minimumDistance) {
+        minimumDistance = poseObservation.minimumTagDistance();
+      }
     }
     averageX /= total;
     averageY /= total;
@@ -119,9 +122,10 @@ public class AprilTagVision extends PeriodicBase {
         new PoseObservation(
             trigPoses.get(trigPoses.size() - 1).timestamp(),
             new Pose3d(averagePose),
-            lowestDistance,
+            0,
             trigPoses.size(),
-            averageDistance);
+            averageDistance,
+            minimumDistance);
     // Logger.recordOutput(cameraName, null);
     // return Optional.of(bestPose);
     return Optional.of(observation);
@@ -178,6 +182,7 @@ public class AprilTagVision extends PeriodicBase {
         robotPose,
         0,
         1,
+        observation.cameraToTarget().getTranslation().getNorm(),
         observation.cameraToTarget().getTranslation().getNorm());
   }
 
@@ -206,12 +211,13 @@ public class AprilTagVision extends PeriodicBase {
     }
     Logger.recordOutput(
         "AprilTagVision/" + cameraName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
-    // testing
+    // // testing
     Rotation2d gyroRotation = RobotOdometry.instance.getPose("Main").getRotation();
     Optional<PoseObservation> robotTrig = getTrigResult(gyroRotation);
 
     PoseObservation robotPose = robotTrig.orElse(null);
     Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose", robotPose.pose());
+        "AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose",
+        robotPose == null ? new Pose2d() : robotPose.pose().toPose2d());
   }
 }

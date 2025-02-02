@@ -19,7 +19,12 @@ public interface AprilTagVisionIO {
       double timestamp, Rotation2d tx, Rotation2d ty, Transform3d cameraToTarget, int fiducialId) {}
 
   public static record PoseObservation(
-      double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
+      double timestamp,
+      Pose3d pose,
+      double ambiguity,
+      int tagCount,
+      double averageTagDistance,
+      double minimumTagDistance) {}
 
   public default void updateInputs(AprilTagVisionIOInputs inputs) {}
 }

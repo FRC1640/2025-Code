@@ -7,20 +7,21 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
-import frc.robot.util.tools.TrackedRobotPID.PID;
+import frc.robot.util.tools.TrackedRobotPID.PIDTrack;
+import frc.robot.util.tools.TrackedRobotPID.ProfiledPIDTrack;
 
 public class RobotPIDConstants {
   public static final PIDController constructPID(PIDConstants constants) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    PID.pidsTrack.add(j);
-    PID.idName.add("PID" + (PID.pidsTrack.size() - 1));
+    PIDTrack.pidsTrack.add(j);
+    PIDTrack.idName.add("PID" + (PIDTrack.pidsTrack.size()));
     return j;
   }
 
   public static final PIDController constructPID(PIDConstants constants, String pidTrackedName) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    PID.pidsTrack.add(j);
-    PID.idName.add(pidTrackedName);
+    PIDTrack.pidsTrack.add(j);
+    PIDTrack.idName.add(pidTrackedName);
     return j;
   }
 
@@ -34,6 +35,9 @@ public class RobotPIDConstants {
     ProfiledPIDController k =
         new ProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDTrack.pidsTrack.add(k);
+    ProfiledPIDTrack.idName.add("PPID" + (ProfiledPIDTrack.pidsTrack.size()));
+
     return k;
   }
 

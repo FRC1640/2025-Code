@@ -53,7 +53,7 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommand(boolean left) {
-    return gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting());
+    return gantryPIDCommand(left ? gantryConstants.gantryLimits.low : 0).andThen(gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting()));
   }
 
   public void constructTriggers() {

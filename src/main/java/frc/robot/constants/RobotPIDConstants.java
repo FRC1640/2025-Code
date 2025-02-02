@@ -7,10 +7,13 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
+import frc.robot.util.tools.TrackedRobotPID;
 
 public class RobotPIDConstants {
   public static final PIDController constructPID(PIDConstants constants) {
-    return new PIDController(constants.kP, constants.kI, constants.kD);
+    PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
+    TrackedRobotPID.pidsTrack.add(j);
+    return j;
   }
 
   public static final SimpleMotorFeedforward constructFFSimpleMotor(

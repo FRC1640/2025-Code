@@ -29,41 +29,26 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    // TODO enable gantry, coral outtake, drive, gyro for Deux24
     public static final RobotType robotType = RobotType.Deux24;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux25, false)
-            .addValue(RobotType.Prime25, false)
-            .get();
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
 
     public static final boolean liftSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux25, true)
-            .addValue(RobotType.Prime25, false)
+            .addValue(RobotType.Prime24, false)
             .addValue(RobotType.Deux24, false)
             .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux25, false)
-            .addValue(RobotType.Prime25, false)
-            .get();
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux25, true)
-            .addValue(RobotType.Prime25, false)
-            .get();
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
 
     // odometry
-    public static final boolean gyroEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux25, false)
-            .addValue(RobotType.Prime25, false)
-            .get();
+    public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {
@@ -152,8 +137,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftleaderMotorID = 0;
-    public static final int liftfollowerMotorID = 1;
+    public static final int liftleaderMotorID = new RobotSwitch<Integer>(0).get();
+    public static final int liftfollowerMotorID = new RobotSwitch<Integer>(1).get();
     public static final double gearRatio = 5;
     public static final Limit liftLimits = new Limit(0, 2);
     public static final double liftMaxSpeed = 0.4;
@@ -164,7 +149,7 @@ public class RobotConstants {
   }
 
   public static class ReefDetectorConstants {
-    public static final int channel = 15;
+    public static final int channel = new RobotSwitch<Integer>(15).get();
     public static final double detectionThresh = 325;
   }
 
@@ -180,13 +165,14 @@ public class RobotConstants {
   }
 
   public static class GantryConstants {
-    public static final int gantrySparkID = 12;
+    public static final int gantrySparkID = new RobotSwitch<Integer>(12).get();
     public static final double gantryGearRatio = 27; // prototype values
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5); // inches for now / placeholder
     // left -> right limit
     public static final Limit gantryLimits = new Limit(-10000, 10000);
-    public static final int gantryLimitSwitchDIOPort = 4;
+    public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
+    ;
 
     public static final double gantryHomeFastVoltage = 6;
     public static final double gantryHomeSlowVoltage = 3;
@@ -194,8 +180,10 @@ public class RobotConstants {
 
   public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
-    public static final int intakeSparkID = 24; // if you dont update this i will find you // *gulp*
-    public static final int coralDetectorChannel = 25; // update this too
+    public static final int intakeSparkID = new RobotSwitch<Integer>(24).get();
+    // if you dont update this i will find you // *gulp* // You understand what happens if you don't
+    public static final int coralDetectorChannel =
+        new RobotSwitch<Integer>(25).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }

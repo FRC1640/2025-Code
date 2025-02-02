@@ -35,7 +35,7 @@ public class ClimberIOSparkMax implements ClimberIO {
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false),
             winchLeaderSpark);
-    liftEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
+    liftEncoder = new ResolverVoltage(ClimberConstants.liftResolverInfo);
     winchEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
     doubleSolenoid =
         new DoubleSolenoid(

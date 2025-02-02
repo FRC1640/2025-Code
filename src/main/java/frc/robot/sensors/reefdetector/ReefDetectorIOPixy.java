@@ -1,13 +1,13 @@
 package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import frc.robot.constants.RobotConstants.CoralDetectorConstants;
+import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 
 public class ReefDetectorIOPixy implements ReefDetectorIO {
   private final AnalogInput pixyCamInput;
 
   public ReefDetectorIOPixy() {
-    pixyCamInput = new AnalogInput(CoralDetectorConstants.channel);
+    pixyCamInput = new AnalogInput(ReefDetectorConstants.channel);
   }
 
   @Override

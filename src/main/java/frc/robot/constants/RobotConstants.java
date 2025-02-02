@@ -30,7 +30,7 @@ public class RobotConstants {
 
   public class RobotConfigConstants {
     // TODO enable gantry, coral outtake, drive, gyro for Deux24
-    public static final RobotType robotType = RobotType.Deux25;
+    public static final RobotType robotType = RobotType.Deux24;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -43,6 +43,7 @@ public class RobotConstants {
         new RobotSwitch<Boolean>(true)
             .addValue(RobotType.Deux25, true)
             .addValue(RobotType.Prime25, false)
+            .addValue(RobotType.Deux24, false)
             .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
@@ -56,7 +57,6 @@ public class RobotConstants {
             .addValue(RobotType.Deux25, true)
             .addValue(RobotType.Prime25, false)
             .get();
-    ;
 
     // odometry
     public static final boolean gyroEnabled =
@@ -64,7 +64,6 @@ public class RobotConstants {
             .addValue(RobotType.Deux25, false)
             .addValue(RobotType.Prime25, false)
             .get();
-    ;
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {

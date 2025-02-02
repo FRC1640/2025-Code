@@ -22,11 +22,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorPosition;
   }
 
-  public double getWinchMotor1Position() {
+  public double getWinchLeaderMotorPosition() {
     return inputs.winchLeaderMotorPosition;
   }
 
-  public double getWinchMotor2Position() {
+  public double getWinchFollowerMotorPosition() {
     return inputs.winchFollowerMotorPosition;
   }
 
@@ -38,11 +38,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorVelocity;
   }
 
-  public double getWinchMotor1Velocity() {
+  public double getWinchLeaderMotorVelocity() {
     return inputs.winchLeaderMotorVelocity;
   }
 
-  public double getWinchMotor2Velocity() {
+  public double getWinchFollowerMotorVelocity() {
     return inputs.winchFollowerMotorVelocity;
   }
 
@@ -54,11 +54,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorCurrent;
   }
 
-  public double getWinchMotor1Current() {
+  public double getWinchLeaderMotorCurrent() {
     return inputs.winchLeaderMotorCurrent;
   }
 
-  public double getWinchMotor2Current() {
+  public double getWinchFollowerMotorCurrent() {
     return inputs.winchFollowerMotorCurrent;
   }
 
@@ -70,11 +70,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorVoltage;
   }
 
-  public double getWinchMotor1Voltage() {
+  public double getWinchLeaderMotorVoltage() {
     return inputs.winchLeaderMotorVoltage;
   }
 
-  public double getWinchMotor2Voltage() {
+  public double getWinchFollowerMotorVoltage() {
     return inputs.winchFollowerMotorVoltage;
   }
 
@@ -86,11 +86,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorTemperature;
   }
 
-  public double getWinchMotor1Temperature() {
+  public double getWinchLeaderMotorTemperature() {
     return inputs.winchLeaderMotorTemperature;
   }
 
-  public double getWinchMotor2Temperature() {
+  public double getWinchFollowerMotorTemperature() {
     return inputs.winchFollowerMotorTemperature;
   }
 

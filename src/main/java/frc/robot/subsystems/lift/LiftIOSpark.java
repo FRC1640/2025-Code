@@ -22,12 +22,8 @@ public class LiftIOSpark implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      new ProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants.kP,
-          RobotPIDConstants.liftProfiledPIDConstants.kI,
-          RobotPIDConstants.liftProfiledPIDConstants.kD,
-          LiftConstants.constraints,
-          0.02);
+      RobotPIDConstants.costructProfiledPIDController(
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
     leaderMotor =

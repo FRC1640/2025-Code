@@ -12,6 +12,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
@@ -110,8 +111,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftleaderMotorID = 0;
-    public static final int liftfollowerMotorID = 1;
+    public static final int liftLeaderMotorID = 0;
+    public static final int liftFollowerMotorID = 1;
     public static final double gearRatio = 10;
 
     public static final double liftMax = 10;
@@ -129,8 +130,6 @@ public class RobotConstants {
 
   // TODO replace with actual values
   public static class WarningThresholdConstants {
-    // current thresholds are in amps and are currently set at the stall current. Consult with team
-    // for actual values later.
     public static final double maxVortexMotorCurrent = 90;
     public static final double maxNeoMotorCurrent = 80;
     public static final double maxNeo550MotorCurrent = 70;
@@ -138,16 +137,23 @@ public class RobotConstants {
     public static final double minBatteryVoltage = 10.5;
   }
 
+  // TODO replace with actual values
   public static class ClimberConstants {
     public static final int climberLiftMotorID = 0;
     public static final int climberWinch1MotorID = 1;
     public static final int climberWinch2MotorID = 2;
-    public static final double gearRatio = 5; // figure that out later pls
 
-    public static final double liftMax = 0; // figure out later
-    public static final double liftMin = 0; // also figyre out
-    public static final double winchMin = 0; // figure smth out
-    public static final double minchMax = 0; // you gotta help me here
+    public static final Limit liftLimits = new Limit(0, 1);
+    public static final Limit winchLimits = new Limit(0, 1);
+    public static final ResolverVoltageInfo winchResolverInfo =
+        new ResolverVoltageInfo(3, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo liftResolverInfo =
+        new ResolverVoltageInfo(3, 0, 5, 0, 100, null);
+
+    public static final double gearRatio = 5;
+
+    public static final int solenoidForwardChannel = 0;
+    public static final int solenoidReverseChannel = 1;
   }
 
   public static class GantryConstants {

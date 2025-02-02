@@ -54,11 +54,15 @@ public class AprilTagVision extends PeriodicBase {
 
   public double getPhotonRotStdDev(PoseObservation observation) {
     double rot = Double.MAX_VALUE;
-    if (observation.ambiguity() < 0.05 && observation.tagCount() > 1) {
+    if (getRotationValidPhotonObservation(observation)) {
       rot = 0.06 * getPhotonDistFactor(observation);
     }
     Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/rot", rot);
     return rot;
+  }
+
+  public boolean getRotationValidPhotonObservation(PoseObservation observation) {
+    return (observation.ambiguity() < 0.05 && observation.tagCount() > 1);
   }
 
   public double getTrigDistFactor(PoseObservation observation) { // TODO
@@ -79,8 +83,13 @@ public class AprilTagVision extends PeriodicBase {
     if (inputs.trigTargetObservations.length == 0) {
       return Optional.empty();
     }
+    double lowestDistance = Double.MAX_VALUE;
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      trigPoses.add(calculateTrigResult(observation, gyroRotation));
+      PoseObservation result = calculateTrigResult(observation, gyroRotation);
+      if (result.averageTagDistance() < lowestDistance) {
+        lowestDistance = result.averageTagDistance();
+      }
+      trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
     // Pose2d bestPose = new Pose2d();
@@ -110,7 +119,7 @@ public class AprilTagVision extends PeriodicBase {
         new PoseObservation(
             trigPoses.get(trigPoses.size() - 1).timestamp(),
             new Pose3d(averagePose),
-            0,
+            lowestDistance,
             trigPoses.size(),
             averageDistance);
     // Logger.recordOutput(cameraName, null);

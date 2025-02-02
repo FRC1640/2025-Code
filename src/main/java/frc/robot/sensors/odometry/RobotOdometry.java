@@ -238,7 +238,7 @@ public class RobotOdometry extends PeriodicBase {
             "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejected", visionUpdate);
         return;
       }
-      if (!(isPoseValid(visionUpdate) && vision.isConnected())) { // TODO more checks?
+      if (!(isPoseValid(visionUpdate) && vision.isConnected() && result.get().ambiguity() < 5)) {
         Logger.recordOutput(
             "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejected", visionUpdate);
         return;

@@ -15,12 +15,12 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
-import frc.robot.util.tools.RobotSwitch;
-import frc.robot.util.tools.RobotSwitch.RobotType;
-import frc.robot.util.tools.RobotSwitchType;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
+  // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
+
   public class RobotDimensions {
     public static final double robotWidth = Units.inchesToMeters(36);
     public static final double robotLength = Units.inchesToMeters(36);
@@ -28,16 +28,16 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime25;
+    public static final RobotType robotType = RobotType.Prime24;
 
     // subsystems
-    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
-    public static final boolean liftSubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
-    public static final boolean coralOuttakeSubsystemEnabled =
-        new RobotSwitchType<Boolean>(true).addValue(RobotType.Duex25, false).get();
+    public static final boolean gantrySubsystemEnabled = true;
 
+    public static final boolean liftSubsystemEnabled = true;
+
+    public static final boolean coralOuttakeSubsystemEnabled = true;
     // sensors
-    public static final boolean reefDetectorEnabled = RobotSwitch.robotTypeValue(true, false);
+    public static final boolean reefDetectorEnabled = true;
 
     // odometry
     public static final boolean gyroEnabled = true;

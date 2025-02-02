@@ -6,18 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
-// import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -36,18 +34,12 @@ import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
-// import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
-// import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
-// import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
-// import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
-// import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.gantry.GantryIO;
-import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
@@ -56,14 +48,8 @@ import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
-// import frc.robot.subsystems.lift.LiftIO;
-// import frc.robot.subsystems.lift.LiftIOSim;
-// import frc.robot.subsystems.lift.LiftIOSpark;
-// import frc.robot.subsystems.lift.LiftSubsystem;
-// import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
-// import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
 
@@ -98,24 +84,60 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
                 CameraConstants.frontCamera));
+        reefDetector =
+            new ReefDetector(
+                RobotConfigConstants.reefDetectorEnabled
+                    ? new ReefDetectorIOLaserCAN()
+                    : new ReefDetectorIO() {});
+        gantrySubsystem =
+            new GantrySubsystem(
+                RobotConfigConstants.gantrySubsystemEnabled
+                    ? new GantryIOSparkMax()
+                    : new GantryIO() {});
+        liftSubsystem =
+            new LiftSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSpark() : new LiftIO() {});
 
-        reefDetector = new ReefDetector(new ReefDetectorIOLaserCAN());
-        gantrySubsystem = new GantrySubsystem(new GantryIOSparkMax());
-        liftSubsystem = new LiftSubsystem(new LiftIOSpark());
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSparkMax());
+        coralOuttakeSubsystem =
+            new CoralOuttakeSubsystem(
+                RobotConfigConstants.coralOuttakeSubsystemEnabled
+                    ? new CoralOuttakeIOSparkMax()
+                    : new CoralOuttakeIO() {
+                      {
+                      }
+                    });
+
         break;
       case SIM:
-        gyro = new Gyro(new GyroIOSim());
+        gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
+
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
-        reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
-        gantrySubsystem = new GantrySubsystem(new GantryIOSim(operatorController.b()));
-        liftSubsystem = new LiftSubsystem(new LiftIOSim());
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
+        reefDetector =
+            new ReefDetector(
+                RobotConfigConstants.reefDetectorEnabled
+                    ? new ReefDetectorIOSim(() -> 0.0, () -> 0.0)
+                    : new ReefDetectorIO() {});
+        gantrySubsystem =
+            new GantrySubsystem(
+                RobotConfigConstants.gantrySubsystemEnabled
+                    ? new GantryIOSparkMax()
+                    : new GantryIO() {});
+        liftSubsystem =
+            new LiftSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+        coralOuttakeSubsystem =
+            new CoralOuttakeSubsystem(
+                RobotConfigConstants.coralOuttakeSubsystemEnabled
+                    ? new CoralOuttakeIOSim(() -> true)
+                    : new CoralOuttakeIO() {
+                      {
+                      }
+                    });
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

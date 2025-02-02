@@ -27,6 +27,7 @@ Weight: 0.014 oz (0.4 g)
 
 Dimension Diagram: https://www.pololu.com/file/0J1812/pololu-digital-distance-sensor-dimensions-irs17a.pdf
 The relationship between measured distance d (in mm) and pulse width t (in µs) is as follows:
+
 ![alt text](image-2.png)
 
 The timing uncertainty is approximately ±5%. As objects approach the sensor, the output pulse width will approach 1.0 ms, while an object detected at 130 cm will produce a 1.65 ms pulse width. The sensor uses a pulse width of 2.0 ms to indicate no detection. The pulse period T ranges from around 9 ms to 10 ms, depending on the proximity of the detected object.

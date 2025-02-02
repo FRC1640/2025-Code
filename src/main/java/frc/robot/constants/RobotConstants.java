@@ -139,15 +139,14 @@ public class RobotConstants {
 
   public static class GantryConstants {
     public static final int gantrySparkID = 12;
-    public static final double gantryGearRatio = 27; // prototype values
-    public static final double pulleyRadius =
-        Units.inchesToMeters(0.5); // inches for now / placeholder
+    public static final double gantryGearRatio = 27.4;
+    public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limit gantryLimits = new Limit(0.0, 12.0);
+    public static final Limit gantryLimits = new Limit(-12.0, 0.0);
     public static final int gantryLimitSwitchDIOPort = 4;
 
-    public static final double gantryHomeFastVoltage = 6;
-    public static final double gantryHomeSlowVoltage = 3;
+    public static final double gantryHomeFastVoltage = 6; // prototype values
+    public static final double gantryHomeSlowVoltage = 3; // prototype values
   }
 
   public static class CoralOuttakeConstants {

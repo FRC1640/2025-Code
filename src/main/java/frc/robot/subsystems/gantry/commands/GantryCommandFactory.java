@@ -50,7 +50,7 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantrySweep(boolean left) {
+  public Command gantryDriftCommand(boolean left) {
     return gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting());
   }
 }

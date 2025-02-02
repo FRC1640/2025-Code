@@ -3,7 +3,9 @@ package frc.robot.constants;
 import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
 
 public class RobotPIDConstants {
@@ -14,6 +16,12 @@ public class RobotPIDConstants {
   public static final SimpleMotorFeedforward constructFFSimpleMotor(
       FeedForwardConstants constants) {
     return new SimpleMotorFeedforward(constants.kS, constants.kV, constants.kA);
+  }
+
+  public static final ProfiledPIDController costructProfiledPIDController(
+      PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
+    return new ProfiledPIDController(
+        pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
   }
 
   public static final ElevatorFeedforward constructFFElevator(FeedForwardConstants constants) {

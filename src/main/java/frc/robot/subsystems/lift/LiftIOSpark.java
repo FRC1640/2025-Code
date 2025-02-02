@@ -22,12 +22,8 @@ public class LiftIOSpark implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      new ProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants.kP,
-          RobotPIDConstants.liftProfiledPIDConstants.kI,
-          RobotPIDConstants.liftProfiledPIDConstants.kD,
-          LiftConstants.constraints,
-          0.02);
+      RobotPIDConstants.costructProfiledPIDController(
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
     leaderMotor =
@@ -92,13 +88,15 @@ public class LiftIOSpark implements LiftIO {
             * LiftConstants.sprocketRadius
             / LiftConstants.gearRatio
             * Math.PI
-            * 2;
+            * 2
+            / 60;
     inputs.followerMotorVelocity =
         followerEncoder.getVelocity()
             * LiftConstants.sprocketRadius
             / LiftConstants.gearRatio
             * Math.PI
-            * 2;
+            * 2
+            / 60;
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
     inputs.leaderMotorVoltage =

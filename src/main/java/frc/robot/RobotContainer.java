@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
@@ -26,7 +27,7 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
-import frc.robot.sensors.reefdetector.ReefDetectorIODistanceSensor;
+import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
@@ -78,7 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
-        gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIONavX() : new GyroIO() {});
+        gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
@@ -86,7 +87,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIODistanceSensor(4)
+                    ? new ReefDetectorIOLaserCAN()
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -105,6 +106,7 @@ public class RobotContainer {
                       {
                       }
                     });
+
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -155,7 +157,7 @@ public class RobotContainer {
         "Low battery voltage.",
         AlertType.kWarning);
 
-    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem);
+    gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     gantrySubsystem.setDefaultCommand(
@@ -195,6 +197,20 @@ public class RobotContainer {
         driveController.x());
 
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    // gantry button bindings:
+
+    operatorController.x().whileTrue(gantryCommandFactory.gantrySweep(true));
+    operatorController.b().whileTrue(gantryCommandFactory.gantrySweep(false));
+    operatorController
+        .rightBumper()
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));
+
+    operatorController
+        .leftBumper()
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
+
+    operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:

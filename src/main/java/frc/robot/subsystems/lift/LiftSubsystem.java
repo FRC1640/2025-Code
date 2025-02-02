@@ -3,27 +3,26 @@ package frc.robot.subsystems.lift;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class LiftSubsystem extends SubsystemBase {
   LiftIO liftIO;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   SysIdRoutine sysIdRoutine;
 
-  private Mechanism2d liftMechanism = new Mechanism2d(3, 3);
-  MechanismLigament2d liftHeight = new MechanismLigament2d("lift", 2, 90);
+  private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
+  LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
-    MechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
+    LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
     liftMechanismRoot.append(liftHeight);
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
@@ -38,11 +37,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    inputs.leaderMotorPosition = 1.5;
-    liftHeight.setLength(inputs.leaderMotorPosition); // conversion?
+    liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     liftIO.updateInputs(inputs);
-    SmartDashboard.putData("lift :/", liftMechanism); // to be unstipidified
-    // Logger.recordOutput("Lift/mechanism", liftMechanism);
+    Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
   }
 

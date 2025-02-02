@@ -228,14 +228,14 @@ public class RobotOdometry extends PeriodicBase {
 
   public void addTrigEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
     // calculate estimated pose (trig)
-    Optional<PoseObservation> result =
-        vision.getTrigResult(
-            odometryStorage
-                .getTrustedRotation()
-                .get()
-                .estimator
-                .getEstimatedPosition()
-                .getRotation());
+    Optional<Rotation2d> gyroInterpolated =
+        odometryStorage.getTrustedRotation().get().getGyroAtTimestamp(vision.getTrigTimestamp());
+    Optional<PoseObservation> result;
+    if (gyroInterpolated.isPresent()) {
+      result = vision.getTrigResult(gyroInterpolated.get());
+    } else {
+      result = vision.getTrigResult(odometryStorage.estimator.getEstimatedPosition().getRotation());
+    }
     // return if no result; continue otherwise
     if (result.isEmpty()) {
       return;
@@ -290,21 +290,26 @@ public class RobotOdometry extends PeriodicBase {
         e.lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
       }
       // Update gyro angle
-      if (gyro.isTrustworthy()) {
-        // Use the real gyro angle
-        e.rawGyroRotation = gyro.getOdometryPositions()[i];
+      if (e.getTrustedRotation().isEmpty()) {
+        if (gyro.isTrustworthy()) {
+          // Use the real gyro angle
+          Rotation2d update = gyro.getOdometryPositions()[i];
+          e.rawGyroRotation = update;
+        } else {
+          // Use the angle delta from the kinematics and module deltas
+          Twist2d twist = DriveConstants.kinematics.toTwist2d(moduleDeltas);
+          Rotation2d update = e.rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+          e.rawGyroRotation = update;
+        }
       } else {
-        // Use the angle delta from the kinematics and module deltas
-        Twist2d twist = DriveConstants.kinematics.toTwist2d(moduleDeltas);
-        e.rawGyroRotation = e.rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+        Rotation2d update =
+            e.getTrustedRotation().get().estimator.getEstimatedPosition().getRotation();
+        e.rawGyroRotation = update;
       }
 
       // Apply update
-      if (e.getTrustedRotation().isPresent()) {
-        e.rawGyroRotation =
-            e.getTrustedRotation().get().estimator.getEstimatedPosition().getRotation();
-      }
       e.estimator.updateWithTime(sampleTimestamps[i], e.rawGyroRotation, modulePositions);
+      e.addGyroSample(e.rawGyroRotation, sampleTimestamps[i]);
       Logger.recordOutput(
           "Drive/Odometry/" + odometryStorage.getName(), e.estimator.getEstimatedPosition());
     }

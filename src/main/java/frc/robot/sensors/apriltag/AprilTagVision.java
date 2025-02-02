@@ -80,6 +80,10 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
+  public double getTrigTimestamp() {
+    return inputs.trigTargetObservations[inputs.trigTargetObservations.length - 1].timestamp();
+  }
+
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();

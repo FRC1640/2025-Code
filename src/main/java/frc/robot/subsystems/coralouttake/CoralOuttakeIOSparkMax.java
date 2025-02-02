@@ -15,7 +15,7 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   public CoralOuttakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(CoralOuttakeConstants.intakeSparkID, false));
+            SparkConstants.getDefaultMax(CoralOuttakeConstants.intakeSparkID, true));
     coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
   }
 

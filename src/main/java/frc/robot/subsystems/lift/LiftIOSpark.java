@@ -92,13 +92,15 @@ public class LiftIOSpark implements LiftIO {
             * LiftConstants.sprocketRadius
             / LiftConstants.gearRatio
             * Math.PI
-            * 2;
+            * 2
+            / 60;
     inputs.followerMotorVelocity =
         followerEncoder.getVelocity()
             * LiftConstants.sprocketRadius
             / LiftConstants.gearRatio
             * Math.PI
-            * 2;
+            * 2
+            / 60;
     inputs.leaderMotorCurrent = leaderMotor.getOutputCurrent();
     inputs.followerMotorCurrent = followerMotor.getOutputCurrent();
     inputs.leaderMotorVoltage =

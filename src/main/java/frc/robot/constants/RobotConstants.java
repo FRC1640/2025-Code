@@ -123,7 +123,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = 15;
-    public static final double detectionThresh = 2000;
+    public static final double detectionThresh = 325;
   }
 
   // TODO replace with actual values
@@ -143,7 +143,7 @@ public class RobotConstants {
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5); // inches for now / placeholder
     // left -> right limit
-    public static final Limit gantryLimits = new Limit(0.0, 12.0);
+    public static final Limit gantryLimits = new Limit(-10000, 10000);
     public static final int gantryLimitSwitchDIOPort = 4;
 
     public static final double gantryHomeFastVoltage = 6;
@@ -152,9 +152,9 @@ public class RobotConstants {
 
   public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
-    public static final int intakeSparkID = 14; // if you dont update this i will find you // *gulp*
+    public static final int intakeSparkID = 24; // if you dont update this i will find you // *gulp*
     public static final int coralDetectorChannel = 25; // update this too
     public static final double distanceRequired = 2;
-    public static final double passiveSpeed = 0.1;
+    public static final double passiveSpeed = 1;
   }
 }

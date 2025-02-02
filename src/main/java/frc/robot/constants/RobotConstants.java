@@ -29,6 +29,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
+    // TODO enable gantry, coral outtake, drive, gyro for Deux24
     public static final RobotType robotType = RobotType.Deux25;
 
     // subsystems

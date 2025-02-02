@@ -39,7 +39,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.gantry.GantryIO;
-import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
@@ -108,17 +107,35 @@ public class RobotContainer {
                     });
         break;
       case SIM:
-        gyro = new Gyro(new GyroIOSim());
+        gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
+
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCamera,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCamera));
-        reefDetector = new ReefDetector(new ReefDetectorIOSim(() -> 0.0, () -> 0.0));
-        gantrySubsystem = new GantrySubsystem(new GantryIOSim());
-        liftSubsystem = new LiftSubsystem(new LiftIOSim());
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIOSim(() -> false));
+        reefDetector =
+            new ReefDetector(
+                RobotConfigConstants.reefDetectorEnabled
+                    ? new ReefDetectorIOSim(() -> 0.0, () -> 0.0)
+                    : new ReefDetectorIO() {});
+        gantrySubsystem =
+            new GantrySubsystem(
+                RobotConfigConstants.gantrySubsystemEnabled
+                    ? new GantryIOSparkMax()
+                    : new GantryIO() {});
+        liftSubsystem =
+            new LiftSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+        coralOuttakeSubsystem =
+            new CoralOuttakeSubsystem(
+                RobotConfigConstants.coralOuttakeSubsystemEnabled
+                    ? new CoralOuttakeIOSim(() -> true)
+                    : new CoralOuttakeIO() {
+                      {
+                      }
+                    });
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

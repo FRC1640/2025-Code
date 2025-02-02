@@ -27,16 +27,19 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Duex25;
+    public static final RobotType robotType = RobotType.Prime25;
 
     // subsystems
-    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
+    public static final boolean gantrySubsystemEnabled = RobotSwitch.robotTypeValue(true, true);
     public static final boolean liftSubsystemEnabled = RobotSwitch.robotTypeValue(true, false);
     public static final boolean coralOuttakeSubsystemEnabled =
         RobotSwitch.robotTypeValue(true, false);
 
     // sensors
     public static final boolean reefDetectorEnabled = RobotSwitch.robotTypeValue(true, false);
+
+    // odometry
+    public static final boolean gyroEnabled = RobotSwitch.robotTypeValue(true, true);
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {

@@ -42,7 +42,11 @@ public class LiftIOSpark implements LiftIO {
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.leaderMotorPosition,
+                voltage,
+                LiftConstants.liftLimits.high,
+                LiftConstants.liftLimits.low)));
   }
   /*
    * Sets the position of the motor(s) using a PID

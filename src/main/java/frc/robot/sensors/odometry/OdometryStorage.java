@@ -6,6 +6,7 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.odometry.RobotOdometry.VisionUpdateMode;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class OdometryStorage {
@@ -32,7 +33,11 @@ public class OdometryStorage {
   }
 
   public Optional<Rotation2d> getGyroAtTimestamp(double timestamp) {
-    if (gyroBuffer.getInternalBuffer().lastKey() - gyroBufferSizeSec > timestamp) {
+    try {
+      if (gyroBuffer.getInternalBuffer().lastKey() - gyroBufferSizeSec > timestamp) {
+        return Optional.empty();
+      }
+    } catch (NoSuchElementException e) {
       return Optional.empty();
     }
     return gyroBuffer.getSample(timestamp);

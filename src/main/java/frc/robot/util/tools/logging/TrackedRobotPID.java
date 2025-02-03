@@ -1,4 +1,4 @@
-package frc.robot.util.tools;
+package frc.robot.util.tools.logging;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -87,7 +87,7 @@ public class TrackedRobotPID {
         Logger.recordOutput(
             "PIDTrack/" + idName.get(i) + "/positionError", pidsTrack.get(i).getPositionError());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/VelocityError", pidsTrack.get(i).getVelocityError());
+            "PIDTrack/" + idName.get(i) + "/velocityError", pidsTrack.get(i).getVelocityError());
         Logger.recordOutput(
             "PIDTrack/" + idName.get(i) + "/atSetpoint", pidsTrack.get(i).atSetpoint());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
@@ -103,12 +103,5 @@ public class TrackedRobotPID {
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
       }
     }
-  }
-
-  public static void updateLogPID() {
-    // Regular PIDs
-    PIDTrack.logValuesID();
-    // Profiled PIDs
-    ProfiledPIDTrack.logValuesID();
   }
 }

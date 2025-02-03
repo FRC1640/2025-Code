@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.periodic.PeriodicScheduler;
-import frc.robot.util.tools.TrackedRobotPID;
+import frc.robot.util.tools.logging.LoggerManager;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -155,7 +155,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void simulationPeriodic() {
-    TrackedRobotPID.updateLogPID();
+    LoggerManager.updateLogPID();
   }
 
   @Override

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.weights.DriveWeight;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,8 +15,8 @@ public class DriveWeightCommand {
 
   static ArrayList<DriveWeight> weights = new ArrayList<>();
 
-  public static Command create(DriveSubsystem driveSubsystem) {
-    Command c = driveSubsystem.runVelocityCommand(() -> getAllSpeeds());
+  public static Command create(DriveCommandFactory driveCommandFactory) {
+    Command c = driveCommandFactory.runVelocityCommand(() -> getAllSpeeds());
     return c;
   }
 

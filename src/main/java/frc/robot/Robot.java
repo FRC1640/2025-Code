@@ -113,6 +113,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+    LoggerManager.updateLog();
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
   }
@@ -155,7 +156,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void simulationPeriodic() {
-    LoggerManager.updateLogPID();
+    LoggerManager.updateLog();
   }
 
   @Override

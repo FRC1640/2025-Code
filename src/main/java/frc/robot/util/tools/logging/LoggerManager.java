@@ -7,11 +7,20 @@ import frc.robot.util.tools.logging.TrackedRobotPID.ProfiledPIDTrack;
 
 public class LoggerManager {
 
+  public static void updateLog() {
+    updateLogPID();
+
+    updateLogFF();
+  }
+
   public static void updateLogPID() {
     // Regular PIDs
     PIDTrack.logValuesID();
     // Profiled PIDs
     ProfiledPIDTrack.logValuesID();
+  }
+
+  public static void updateLogFF() {
     // Elevator FeedForward
     ElevatorFeedForwardTrack.logVal();
     // Simple Feed Forward

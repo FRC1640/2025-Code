@@ -46,6 +46,17 @@ public class TrackedRobotPID {
         Logger.recordOutput(
             "PIDTrack/" + idName.get(i) + "/errorTolerance", pidsTrack.get(i).getErrorTolerance());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/errorDerivativeTolerance",
+            pidsTrack.get(i).getErrorDerivativeTolerance());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/IZone", pidsTrack.get(i).getIZone());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/accumulatedError",
+            pidsTrack.get(i).getAccumulatedError());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/continuosInputEnabled",
+            pidsTrack.get(i).isContinuousInputEnabled());
+
         // Information of the Values
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
@@ -97,6 +108,20 @@ public class TrackedRobotPID {
         Logger.recordOutput(
             "PIDTrack/" + idName.get(i) + "/positionTolerance",
             pidsTrack.get(i).getPositionTolerance());
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/IZone", pidsTrack.get(i).getIZone());
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/constraints/maxAcceleration",
+            pidsTrack.get(i).getConstraints().maxAcceleration);
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/constraints/maxVelocity",
+            pidsTrack.get(i).getConstraints().maxVelocity);
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/goal/position", pidsTrack.get(i).getGoal().position);
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/goal/velocity", pidsTrack.get(i).getGoal().velocity);
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/accumulatedError",
+            pidsTrack.get(i).getAccumulatedError());
         // Information of the Values
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());

@@ -16,16 +16,16 @@ public class TrackedFeedForward {
     public static void logVal() {
       for (int i = 0; i < feedTrack.size(); i++) {
         Logger.recordOutput(
-            "SimplElevatorFeedForward/" + idName.get(i) + "/period (Dt)",
+            "SimpleFeedForward/" + idName.get(i) + "/period (Dt)",
             getDoubleValues(SimpleMotorFeedforward::getDt, i));
         Logger.recordOutput(
-            "SimplElevatorFeedForward/" + idName.get(i) + "/accelerationGain (Ka)",
+            "SimpleFeedForward/" + idName.get(i) + "/accelerationGain (Ka)",
             getDoubleValues(SimpleMotorFeedforward::getKa, i));
         Logger.recordOutput(
-            "SimplElevatorFeedForward/" + idName.get(i) + "/staticGain (Ks)",
+            "SimpleFeedForward/" + idName.get(i) + "/staticGain (Ks)",
             getDoubleValues(SimpleMotorFeedforward::getKs, i));
         Logger.recordOutput(
-            "SimplElevatorFeedForward/" + idName.get(i) + "/velocityGain (Kv)",
+            "SimpleFeedForward/" + idName.get(i) + "/velocityGain (Kv)",
             getDoubleValues(SimpleMotorFeedforward::getKv, i));
       }
     }

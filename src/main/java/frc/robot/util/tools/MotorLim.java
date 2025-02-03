@@ -29,7 +29,7 @@ public class MotorLim {
   // }
 
   public static double applyLimits(
-      double pos, double voltage, boolean highLimit, boolean lowLimit) {
+      double pos, double voltage, boolean lowLimit, boolean highLimit) {
     double voltageClamped = voltage;
     if (!(Double.isNaN(voltageClamped) || Double.isNaN(pos))) {
       if ((highLimit && voltage > 0) || (lowLimit && voltage < 0)) {
@@ -41,16 +41,16 @@ public class MotorLim {
     }
   }
 
-  public static double applyLimits(double pos, double voltage, Double highLimit, Boolean lowLimit) {
-    return applyLimits(pos, voltage, pos > highLimit, lowLimit);
+  public static double applyLimits(double pos, double voltage, Double lowLimit, Boolean highLimit) {
+    return applyLimits(pos, voltage, pos < lowLimit, highLimit);
   }
 
-  public static double applyLimits(double pos, double voltage, Boolean highLimit, Double lowLimit) {
-    return applyLimits(pos, voltage, highLimit, pos < lowLimit);
+  public static double applyLimits(double pos, double voltage, Boolean lowLimit, Double highLimit) {
+    return applyLimits(pos, voltage, lowLimit, pos < highLimit);
   }
 
-  public static double applyLimits(double pos, double voltage, Double highLimit, Double lowLimit) {
-    return applyLimits(pos, voltage, pos > highLimit, pos < lowLimit);
+  public static double applyLimits(double pos, double voltage, Double lowLimit, Double highLimit) {
+    return applyLimits(pos, voltage, pos > lowLimit, pos < highLimit);
   }
 
   /**

@@ -48,15 +48,15 @@ public class LiftIOSim implements LiftIO {
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.high,
-                LiftConstants.liftLimits.low)));
+                LiftConstants.liftLimits.low,
+                LiftConstants.liftLimits.high)));
     motor2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.followerMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.high,
-                LiftConstants.liftLimits.low)));
+                LiftConstants.liftLimits.low,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID

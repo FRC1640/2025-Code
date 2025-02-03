@@ -183,11 +183,11 @@ public class RobotContainer {
     operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
     operatorController
         .rightBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 4));
 
     operatorController
         .leftBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -4));
 
     operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 

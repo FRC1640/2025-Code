@@ -46,11 +46,11 @@ public class MotorLim {
   }
 
   public static double applyLimits(double pos, double voltage, Boolean lowLimit, Double highLimit) {
-    return applyLimits(pos, voltage, lowLimit, pos < highLimit);
+    return applyLimits(pos, voltage, lowLimit, pos > highLimit);
   }
 
   public static double applyLimits(double pos, double voltage, Double lowLimit, Double highLimit) {
-    return applyLimits(pos, voltage, pos > lowLimit, pos < highLimit);
+    return applyLimits(pos, voltage, pos < lowLimit, pos > highLimit);
   }
 
   /**

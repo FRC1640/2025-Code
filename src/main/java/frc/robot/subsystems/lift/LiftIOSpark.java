@@ -45,8 +45,8 @@ public class LiftIOSpark implements LiftIO {
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.high,
-                LiftConstants.liftLimits.low)));
+                LiftConstants.liftLimits.low,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID

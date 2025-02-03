@@ -189,7 +189,7 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -4));
 
-    operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
+    operatorController.back().onTrue(new InstantCommand(() -> gantryCommandFactory.gantryHomeCommand()));
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:
@@ -204,6 +204,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return dashboard
         .getAutoChooserCommand()
+        .alongWith(gantryCommandFactory.gantryHomeCommand())
         .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

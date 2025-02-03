@@ -12,7 +12,6 @@ import java.util.function.DoubleSupplier;
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
-  private boolean runAtStartup = true;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -53,11 +52,8 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommand(boolean left) {
-    return gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting());
+    return gantryPIDCommand(() -> (left ? GantryConstants.gantryLimits.low : 0)).andThen(gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting()));
   }
 
-  public void constructTriggers() {
-    new Trigger(() -> runAtStartup)
-        .whileTrue(gantryHomeCommand().finallyDo(() -> runAtStartup = false));
-  }
+  public void constructTriggers() {}
 }

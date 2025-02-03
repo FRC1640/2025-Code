@@ -5,7 +5,33 @@
     {
       "name": "Teleoperated",
       "grid_layout": {
-        "layouts": [],
+        "layouts": [
+          {
+            "title": "List Layout",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Alerts",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 256.0,
+                "height": 384.0,
+                "type": "Alerts",
+                "properties": {
+                  "topic": "/AdvantageKit/RealOutputs/Alerts",
+                  "period": 0.06
+                }
+              }
+            ]
+          }
+        ],
         "containers": []
       }
     },
@@ -64,10 +90,10 @@
         "layouts": [
           {
             "title": "List Layout",
-            "x": 384.0,
+            "x": 640.0,
             "y": 0.0,
-            "width": 384.0,
-            "height": 384.0,
+            "width": 512.0,
+            "height": 512.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -93,7 +119,7 @@
             "title": "Recent Errors",
             "x": 0.0,
             "y": 0.0,
-            "width": 384.0,
+            "width": 640.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -107,7 +133,7 @@
             "title": "Recent Infos",
             "x": 0.0,
             "y": 128.0,
-            "width": 384.0,
+            "width": 640.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -121,7 +147,7 @@
             "title": "Recent Warnings",
             "x": 0.0,
             "y": 256.0,
-            "width": 384.0,
+            "width": 640.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {

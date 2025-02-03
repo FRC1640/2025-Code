@@ -17,7 +17,8 @@ public class LiftIOSpark implements LiftIO {
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
-  PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
+  PIDController liftController =
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 

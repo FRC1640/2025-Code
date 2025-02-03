@@ -11,11 +11,11 @@ import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
-import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagVision extends PeriodicBase {
@@ -80,14 +80,14 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
+  public Optional<PoseObservation> getTrigResult(Function<Double, Rotation2d> getGyroRotation) {
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
     if (inputs.trigTargetObservations.length == 0) {
       return Optional.empty();
     }
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      PoseObservation result = calculateTrigResult(observation, gyroRotation);
+      PoseObservation result = calculateTrigResult(observation, getGyroRotation);
       trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
@@ -116,7 +116,11 @@ public class AprilTagVision extends PeriodicBase {
     averageX /= total;
     averageY /= total;
     averageDistance /= trigPoses.size();
-    Pose2d averagePose = new Pose2d(averageX, averageY, gyroRotation);
+    Pose2d averagePose =
+        new Pose2d(
+            averageX,
+            averageY,
+            getGyroRotation.apply(trigPoses.get(trigPoses.size() - 1).timestamp()));
 
     PoseObservation observation =
         new PoseObservation(
@@ -132,7 +136,10 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public PoseObservation calculateTrigResult(
-      TrigTargetObservation observation, Rotation2d gyroRotation) {
+      TrigTargetObservation observation, Function<Double, Rotation2d> getGyroRotation) {
+    // evaluate function
+    Rotation2d gyroRotation = getGyroRotation.apply(observation.timestamp());
+
     // Get camera displacement details
     Transform3d cameraDisplacement = inputs.cameraDisplacement;
     Translation3d cameraToRobot = cameraDisplacement.getTranslation();
@@ -211,13 +218,5 @@ public class AprilTagVision extends PeriodicBase {
     }
     Logger.recordOutput(
         "AprilTagVision/" + cameraName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
-    // // testing
-    Rotation2d gyroRotation = RobotOdometry.instance.getPose("Main").getRotation();
-    Optional<PoseObservation> robotTrig = getTrigResult(gyroRotation);
-
-    PoseObservation robotPose = robotTrig.orElse(null);
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose",
-        robotPose == null ? new Pose2d() : robotPose.pose().toPose2d());
   }
 }

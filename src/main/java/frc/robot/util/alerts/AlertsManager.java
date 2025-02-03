@@ -2,6 +2,9 @@ package frc.robot.util.alerts;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.robot.util.dashboard.Elastic;
+import frc.robot.util.dashboard.Elastic.Notification;
+import frc.robot.util.dashboard.Elastic.Notification.NotificationLevel;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
@@ -29,7 +32,30 @@ public class AlertsManager extends PeriodicBase {
   @Override
   public void periodic() {
     for (int i = 0; i < alerts.size(); i++) {
-      alerts.get(i).set(alertConditions.get(i).getAsBoolean());
+      boolean alertGet = alertConditions.get(i).getAsBoolean();
+
+      if (alertGet == false) {
+        NotificationLevel notifLevel;
+
+        switch (alerts.get(i).getType()) {
+          case kError:
+            notifLevel = NotificationLevel.ERROR;
+            break;
+          case kWarning:
+            notifLevel = NotificationLevel.WARNING;
+            break;
+          case kInfo:
+            notifLevel = NotificationLevel.INFO;
+            break;
+          default:
+            notifLevel = NotificationLevel.WARNING;
+        }
+        Elastic.sendNotification(
+            new Notification(
+                notifLevel, notifLevel + " - " + alerts.get(i).getText(), alerts.get(i).getText()));
+      }
+
+      alerts.get(i).set(alertGet);
     }
   }
 }

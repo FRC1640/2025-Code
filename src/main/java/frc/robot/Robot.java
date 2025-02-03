@@ -152,7 +152,6 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    AlertsManager.addAlert(() -> true, "Teleoperated Mode", AlertType.kInfo);
   }
 
   @Override

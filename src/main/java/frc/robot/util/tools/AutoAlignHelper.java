@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.commands;
+package frc.robot.util.tools;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -9,47 +9,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
-import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
-
-  public Pose2d findNearest(Pose2d[] points, Pose2d robotPose) {
-    if (points.length == 0) {
-      return null;
-    }
-    Pose2d nearest = points[0];
-    double nearestDist = robotPose.getTranslation().getDistance(nearest.getTranslation());
-    for (Pose2d point : points) {
-      double dist = robotPose.getTranslation().getDistance(point.getTranslation());
-      if (dist < nearestDist) {
-        nearest = point;
-        nearestDist = dist;
-      }
-    }
-    return nearest;
-  }
-
-  public Pose2d findNearest(
-      Pose2d[] points, Pose2d robotPose, Function<Pose2d, Pose2d> poseFunction) {
-    if (points.length == 0) {
-      return null;
-    }
-    Pose2d nearest = new Pose2d();
-    double nearestDist = Double.MAX_VALUE;
-    for (Pose2d point : points) {
-      double dist =
-          robotPose.getTranslation().getDistance(poseFunction.apply(point).getTranslation());
-      if (dist < nearestDist) {
-        nearest = poseFunction.apply(point);
-        nearestDist = dist;
-      }
-    }
-    return nearest;
-  }
 
   public ChassisSpeeds getPoseSpeeds(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;

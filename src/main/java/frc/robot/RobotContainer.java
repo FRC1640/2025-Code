@@ -35,8 +35,9 @@ import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.drive.commands.DriveToNearestWeight;
+import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -75,6 +76,7 @@ public class RobotContainer {
   private final GantryCommandFactory gantryCommandFactory;
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
+  private final DriveCommandFactory driveCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -160,15 +162,15 @@ public class RobotContainer {
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-    gantrySubsystem.setDefaultCommand(
-        gantryCommandFactory.gantryApplyVoltageCommand(() -> operatorController.getRightX() * 6));
-    liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> operatorController.getRightY() * 6));
+    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
+
+    // set defaults
+
+    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
     configureBindings();
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveSubsystem));
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
             () -> -driveController.getLeftY(),
@@ -213,6 +215,7 @@ public class RobotContainer {
     operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
+
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
     operatorController
@@ -225,6 +228,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return dashboard
         .getAutoChooserCommand()
-        .andThen(driveSubsystem.runVelocityCommand(() -> new ChassisSpeeds()));
+        .andThen(driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

@@ -2,9 +2,11 @@ package frc.robot.sensors.odometry;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.odometry.RobotOdometry.VisionUpdateMode;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class OdometryStorage {
@@ -14,6 +16,9 @@ public class OdometryStorage {
   private VisionUpdateMode updateMode;
   private String name;
   private Optional<OdometryStorage> trustedRotation;
+  private final double gyroBufferSizeSec = 2.0;
+  private TimeInterpolatableBuffer<Rotation2d> gyroBuffer =
+      TimeInterpolatableBuffer.createBuffer(gyroBufferSizeSec);
 
   public void setTrustedRotation(OdometryStorage trustedRotation) {
     this.trustedRotation = Optional.of(trustedRotation);
@@ -21,6 +26,21 @@ public class OdometryStorage {
 
   public Optional<OdometryStorage> getTrustedRotation() {
     return trustedRotation;
+  }
+
+  public void addGyroSample(Rotation2d sample, double timestamp) {
+    gyroBuffer.addSample(timestamp, sample);
+  }
+
+  public Optional<Rotation2d> getGyroAtTimestamp(double timestamp) {
+    try {
+      if (gyroBuffer.getInternalBuffer().lastKey() - gyroBufferSizeSec > timestamp) {
+        return Optional.empty();
+      }
+    } catch (NoSuchElementException e) {
+      return Optional.empty();
+    }
+    return gyroBuffer.getSample(timestamp);
   }
 
   public String getName() {

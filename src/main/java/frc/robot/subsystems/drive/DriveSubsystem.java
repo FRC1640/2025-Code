@@ -20,7 +20,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -200,10 +198,6 @@ public class DriveSubsystem extends SubsystemBase {
       modules[i].setDesiredStateMetersPerSecond(previousSetpoint.moduleStates()[i]);
       // DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized)[i]);
     }
-  }
-
-  public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocity(speeds.get(), true, 2.5), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds inceptionMode(

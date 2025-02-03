@@ -1,9 +1,9 @@
 package frc.robot.subsystems.gantry;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
@@ -14,7 +14,7 @@ import frc.robot.util.tools.MotorLim;
 public class GantryIOSparkMax implements GantryIO {
   private final SparkMax gantrySpark;
   private final RelativeEncoder gantryEncoder;
-  private final DigitalInput gantryLimitSwitch;
+  private final SparkLimitSwitch gantryLimitSwitch;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
 
@@ -23,7 +23,7 @@ public class GantryIOSparkMax implements GantryIO {
         SparkConfigurer.configSparkMax(
             SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID));
     gantryEncoder = gantrySpark.getEncoder();
-    gantryLimitSwitch = new DigitalInput(GantryConstants.gantryLimitSwitchDIOPort);
+    gantryLimitSwitch = gantrySpark.getForwardLimitSwitch();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class GantryIOSparkMax implements GantryIO {
             * GantryConstants.pulleyRadius
             * 2
             * Math.PI;
-    inputs.isLimitSwitchPressed = gantryLimitSwitch.get();
+    inputs.isLimitSwitchPressed = gantryLimitSwitch.isPressed();
     inputs.encoderVelocity =
         gantryEncoder.getVelocity()
             / 60

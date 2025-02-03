@@ -44,4 +44,6 @@ public class AutoAlignHelper {
                 .unaryMinus());
     return new ChassisSpeeds(fieldRelative.getX(), fieldRelative.getY(), rotationalPID);
   }
+
+  public void getPoseSpeedsProfiled(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {}
 }

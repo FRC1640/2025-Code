@@ -3,7 +3,6 @@ package frc.robot.subsystems.gantry.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
@@ -36,23 +35,29 @@ public class GantryCommandFactory {
             gantrySubsystem)
         .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            () -> gantrySubsystem.setGantryVoltage(-1 * GantryConstants.gantryHomeFastVoltage),
-            gantrySubsystem)
+            () -> {
+              gantrySubsystem.resetEncoder();
+              gantrySubsystem.setCarriagePosition(-0.5);
+            })
         .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
             () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeSlowVoltage),
             gantrySubsystem)
         .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            () -> gantrySubsystem.setGantryVoltage(-1 * GantryConstants.gantryHomeSlowVoltage),
-            gantrySubsystem)
+            () -> {
+              gantrySubsystem.resetEncoder();
+              gantrySubsystem.setCarriagePosition(-0.5);
+            })
         .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
-        .andThen(() -> gantrySubsystem.resetEncoder(), gantrySubsystem)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
   public Command gantryDriftCommand(boolean left) {
-    return gantryPIDCommand(() -> (left ? GantryConstants.gantryLimits.low : 0)).andThen(gantryApplyVoltageCommand(() -> (left ? 2 : -2)).until(() -> reefDetector.isDetecting()));
+    return gantryPIDCommand(() -> (left ? GantryConstants.gantryLimits.low : 0))
+        .andThen(
+            gantryApplyVoltageCommand(() -> (left ? 2 : -2))
+                .until(() -> reefDetector.isDetecting()));
   }
 
   public void constructTriggers() {}

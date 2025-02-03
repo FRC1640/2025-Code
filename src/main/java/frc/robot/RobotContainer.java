@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.FieldConstants;
@@ -189,7 +188,7 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -4));
 
-    operatorController.back().onTrue(new InstantCommand(() -> gantryCommandFactory.gantryHomeCommand()));
+    operatorController.back().onTrue(gantryCommandFactory.gantryHomeCommand());
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
     // intake button bindings:

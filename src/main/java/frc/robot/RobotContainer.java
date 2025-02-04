@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final PresetBoard presetBoard = new PresetBoard(2);
   private final AlertsManager alertsManager;
 
   // Dashboard
@@ -216,6 +219,7 @@ public class RobotContainer {
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
+    new Trigger(() -> presetBoard.get)
   }
 
   public Command getAutonomousCommand() {

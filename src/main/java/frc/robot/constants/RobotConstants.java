@@ -146,6 +146,28 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+
+    public enum CoralPreset {
+      Safe(0, false),
+      LeftL2(1, false), // TODO correct numbers
+      RightL2(1, true),
+      LeftL3(1.5, false),
+      RightL3(1.5, true),
+      LeftL4(2.25, false),
+      RightL4(2.25, true);
+
+      double lift;
+      boolean right;
+
+      private CoralPreset(double lift, boolean right) {
+        this.lift = lift;
+        this.right = right;
+      }
+
+      public double getLift() {
+        return lift;
+      }
+    }
   }
 
   public static class ReefDetectorConstants {

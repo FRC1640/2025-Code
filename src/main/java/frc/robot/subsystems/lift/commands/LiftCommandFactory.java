@@ -3,6 +3,7 @@ package frc.robot.subsystems.lift.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.lift.LiftSubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class LiftCommandFactory {
@@ -33,5 +34,14 @@ public class LiftCommandFactory {
               liftSubsystem.setLiftVoltage(0);
               liftSubsystem.resetLiftMotionProfile();
             });
+  }
+
+  public Command presetCommand(BooleanSupplier cancelCondition) { // TODO return to safe after?
+    return new RunCommand(
+            () -> {
+              liftSubsystem.runLiftMotionProfile(liftSubsystem.getPresetPos());
+            },
+            liftSubsystem)
+        .until(cancelCondition);
   }
 }

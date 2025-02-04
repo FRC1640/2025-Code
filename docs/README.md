@@ -1,9 +1,11 @@
 # Documentation
 ### Information
-[April Tag Positions](AprilTagPositions/GetApriltagPositions.md)
+[April Tag Positions](/docs/AprilTagPositions/GetApriltagPositions.md)
 
-[Distance Sensor](DistanceSensor/DistanceSensor.md)
+[Distance Sensor](/docs/DistanceSensor/DistanceSensor.md)
 
-[RevLib Spark Config](SparkConfiguration/SparkConfig.md)
+[RevLib Spark Config](/docs/SparkConfiguration/SparkConfig.md)
 
-[MotorLim](MotorLim/main.md)
+[Utility Tools](/docs/tools/main.md)
+
+[Constants](/docs/constants/main.md)

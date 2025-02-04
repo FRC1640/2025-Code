@@ -63,7 +63,7 @@ public class Dashboard {
         "Lift",
         CreateSysidCommand.createCommand(
             liftSubsystem::sysIdQuasistatic,
-            liftSubsystem::sysIdQuasistatic,
+            liftSubsystem::sysIdDynamic,
             "Lift",
             startNext,
             cancel,

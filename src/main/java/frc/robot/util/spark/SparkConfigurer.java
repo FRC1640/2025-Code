@@ -53,12 +53,12 @@ public class SparkConfigurer {
 
   public static SparkFlex configSparkFlex(SparkConfiguration config, SparkMax leader) {
     config.follow(leader);
-    return configSparkFlex(config, leader);
+    return configSparkFlex(config);
   }
 
   public static SparkFlex configSparkFlex(SparkConfiguration config, SparkFlex leader) {
     config.follow(leader);
-    return configSparkFlex(config, leader);
+    return configSparkFlex(config);
   }
   /*
    * Check if the spark needs to be flashed for settings that are currently flashed

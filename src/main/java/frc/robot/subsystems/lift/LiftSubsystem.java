@@ -8,14 +8,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class LiftSubsystem extends SubsystemBase {
   LiftIO liftIO;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   SysIdRoutine sysIdRoutine;
 
+  private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
+  LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
+
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
+    LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
+    liftMechanismRoot.append(liftHeight);
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(
@@ -29,8 +37,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     liftIO.updateInputs(inputs);
+    Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
   }
 

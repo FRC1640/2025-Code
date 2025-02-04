@@ -3,26 +3,32 @@ package frc.robot.sensors.reefdetector;
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+import frc.robot.constants.RobotConstants.ReefDetectorConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
   private boolean isConnected;
 
-  public ReefDetectorIOLaserCAN(int channel) {
-    laserCan = new LaserCan(channel);
+  public ReefDetectorIOLaserCAN() {
+    laserCan = new LaserCan(ReefDetectorConstants.channel);
     isConnected = true;
     try {
       laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
-      laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+      laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 1, 1));
+      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
     } catch (ConfigurationFailedException e) {
-      System.out.println("Configuration failed! " + e);
+      Logger.recordOutput("LaserCAN Configuration failed! " + e.toString(), false);
       isConnected = false;
     }
   }
 
   public double getDistance() {
-    return laserCan.getMeasurement().distance_mm;
+    Measurement m = laserCan.getMeasurement();
+    if (isDetecting()) {
+      return m.distance_mm;
+    }
+    return Double.MAX_VALUE;
   }
 
   public boolean isDetecting() {
@@ -34,7 +40,7 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = isConnected;
-    inputs.isDetecting = isDetecting();
+    inputs.isDetecting = getDistance() < ReefDetectorConstants.detectionThresh;
     inputs.distanceToReef = getDistance();
   }
 }

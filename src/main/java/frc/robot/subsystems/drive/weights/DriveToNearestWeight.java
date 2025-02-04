@@ -1,9 +1,10 @@
-package frc.robot.subsystems.drive.commands;
+package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
-import frc.robot.subsystems.drive.weights.DriveWeight;
+import frc.robot.util.tools.AutoAlignHelper;
+import frc.robot.util.tools.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,10 +39,12 @@ public class DriveToNearestWeight implements DriveWeight {
     if (poseFunction != null) {
       return autoAlignHelper.getPoseSpeeds(
           robotPose.get(),
-          autoAlignHelper.findNearest(targetPoses.get(), robotPose.get(), poseFunction),
+          DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get(), poseFunction),
           gyro);
     }
     return autoAlignHelper.getPoseSpeeds(
-        robotPose.get(), autoAlignHelper.findNearest(targetPoses.get(), robotPose.get()), gyro);
+        robotPose.get(),
+        DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get()),
+        gyro);
   }
 }

@@ -23,7 +23,6 @@ public class LiftCommandFactory {
   }
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {
-    System.out.println("hi");
     return new RunCommand(
             () -> {
               liftSubsystem.runLiftMotionProfile(pos.getAsDouble());

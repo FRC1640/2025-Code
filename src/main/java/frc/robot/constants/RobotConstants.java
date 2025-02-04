@@ -12,6 +12,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.tools.Limit;
@@ -43,6 +44,9 @@ public class RobotConstants {
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+
+    public static final boolean climberSubsystemEnabled =
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
@@ -137,8 +141,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftleaderMotorID = new RobotSwitch<Integer>(0).get();
-    public static final int liftfollowerMotorID = new RobotSwitch<Integer>(1).get();
+    public static final int liftLeaderMotorID = new RobotSwitch<Integer>(0).get();
+    public static final int liftFollowerMotorID = new RobotSwitch<Integer>(1).get();
     public static final double gearRatio = 5;
     public static final Limit liftLimits = new Limit(0, 2);
     public static final double liftMaxSpeed = 0.4;
@@ -155,13 +159,30 @@ public class RobotConstants {
 
   // TODO replace with actual values
   public static class WarningThresholdConstants {
-    // current thresholds are in amps and are currently set at the stall current. Consult with team
-    // for actual values later.
     public static final double maxVortexMotorCurrent = 90;
     public static final double maxNeoMotorCurrent = 80;
     public static final double maxNeo550MotorCurrent = 70;
     public static final double maxMotorTemp = 60; // in degrees celcius
     public static final double minBatteryVoltage = 10.5;
+  }
+
+  // TODO replace with actual values
+  public static class ClimberConstants {
+    public static final int climberLiftMotorID = 0;
+    public static final int climberWinch1MotorID = 1;
+    public static final int climberWinch2MotorID = 2;
+
+    public static final Limit liftLimits = new Limit(0, 1000);
+    public static final Limit winchLimits = new Limit(0, 1000);
+    public static final ResolverVoltageInfo winchResolverInfo =
+        new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo liftResolverInfo =
+        new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
+
+    public static final double gearRatio = 5;
+
+    public static final int solenoidForwardChannel = 0;
+    public static final int solenoidReverseChannel = 1;
   }
 
   public static class GantryConstants {

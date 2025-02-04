@@ -29,6 +29,11 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOSparkMax;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -62,6 +67,7 @@ public class RobotContainer {
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
+  private final ClimberSubsystem climberSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -77,6 +83,7 @@ public class RobotContainer {
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
+  private final ClimberCommandFactory climberCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -104,10 +111,12 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSparkMax()
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new ClimberIOSparkMax()
+                    : new ClimberIO() {});
 
         break;
       case SIM:
@@ -136,10 +145,12 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSim(() -> true)
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new ClimberIOSim()
+                    : new ClimberIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -147,6 +158,7 @@ public class RobotContainer {
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
+        climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -163,6 +175,7 @@ public class RobotContainer {
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
+    climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
 
     // set defaults
 

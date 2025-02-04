@@ -1,8 +1,8 @@
 package frc.robot.subsystems.gantry.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
@@ -30,27 +30,18 @@ public class GantryCommandFactory {
   }
 
   public Command gantryHomeCommand() {
-    return new RunCommand(
-            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeFastVoltage),
-            gantrySubsystem)
-        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
+    return gantryApplyVoltageCommand(() -> 6)
+        .repeatedly()
+        .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            () -> {
-              gantrySubsystem.resetEncoder();
-              gantrySubsystem.setCarriagePosition(-0.5);
-            })
-        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
+            gantryApplyVoltageCommand(() -> -0.5)
+                .repeatedly()
+                .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeSlowVoltage),
-            gantrySubsystem)
-        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
-        .andThen(
-            () -> {
-              gantrySubsystem.resetEncoder();
-              gantrySubsystem.setCarriagePosition(-0.5);
-            })
-        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
-        .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
+            gantryApplyVoltageCommand(() -> 0.1)
+                .repeatedly()
+                .until(() -> gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
   }
 
   public Command gantryDriftCommand(boolean left) {

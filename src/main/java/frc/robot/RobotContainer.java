@@ -40,6 +40,7 @@ import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.gantry.GantryIO;
+import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
@@ -103,10 +104,7 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSparkMax()
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
 
         break;
       case SIM:
@@ -126,7 +124,7 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSparkMax()
+                    ? new GantryIOSim(operatorController.b())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
@@ -135,10 +133,7 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSim(() -> true)
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -201,8 +196,8 @@ public class RobotContainer {
 
     // gantry button bindings:
 
-    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand(true));
-    operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
+    // operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand(true));
+    // operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 4));

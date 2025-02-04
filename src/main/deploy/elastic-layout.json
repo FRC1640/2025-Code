@@ -7,7 +7,7 @@
       "grid_layout": {
         "layouts": [
           {
-            "title": "List Layout",
+            "title": "Active Alerts",
             "x": 0.0,
             "y": 0.0,
             "width": 256.0,
@@ -89,7 +89,7 @@
       "grid_layout": {
         "layouts": [
           {
-            "title": "List Layout",
+            "title": "Active Alerts",
             "x": 640.0,
             "y": 0.0,
             "width": 512.0,

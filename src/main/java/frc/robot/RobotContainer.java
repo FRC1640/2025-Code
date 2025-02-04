@@ -30,9 +30,9 @@ import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
 import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
-import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -109,10 +109,12 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSparkMax()
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new ClimberIOSparkMax()
+                    : new ClimberIO() {});
 
         break;
       case SIM:
@@ -141,10 +143,12 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSim(() -> true)
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new ClimberIOSim()
+                    : new ClimberIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

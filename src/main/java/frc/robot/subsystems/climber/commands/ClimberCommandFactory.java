@@ -3,6 +3,7 @@ package frc.robot.subsystems.climber.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class ClimberCommandFactory {
@@ -13,6 +14,7 @@ public class ClimberCommandFactory {
   }
 
   public Command climberSetLiftPosPID(DoubleSupplier pos) {
+    System.out.println("hi");
     return new RunCommand(
             () -> climberSubsystem.setClimberLiftPosition(pos.getAsDouble()), climberSubsystem)
         .finallyDo(() -> climberSubsystem.setClimberLiftVoltage(0));
@@ -34,5 +36,10 @@ public class ClimberCommandFactory {
     return new RunCommand(
             () -> climberSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), climberSubsystem)
         .finallyDo(() -> climberSubsystem.setClimberWinchVoltage(0));
+  }
+
+  public Command climberSetClampState(BooleanSupplier isClamped) {
+    return new RunCommand(
+        () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()), climberSubsystem);
   }
 }

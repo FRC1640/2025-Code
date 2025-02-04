@@ -44,6 +44,8 @@ public class RobotConstants {
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+    // TODO disable for deux 2024 after testing
+    public static final boolean climberSubsystemEnabled = new RobotSwitch<Boolean>(true).get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
@@ -169,8 +171,8 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = 1;
     public static final int climberWinch2MotorID = 2;
 
-    public static final Limit liftLimits = new Limit(0, 1);
-    public static final Limit winchLimits = new Limit(0, 1);
+    public static final Limit liftLimits = new Limit(0, 1000);
+    public static final Limit winchLimits = new Limit(0, 1000);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =

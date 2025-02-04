@@ -33,6 +33,7 @@ import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -82,6 +83,7 @@ public class RobotContainer {
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
+  private final ClimberCommandFactory climberCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -112,7 +114,7 @@ public class RobotContainer {
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled
+                RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
 
@@ -146,7 +148,7 @@ public class RobotContainer {
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled
+                RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSim()
                     : new ClimberIO() {});
         break;
@@ -173,6 +175,7 @@ public class RobotContainer {
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
+    climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
 
     // set defaults
 

@@ -22,7 +22,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
 
-  DoubleSolenoid doubleSolenoid;
+  private final DoubleSolenoid doubleSolenoid;
 
   public ClimberIOSparkMax() {
     liftSpark =
@@ -93,6 +93,8 @@ public class ClimberIOSparkMax implements ClimberIO {
     inputs.liftMotorTemperature = liftSpark.getMotorTemperature();
     inputs.winchLeaderMotorTemperature = winchLeaderSpark.getMotorTemperature();
     inputs.winchFollowerMotorTemperature = winchFollowerSpark.getMotorTemperature();
+
+    inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
   }
 
   @Override

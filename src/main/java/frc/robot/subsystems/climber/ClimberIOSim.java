@@ -103,5 +103,7 @@ public class ClimberIOSim implements ClimberIO {
     inputs.liftMotorVoltage = liftSim.getInputVoltage();
     inputs.winchLeaderMotorVoltage = winch1Sim.getInputVoltage();
     inputs.winchFollowerMotorVoltage = winch2Sim.getInputVoltage();
+
+    inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
   }
 }

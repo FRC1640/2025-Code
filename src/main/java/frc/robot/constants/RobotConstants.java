@@ -44,8 +44,9 @@ public class RobotConstants {
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
-    // TODO disable for deux 2024 after testing
-    public static final boolean climberSubsystemEnabled = new RobotSwitch<Boolean>(true).get();
+
+    public static final boolean climberSubsystemEnabled =
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();

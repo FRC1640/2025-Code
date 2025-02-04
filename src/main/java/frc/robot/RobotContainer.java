@@ -146,7 +146,7 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController);
+    dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,

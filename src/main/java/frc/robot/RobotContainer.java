@@ -196,8 +196,7 @@ public class RobotContainer {
 
     // gantry button bindings:
 
-    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand(true));
-    operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
+    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 4));

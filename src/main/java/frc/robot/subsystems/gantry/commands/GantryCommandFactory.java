@@ -3,6 +3,7 @@ package frc.robot.subsystems.gantry.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import java.util.function.DoubleSupplier;
@@ -29,22 +30,23 @@ public class GantryCommandFactory {
   }
 
   public Command gantryHomeCommand() {
-    return gantryApplyVoltageCommand(() -> 6)
+    return gantryApplyVoltageCommand(() -> 2)
         .repeatedly()
         .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            gantryApplyVoltageCommand(() -> -0.5)
+            gantryApplyVoltageCommand(() -> -1)
                 .repeatedly()
                 .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            gantryApplyVoltageCommand(() -> 0.1)
+            gantryApplyVoltageCommand(() -> 0.5)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed()))
         .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
   }
 
   public Command gantryDriftCommand() { // TODO: breaks if doesn't detect
-    return gantryPIDCommand(() -> 0).until(() -> reefDetector.isDetecting());
+    return gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2)
+        .until(() -> reefDetector.isDetecting());
   }
 
   public void constructTriggers() {}

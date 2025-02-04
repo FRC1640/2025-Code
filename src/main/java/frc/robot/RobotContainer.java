@@ -199,19 +199,19 @@ public class RobotContainer {
     operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
     operatorController
         .rightBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 4));
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 3));
 
     operatorController
         .leftBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -4));
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -3));
 
-    operatorController.back().onTrue(gantryCommandFactory.gantryHomeCommand());
+    operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
 
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    operatorController
+    driveController
         .rightTrigger()
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(

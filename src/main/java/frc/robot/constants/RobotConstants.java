@@ -151,6 +151,8 @@ public class RobotConstants {
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
     public static final double detectionThresh = 325;
+    public static final int averageLength = 20;
+    public static final double averagePercentage = 0.8;
   }
 
   // TODO replace with actual values
@@ -169,11 +171,8 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.0, null);
+    public static final Limits gantryLimits = new Limits(-0.355, null);
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    ;
-    public static final double gantryHomeFastVoltage = 6; // prototype values
-    public static final double gantryHomeSlowVoltage = 3; // prototype values
   }
 
   public static class CoralOuttakeConstants {

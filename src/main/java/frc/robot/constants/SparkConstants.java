@@ -23,8 +23,9 @@ public class SparkConstants {
         16,
         StatusFrames.getDefault(),
         new LimitSwitchConfig()
-            .forwardLimitSwitchEnabled(true)
-            .forwardLimitSwitchType(Type.kNormallyOpen),
+            .reverseLimitSwitchEnabled(false)
+            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .forwardLimitSwitchEnabled(true),
         new SparkMaxConfig());
   }
 

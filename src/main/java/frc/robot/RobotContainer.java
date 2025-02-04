@@ -124,7 +124,7 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(operatorController.b())
+                    ? new GantryIOSim(operatorController.y())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
@@ -196,8 +196,8 @@ public class RobotContainer {
 
     // gantry button bindings:
 
-    // operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand(true));
-    // operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
+    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand(true));
+    operatorController.b().whileTrue(gantryCommandFactory.gantryDriftCommand(false));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 4));

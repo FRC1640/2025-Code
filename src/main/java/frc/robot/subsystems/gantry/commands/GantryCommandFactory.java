@@ -44,9 +44,22 @@ public class GantryCommandFactory {
         .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
   }
 
+  public Command gantrySetVelocityCommand(DoubleSupplier velocity) {
+    return new RunCommand(
+            () -> gantrySubsystem.setVelocity(velocity.getAsDouble()), gantrySubsystem)
+        .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
+  }
+
   public Command gantryDriftCommand() { // TODO: breaks if doesn't detect
-    return gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2)
-        .until(() -> reefDetector.isDetecting());
+    return gantrySetVelocityCommand(
+            () ->
+                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                    ? 0.1
+                    : -0.1)
+        .until(() -> reefDetector.isDetecting())
+        .andThen(
+            gantrySetVelocityCommand(() -> 0)
+                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
   }
 
   public void constructTriggers() {}

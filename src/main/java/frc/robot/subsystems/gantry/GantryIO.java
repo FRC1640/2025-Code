@@ -21,6 +21,8 @@ public interface GantryIO extends AutoCloseable {
 
   public default void resetEncoder() {}
 
+  public default void setGantryVelocity(double velocity, GantryIOInputs inputs) {}
+
   @Override
   default void close() {}
 }

@@ -14,7 +14,6 @@ public class ClimberCommandFactory {
   }
 
   public Command climberSetLiftPosPID(DoubleSupplier pos) {
-    System.out.println("hi");
     return new RunCommand(
             () -> climberSubsystem.setClimberLiftPosition(pos.getAsDouble()), climberSubsystem)
         .finallyDo(() -> climberSubsystem.setClimberLiftVoltage(0));

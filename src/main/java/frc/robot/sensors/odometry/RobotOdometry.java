@@ -320,8 +320,9 @@ public class RobotOdometry extends PeriodicBase {
       }
 
       // Apply update
-      e.estimator.updateWithTime(sampleTimestamps[i], e.rawGyroRotation, modulePositions);
       e.addGyroSample(e.rawGyroRotation, sampleTimestamps[i]);
+      e.estimator.updateWithTime(sampleTimestamps[i], e.rawGyroRotation, modulePositions);
+
       Logger.recordOutput(
           "Drive/Odometry/" + odometryStorage.getName(), e.estimator.getEstimatedPosition());
     }

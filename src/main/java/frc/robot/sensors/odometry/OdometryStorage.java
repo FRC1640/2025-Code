@@ -8,6 +8,7 @@ import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.odometry.RobotOdometry.VisionUpdateMode;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import org.littletonrobotics.junction.Logger;
 
 public class OdometryStorage {
   public SwerveDrivePoseEstimator estimator;
@@ -18,7 +19,13 @@ public class OdometryStorage {
   private Optional<OdometryStorage> trustedRotation;
   private final double gyroBufferSizeSec = 2.0;
   private TimeInterpolatableBuffer<Rotation2d> gyroBuffer =
-      TimeInterpolatableBuffer.createBuffer(gyroBufferSizeSec);
+      TimeInterpolatableBuffer.createBuffer(
+          (a, b, c) -> {
+            double aRadians = (a.getRadians() % (2 * Math.PI));
+            double delta = (b.getRadians() % (2 * Math.PI)) - aRadians;
+            return new Rotation2d((delta * c) + aRadians);
+          },
+          gyroBufferSizeSec);
 
   public void setTrustedRotation(OdometryStorage trustedRotation) {
     this.trustedRotation = Optional.of(trustedRotation);
@@ -40,6 +47,8 @@ public class OdometryStorage {
     } catch (NoSuchElementException e) {
       return Optional.empty();
     }
+    Optional<Rotation2d> gyroInterpolated = gyroBuffer.getSample(timestamp);
+    Logger.recordOutput("Drive/Odometry/" + name + "/gyroInterpolated", gyroInterpolated.get());
     return gyroBuffer.getSample(timestamp);
   }
 

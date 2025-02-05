@@ -1,6 +1,7 @@
 package frc.robot.subsystems.lift;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -25,14 +26,19 @@ public class LiftIOSpark implements LiftIO {
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.costructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+  SparkClosedLoopController leaderMotorEncoder;
+  SparkClosedLoopController followerMotorEncoder;
 
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false));
+            SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false)
+                .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false), leaderMotor);
+            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false)
+                .applyPIDConfig(RobotPIDConstants.pidConstantSpark),
+            leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
   }

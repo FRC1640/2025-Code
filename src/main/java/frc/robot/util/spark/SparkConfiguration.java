@@ -1,13 +1,17 @@
 package frc.robot.util.spark;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.constants.PIDConstantSpark.PIDConstantsSpark;
 import java.util.Optional;
 
 public class SparkConfiguration {
@@ -60,6 +64,68 @@ public class SparkConfiguration {
 
   public SparkBaseConfig getInnerConfig() {
     return inner;
+  }
+
+  public void applyMaxMotionConfig(MAXMotionConfig config) {
+    inner.closedLoop.apply(config);
+  }
+
+  public void applyPIDConfig(
+      PIDConstants pidConstants,
+      double minOutput,
+      double maxOutput,
+      double velocityFF,
+      double maxVel,
+      double maxAccel,
+      double allowedErr,
+      MAXMotionPositionMode maxPositionMode,
+      ClosedLoopSlot closedLoopSlot) {
+    inner
+        .closedLoop
+        .p(pidConstants.kP)
+        .i(pidConstants.kI)
+        .d(pidConstants.kD)
+        .outputRange(minOutput, maxOutput, closedLoopSlot)
+        .velocityFF(velocityFF)
+        .maxMotion
+        .maxVelocity(maxVel)
+        .maxAcceleration(maxAccel)
+        .allowedClosedLoopError(allowedErr)
+        .positionMode(maxPositionMode);
+  }
+
+  public SparkConfiguration applyPIDConfig(PIDConstantsSpark sparkPIDConstant) {
+    if (sparkPIDConstant.kP != null) {
+      inner.closedLoop.p(sparkPIDConstant.kP);
+    }
+    if (sparkPIDConstant.kI != null) {
+      inner.closedLoop.i(sparkPIDConstant.kI);
+    }
+    if (sparkPIDConstant.kD != null) {
+      inner.closedLoop.i(sparkPIDConstant.kD);
+    }
+    if (sparkPIDConstant.minOutput != null
+        || sparkPIDConstant.maxOutput != null
+        || sparkPIDConstant.closedLoopSlot != null) {
+      inner.closedLoop.outputRange(
+          sparkPIDConstant.minOutput, sparkPIDConstant.maxOutput, sparkPIDConstant.closedLoopSlot);
+    }
+    if (sparkPIDConstant.velocityFF != null) {
+      inner.closedLoop.velocityFF(sparkPIDConstant.velocityFF);
+    }
+    if (sparkPIDConstant.maxVel != null) {
+      inner.closedLoop.maxMotion.maxVelocity(sparkPIDConstant.maxVel);
+    }
+    if (sparkPIDConstant.maxAccel != null) {
+      inner.closedLoop.maxMotion.maxAcceleration(sparkPIDConstant.maxAccel);
+    }
+    if (sparkPIDConstant.allowedErr != null) {
+      inner.closedLoop.maxMotion.allowedClosedLoopError(sparkPIDConstant.allowedErr);
+    }
+    if (sparkPIDConstant.maxPositionMode != null) {
+      inner.closedLoop.maxMotion.positionMode(sparkPIDConstant.maxPositionMode);
+    }
+    return this;
   }
 
   public void follow(SparkMax leader) {

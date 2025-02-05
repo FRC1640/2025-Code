@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotOdometry extends PeriodicBase {
@@ -227,27 +226,25 @@ public class RobotOdometry extends PeriodicBase {
     }
   }
 
-  private Rotation2d interpolateGyro(Double timestamp, OdometryStorage odometryStorage) {
-    Optional<Rotation2d> gyroInterpolated;
-    if (odometryStorage.getTrustedRotation().isPresent()) {
-      gyroInterpolated = odometryStorage.getTrustedRotation().get().getGyroAtTimestamp(timestamp);
-    } else {
-      gyroInterpolated =
-          Optional.of(odometryStorage.estimator.getEstimatedPosition().getRotation());
-    }
-    if (gyroInterpolated.isPresent()) {
-      return gyroInterpolated.get();
-    } else {
-      return odometryStorage.estimator.getEstimatedPosition().getRotation();
-    }
-  }
-
   public void addTrigEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
+    if (odometryStorage.getTrustedRotation().isEmpty()) {
+      return;
+    }
     // pass function
-    Function<Double, Rotation2d> interpolateGyro =
-        (timestamp) -> interpolateGyro(timestamp, odometryStorage);
+    if (vision.getTrigResult(new Rotation2d()).isEmpty()) {
+      return;
+    }
+    Optional<Rotation2d> interpolateGyro =
+        odometryStorage
+            .getTrustedRotation()
+            .get()
+            .getGyroAtTimestamp(vision.getTrigResult(new Rotation2d()).get().timestamp());
+
+    if (interpolateGyro.isEmpty()) {
+      return;
+    }
     // calculate estimated pose (trig)
-    Optional<PoseObservation> result = vision.getTrigResult(interpolateGyro);
+    Optional<PoseObservation> result = vision.getTrigResult(interpolateGyro.get());
     // return if no result; continue otherwise
     if (result.isEmpty()) {
       return;

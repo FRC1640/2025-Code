@@ -61,13 +61,13 @@ import java.util.ArrayList;
 
 public class RobotContainer {
   // Subsystems
-  private final DriveSubsystem driveSubsystem;
+  private final DriveSubsystem driveSubsystem; // drive, steer
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
-  private final ClimberSubsystem climberSubsystem;
+  private final ClimberSubsystem climberSubsystem; // lift, winch
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -76,6 +76,7 @@ public class RobotContainer {
 
   // Dashboard
   private final Dashboard dashboard;
+  private final String[] pidKeys = {"weewoo", "weewoo"};
 
   private final ReefDetector reefDetector;
 
@@ -164,7 +165,7 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController);
+    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController, pidKeys);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,

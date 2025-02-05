@@ -93,4 +93,5 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants liftFF = new FeedForwardConstants(0, 26.04, 0.0101, 0);
   public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
+  public static final PIDConstants dashDefault = new PIDConstants(0, 0, 0);
 }

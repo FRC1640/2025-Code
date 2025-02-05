@@ -28,10 +28,12 @@ public class ModuleIOSparkMax implements ModuleIO {
   private final SparkFlex driveSpark;
   private final SparkMax steerSpark;
 
-  private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
+  private final PIDController drivePID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "DrivePID");
   private final SimpleMotorFeedforward driveFF =
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
-  private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
+  private final PIDController steerPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "SteerPID");
 
   public ModuleIOSparkMax(ModuleInfo id) {
     driveSpark = SparkConstants.driveFlex(id.driveChannel);

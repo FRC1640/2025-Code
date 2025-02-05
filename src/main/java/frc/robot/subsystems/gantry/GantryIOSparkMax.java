@@ -16,7 +16,7 @@ public class GantryIOSparkMax implements GantryIO {
   private final RelativeEncoder gantryEncoder;
   private final DigitalInput gantryLimitSwitch;
   private final PIDController gantryPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "GantryPID");
 
   public GantryIOSparkMax() {
     gantrySpark =

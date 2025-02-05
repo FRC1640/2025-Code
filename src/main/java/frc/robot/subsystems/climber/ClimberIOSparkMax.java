@@ -18,9 +18,9 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final SparkMax winchLeaderSpark;
   private final SparkMax winchFollowerSpark;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "ClimberLiftPID");
   private final PIDController winchPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "ClimberWinchPID");
 
   private final DoubleSolenoid doubleSolenoid;
 

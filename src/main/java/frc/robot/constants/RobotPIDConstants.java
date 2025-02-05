@@ -104,5 +104,5 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants liftFF = new FeedForwardConstants(0, 26.04, 0.0101, 0);
 
   public static final SparkPIDConstants pidConstantSpark =
-      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0);
+      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0).setVelocityFF(2);
 }

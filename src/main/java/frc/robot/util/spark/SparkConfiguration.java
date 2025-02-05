@@ -75,7 +75,7 @@ public class SparkConfiguration {
       inner.closedLoop.i(sparkPIDConstant.kI);
     }
     if (sparkPIDConstant.kD != null) {
-      inner.closedLoop.i(sparkPIDConstant.kD);
+      inner.closedLoop.d(sparkPIDConstant.kD);
     }
     if (sparkPIDConstant.minOutput != null
         || sparkPIDConstant.maxOutput != null

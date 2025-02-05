@@ -58,11 +58,25 @@ public class GantryCommandFactory {
                     : -0.1)
         .until(
             () ->
-                reefDetector.isDetecting()
-                    || Math.abs(
-                            gantrySubsystem.getCarriagePosition()
-                                - GantryConstants.gantryLimits.low / 2)
-                        < 0.01)
+                Math.abs(
+                        gantrySubsystem.getCarriagePosition()
+                            - GantryConstants.gantryLimits.low / 2)
+                    < 0.05)
+        .andThen(
+            gantrySetVelocityCommand(
+                    () ->
+                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                            ? -0.1
+                            : 0.1)
+                .until(
+                    () ->
+                        Math.abs(gantrySubsystem.getCarriagePosition()) < 0.05
+                            || Math.abs(
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimits.low)
+                                < 0.05))
+        .repeatedly()
+        .until(() -> reefDetector.isDetecting())
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));

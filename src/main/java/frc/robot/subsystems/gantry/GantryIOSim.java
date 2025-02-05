@@ -26,9 +26,7 @@ public class GantryIOSim implements GantryIO {
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
     gantrySim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                gantryGearbox, 0.00019125, GantryConstants.gantryGearRatio),
-            gantryGearbox);
+            LinearSystemId.createDCMotorSystem(gantryGearbox, 0.00019125, 1), gantryGearbox);
   }
 
   @Override

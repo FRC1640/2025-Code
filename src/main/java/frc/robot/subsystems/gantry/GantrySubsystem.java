@@ -36,7 +36,7 @@ public class GantrySubsystem extends SubsystemBase {
                 this::getCarriagePosition,
                 this::getGantryVelocity,
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(0.5), Volts.of(4), Seconds.of(3)));
+                new SysIdRoutine.Config(Volts.per(Seconds).of(0.5), Volts.of(4), Seconds.of(20)));
   }
 
   @Override

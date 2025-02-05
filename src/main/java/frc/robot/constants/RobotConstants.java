@@ -150,9 +150,10 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 325;
+    public static final double detectionThresh = 350;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
+    public static final double waitTimeSeconds = 0.03;
   }
 
   // TODO replace with actual values
@@ -171,7 +172,7 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.355, null);
+    public static final Limits gantryLimits = new Limits(-0.330, null);
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
   }
 
@@ -180,7 +181,7 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(24).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(25).get(); // update this too
+        new RobotSwitch<Integer>(8).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }

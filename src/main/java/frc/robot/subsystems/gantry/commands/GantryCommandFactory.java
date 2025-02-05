@@ -2,7 +2,6 @@ package frc.robot.subsystems.gantry.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
@@ -30,27 +29,25 @@ public class GantryCommandFactory {
   }
 
   public Command gantryHomeCommand() {
-    return new RunCommand(
-            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeFastVoltage),
-            gantrySubsystem)
-        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
+    return gantryApplyVoltageCommand(() -> GantryConstants.gantryHomeFastVoltage)
+        .repeatedly()
+        .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            () -> {
-              gantrySubsystem.resetEncoder();
-              gantrySubsystem.setCarriagePosition(-0.5);
-            })
-        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
+            gantryApplyVoltageCommand(() -> -GantryConstants.gantryHomeFastVoltage)
+                .repeatedly()
+                .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            () -> gantrySubsystem.setGantryVoltage(GantryConstants.gantryHomeSlowVoltage),
-            gantrySubsystem)
-        .deadlineFor(new WaitUntilCommand(() -> gantrySubsystem.isLimitSwitchPressed()))
-        .andThen(
-            () -> {
-              gantrySubsystem.resetEncoder();
-              gantrySubsystem.setCarriagePosition(-0.5);
-            })
-        .deadlineFor(new WaitUntilCommand(() -> !gantrySubsystem.isLimitSwitchPressed()))
-        .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
+            gantryApplyVoltageCommand(() -> GantryConstants.gantryHomeSlowVoltage)
+                .repeatedly()
+                .until(() -> gantrySubsystem.isLimitSwitchPressed()))
+        // .andThen(
+        //     gantryApplyVoltageCommand(() -> -GantryConstants.gantryHomeFastVoltage)
+        //         .repeatedly()
+        //         .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
+        .andThen(() -> gantrySubsystem.resetEncoder());
+    // I dont think the limit switch as the bound is a good idea because then the gantry will be
+    // slamming into the limit switch all the time. -> Bad for the limit switch. So I think we
+    // should just use the encoder value as the bound.
   }
 
   public Command gantryDriftCommand(boolean left) {

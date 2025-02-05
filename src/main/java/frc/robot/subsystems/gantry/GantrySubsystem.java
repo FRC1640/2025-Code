@@ -34,7 +34,6 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public double getGantryVoltage() {
-    System.out.println("gaaa");
     return inputs.appliedVoltage;
   }
 
@@ -43,22 +42,18 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isLimitSwitchPressed() {
-    System.out.println("goo");
     return inputs.isLimitSwitchPressed;
   }
 
   public void setCarriagePosition(double pos) {
-    System.out.println("snarp");
     io.setGantryPosition(pos, inputs);
   }
 
   public void setGantryVoltage(double voltage) {
-    System.out.println("hhee");
     io.setGantryVoltage(voltage, inputs);
   }
 
   public void resetEncoder() {
-    System.out.println("reset");
     io.resetEncoder();
   }
 }

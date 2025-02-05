@@ -1,17 +1,14 @@
 package frc.robot.util.spark;
 
 import com.pathplanner.lib.config.PIDConstants;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.MAXMotionConfig;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.constants.PIDConstantSpark.PIDSparkConstants;
 import java.util.Optional;
 
 public class SparkConfiguration {
@@ -70,31 +67,7 @@ public class SparkConfiguration {
     inner.closedLoop.apply(config);
   }
 
-  public void applyPIDConfig(
-      PIDConstants pidConstants,
-      double minOutput,
-      double maxOutput,
-      double velocityFF,
-      double maxVel,
-      double maxAccel,
-      double allowedErr,
-      MAXMotionPositionMode maxPositionMode,
-      ClosedLoopSlot closedLoopSlot) {
-    inner
-        .closedLoop
-        .p(pidConstants.kP)
-        .i(pidConstants.kI)
-        .d(pidConstants.kD)
-        .outputRange(minOutput, maxOutput, closedLoopSlot)
-        .velocityFF(velocityFF)
-        .maxMotion
-        .maxVelocity(maxVel)
-        .maxAcceleration(maxAccel)
-        .allowedClosedLoopError(allowedErr)
-        .positionMode(maxPositionMode);
-  }
-
-  public SparkConfiguration applyPIDConfig(PIDSparkConstants sparkPIDConstant) {
+  public SparkConfiguration applyPIDConfig(SparkPIDConstants sparkPIDConstant) {
     if (sparkPIDConstant.kP != null) {
       inner.closedLoop.p(sparkPIDConstant.kP);
     }

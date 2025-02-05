@@ -1,9 +1,9 @@
-package frc.robot.constants.PIDConstantSpark;
+package frc.robot.util.spark;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
-public class PIDSparkConstants {
+public class SparkPIDConstants {
   public Double kP = null;
   public Double kI = null;
   public Double kD = null;
@@ -22,7 +22,7 @@ public class PIDSparkConstants {
    * @param kD The rate of change in error
    * @param closedLoopSlot
    */
-  public PIDSparkConstants(Double kP, Double kI, Double kD, ClosedLoopSlot closedLoopSlot) {
+  public SparkPIDConstants(double kP, double kI, double kD, ClosedLoopSlot closedLoopSlot) {
     this.kP = kP;
     this.kI = kI;
     this.kD = kD;
@@ -41,16 +41,16 @@ public class PIDSparkConstants {
    * @param maxPositionMode The position mode
    * @param closedLoopSlot The closed loop slot
    */
-  public PIDSparkConstants(
-      Double kP,
-      Double kI,
-      Double kD,
-      Double minOutput,
-      Double maxOutput,
-      Double velocityFF,
-      Double maxVel,
-      Double maxAccel,
-      Double allowedErr,
+  public SparkPIDConstants(
+      double kP,
+      double kI,
+      double kD,
+      double minOutput,
+      double maxOutput,
+      double velocityFF,
+      double maxVel,
+      double maxAccel,
+      double allowedErr,
       MAXMotionPositionMode maxPositionMode,
       ClosedLoopSlot closedLoopSlot) {
     this.kP = kP;
@@ -67,7 +67,7 @@ public class PIDSparkConstants {
   /*
    * Set the constraints of output of the PID
    */
-  public PIDSparkConstants setConstraint(Double minOutput, Double maxOutput) {
+  public SparkPIDConstants setConstraint(Double minOutput, Double maxOutput) {
     this.minOutput = minOutput;
     this.maxOutput = maxOutput;
     return this;
@@ -75,14 +75,14 @@ public class PIDSparkConstants {
   /*
    * Sets the Velocity Feed Forward
    */
-  public PIDSparkConstants setVelocityFF(Double velocityFF) {
+  public SparkPIDConstants setVelocityFF(Double velocityFF) {
     this.velocityFF = velocityFF;
     return this;
   }
   /*
    * Sets max velocity
    */
-  public PIDSparkConstants setMaxVelocity(Double maxVel) {
+  public SparkPIDConstants setMaxVelocity(Double maxVel) {
     this.maxVel = maxVel;
     return this;
   }
@@ -90,28 +90,28 @@ public class PIDSparkConstants {
    * Set Max Acceleration
    *
    */
-  public PIDSparkConstants setMaxAccel(Double maxAccel) {
+  public SparkPIDConstants setMaxAccel(Double maxAccel) {
     this.maxAccel = maxAccel;
     return this;
   }
   /*
    * Set Allowed Error
    */
-  public PIDSparkConstants setAllowedErr(Double allowedErr) {
+  public SparkPIDConstants setAllowedErr(Double allowedErr) {
     this.allowedErr = allowedErr;
     return this;
   }
   /*
    * Set the MAXPosition mode
    */
-  public PIDSparkConstants setMaxPositionMode(MAXMotionPositionMode maxPositionMode) {
+  public SparkPIDConstants setMaxPositionMode(MAXMotionPositionMode maxPositionMode) {
     this.maxPositionMode = maxPositionMode;
     return this;
   }
   /*
    * Set the Closed Loop Slot on the Spark
    */
-  public PIDSparkConstants setClosedLoopSlot(ClosedLoopSlot closedLoopSlot) {
+  public SparkPIDConstants setClosedLoopSlot(ClosedLoopSlot closedLoopSlot) {
     this.closedLoopSlot = closedLoopSlot;
     return this;
   }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.sensors.reefdetector.ReefDetector;
@@ -29,32 +30,49 @@ public class GantryCommandFactory {
   }
 
   public Command gantryHomeCommand() {
-    return gantryApplyVoltageCommand(() -> GantryConstants.gantryHomeFastVoltage)
+    return gantryApplyVoltageCommand(() -> 2)
         .repeatedly()
         .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            gantryApplyVoltageCommand(() -> -GantryConstants.gantryHomeFastVoltage)
+            gantryApplyVoltageCommand(() -> -1)
                 .repeatedly()
                 .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            gantryApplyVoltageCommand(() -> GantryConstants.gantryHomeSlowVoltage)
+            gantryApplyVoltageCommand(() -> 0.5)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed()))
         // .andThen(
         //     gantryApplyVoltageCommand(() -> -GantryConstants.gantryHomeFastVoltage)
         //         .repeatedly()
         //         .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
-        .andThen(() -> gantrySubsystem.resetEncoder());
-    // I dont think the limit switch as the bound is a good idea because then the gantry will be
-    // slamming into the limit switch all the time. -> Bad for the limit switch. So I think we
-    // should just use the encoder value as the bound.
+        .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
+  }
+  // I dont think the limit switch as the bound is a good idea because then the gantry will be
+  // slamming into the limit switch all the time. -> Bad for the limit switch. So I think we
+  // should just use the encoder value as the bound.
+
+  public Command gantrySetVelocityCommand(DoubleSupplier velocity) {
+    return new RunCommand(
+            () -> gantrySubsystem.setVelocity(velocity.getAsDouble()), gantrySubsystem)
+        .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommand(boolean left) {
-    return gantryPIDCommand(() -> (left ? GantryConstants.gantryLimits.low : 0))
+  public Command gantryDriftCommand() { // TODO: breaks if doesn't detect
+    return gantrySetVelocityCommand(
+            () ->
+                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                    ? 0.1
+                    : -0.1)
+        .until(
+            () ->
+                reefDetector.isDetecting()
+                    || Math.abs(
+                            gantrySubsystem.getCarriagePosition()
+                                - GantryConstants.gantryLimits.low / 2)
+                        < 0.01)
         .andThen(
-            gantryApplyVoltageCommand(() -> (left ? 2 : -2))
-                .until(() -> reefDetector.isDetecting()));
+            gantrySetVelocityCommand(() -> 0)
+                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
   }
 
   public void constructTriggers() {}

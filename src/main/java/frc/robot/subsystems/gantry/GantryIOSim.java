@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -14,7 +15,11 @@ public class GantryIOSim implements GantryIO {
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
+  private final PIDController gantryVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
@@ -58,5 +63,12 @@ public class GantryIOSim implements GantryIO {
                 voltage,
                 GantryConstants.gantryLimits.low,
                 inputs.isLimitSwitchPressed)));
+  }
+
+  @Override
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+    setGantryVoltage(
+        ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
+        inputs);
   }
 }

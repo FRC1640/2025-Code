@@ -1,9 +1,10 @@
 package frc.robot.subsystems.gantry;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
@@ -14,16 +15,20 @@ import frc.robot.util.tools.MotorLim;
 public class GantryIOSparkMax implements GantryIO {
   private final SparkMax gantrySpark;
   private final RelativeEncoder gantryEncoder;
-  private final DigitalInput gantryLimitSwitch;
+  private final SparkLimitSwitch gantryLimitSwitch;
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
+  private final PIDController gantryVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
 
   public GantryIOSparkMax() {
     gantrySpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID));
     gantryEncoder = gantrySpark.getEncoder();
-    gantryLimitSwitch = new DigitalInput(GantryConstants.gantryLimitSwitchDIOPort);
+    gantryLimitSwitch = gantrySpark.getForwardLimitSwitch();
   }
 
   @Override
@@ -37,7 +42,7 @@ public class GantryIOSparkMax implements GantryIO {
             * GantryConstants.pulleyRadius
             * 2
             * Math.PI;
-    inputs.isLimitSwitchPressed = gantryLimitSwitch.get();
+    inputs.isLimitSwitchPressed = gantryLimitSwitch.isPressed();
     inputs.encoderVelocity =
         gantryEncoder.getVelocity()
             / 60
@@ -61,6 +66,13 @@ public class GantryIOSparkMax implements GantryIO {
   @Override
   public void setGantryPosition(double position, GantryIOInputs inputs) {
     setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
+  }
+
+  @Override
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+    setGantryVoltage(
+        ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
+        inputs);
   }
 
   @Override

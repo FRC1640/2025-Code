@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.constants.PIDConstantSpark.PIDConstantsSpark;
+import frc.robot.constants.PIDConstantSpark.PIDSparkConstants;
 import frc.robot.util.control.FeedForwardConstants;
 import frc.robot.util.tools.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.tools.logging.TrackedFeedForward.FeedForwardTrack;
@@ -102,6 +102,6 @@ public class RobotPIDConstants {
   public static final PIDConstants liftProfiledPIDConstants = new PIDConstants(27.25, 0.010569);
   public static final FeedForwardConstants liftFF = new FeedForwardConstants(0, 26.04, 0.0101, 0);
 
-  public static final PIDConstantsSpark pidConstantSpark =
-      new PIDConstantsSpark(0D, 0D, 0D, 0D, null, null, null, null, null, null, null);
+  public static final PIDSparkConstants pidConstantSpark =
+      new PIDSparkConstants(0D, 0D, 0D, 0D, null, null, null, null, null, null, null);
 }

@@ -11,7 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.constants.PIDConstantSpark.PIDConstantsSpark;
+import frc.robot.constants.PIDConstantSpark.PIDSparkConstants;
 import java.util.Optional;
 
 public class SparkConfiguration {
@@ -94,7 +94,7 @@ public class SparkConfiguration {
         .positionMode(maxPositionMode);
   }
 
-  public SparkConfiguration applyPIDConfig(PIDConstantsSpark sparkPIDConstant) {
+  public SparkConfiguration applyPIDConfig(PIDSparkConstants sparkPIDConstant) {
     if (sparkPIDConstant.kP != null) {
       inner.closedLoop.p(sparkPIDConstant.kP);
     }

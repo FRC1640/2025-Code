@@ -149,12 +149,12 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Safe(0, false),
-      LeftL2(1, false), // TODO correct numbers
-      RightL2(1, true),
-      LeftL3(1.5, false),
-      RightL3(1.5, true),
-      LeftL4(2.25, false),
-      RightL4(2.25, true);
+      LeftL2(0.5, false), // TODO correct numbers
+      RightL2(0.5, true),
+      LeftL3(1, false),
+      RightL3(1, true),
+      LeftL4(1.5, false),
+      RightL4(1.5, true);
 
       double lift;
       boolean right;

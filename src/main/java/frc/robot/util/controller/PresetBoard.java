@@ -48,7 +48,7 @@ public class PresetBoard extends GenericHID {
   }
 
   public boolean getLl4() {
-    
+    return super.getRawAxis(Axis.kLTAxis) == 1;
   }
 
   public boolean povIsActive() {

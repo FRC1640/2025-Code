@@ -8,7 +8,7 @@ import frc.robot.util.tools.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class DriveToNearestWeight implements DriveWeight {
+public class DriveToNearestWeight extends AutoalignWeight {
   private Supplier<Pose2d> robotPose;
   private Supplier<Pose2d[]> targetPoses;
   private Gyro gyro;
@@ -46,5 +46,9 @@ public class DriveToNearestWeight implements DriveWeight {
         robotPose.get(),
         DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get()),
         gyro);
+  }
+
+  public double getTargetDistance() {
+    return DistanceManager.getNearestPositionDistance(robotPose.get(), targetPoses.get());
   }
 }

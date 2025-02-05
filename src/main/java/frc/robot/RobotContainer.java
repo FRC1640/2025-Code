@@ -9,12 +9,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
@@ -80,6 +82,9 @@ public class RobotContainer {
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
+
+  private Command liftCommand;
+  private CoralPreset coralPreset;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -176,7 +181,7 @@ public class RobotContainer {
             driveController.rightBumper(),
             driveController.leftTrigger()));
 
-    DriveWeightCommand.createWeightTrigger(
+    DriveWeightCommand.createAutoalignTrigger(
         new DriveToNearestWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
@@ -186,7 +191,10 @@ public class RobotContainer {
             (x) -> RobotConstants.addRobotDim(x)),
         driveController.a());
 
-    DriveWeightCommand.createWeightTrigger(
+    new Trigger(() -> DriveWeightCommand.nearAutoalignTarget())
+        .onTrue(liftCommand = liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()));
+
+    DriveWeightCommand.createAutoalignTrigger(
         new DriveToPointWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
@@ -219,7 +227,38 @@ public class RobotContainer {
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
-    new Trigger(() -> presetBoard.get)
+    new Trigger(() -> presetBoard.getLl2())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
+    new Trigger(() -> presetBoard.getRl2())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL2));
+    new Trigger(() -> presetBoard.getLl3())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL3));
+    new Trigger(() -> presetBoard.getRl3())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL3));
+    new Trigger(() -> presetBoard.getLl4())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
+    new Trigger(() -> presetBoard.getRl4())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
+    operatorController
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    liftCommand =
+                        liftCommandFactory.runLiftMotionProfile(
+                            () -> coralPreset.getLift()))); // TODO jitter?
+    operatorController
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> liftCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
+    operatorController
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    liftCommand =
+                        liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())));
   }
 
   public Command getAutonomousCommand() {

@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
@@ -20,7 +19,6 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
-  private CoralPreset preset = CoralPreset.Safe;
 
   public LiftSubsystem(LiftIO liftIO) {
     this.liftIO = liftIO;
@@ -35,16 +33,6 @@ public class LiftSubsystem extends SubsystemBase {
                 this::getFollowerMotorVelocity,
                 this,
                 new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(5)));
-  }
-
-  public void setPreset(CoralPreset preset) {
-    if (this.preset != preset) {
-      this.preset = preset;
-    }
-  }
-
-  public double getPresetPos() {
-    return preset.getLift();
   }
 
   @Override

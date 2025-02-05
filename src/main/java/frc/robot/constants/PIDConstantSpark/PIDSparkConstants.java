@@ -16,6 +16,31 @@ public class PIDSparkConstants {
   public MAXMotionPositionMode maxPositionMode = null;
   public ClosedLoopSlot closedLoopSlot = null;
 
+  /**
+   * @param kP Proportional Gain
+   * @param kI Derivative
+   * @param kD The rate of change in error
+   * @param closedLoopSlot
+   */
+  public PIDSparkConstants(Double kP, Double kI, Double kD, ClosedLoopSlot closedLoopSlot) {
+    this.kP = kP;
+    this.kI = kI;
+    this.kD = kD;
+    this.closedLoopSlot = closedLoopSlot;
+  }
+  /**
+   * @param kP Proportional Gain
+   * @param kI Derivative
+   * @param kD The rate of change error
+   * @param minOutput Minimum output of PID
+   * @param maxOutput Maximum output of PID
+   * @param velocityFF Velocity Feed Forward
+   * @param maxVel Max Velocity
+   * @param maxAccel Max Acceleration
+   * @param allowedErr Allowed Error Amount
+   * @param maxPositionMode The position mode
+   * @param closedLoopSlot The closed loop slot
+   */
   public PIDSparkConstants(
       Double kP,
       Double kI,
@@ -37,99 +62,57 @@ public class PIDSparkConstants {
     this.maxVel = maxVel;
     this.maxAccel = maxAccel;
     this.allowedErr = allowedErr;
-  }
-
-  public PIDSparkConstants(Double kP, Double kI, Double kD, ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
     this.closedLoopSlot = closedLoopSlot;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
   }
-
-  public PIDSparkConstants(
-      Double kP,
-      Double kI,
-      Double kD,
-      Double minOutput,
-      Double maxOutput,
-      ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
+  /*
+   * Set the constraints of output of the PID
+   */
+  public PIDSparkConstants setConstraint(Double minOutput, Double maxOutput) {
     this.minOutput = minOutput;
     this.maxOutput = maxOutput;
-    this.closedLoopSlot = closedLoopSlot;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
+    return this;
   }
-
-  public PIDSparkConstants(
-      Double kP, Double kI, Double kD, Double velocityFF, ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
-    this.closedLoopSlot = closedLoopSlot;
+  /*
+   * Sets the Velocity Feed Forward
+   */
+  public PIDSparkConstants setVelocityFF(Double velocityFF) {
     this.velocityFF = velocityFF;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
+    return this;
   }
-
-  public PIDSparkConstants(
-      Double kP,
-      Double kI,
-      Double kD,
-      Double minOutput,
-      Double maxOutput,
-      Double velocityFF,
-      ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
-    this.minOutput = minOutput;
-    this.maxOutput = maxOutput;
-    this.velocityFF = velocityFF;
-    this.closedLoopSlot = closedLoopSlot;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
-  }
-
-  public PIDSparkConstants(
-      Double kP,
-      Double kI,
-      Double kD,
-      Double minOutput,
-      Double maxOutput,
-      Double velocityFF,
-      Double maxVel,
-      ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
-    this.minOutput = minOutput;
-    this.maxOutput = maxOutput;
-    this.velocityFF = velocityFF;
-    this.closedLoopSlot = closedLoopSlot;
+  /*
+   * Sets max velocity
+   */
+  public PIDSparkConstants setMaxVelocity(Double maxVel) {
     this.maxVel = maxVel;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
+    return this;
   }
-
-  public PIDSparkConstants(
-      Double kP,
-      Double kI,
-      Double kD,
-      Double minOutput,
-      Double maxOutput,
-      Double velocityFF,
-      Double maxVel,
-      Double maxAccel,
-      ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
-    this.minOutput = minOutput;
-    this.maxOutput = maxOutput;
-    this.velocityFF = velocityFF;
-    this.closedLoopSlot = closedLoopSlot;
-    this.maxVel = maxVel;
+  /*
+   * Set Max Acceleration
+   *
+   */
+  public PIDSparkConstants setMaxAccel(Double maxAccel) {
     this.maxAccel = maxAccel;
-    maxPositionMode = MAXMotionPositionMode.kMAXMotionTrapezoidal;
+    return this;
+  }
+  /*
+   * Set Allowed Error
+   */
+  public PIDSparkConstants setAllowedErr(Double allowedErr) {
+    this.allowedErr = allowedErr;
+    return this;
+  }
+  /*
+   * Set the MAXPosition mode
+   */
+  public PIDSparkConstants setMaxPositionMode(MAXMotionPositionMode maxPositionMode) {
+    this.maxPositionMode = maxPositionMode;
+    return this;
+  }
+  /*
+   * Set the Closed Loop Slot on the Spark
+   */
+  public PIDSparkConstants setClosedLoopSlot(ClosedLoopSlot closedLoopSlot) {
+    this.closedLoopSlot = closedLoopSlot;
+    return this;
   }
 }

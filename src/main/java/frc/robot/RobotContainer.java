@@ -223,7 +223,8 @@ public class RobotContainer {
 
     new Trigger(
             () ->
-                coralAutoAlignWeight.getTargetDistance() < 1.5 && coralAutoAlignWeight.getEnabled())
+                coralAutoAlignWeight.getTargetDistance() < 1.5
+                    && DriveWeightCommand.checkWeight(coralAutoAlignWeight))
         .onTrue(
             new InstantCommand(
                     () ->

@@ -55,14 +55,4 @@ public class DriveToNearestWeight implements DriveWeight {
   public Rotation2d getAngleDistance() {
     return getNearestTarget().getRotation().minus(robotPose.get().getRotation());
   }
-
-  @Override
-  public boolean getEnabled() {
-    return enabled;
-  }
-
-  @Override
-  public void setEnabled(boolean setEnabled) {
-    enabled = setEnabled;
-  }
 }

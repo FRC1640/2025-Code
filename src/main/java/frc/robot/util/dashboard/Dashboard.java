@@ -40,7 +40,7 @@ public class Dashboard {
     this.controller = controller;
     autoInit();
     teleopInit();
-    // testInit(pidKeys);
+    testInit(pidKeys);
   }
 
   private void autoInit() {
@@ -55,15 +55,17 @@ public class Dashboard {
 
   private void teleopInit() {}
 
-  // private void testInit(String[] pidKeys) {
-  //   SendableChooser<Test> testChooser = new SendableChooser<Test>();
-  //   testChooser.setDefaultOption("womp womp", Test.NONE);
-  //   testChooser.addOption("PID", Test.PID);
-  //   testChooser.addOption("SYSID", Test.SYSID);
-  //   ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
-  //   testTab.add("test_it.mp4", testChooser);
-  //   testChooser.onChange(Dashboard::testChange); // how do consumers work even
-  // }
+  private void testInit(String[] pidKeys) {
+    SendableChooser<Test> testChooser = new SendableChooser<Test>();
+    testChooser.setDefaultOption("womp womp", Test.NONE);
+    testChooser.addOption("PID", Test.PID);
+    testChooser.addOption("SYSID", Test.SYSID);
+    ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
+    testTab.add("STUPID TRASH RAAA", testChooser).withSize(4, 3).withPosition(1, 1);
+    System.out.println(testChooser.getSelected() + "sanity check");
+    // testChooser.onChange();
+    testChange(testChooser.getSelected(), pidKeys);
+  }
 
   private void testChange(Test test, String[] pidKey) {
     switch (test) {

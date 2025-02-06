@@ -8,6 +8,7 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.util.tools.AutoAlignHelper;
+import org.littletonrobotics.junction.Logger;
 
 public class AntiTipWeight implements DriveWeight {
   private Gyro gyro;
@@ -43,7 +44,12 @@ public class AntiTipWeight implements DriveWeight {
             ySpeed,
             -DriveConstants.maxAntiTipCorrectionSpeed,
             DriveConstants.maxAntiTipCorrectionSpeed);
-    return AutoAlignHelper.convertToFieldRelative(
-        new ChassisSpeeds(xSpeed, ySpeed, 0), gyro, RobotOdometry.instance.getPose("Main"));
+
+    ChassisSpeeds speeds =
+        AutoAlignHelper.convertToFieldRelative(
+            new ChassisSpeeds(xSpeed, ySpeed, 0), gyro, RobotOdometry.instance.getPose("Main"));
+
+    Logger.recordOutput("AntiTipSpeeds", speeds);
+    return new ChassisSpeeds();
   }
 }

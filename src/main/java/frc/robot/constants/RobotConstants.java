@@ -157,7 +157,7 @@ public class RobotConstants {
     public static final double detectionThresh = 350;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
-    public static final double waitTimeSeconds = 0.03;
+    public static final double waitTimeSeconds = 0.02;
   }
 
   // TODO replace with actual values
@@ -175,8 +175,8 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = 1;
     public static final int climberWinch2MotorID = 2;
 
-    public static final Limit liftLimits = new Limit(0, 1000);
-    public static final Limit winchLimits = new Limit(0, 1000);
+    public static final Limits liftLimits = new Limits(0.0, 1000.0);
+    public static final Limits winchLimits = new Limits(0.0, 1000.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =

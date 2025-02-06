@@ -46,6 +46,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
@@ -206,10 +207,7 @@ public class RobotContainer {
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
             (x) -> RobotConstants.addRobotDim(x));
-    configureBindings();
-  }
 
-  private void configureBindings() {
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
             () -> -driveController.getLeftY(),
@@ -217,6 +215,12 @@ public class RobotContainer {
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger()));
+
+    DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
+    configureBindings();
+  }
+
+  private void configureBindings() {
 
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
 

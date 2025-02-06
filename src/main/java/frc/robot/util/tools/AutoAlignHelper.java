@@ -37,13 +37,17 @@ public class AutoAlignHelper {
 
     // convert to robot relative from field relative
     Translation2d fieldRelative = new Translation2d(xSpeed, ySpeed);
-    fieldRelative =
-        fieldRelative.rotateBy(
-            new Rotation2d(
-                    gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
-                .unaryMinus());
+    fieldRelative = convertToFieldRelative(fieldRelative, gyro, robot);
     return new ChassisSpeeds(fieldRelative.getX(), fieldRelative.getY(), rotationalPID);
   }
 
   public void getPoseSpeedsProfiled(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {}
+
+  public Translation2d convertToFieldRelative(
+      Translation2d fieldRelative, Gyro gyro, Pose2d robot) {
+    return fieldRelative.rotateBy(
+        new Rotation2d(
+                gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
+            .unaryMinus());
+  }
 }

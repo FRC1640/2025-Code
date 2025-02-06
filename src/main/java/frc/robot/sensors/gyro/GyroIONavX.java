@@ -30,6 +30,9 @@ public class GyroIONavX implements GyroIO {
     inputs.angularVelocityDegreesPerSecond = gyro.getRate();
     inputs.angleDegreesRaw = Math.toDegrees(inputs.angleRadiansRaw);
 
+    inputs.roll = new Rotation2d(gyro.getRotation3d().getX());
+    inputs.pitch = new Rotation2d(gyro.getRotation3d().getY());
+
     inputs.displacementX = gyro.getDisplacementX();
     inputs.displacementY = gyro.getDisplacementY();
     inputs.odometryYawRate = rate.stream().mapToDouble((Double value) -> value).toArray();

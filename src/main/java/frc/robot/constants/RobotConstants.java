@@ -113,6 +113,9 @@ public class RobotConstants {
     public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
 
     public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+
+    public static final double maxAntiTipCorrectionSpeed = 0.5;
+    public static final double minTipDegrees = 5;
   }
 
   public static class CameraConstants {

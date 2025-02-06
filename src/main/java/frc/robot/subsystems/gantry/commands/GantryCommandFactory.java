@@ -20,6 +20,7 @@ public class GantryCommandFactory {
   public Command gantryPIDCommand(DoubleSupplier pos) {
     return new RunCommand(
             () -> gantrySubsystem.setCarriagePosition(pos.getAsDouble()), gantrySubsystem)
+        .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 

@@ -16,6 +16,7 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
@@ -92,7 +93,7 @@ public class RobotContainer {
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
 
-  private Command coralCommand;
+  private Command liftAutoCommand;
   private CoralPreset coralPreset;
 
   private DriveToNearestWeight coralAutoAlignWeight;
@@ -194,7 +195,7 @@ public class RobotContainer {
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-    liftSubsystem.setDefaultCommand(coralCommand);
+    liftSubsystem.setDefaultCommand(liftAutoCommand);
 
     // weights
     coralAutoAlignWeight =
@@ -219,10 +220,15 @@ public class RobotContainer {
 
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
 
-    new Trigger(() -> coralAutoAlignWeight.getTargetDistance() < 1.5)
+    new Trigger(
+            () ->
+                coralAutoAlignWeight.getTargetDistance() < 1.5 && coralAutoAlignWeight.getEnabled())
         .onTrue(
-            autoScoringCommandFactory.autoalignCoralCommand(
-                () -> coralPreset, () -> coralAutoAlignWeight.getAutoalignComplete()));
+            new InstantCommand(
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                .alongWith(autoScoringCommandFactory.gantryAlignCommand(() -> coralPreset)));
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
@@ -240,11 +246,12 @@ public class RobotContainer {
     operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
     operatorController
         .rightBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 3));
+        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
 
     operatorController
         .leftBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -3));
+        .whileTrue(
+            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
 
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
 
@@ -273,22 +280,26 @@ public class RobotContainer {
         .a()
         .onTrue(
             new InstantCommand(
-                () ->
-                    coralCommand =
-                        liftCommandFactory.runLiftMotionProfile(
-                            () -> coralPreset.getLift()))); // TODO jitter?
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                .alongWith(
+                    autoScoringCommandFactory.gantryAlignCommand(
+                        () -> coralPreset))); // TODO jitter?
     operatorController
         .b()
         .onTrue(
             new InstantCommand(
-                () -> coralCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
+                () -> liftAutoCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
     operatorController
         .x()
         .onTrue(
             new InstantCommand(
-                () ->
-                    coralCommand =
-                        liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())));
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(
+                                () -> CoralPreset.Safe.getLift()))
+                .alongWith(gantryCommandFactory.gantryPIDCommand(() -> 0)));
   }
 
   public Command getAutonomousCommand() {

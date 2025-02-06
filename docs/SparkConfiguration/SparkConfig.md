@@ -1,4 +1,18 @@
 # RevLib Spark Configurer
+
+---
+## **Table of Contents**
+- [RevLib Spark Configurer](#revlib-spark-configurer)
+  - [**Table of Contents**](#table-of-contents)
+    - [Making your motor](#making-your-motor)
+    - [Follower Motors](#follower-motors)
+  - [Config:](#config)
+      - [configSparkMax](#configsparkmax)
+      - [SparkConfiguration:](#sparkconfiguration)
+    - [PID Controller](#pid-controller)
+      - [Construct the Spark PID](#construct-the-spark-pid)
+
+---
 ### Making your motor
 ```java
 SparkMax motor1;
@@ -53,3 +67,60 @@ SparkConfiguration(
       LimitSwitchConfig limitSwitch,
       SparkBaseConfig seed)
 ```
+### PID Controller
+In RobotPIDConstants.java, create a new SparkPIDConstant like this:
+```java
+public static final SparkPIDConstants pidConstantSpark =
+      new SparkPIDConstants(kP, kI, kD, ClosedLoopSlot);
+```
+There are command decorators you can add to it, as follows:
+```java
+/*
+   * Set the constraints of output of the PID
+   */
+  .setConstraint(double minOutput, double maxOutput)
+  /*
+   * Sets the Velocity Feed Forward
+   */
+  .setVelocityFF(double velocityFF)
+  /*
+   * Sets max velocity
+   */
+  .setMaxVelocity(double maxVel)
+  /*
+   * Set Max Acceleration
+   *
+   */
+  .setMaxAccel(double maxAccel)
+  /*
+   * Set Allowed Error
+   */
+  .setAllowedErr(double allowedErr)
+  /*
+   * Set the MAXPosition mode
+   */
+  .setMaxPositionMode(MAXMotionPositionMode maxPositionMode)
+  /*
+   * Set the Closed Loop Slot on the Spark
+   */
+  .setClosedLoopSlot(ClosedLoopSlot closedLoopSlot)
+```
+
+To apply them, do like follows:
+```java
+  public static final SparkPIDConstants pidConstantSpark =
+      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0).commandDecorator(parameter).commandDecorator2(parameter);
+```
+#### Construct the Spark PID
+On your motor, do this:
+```java
+public static final SparkPIDConstants variable =
+      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0).commandDecorator(parameter);
+leaderMotor =
+        SparkConfigurer.configSparkMax(
+            SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false)
+                .applyPIDConfig(variable));
+```
+For actually detailed documentation, check out here:
+[**Spark PID/Closed Loop Documentation**](https://docs.revrobotics.com/revlib/spark/closed-loop)
+[**MAXMotion Documentation**](https://docs.revrobotics.com/revlib/spark/closed-loop/maxmotion-position-control)

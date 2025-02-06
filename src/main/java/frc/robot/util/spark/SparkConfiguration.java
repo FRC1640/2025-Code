@@ -82,6 +82,10 @@ public class SparkConfiguration {
         || sparkPIDConstant.closedLoopSlot != null) {
       inner.closedLoop.outputRange(
           sparkPIDConstant.minOutput, sparkPIDConstant.maxOutput, sparkPIDConstant.closedLoopSlot);
+    } else if (sparkPIDConstant.minOutput != null || sparkPIDConstant.maxOutput != null) {
+      inner.closedLoop.outputRange(sparkPIDConstant.minOutput, sparkPIDConstant.maxOutput);
+    } else {
+      inner.closedLoop.outputRange(-1, 1);
     }
     if (sparkPIDConstant.velocityFF != null) {
       inner.closedLoop.velocityFF(sparkPIDConstant.velocityFF);

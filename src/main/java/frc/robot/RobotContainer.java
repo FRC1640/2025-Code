@@ -144,7 +144,7 @@ public class RobotContainer {
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(() -> true)
+                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(

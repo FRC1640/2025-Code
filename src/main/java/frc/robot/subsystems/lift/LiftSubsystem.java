@@ -29,8 +29,8 @@ public class LiftSubsystem extends SubsystemBase {
             .createNewRoutine(
                 this::setLiftVoltage,
                 this::getLeaderMotorVoltage,
-                this::getFollowerMotorPosition,
-                this::getFollowerMotorVelocity,
+                this::getLeaderMotorPosition,
+                this::getLeaderMotorVelocity,
                 this,
                 new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(5)));
   }

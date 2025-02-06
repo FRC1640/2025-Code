@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
@@ -15,8 +16,12 @@ public class GantryIOSparkMax implements GantryIO {
   private final SparkMax gantrySpark;
   private final RelativeEncoder gantryEncoder;
   private final SparkLimitSwitch gantryLimitSwitch;
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
+  private final PIDController gantryVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
 
   public GantryIOSparkMax() {
     gantrySpark =
@@ -61,6 +66,13 @@ public class GantryIOSparkMax implements GantryIO {
   @Override
   public void setGantryPosition(double position, GantryIOInputs inputs) {
     setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
+  }
+
+  @Override
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+    setGantryVoltage(
+        ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
+        inputs);
   }
 
   @Override

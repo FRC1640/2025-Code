@@ -83,12 +83,17 @@ public class RobotPIDConstants {
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
-  public static final PIDConstants linearDrivePID = new PIDConstants(0.8, 0, 0);
+  public static final PIDConstants linearDrivePID = new PIDConstants(0.1, 0, 0);
 
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
 
-  public static final PIDConstants gantryPID = new PIDConstants(0.01, 0, 0);
+  public static final PIDConstants gantryPID = new PIDConstants(50, 0, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants = new PIDConstants(27.25, 0.010569);
   public static final FeedForwardConstants liftFF = new FeedForwardConstants(0, 26.04, 0.0101, 0);
+  public static final FeedForwardConstants gantryFF =
+      new FeedForwardConstants(0.19249, 20.698, 1.1805);
+  public static final PIDConstants gantryVelocityPID = new PIDConstants(1.4935);
+  public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
+  public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
 }

@@ -2,17 +2,21 @@ package frc.robot.util.tools;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
-  PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
+  ProfiledPIDController linearDrivePID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.linearDrivePIDProfiled, new TrapezoidProfile.Constraints(2, 6));
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 

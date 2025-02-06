@@ -30,7 +30,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux24;
+    public static final RobotType robotType = RobotType.Sim;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -155,7 +155,7 @@ public class RobotConstants {
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
 
     public enum CoralPreset {
-      Safe(0, false),
+      Safe(0.1, false),
       LeftL2(0.5, false), // TODO correct numbers
       RightL2(0.5, true),
       LeftL3(1, false),

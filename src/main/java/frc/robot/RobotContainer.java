@@ -93,9 +93,7 @@ public class RobotContainer {
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
-
-  private Command liftAutoCommand;
-  private CoralPreset coralPreset;
+  private CoralPreset coralPreset = CoralPreset.Safe;
 
   private DriveToNearestWeight coralAutoAlignWeight;
 
@@ -196,7 +194,6 @@ public class RobotContainer {
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-    liftSubsystem.setDefaultCommand(liftAutoCommand);
 
     // weights
     coralAutoAlignWeight =
@@ -230,8 +227,8 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                     () ->
-                        liftAutoCommand =
-                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                        liftSubsystem.setDefaultCommand(
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(autoScoringCommandFactory.gantryAlignCommand(() -> coralPreset)));
 
     DriveWeightCommand.createWeightTrigger(
@@ -259,8 +256,6 @@ public class RobotContainer {
 
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
 
-    operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
-
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
     driveController
@@ -285,8 +280,8 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                     () ->
-                        liftAutoCommand =
-                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                        liftSubsystem.setDefaultCommand(
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
                         () -> coralPreset))); // TODO jitter?
@@ -294,15 +289,17 @@ public class RobotContainer {
         .b()
         .onTrue(
             new InstantCommand(
-                () -> liftAutoCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
+                () ->
+                    liftSubsystem.setDefaultCommand(
+                        liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
     operatorController
         .x()
         .onTrue(
             new InstantCommand(
                     () ->
-                        liftAutoCommand =
+                        liftSubsystem.setDefaultCommand(
                             liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift()))
+                                () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
                         () -> GantryConstants.gantryLimits.low / 2)));

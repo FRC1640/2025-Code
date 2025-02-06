@@ -30,7 +30,7 @@ public class AntiTipWeight implements DriveWeight {
     if (Math.abs(gyro.getPitch().getDegrees()) > DriveConstants.minTipDegrees) {
       xSpeed = pitchAntiTip.calculate(gyro.getPitch().getRadians(), 0);
     }
-    if (Math.abs(gyro.getPitch().getDegrees()) > DriveConstants.minTipDegrees) {
+    if (Math.abs(gyro.getRoll().getDegrees()) > DriveConstants.minTipDegrees) {
       ySpeed = rollAntiTip.calculate(gyro.getRoll().getRadians(), 0);
     }
 

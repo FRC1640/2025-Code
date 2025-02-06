@@ -286,6 +286,17 @@ public class RobotContainer {
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
                         () -> coralPreset))); // TODO jitter?
+
+    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
+        .onFalse(
+            new InstantCommand(
+                    () ->
+                        liftSubsystem.setDefaultCommand(
+                            liftCommandFactory.runLiftMotionProfile(
+                                () -> CoralPreset.Safe.getLift())))
+                .alongWith(
+                    gantryCommandFactory.gantryPIDCommand(
+                        () -> GantryConstants.gantryLimits.low / 2)));
     operatorController
         .b()
         .onTrue(

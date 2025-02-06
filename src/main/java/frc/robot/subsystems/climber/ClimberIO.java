@@ -24,6 +24,8 @@ public interface ClimberIO extends AutoCloseable {
     public double winchFollowerMotorTemperature = 0.0;
 
     public boolean solenoidForward = false;
+
+    public double servoPosition = 0.0;
   }
 
   /*
@@ -52,5 +54,9 @@ public interface ClimberIO extends AutoCloseable {
   /*
    * Set solenoid state (forward/reverse)
    */
-  public default void setSolenoidState(boolean forward, ClimberIOInputs inputs) {}
+  public default void setSolenoidState(boolean forward) {}
+  /*
+   * Set servo position (between 0 and 1)
+   */
+  public default void setServoPosition(double position) {}
 }

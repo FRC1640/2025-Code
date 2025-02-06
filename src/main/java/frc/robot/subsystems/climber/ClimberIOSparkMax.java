@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
@@ -21,6 +22,7 @@ public class ClimberIOSparkMax implements ClimberIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+  private final Servo servo;
 
   private final DoubleSolenoid doubleSolenoid;
 
@@ -42,6 +44,7 @@ public class ClimberIOSparkMax implements ClimberIO {
             PneumaticsModuleType.REVPH,
             ClimberConstants.solenoidForwardChannel,
             ClimberConstants.solenoidReverseChannel);
+    servo = new Servo(ClimberConstants.servoChannel);
   }
   /*
    * Set voltage of the lift motor
@@ -80,6 +83,20 @@ public class ClimberIOSparkMax implements ClimberIO {
   }
 
   @Override
+  public void setSolenoidState(boolean forward) {
+    if (forward) {
+      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    } else {
+      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+  }
+
+  @Override
+  public void setServoPosition(double position) {
+    servo.set(position);
+  }
+
+  @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.liftMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
     inputs.winchLeaderMotorPosition =
@@ -95,14 +112,6 @@ public class ClimberIOSparkMax implements ClimberIO {
     inputs.winchFollowerMotorTemperature = winchFollowerSpark.getMotorTemperature();
 
     inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
-  }
-
-  @Override
-  public void setSolenoidState(boolean forward, ClimberIOInputs inputs) {
-    if (forward) {
-      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-    } else {
-      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
+    inputs.servoPosition = servo.get();
   }
 }

@@ -183,6 +183,8 @@ public class RobotConstants {
 
     public static final int solenoidForwardChannel = 0;
     public static final int solenoidReverseChannel = 1;
+
+    public static final int servoChannel = 0;
   }
 
   public static class GantryConstants {

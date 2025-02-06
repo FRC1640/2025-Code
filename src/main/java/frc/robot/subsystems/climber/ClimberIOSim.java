@@ -5,6 +5,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
@@ -17,6 +18,7 @@ public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim winch1Sim; // winch leader motor
   private final DCMotorSim winch2Sim; // winch follower motor
   private final DoubleSolenoidSim doubleSolenoidSim;
+  private final Servo servoSim;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
@@ -43,6 +45,7 @@ public class ClimberIOSim implements ClimberIO {
                 motor3SimGearbox, 0.00019125, RobotConstants.ClimberConstants.gearRatio),
             motor3SimGearbox);
     doubleSolenoidSim = new DoubleSolenoidSim(PneumaticsModuleType.REVPH, 0, 1);
+    servoSim = new Servo(0);
   }
 
   @Override
@@ -78,12 +81,17 @@ public class ClimberIOSim implements ClimberIO {
   }
 
   @Override
-  public void setSolenoidState(boolean forward, ClimberIOInputs inputs) {
+  public void setSolenoidState(boolean forward) {
     if (forward) {
       doubleSolenoidSim.set(DoubleSolenoid.Value.kForward);
     } else {
       doubleSolenoidSim.set(DoubleSolenoid.Value.kReverse);
     }
+  }
+
+  @Override
+  public void setServoPosition(double position) {
+    servoSim.set(position);
   }
 
   @Override
@@ -105,5 +113,6 @@ public class ClimberIOSim implements ClimberIO {
     inputs.winchFollowerMotorVoltage = winch2Sim.getInputVoltage();
 
     inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
+    inputs.servoPosition = servoSim.get();
   }
 }

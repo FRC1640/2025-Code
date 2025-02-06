@@ -119,6 +119,6 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void setSolenoidState(boolean forward) {
-    climberIO.setSolenoidState(forward, inputs);
+    climberIO.setSolenoidState(forward);
   }
 }

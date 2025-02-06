@@ -51,7 +51,7 @@ public class SparkConstants {
             id,
             getDefaultFlex(id).getIdleMode(),
             true,
-            18,
+            60,
             8,
             2,
             new StatusFrames(

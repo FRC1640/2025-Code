@@ -94,4 +94,6 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants gantryFF =
       new FeedForwardConstants(0.19249, 20.698, 1.1805);
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1.4935);
+  public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
+  public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
 }

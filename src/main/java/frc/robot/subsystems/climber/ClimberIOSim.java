@@ -49,7 +49,11 @@ public class ClimberIOSim implements ClimberIO {
   public void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {
     liftSim.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.liftMotorPosition, voltage, ClimberConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.liftMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
   }
 
   @Override
@@ -63,11 +67,17 @@ public class ClimberIOSim implements ClimberIO {
     winch1Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition, voltage, ClimberConstants.winchLimits)));
+                inputs.winchLeaderMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
     winch2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchFollowerMotorPosition, voltage, ClimberConstants.winchLimits)));
+                inputs.winchFollowerMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
   }
 
   @Override

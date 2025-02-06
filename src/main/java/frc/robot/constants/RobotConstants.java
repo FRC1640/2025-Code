@@ -183,7 +183,7 @@ public class RobotConstants {
     public static final double detectionThresh = 350;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
-    public static final double waitTimeSeconds = 0.03;
+    public static final double waitTimeSeconds = 0.02;
   }
 
   // TODO replace with actual values

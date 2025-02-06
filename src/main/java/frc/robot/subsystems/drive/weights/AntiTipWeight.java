@@ -6,6 +6,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.util.tools.AutoAlignHelper;
 
 public class AntiTipWeight implements DriveWeight {
   private Gyro gyro;
@@ -41,6 +43,7 @@ public class AntiTipWeight implements DriveWeight {
             ySpeed,
             -DriveConstants.maxAntiTipCorrectionSpeed,
             DriveConstants.maxAntiTipCorrectionSpeed);
-    return new ChassisSpeeds(xSpeed, ySpeed, 0);
+    return AutoAlignHelper.convertToFieldRelative(
+        new ChassisSpeeds(xSpeed, ySpeed, 0), gyro, RobotOdometry.instance.getPose("Main"));
   }
 }

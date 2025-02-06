@@ -222,6 +222,7 @@ public class RobotConstants {
     public static final Limits gantryLimits = new Limits(-0.330, null);
     public static final double gantryPadding = 0.05;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
+    public static final double alignSpeed = 0.1;
   }
 
   public static class CoralOuttakeConstants {

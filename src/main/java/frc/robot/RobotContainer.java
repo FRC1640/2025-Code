@@ -90,13 +90,12 @@ public class RobotContainer {
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
+  private final AutoScoringCommandFactory autoScoringCommandFactory;
 
   private Command coralCommand;
   private CoralPreset coralPreset;
 
   private DriveToNearestWeight coralAutoAlignWeight;
-
-  private AutoScoringCommandFactory autoScoringCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -189,11 +188,15 @@ public class RobotContainer {
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    autoScoringCommandFactory =
+        new AutoScoringCommandFactory(gantryCommandFactory, liftCommandFactory);
 
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    liftSubsystem.setDefaultCommand(coralCommand);
 
+    // weights
     coralAutoAlignWeight =
         new DriveToNearestWeight(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -202,9 +205,6 @@ public class RobotContainer {
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
             (x) -> RobotConstants.addRobotDim(x));
-
-    autoScoringCommandFactory =
-        new AutoScoringCommandFactory(gantryCommandFactory, liftCommandFactory);
     configureBindings();
   }
 

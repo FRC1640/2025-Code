@@ -227,6 +227,22 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public void addTrigEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
+    if (odometryStorage.getTrustedRotation().isEmpty()) {
+      return;
+    }
+    // pass function
+    if (vision.getTrigResult(new Rotation2d()).isEmpty()) {
+      return;
+    }
+    Optional<Rotation2d> interpolateGyro =
+        odometryStorage
+            .getTrustedRotation()
+            .get()
+            .getGyroAtTimestamp(vision.getTrigResult(new Rotation2d()).get().timestamp());
+
+    if (interpolateGyro.isEmpty()) {
+      return;
+    }
     // calculate estimated pose (trig)
     Optional<PoseObservation> result =
         vision.getTrigResult(
@@ -239,29 +255,28 @@ public class RobotOdometry extends PeriodicBase {
     // return if no result; continue otherwise
     if (result.isEmpty()) {
       return;
-    } else {
-      Pose2d visionUpdate = result.get().pose().toPose2d();
-      Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesTrig", visionUpdate);
-      if (Robot.getState() == RobotState.DISABLED
-          || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
-        Logger.recordOutput(
-            "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
-        return;
-      }
-      if (!(isPoseValid(visionUpdate)
-          && vision.isConnected()
-          && result.get().minimumTagDistance() < 7)) {
-        Logger.recordOutput(
-            "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
-        return;
-      }
-      Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesAcceptedTrig", visionUpdate);
-      double xy = vision.getTrigXyStdDev(result.get());
-      odometryStorage.estimator.addVisionMeasurement(
-          visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));
     }
+    Pose2d visionUpdate = result.get().pose().toPose2d();
+    Logger.recordOutput(
+        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesTrig", visionUpdate);
+    if (Robot.getState() == RobotState.DISABLED
+        || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+      return;
+    }
+    if (!(isPoseValid(visionUpdate)
+        && vision.isConnected()
+        && result.get().minimumTagDistance() < 7)) {
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+      return;
+    }
+    Logger.recordOutput(
+        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesAcceptedTrig", visionUpdate);
+    double xy = vision.getTrigXyStdDev(result.get());
+    odometryStorage.estimator.addVisionMeasurement(
+        visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));
   }
 
   public boolean isPoseValid(Pose2d pose) {
@@ -290,21 +305,26 @@ public class RobotOdometry extends PeriodicBase {
         e.lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
       }
       // Update gyro angle
-      if (gyro.isTrustworthy()) {
-        // Use the real gyro angle
-        e.rawGyroRotation = gyro.getOdometryPositions()[i];
+      if (e.getTrustedRotation().isEmpty()) {
+        if (gyro.isTrustworthy()) {
+          // Use the real gyro angle
+          Rotation2d update = gyro.getOdometryPositions()[i];
+          e.rawGyroRotation = update;
+        } else {
+          // Use the angle delta from the kinematics and module deltas
+          Twist2d twist = DriveConstants.kinematics.toTwist2d(moduleDeltas);
+          Rotation2d update = e.rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+          e.rawGyroRotation = update;
+        }
       } else {
-        // Use the angle delta from the kinematics and module deltas
-        Twist2d twist = DriveConstants.kinematics.toTwist2d(moduleDeltas);
-        e.rawGyroRotation = e.rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+        Rotation2d update =
+            e.getTrustedRotation().get().estimator.getEstimatedPosition().getRotation();
+        e.rawGyroRotation = update;
       }
 
       // Apply update
-      if (e.getTrustedRotation().isPresent()) {
-        e.rawGyroRotation =
-            e.getTrustedRotation().get().estimator.getEstimatedPosition().getRotation();
-      }
       e.estimator.updateWithTime(sampleTimestamps[i], e.rawGyroRotation, modulePositions);
+      e.addGyroSample(e.rawGyroRotation, sampleTimestamps[i]);
       Logger.recordOutput(
           "Drive/Odometry/" + odometryStorage.getName(), e.estimator.getEstimatedPosition());
     }

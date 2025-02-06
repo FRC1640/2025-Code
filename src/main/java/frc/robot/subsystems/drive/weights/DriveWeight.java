@@ -15,4 +15,10 @@ public interface DriveWeight {
   public default boolean cancelCondition() {
     return false;
   }
+
+  public default boolean getEnabled() {
+    return false;
+  }
+
+  public default void setEnabled(boolean setEnabled) {}
 }

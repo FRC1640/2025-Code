@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.tools.AutoAlignHelper;
@@ -14,6 +15,7 @@ public class DriveToNearestWeight implements DriveWeight {
   private Gyro gyro;
   private Function<Pose2d, Pose2d> poseFunction;
   AutoAlignHelper autoAlignHelper = new AutoAlignHelper();
+  private boolean enabled = false;
 
   public DriveToNearestWeight(
       Supplier<Pose2d> robotPose, Supplier<Pose2d[]> targetPoses, Gyro gyro) {
@@ -36,15 +38,31 @@ public class DriveToNearestWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
+    return autoAlignHelper.getPoseSpeeds(robotPose.get(), getNearestTarget(), gyro);
+  }
+
+  private Pose2d getNearestTarget() {
     if (poseFunction != null) {
-      return autoAlignHelper.getPoseSpeeds(
-          robotPose.get(),
-          DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get(), poseFunction),
-          gyro);
+      return DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get(), poseFunction);
     }
-    return autoAlignHelper.getPoseSpeeds(
-        robotPose.get(),
-        DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get()),
-        gyro);
+    return DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get());
+  }
+
+  public double getTargetDistance() {
+    return robotPose.get().getTranslation().getDistance(getNearestTarget().getTranslation());
+  }
+
+  public Rotation2d getAngleDistance() {
+    return getNearestTarget().getRotation().minus(robotPose.get().getRotation());
+  }
+
+  @Override
+  public boolean getEnabled() {
+    return enabled;
+  }
+
+  @Override
+  public void setEnabled(boolean setEnabled) {
+    enabled = setEnabled;
   }
 }

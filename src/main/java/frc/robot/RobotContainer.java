@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
@@ -29,18 +32,25 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSim;
+import frc.robot.subsystems.climber.ClimberIOSparkMax;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.gantry.GantryIO;
+import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
@@ -50,6 +60,7 @@ import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
@@ -62,10 +73,12 @@ public class RobotContainer {
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
+  private final ClimberSubsystem climberSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final PresetBoard presetBoard = new PresetBoard(2);
   private final AlertsManager alertsManager;
 
   // Dashboard
@@ -77,6 +90,13 @@ public class RobotContainer {
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
+  private final ClimberCommandFactory climberCommandFactory;
+  private final AutoScoringCommandFactory autoScoringCommandFactory;
+
+  private Command liftAutoCommand;
+  private CoralPreset coralPreset;
+
+  private DriveToNearestWeight coralAutoAlignWeight;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -104,10 +124,12 @@ public class RobotContainer {
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSparkMax()
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new ClimberIOSparkMax()
+                    : new ClimberIO() {});
 
         break;
       case SIM:
@@ -127,7 +149,7 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSparkMax()
+                    ? new GantryIOSim(operatorController.y())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
@@ -135,11 +157,13 @@ public class RobotContainer {
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(() -> true)
-                    : new CoralOuttakeIO() {
-                      {
-                      }
-                    });
+                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
+                    : new CoralOuttakeIO() {});
+        climberSubsystem =
+            new ClimberSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new ClimberIOSim()
+                    : new ClimberIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -147,12 +171,13 @@ public class RobotContainer {
         gantrySubsystem = new GantrySubsystem(new GantryIO() {});
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
+        climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController);
+    dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
@@ -163,10 +188,24 @@ public class RobotContainer {
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
+    climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    autoScoringCommandFactory =
+        new AutoScoringCommandFactory(gantryCommandFactory, liftCommandFactory);
 
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    liftSubsystem.setDefaultCommand(liftAutoCommand);
+
+    // weights
+    coralAutoAlignWeight =
+        new DriveToNearestWeight(
+            () -> RobotOdometry.instance.getPose("Main"),
+            () ->
+                AllianceManager.chooseFromAlliance(
+                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            gyro,
+            (x) -> RobotConstants.addRobotDim(x));
     configureBindings();
   }
 
@@ -179,15 +218,17 @@ public class RobotContainer {
             driveController.rightBumper(),
             driveController.leftTrigger()));
 
-    DriveWeightCommand.createWeightTrigger(
-        new DriveToNearestWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
+    DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
+
+    new Trigger(
             () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            gyro,
-            (x) -> RobotConstants.addRobotDim(x)),
-        driveController.a());
+                coralAutoAlignWeight.getTargetDistance() < 1.5 && coralAutoAlignWeight.getEnabled())
+        .onTrue(
+            new InstantCommand(
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                .alongWith(autoScoringCommandFactory.gantryAlignCommand(() -> coralPreset)));
 
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
@@ -202,32 +243,71 @@ public class RobotContainer {
 
     // gantry button bindings:
 
-    operatorController.x().whileTrue(gantryCommandFactory.gantrySweep(true));
-    operatorController.b().whileTrue(gantryCommandFactory.gantrySweep(false));
+    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
     operatorController
         .rightBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 2));
+        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
 
     operatorController
         .leftBumper()
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
+        .whileTrue(
+            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
 
-    operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
+    operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
 
     operatorController.a().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 1.0));
 
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    operatorController
+    driveController
         .rightTrigger()
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
+    new Trigger(() -> presetBoard.getLl2())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
+    new Trigger(() -> presetBoard.getRl2())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL2));
+    new Trigger(() -> presetBoard.getLl3())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL3));
+    new Trigger(() -> presetBoard.getRl3())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL3));
+    new Trigger(() -> presetBoard.getLl4())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
+    new Trigger(() -> presetBoard.getRl4())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
+    operatorController
+        .a()
+        .onTrue(
+            new InstantCommand(
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()))
+                .alongWith(
+                    autoScoringCommandFactory.gantryAlignCommand(
+                        () -> coralPreset))); // TODO jitter?
+    operatorController
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> liftAutoCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
+    operatorController
+        .x()
+        .onTrue(
+            new InstantCommand(
+                    () ->
+                        liftAutoCommand =
+                            liftCommandFactory.runLiftMotionProfile(
+                                () -> CoralPreset.Safe.getLift()))
+                .alongWith(
+                    gantryCommandFactory.gantryPIDCommand(
+                        () -> GantryConstants.gantryLimits.low / 2)));
   }
 
   public Command getAutonomousCommand() {
     return dashboard
         .getAutoChooserCommand()
+        .alongWith(gantryCommandFactory.gantryHomeCommand())
         .andThen(driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds()));
   }
 }

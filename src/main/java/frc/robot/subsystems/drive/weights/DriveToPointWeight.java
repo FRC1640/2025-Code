@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.tools.AutoAlignHelper;
+import frc.robot.util.tools.DistanceManager;
 import java.util.function.Supplier;
 
 public class DriveToPointWeight implements DriveWeight {
@@ -21,5 +22,9 @@ public class DriveToPointWeight implements DriveWeight {
   @Override
   public ChassisSpeeds getSpeeds() {
     return autoAlignHelper.getPoseSpeeds(robotPose.get(), targetPose.get(), gyro);
+  }
+
+  public double getTargetDistance() {
+    return DistanceManager.getPositionDistance(robotPose.get(), targetPose.get());
   }
 }

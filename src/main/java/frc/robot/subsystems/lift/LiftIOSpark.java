@@ -17,7 +17,8 @@ public class LiftIOSpark implements LiftIO {
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
-  PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
+  PIDController liftController =
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
@@ -28,10 +29,10 @@ public class LiftIOSpark implements LiftIO {
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false));
+            SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftfollowerMotorID, false), leaderMotor);
+            SparkConstants.getDefaultMax(LiftConstants.liftFollowerMotorID, false), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
   }
@@ -42,7 +43,11 @@ public class LiftIOSpark implements LiftIO {
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.leaderMotorPosition,
+                voltage,
+                LiftConstants.liftLimits.low,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -105,5 +110,6 @@ public class LiftIOSpark implements LiftIO {
         followerMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
+    inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
   }
 }

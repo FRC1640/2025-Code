@@ -59,4 +59,8 @@ public class DistanceManager {
     }
     return nearestPos;
   }
+
+  public static double getPositionDistance(Pose2d robotPos, Pose2d targetPos) {
+    return robotPos.getTranslation().getDistance(targetPos.getTranslation());
+  }
 }

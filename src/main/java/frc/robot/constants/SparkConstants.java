@@ -2,6 +2,8 @@ package frc.robot.constants;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Type;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -13,7 +15,18 @@ import frc.robot.util.spark.StatusFrames;
 public class SparkConstants {
   public static final SparkConfiguration getGantryDefaultSparkMax(int id) {
     return new SparkConfiguration(
-        id, IdleMode.kBrake, true, 60, 50, 16, StatusFrames.getDefault(), new SparkMaxConfig());
+        id,
+        IdleMode.kBrake,
+        true,
+        60,
+        50,
+        16,
+        StatusFrames.getDefault(),
+        new LimitSwitchConfig()
+            .reverseLimitSwitchEnabled(false)
+            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .forwardLimitSwitchEnabled(true),
+        new SparkMaxConfig());
   }
 
   public static final SparkConfiguration getDefaultMax(int id, boolean inverted) {
@@ -38,7 +51,7 @@ public class SparkConstants {
             id,
             getDefaultFlex(id).getIdleMode(),
             true,
-            18,
+            60,
             8,
             2,
             new StatusFrames(

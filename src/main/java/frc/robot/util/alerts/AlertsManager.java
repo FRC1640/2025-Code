@@ -2,6 +2,7 @@ package frc.robot.util.alerts;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.robot.util.notification.NotificationManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
@@ -28,8 +29,12 @@ public class AlertsManager extends PeriodicBase {
 
   @Override
   public void periodic() {
+
     for (int i = 0; i < alerts.size(); i++) {
-      alerts.get(i).set(alertConditions.get(i).getAsBoolean());
+      boolean alertGet = alertConditions.get(i).getAsBoolean();
+      NotificationManager.alertNotification(alertGet, alerts.get(i));
+
+      alerts.get(i).set(alertGet);
     }
   }
 }

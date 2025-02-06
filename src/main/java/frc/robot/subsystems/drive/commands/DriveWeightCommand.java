@@ -87,11 +87,26 @@ public class DriveWeightCommand {
     return speeds;
   }
 
-  public static void createWeightTrigger(DriveWeight weight, BooleanSupplier condition) {
-    new Trigger(condition)
-        .onTrue(new InstantCommand(() -> addWeight(weight)))
-        .onFalse(new InstantCommand(() -> removeWeight(weight)));
+  public static Trigger createWeightTrigger(DriveWeight weight, BooleanSupplier condition) {
     new Trigger(() -> weight.cancelCondition())
-        .onTrue(new InstantCommand(() -> removeWeight(weight)));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  removeWeight(weight);
+                  weight.setEnabled(false);
+                }));
+    return new Trigger(condition)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  addWeight(weight);
+                  weight.setEnabled(true);
+                }))
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  removeWeight(weight);
+                  weight.setEnabled(false);
+                }));
   }
 }

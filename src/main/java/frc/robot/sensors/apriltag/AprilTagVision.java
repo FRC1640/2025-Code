@@ -11,7 +11,6 @@ import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
-import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
@@ -133,6 +132,7 @@ public class AprilTagVision extends PeriodicBase {
 
   public PoseObservation calculateTrigResult(
       TrigTargetObservation observation, Rotation2d gyroRotation) {
+
     // Get camera displacement details
     Transform3d cameraDisplacement = inputs.cameraDisplacement;
     Translation3d cameraToRobot = cameraDisplacement.getTranslation();
@@ -211,13 +211,5 @@ public class AprilTagVision extends PeriodicBase {
     }
     Logger.recordOutput(
         "AprilTagVision/" + cameraName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
-    // // testing
-    Rotation2d gyroRotation = RobotOdometry.instance.getPose("Main").getRotation();
-    Optional<PoseObservation> robotTrig = getTrigResult(gyroRotation);
-
-    PoseObservation robotPose = robotTrig.orElse(null);
-    Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TrigEstimate/RobotPose",
-        robotPose == null ? new Pose2d() : robotPose.pose().toPose2d());
   }
 }

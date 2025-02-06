@@ -22,6 +22,7 @@ public class ResolverVoltage {
     slope = (angle1 - angle2) / (v1 - v2);
     offset = angle1 - slope * v1;
   }
+
   /**
    * Creates resolver using a slope (created from 2 voltages and degrees) and an offset. Ideal for
    * systems with same sloped resolvers but multiple offsets (like swerve)
@@ -38,6 +39,32 @@ public class ResolverVoltage {
     resolver = new AnalogInput(channel);
     slope = (angle1 - angle2) / (v1 - v2);
     this.offset = offset;
+  }
+
+  /*
+   * Creates resolver using ResolverVoltageInfo class
+   */
+  public ResolverVoltage(ResolverVoltageInfo info) {
+    resolver = new AnalogInput(info.channel);
+    slope = (info.angle1 - info.angle2) / (info.v1 - info.v2);
+    if (info.offset == null) {
+      offset = info.angle1 - slope * info.v1;
+    } else {
+      offset = info.offset;
+    }
+  }
+
+  /*
+   * Creates resolver using ResolverVoltageInfo class
+   */
+  public ResolverVoltage(ResolverVoltageInfo info) {
+    resolver = new AnalogInput(info.channel);
+    slope = (info.angle1 - info.angle2) / (info.v1 - info.v2);
+    if (info.offset == null) {
+      offset = info.angle1 - slope * info.v1;
+    } else {
+      offset = info.offset;
+    }
   }
 
   public ResolverVoltage(Object intakeResolverInfo) {

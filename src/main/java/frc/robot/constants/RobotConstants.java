@@ -160,8 +160,8 @@ public class RobotConstants {
       LeftL4(1.5, false),
       RightL4(1.5, true);
 
-      double lift;
-      boolean right;
+      private double lift;
+      private boolean right;
 
       private CoralPreset(double lift, boolean right) {
         this.lift = lift;
@@ -170,6 +170,10 @@ public class RobotConstants {
 
       public double getLift() {
         return lift;
+      }
+
+      public boolean getGantryRight() {
+        return right;
       }
     }
   }
@@ -197,8 +201,8 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = 1;
     public static final int climberWinch2MotorID = 2;
 
-    public static final Limit liftLimits = new Limit(0, 1000);
-    public static final Limit winchLimits = new Limit(0, 1000);
+    public static final Limits liftLimits = new Limits(0.0, 1000.0);
+    public static final Limits winchLimits = new Limits(0.0, 1000.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =
@@ -216,6 +220,7 @@ public class RobotConstants {
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
     public static final Limits gantryLimits = new Limits(-0.330, null);
+    public static final double gantryPadding = 0.05;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
   }
 

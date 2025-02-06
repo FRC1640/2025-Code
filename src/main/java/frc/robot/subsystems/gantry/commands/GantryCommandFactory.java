@@ -77,7 +77,8 @@ public class GantryCommandFactory {
                             : 0.1)
                 .until(
                     () ->
-                        Math.abs(gantrySubsystem.getCarriagePosition()) < 0.05
+                        Math.abs(gantrySubsystem.getCarriagePosition())
+                                < GantryConstants.gantryPadding
                             || Math.abs(
                                     gantrySubsystem.getCarriagePosition()
                                         - GantryConstants.gantryLimits.low)

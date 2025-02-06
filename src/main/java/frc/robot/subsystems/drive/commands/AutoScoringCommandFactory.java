@@ -27,6 +27,9 @@ public class AutoScoringCommandFactory {
                     () ->
                         getAutoaligned.getAsBoolean()
                             && liftCommandFactory.getLiftAtPreset(getPreset.get()))
-                .andThen(gantryCommandFactory.gantryHomeCommand()));
+                .andThen(
+                    gantryCommandFactory.gantryPIDCommand(
+                        () -> getPreset.get().getGantryRight() ? 0.31 : Constants.gantryLimits))
+                .andThen(gantryCommandFactory.gantryDriftCommand()));
   }
 }

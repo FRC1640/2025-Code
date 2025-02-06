@@ -12,9 +12,10 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.util.tools.Limit;
+import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
@@ -43,6 +44,9 @@ public class RobotConstants {
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+
+    public static final boolean climberSubsystemEnabled =
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
@@ -137,10 +141,10 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftleaderMotorID = new RobotSwitch<Integer>(0).get();
-    public static final int liftfollowerMotorID = new RobotSwitch<Integer>(1).get();
+    public static final int liftLeaderMotorID = new RobotSwitch<Integer>(0).get();
+    public static final int liftFollowerMotorID = new RobotSwitch<Integer>(1).get();
     public static final double gearRatio = 5;
-    public static final Limit liftLimits = new Limit(0, 2);
+    public static final Limits liftLimits = new Limits(0.0, 2.0);
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
@@ -150,13 +154,14 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 325;
+    public static final double detectionThresh = 350;
+    public static final int averageLength = 20;
+    public static final double averagePercentage = 0.8;
+    public static final double waitTimeSeconds = 0.02;
   }
 
   // TODO replace with actual values
   public static class WarningThresholdConstants {
-    // current thresholds are in amps and are currently set at the stall current. Consult with team
-    // for actual values later.
     public static final double maxVortexMotorCurrent = 90;
     public static final double maxNeoMotorCurrent = 80;
     public static final double maxNeo550MotorCurrent = 70;
@@ -164,18 +169,32 @@ public class RobotConstants {
     public static final double minBatteryVoltage = 10.5;
   }
 
+  // TODO replace with actual values
+  public static class ClimberConstants {
+    public static final int climberLiftMotorID = 0;
+    public static final int climberWinch1MotorID = 1;
+    public static final int climberWinch2MotorID = 2;
+
+    public static final Limits liftLimits = new Limits(0.0, 1000.0);
+    public static final Limits winchLimits = new Limits(0.0, 1000.0);
+    public static final ResolverVoltageInfo winchResolverInfo =
+        new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo liftResolverInfo =
+        new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
+
+    public static final double gearRatio = 5;
+
+    public static final int solenoidForwardChannel = 0;
+    public static final int solenoidReverseChannel = 1;
+  }
+
   public static class GantryConstants {
     public static final int gantrySparkID = new RobotSwitch<Integer>(12).get();
-    public static final double gantryGearRatio = 27; // prototype values
-    public static final double pulleyRadius =
-        Units.inchesToMeters(0.5); // inches for now / placeholder
+    public static final double gantryGearRatio = 27.4;
+    public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limit gantryLimits = new Limit(-10000, 10000);
+    public static final Limits gantryLimits = new Limits(-0.330, null);
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    ;
-
-    public static final double gantryHomeFastVoltage = 6;
-    public static final double gantryHomeSlowVoltage = 3;
   }
 
   public static class CoralOuttakeConstants {
@@ -183,7 +202,7 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(24).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(25).get(); // update this too
+        new RobotSwitch<Integer>(8).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }

@@ -18,7 +18,13 @@ public class OdometryStorage {
   private Optional<OdometryStorage> trustedRotation;
   private final double gyroBufferSizeSec = 2.0;
   private TimeInterpolatableBuffer<Rotation2d> gyroBuffer =
-      TimeInterpolatableBuffer.createBuffer(gyroBufferSizeSec);
+      TimeInterpolatableBuffer.createBuffer(
+          (a, b, c) -> {
+            double aRadians = a.getRadians();
+            double delta = (b.getRadians() % (2 * Math.PI)) - aRadians;
+            return new Rotation2d((delta * c) + aRadians);
+          },
+          gyroBufferSizeSec);
 
   public void setTrustedRotation(OdometryStorage trustedRotation) {
     this.trustedRotation = Optional.of(trustedRotation);

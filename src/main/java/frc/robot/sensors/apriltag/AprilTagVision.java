@@ -15,7 +15,6 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagVision extends PeriodicBase {
@@ -80,14 +79,14 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  public Optional<PoseObservation> getTrigResult(Function<Double, Rotation2d> getGyroRotation) {
+  public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
     if (inputs.trigTargetObservations.length == 0) {
       return Optional.empty();
     }
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      PoseObservation result = calculateTrigResult(observation, getGyroRotation);
+      PoseObservation result = calculateTrigResult(observation, gyroRotation);
       trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
@@ -116,11 +115,7 @@ public class AprilTagVision extends PeriodicBase {
     averageX /= total;
     averageY /= total;
     averageDistance /= trigPoses.size();
-    Pose2d averagePose =
-        new Pose2d(
-            averageX,
-            averageY,
-            getGyroRotation.apply(trigPoses.get(trigPoses.size() - 1).timestamp()));
+    Pose2d averagePose = new Pose2d(averageX, averageY, gyroRotation);
 
     PoseObservation observation =
         new PoseObservation(
@@ -136,9 +131,7 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public PoseObservation calculateTrigResult(
-      TrigTargetObservation observation, Function<Double, Rotation2d> getGyroRotation) {
-    // evaluate function
-    Rotation2d gyroRotation = getGyroRotation.apply(observation.timestamp());
+      TrigTargetObservation observation, Rotation2d gyroRotation) {
 
     // Get camera displacement details
     Transform3d cameraDisplacement = inputs.cameraDisplacement;

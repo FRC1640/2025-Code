@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
-import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.tools.logging.LoggerManager;
 import java.net.InetAddress;
@@ -167,7 +166,7 @@ public class Robot extends LoggedRobot {
   public void testInit() {
     state = RobotState.TEST;
     CommandScheduler.getInstance().cancelAll();
-    Dashboard.getSysidCommand().schedule();
+    m_robotContainer.getSysidCommand().schedule();
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
   }
 

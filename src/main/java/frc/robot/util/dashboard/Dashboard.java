@@ -30,6 +30,9 @@ public class Dashboard {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   private LiftSubsystem liftSubsystem;
 
+  private boolean pid = false;
+  private boolean sysid = false;
+
   public Dashboard(
       DriveSubsystem driveSubsystem,
       LiftSubsystem liftSubsystem,
@@ -61,18 +64,26 @@ public class Dashboard {
     testChooser.addOption("PID", Test.PID);
     testChooser.addOption("SYSID", Test.SYSID);
     ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
-    testTab.add("STUPID TRASH RAAA", testChooser).withSize(4, 3).withPosition(1, 1);
-    System.out.println(testChooser.getSelected() + "sanity check");
-    testChooser.onChange((x)->testChange(x, new String[0]));
+    testTab.add("STUPID TRASH RAAA", testChooser).withSize(4, 3).withPosition(4, 1);
+    // System.out.println(testChooser.getSelected() + "sanity check");
+    testChooser.onChange((x) -> testChange(x, new String[0]));
   }
 
   private void testChange(Test test, String[] pidKey) {
-    switch (test) {
+    switch (test) { // come back to allow multiple test tabs happening
       case SYSID:
-        sysidInit();
+        if (!sysid) {
+          pid = false;
+          sysid = true;
+          sysidInit();
+        }
         break;
       case PID:
-        pidInit(pidKey);
+        if (!pid) {
+          pid = true;
+          sysid = false;
+          pidInit(pidKey);
+        }
         break;
       case NONE:
         break;
@@ -80,9 +91,10 @@ public class Dashboard {
   }
 
   private void sysidInit() {
+    pid = false;
+    sysid = true;
     BooleanSupplier startNext = controller.b();
     BooleanSupplier cancel = controller.a();
-    ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
     sysidChooser.setDefaultOption("none :/", new WaitCommand(0.1));
     sysidChooser.addOption(
         "Swerve",
@@ -102,6 +114,7 @@ public class Dashboard {
             startNext,
             cancel,
             () -> liftSubsystem.setLiftVoltage(0)));
+    ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 

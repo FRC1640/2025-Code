@@ -244,4 +244,8 @@ public class RobotContainer {
         .getAutoChooserCommand()
         .andThen(driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds()));
   }
+
+  public Command getSysidCommand() {
+    return dashboard.getSysidCommand();
+  }
 }

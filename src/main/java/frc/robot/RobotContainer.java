@@ -37,6 +37,7 @@ import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
@@ -83,8 +84,12 @@ public class RobotContainer {
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
 
-  private Command liftCommand;
+  private Command coralCommand;
   private CoralPreset coralPreset;
+
+  private DriveToNearestWeight coralAutoAlignWeight;
+
+  private AutoScoringCommandFactory autoScoringCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -169,6 +174,18 @@ public class RobotContainer {
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+
+    coralAutoAlignWeight =
+        new DriveToNearestWeight(
+            () -> RobotOdometry.instance.getPose("Main"),
+            () ->
+                AllianceManager.chooseFromAlliance(
+                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            gyro,
+            (x) -> RobotConstants.addRobotDim(x));
+
+    autoScoringCommandFactory =
+        new AutoScoringCommandFactory(gantryCommandFactory, liftCommandFactory);
     configureBindings();
   }
 
@@ -181,20 +198,14 @@ public class RobotContainer {
             driveController.rightBumper(),
             driveController.leftTrigger()));
 
-    DriveWeightCommand.createAutoalignTrigger(
-        new DriveToNearestWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            gyro,
-            (x) -> RobotConstants.addRobotDim(x)),
-        driveController.a());
+    DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
 
-    new Trigger(() -> DriveWeightCommand.nearAutoalignTarget())
-        .onTrue(liftCommand = liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift()));
+    new Trigger(() -> coralAutoAlignWeight.getTargetDistance() < 1.5)
+        .onTrue(
+            autoScoringCommandFactory.autoalignCoralCommand(
+                () -> coralPreset, () -> coralAutoAlignWeight.getAutoalignComplete()));
 
-    DriveWeightCommand.createAutoalignTrigger(
+    DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
@@ -244,20 +255,20 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () ->
-                    liftCommand =
+                    coralCommand =
                         liftCommandFactory.runLiftMotionProfile(
                             () -> coralPreset.getLift()))); // TODO jitter?
     operatorController
         .b()
         .onTrue(
             new InstantCommand(
-                () -> liftCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
+                () -> coralCommand = liftCommandFactory.liftApplyVoltageCommand(() -> 0)));
     operatorController
         .x()
         .onTrue(
             new InstantCommand(
                 () ->
-                    liftCommand =
+                    coralCommand =
                         liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())));
   }
 

@@ -110,5 +110,6 @@ public class LiftIOSpark implements LiftIO {
         followerMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
+    inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
   }
 }

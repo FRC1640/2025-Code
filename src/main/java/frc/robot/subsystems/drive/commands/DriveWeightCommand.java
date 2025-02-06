@@ -5,18 +5,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.subsystems.drive.weights.AutoalignWeight;
 import frc.robot.subsystems.drive.weights.DriveWeight;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 public class DriveWeightCommand {
   static ArrayList<DriveWeight> persistentWeights = new ArrayList<>();
 
   static ArrayList<DriveWeight> weights = new ArrayList<>();
-  static Optional<AutoalignWeight> autoalignWeight = Optional.empty();
 
   public static Command create(DriveCommandFactory driveCommandFactory) {
     Command c = driveCommandFactory.runVelocityCommand(() -> getAllSpeeds());
@@ -47,17 +44,8 @@ public class DriveWeightCommand {
     }
   }
 
-  public static void addAutoalignWeight(AutoalignWeight weight) {
-    autoalignWeight = Optional.of(weight);
-  }
-
-  public static void removeAutoalignWeight() {
-    autoalignWeight = Optional.empty();
-  }
-
   public static void removeAllWeights() {
     weights.clear();
-    autoalignWeight = Optional.empty();
   }
 
   private static ChassisSpeeds getAllSpeeds() {
@@ -76,10 +64,6 @@ public class DriveWeightCommand {
     }
     for (DriveWeight driveWeight : persistentWeights) {
       speeds = speeds.plus(driveWeight.getSpeeds().times(driveWeight.getWeight()));
-    }
-    if (autoalignWeight.isPresent()) {
-      speeds =
-          speeds.plus(autoalignWeight.get().getSpeeds().times(autoalignWeight.get().getWeight()));
     }
     return decreaseSpeeds(speeds);
   }
@@ -109,21 +93,5 @@ public class DriveWeightCommand {
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> addWeight(weight)))
         .onFalse(new InstantCommand(() -> removeWeight(weight)));
-  }
-
-  public static Trigger createAutoalignTrigger(AutoalignWeight weight, BooleanSupplier condition) {
-    new Trigger(() -> weight.cancelCondition())
-        .onTrue(new InstantCommand(() -> removeAutoalignWeight()));
-    return new Trigger(condition)
-        .onTrue(new InstantCommand(() -> addAutoalignWeight(weight)))
-        .onFalse(new InstantCommand(() -> removeAutoalignWeight()));
-  }
-
-  public static boolean nearAutoalignTarget() {
-    boolean near = false;
-    if (autoalignWeight.isPresent()) {
-      near = (autoalignWeight.get().getTargetDistance() < 2);
-    }
-    return near;
   }
 }

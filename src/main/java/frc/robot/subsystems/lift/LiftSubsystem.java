@@ -43,6 +43,10 @@ public class LiftSubsystem extends SubsystemBase {
     Logger.processInputs("Lift/", inputs);
   }
 
+  public double getMotorPosition() {
+    return inputs.motorPosition;
+  }
+
   public double getLeaderMotorPosition() {
     return inputs.leaderMotorPosition;
   }

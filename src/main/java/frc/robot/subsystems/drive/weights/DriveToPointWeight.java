@@ -7,7 +7,7 @@ import frc.robot.util.tools.AutoAlignHelper;
 import frc.robot.util.tools.DistanceManager;
 import java.util.function.Supplier;
 
-public class DriveToPointWeight extends AutoalignWeight {
+public class DriveToPointWeight implements DriveWeight {
   private Supplier<Pose2d> robotPose;
   private Supplier<Pose2d> targetPose;
   private Gyro gyro;
@@ -24,7 +24,6 @@ public class DriveToPointWeight extends AutoalignWeight {
     return autoAlignHelper.getPoseSpeeds(robotPose.get(), targetPose.get(), gyro);
   }
 
-  @Override
   public double getTargetDistance() {
     return DistanceManager.getPositionDistance(robotPose.get(), targetPose.get());
   }

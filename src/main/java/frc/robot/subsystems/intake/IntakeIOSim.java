@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotConstants.IntakeConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
 
@@ -30,7 +31,8 @@ public class IntakeIOSim implements IntakeIO {
   public void setIntakemotor1Voltage(final double voltage, IntakeIOInputs inputs) {
     intakemotor.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.intakeMotorPosition, voltage, IntakeConstants.intakeLimts)));
+            MotorLim.applyLimits(
+                inputs.intakeMotorPosition, voltage, IntakeConstants.intakeLimts)));
   }
 
   @Override

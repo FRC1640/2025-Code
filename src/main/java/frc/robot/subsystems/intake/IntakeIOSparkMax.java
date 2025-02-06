@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.constants.RobotConstants.IntakeConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.sensors.resolvers.ResolverVoltage;

@@ -40,7 +40,10 @@ public class ResolverVoltage {
     this.offset = offset;
   }
 
-  /**
+  public ResolverVoltage(Object intakeResolverInfo) {
+    //TODO Auto-generated constructor stub
+}
+/**
    * @return Angle in radians
    */
   public double getRadians() {

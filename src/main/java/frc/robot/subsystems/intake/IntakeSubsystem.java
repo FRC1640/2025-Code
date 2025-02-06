@@ -1,117 +1,45 @@
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class ClimberSubsystem extends SubsystemBase {
-  ClimberIO climberIO;
-  ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
+public class IntakeSubsystem extends SubsystemBase {
+  IntakeIO IntakeIO;
+  IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-  public ClimberSubsystem(ClimberIO liftIO) {
-    this.climberIO = liftIO;
+  public IntakeSubsystem(IntakeIO IntakeIO) {
+    this.IntakeIO = IntakeIO;
   }
 
   @Override
   public void periodic() {
 
-    climberIO.updateInputs(inputs);
-    Logger.processInputs("Climber/", inputs);
+    IntakeIO.updateInputs(inputs);
+    Logger.processInputs("Intake/", inputs);
   }
 
   public double getLiftMotorPosition() {
-    return inputs.liftMotorPosition;
+    return inputs.intakeMotorPosition;
   }
 
-  public double getWinchLeaderMotorPosition() {
-    return inputs.winchLeaderMotorPosition;
+  public double getintakeMotorVelocity() {
+    return inputs.intakeMotorVelocity;
   }
 
-  public double getWinchFollowerMotorPosition() {
-    return inputs.winchFollowerMotorPosition;
+  public double getIntakeMotorCurrent() {
+    return inputs.intakeMotorCurrent;
   }
 
-  public double getWinchMotorPosition() {
-    return ((inputs.winchLeaderMotorPosition + inputs.winchFollowerMotorPosition) / 2.0);
+  public double getintakerMotorVoltage() {
+    return inputs.intakeMotorVoltage;
   }
 
-  public double getLiftMotorVelocity() {
-    return inputs.liftMotorVelocity;
+  public double getintakeTemperature() {
+    return inputs.intakeMotorTemperature;
   }
 
-  public double getWinchLeaderMotorVelocity() {
-    return inputs.winchLeaderMotorVelocity;
-  }
-
-  public double getWinchFollowerMotorVelocity() {
-    return inputs.winchFollowerMotorVelocity;
-  }
-
-  public double getWinchMotorVelocity() {
-    return ((inputs.winchLeaderMotorVelocity + inputs.winchFollowerMotorVelocity) / 2.0);
-  }
-
-  public double getLiftMotorCurrent() {
-    return inputs.liftMotorCurrent;
-  }
-
-  public double getWinchLeaderMotorCurrent() {
-    return inputs.winchLeaderMotorCurrent;
-  }
-
-  public double getWinchFollowerMotorCurrent() {
-    return inputs.winchFollowerMotorCurrent;
-  }
-
-  public double getWinchMotorCurrent() {
-    return ((inputs.winchLeaderMotorCurrent + inputs.winchFollowerMotorCurrent) / 2.0);
-  }
-
-  public double getLiftMotorVoltage() {
-    return inputs.liftMotorVoltage;
-  }
-
-  public double getWinchLeaderMotorVoltage() {
-    return inputs.winchLeaderMotorVoltage;
-  }
-
-  public double getWinchFollowerMotorVoltage() {
-    return inputs.winchFollowerMotorVoltage;
-  }
-
-  public double getWinchMotorVoltage() {
-    return ((inputs.winchLeaderMotorVoltage + inputs.winchFollowerMotorVoltage) / 2.0);
-  }
-
-  public double getLiftTemperature() {
-    return inputs.liftMotorTemperature;
-  }
-
-  public double getWinchLeaderMotorTemperature() {
-    return inputs.winchLeaderMotorTemperature;
-  }
-
-  public double getWinchFollowerMotorTemperature() {
-    return inputs.winchFollowerMotorTemperature;
-  }
-
-  public double getWinchMotorTemperature() {
-    return ((inputs.winchLeaderMotorTemperature + inputs.winchFollowerMotorTemperature) / 2.0);
-  }
-
-  public void setClimberLiftPosition(double pos) {
-    climberIO.setClimberLiftPosition(pos, inputs);
-  }
-
-  public void setClimberLiftVoltage(double voltage) {
-    climberIO.setClimberLiftVoltage(voltage, inputs);
-  }
-
-  public void setClimberWinchPosition(double pos) {
-    climberIO.setClimberWinchPosition(pos, inputs);
-  }
-
-  public void setClimberWinchVoltage(double voltage) {
-    climberIO.setClimberWinchVoltage(voltage, inputs);
+  public void setIntakePosition(double pos) {
+    IntakeIO.setIntakemotor1Position(pos, inputs);
   }
 
   public boolean getSolenoidState() {
@@ -119,6 +47,6 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void setSolenoidState(boolean forward) {
-    climberIO.setSolenoidState(forward, inputs);
+    IntakeIO.setIntakeSolenoidState(forward, inputs);
   }
 }

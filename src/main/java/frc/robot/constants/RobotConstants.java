@@ -24,6 +24,11 @@ public class RobotConstants {
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
+public static final String IntakeConstants = null;
+public static final String IntakeConstants = null;
+public static final String IntakeConstants = null;
+public static Object IntakeConstants;
+
   public static Pose2d addRobotDim(Pose2d pose2d) {
     Translation2d translation =
         pose2d

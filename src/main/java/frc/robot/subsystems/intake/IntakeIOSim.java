@@ -12,7 +12,7 @@ import frc.robot.util.tools.MotorLim;
 
 public class IntakeIOSim implements IntakeIO {
   private final DCMotorSim intakemotor;
-  private final DoubleSolenoidSim doubleSolenoidSim;
+  final DoubleSolenoidSim doubleSolenoidSim;
   private final PIDController liftPID;
 
   public IntakeIOSim() {
@@ -27,21 +27,20 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   @Override
-  public void setintak.eVoltage(final double voltage, IntakeIOInputs inputs) {
+  public void setIntakemotor1Voltage(final double voltage, IntakeIOInputs inputs) {
     intakemotor.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(
-                inputs.intakeMotorPosition, voltage, RobotConstants.IntakeConstants.intakeLimits)));
+            MotorLim.applyLimits(inputs.intakeMotorPosition, voltage, IntakeConstants.intakeLimts)));
   }
 
   @Override
-  public void setIntakeposition(double position, final IntakeIOInputs inputs) {
-    setintakeVoltage(
+  public void setIntakemotor1Position(double position, IntakeIOInputs inputs) {
+    setIntakemotor1Voltage(
         MotorLim.clampVoltage(liftPID.calculate(inputs.intakeMotorPosition, position)), inputs);
   }
 
   @Override
-  public void setSolenoidState(final boolean forward, IntakeIOInputs inputs) {
+  public void setIntakeSolenoidState(final boolean forward, IntakeIOInputs inputs) {
     inputs.setSolenoidState(forward, this);
   }
 

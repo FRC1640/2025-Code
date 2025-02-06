@@ -299,7 +299,9 @@ public class RobotContainer {
                         liftAutoCommand =
                             liftCommandFactory.runLiftMotionProfile(
                                 () -> CoralPreset.Safe.getLift()))
-                .alongWith(gantryCommandFactory.gantryPIDCommand(() -> 0)));
+                .alongWith(
+                    gantryCommandFactory.gantryPIDCommand(
+                        () -> GantryConstants.gantryLimits.low / 2)));
   }
 
   public Command getAutonomousCommand() {

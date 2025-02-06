@@ -17,7 +17,7 @@ import java.util.function.BooleanSupplier;
 
 public class Dashboard {
 
-  public static enum Test {
+  public enum Test {
     PID,
     SYSID,
     NONE
@@ -26,7 +26,7 @@ public class Dashboard {
   private DriveSubsystem driveSubsystem;
   private CommandXboxController controller;
 
-  private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
+  private SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   private LiftSubsystem liftSubsystem;
 
@@ -63,8 +63,7 @@ public class Dashboard {
     ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
     testTab.add("STUPID TRASH RAAA", testChooser).withSize(4, 3).withPosition(1, 1);
     System.out.println(testChooser.getSelected() + "sanity check");
-    // testChooser.onChange();
-    testChange(testChooser.getSelected(), pidKeys);
+    testChooser.onChange((x)->testChange(x, new String[0]));
   }
 
   private void testChange(Test test, String[] pidKey) {
@@ -106,7 +105,7 @@ public class Dashboard {
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 
-  public static Command getSysidCommand() {
+  public Command getSysidCommand() {
     return sysidChooser.getSelected();
   }
 

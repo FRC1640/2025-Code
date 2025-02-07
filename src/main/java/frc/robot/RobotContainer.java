@@ -29,6 +29,11 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.algaeintake.AlgaeIntakeIO;
+import frc.robot.subsystems.algaeintake.AlgaeIntakeIOSim;
+import frc.robot.subsystems.algaeintake.AlgaeIntakeIOSparkMax;
+import frc.robot.subsystems.algaeintake.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.algaeintake.commands.AlgaeIntakeCommandFactory;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -68,6 +73,7 @@ public class RobotContainer {
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private final ClimberSubsystem climberSubsystem;
+  private final AlgaeIntakeSubsystem algaeIntakeSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -84,6 +90,7 @@ public class RobotContainer {
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
+  private final AlgaeIntakeCommandFactory algaeIntakeCommandFactory;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -117,7 +124,11 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
-
+        algaeIntakeSubsystem =
+            new AlgaeIntakeSubsystem(
+                RobotConfigConstants.algaeIntakeSubsystemEnabled
+                    ? new AlgaeIntakeIOSparkMax()
+                    : new AlgaeIntakeIO() {});
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -151,6 +162,11 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSim()
                     : new ClimberIO() {});
+        algaeIntakeSubsystem =
+            new AlgaeIntakeSubsystem(
+                RobotConfigConstants.algaeIntakeSubsystemEnabled
+                    ? new AlgaeIntakeIOSim()
+                    : new AlgaeIntakeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -159,6 +175,7 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        algaeIntakeSubsystem = new AlgaeIntakeSubsystem(new AlgaeIntakeIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -176,6 +193,7 @@ public class RobotContainer {
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    algaeIntakeCommandFactory = new AlgaeIntakeCommandFactory(algaeIntakeSubsystem);
 
     // set defaults
 
@@ -224,6 +242,10 @@ public class RobotContainer {
     operatorController
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
+
+    operatorController
+        .leftTrigger()
+        .whileTrue(algaeIntakeCommandFactory.algaeIntakeIntakeAlgaeCommand());
 
     operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 

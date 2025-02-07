@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.algaeintake;
 
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
@@ -7,33 +7,33 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.IntakeConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
-import frc.robot.sensors.resolvers.ResolverVoltage;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
-public class IntakeIOSparkMax implements IntakeIO {
+public class AlgaeIntakeIOSparkMax implements AlgaeIntakeIO {
 
   private final SparkMax intakeSpark;
   private final PIDController intakePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.intakePID);
   DoubleSolenoid doubleSolenoid;
 
-  public IntakeIOSparkMax() {
+  public AlgaeIntakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(IntakeConstants.intakeMotorID, false));
-    ResolverVoltage intakeEncoder = new ResolverVoltage(IntakeConstants.intakeResolverInfo);
     doubleSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
-            IntakeConstants.solenoidForwardChannel,
+            IntakeConstants
+                .solenoidForwardChannel, // TODO: idk if we are going to use pneumatics just for
+            // this.
             IntakeConstants.solenoidReverseChannel);
   }
   /*
    * Set voltage of the lift motor
    */
   @Override
-  public void setIntakemotor1Voltage(double voltage, IntakeIOInputs inputs) {
+  public void setIntakeMotorVoltage(double voltage, AlgaeIntakeIOInputs inputs) {
     intakeSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
@@ -44,8 +44,8 @@ public class IntakeIOSparkMax implements IntakeIO {
    * Sets the position of the lift motor using a PID
    */
   @Override
-  public void setIntakemotor1Position(double position, IntakeIOInputs inputs) {
-    setIntakemotor1Position(
+  public void setIntakeMotorPosition(double position, AlgaeIntakeIOInputs inputs) {
+    setIntakeMotorPosition(
         MotorLim.clampVoltage(intakePID.calculate(inputs.intakeMotorPosition, position)), inputs);
   }
   /*
@@ -53,14 +53,14 @@ public class IntakeIOSparkMax implements IntakeIO {
    */
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(AlgaeIntakeIOInputs inputs) {
     inputs.intakeMotorCurrent = intakeSpark.getOutputCurrent();
     inputs.intakeMotorVoltage = intakeSpark.getAppliedOutput();
     inputs.intakeMotorTemperature = intakeSpark.getMotorTemperature();
   }
 
   @Override
-  public void setIntakeSolenoidState(boolean forward, IntakeIOInputs inputs) {
+  public void setIntakeSolenoidState(boolean forward, AlgaeIntakeIOInputs inputs) {
     if (forward) {
       doubleSolenoid.set(DoubleSolenoid.Value.kForward);
     } else {

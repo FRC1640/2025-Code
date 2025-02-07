@@ -41,36 +41,10 @@ public class ResolverVoltage {
     this.offset = offset;
   }
 
-  /*
-   * Creates resolver using ResolverVoltageInfo class
-   */
-  public ResolverVoltage(ResolverVoltageInfo info) {
-    resolver = new AnalogInput(info.channel);
-    slope = (info.angle1 - info.angle2) / (info.v1 - info.v2);
-    if (info.offset == null) {
-      offset = info.angle1 - slope * info.v1;
-    } else {
-      offset = info.offset;
-    }
-  }
-
-  /*
-   * Creates resolver using ResolverVoltageInfo class
-   */
-  public ResolverVoltage(ResolverVoltageInfo info) {
-    resolver = new AnalogInput(info.channel);
-    slope = (info.angle1 - info.angle2) / (info.v1 - info.v2);
-    if (info.offset == null) {
-      offset = info.angle1 - slope * info.v1;
-    } else {
-      offset = info.offset;
-    }
-  }
-
   public ResolverVoltage(Object intakeResolverInfo) {
-    //TODO Auto-generated constructor stub
-}
-/**
+    // TODO Auto-generated constructor stub
+  }
+  /**
    * @return Angle in radians
    */
   public double getRadians() {

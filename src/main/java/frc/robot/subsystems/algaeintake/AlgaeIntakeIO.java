@@ -1,11 +1,11 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.algaeintake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface IntakeIO extends AutoCloseable {
+public interface AlgaeIntakeIO extends AutoCloseable {
   @AutoLog
-  public static class IntakeIOInputs {
+  public static class AlgaeIntakeIOInputs {
     // may need more for pneumatic stsuff not entirely sure
     public double intakeMotorPosition = 0.0;
     public double intakeMotorVelocity = 0.0;
@@ -14,7 +14,7 @@ public interface IntakeIO extends AutoCloseable {
     public double intakeMotorTemperature = 0.0;
     public boolean solenoidForward = false;
 
-    public void setSolenoidState(final boolean forward, IntakeIOSim intakeIOSim) {
+    public void setSolenoidState(final boolean forward, AlgaeIntakeIOSim intakeIOSim) {
       if (forward) {
         intakeIOSim.doubleSolenoidSim.set(DoubleSolenoid.Value.kForward);
       } else {
@@ -26,21 +26,21 @@ public interface IntakeIO extends AutoCloseable {
   /*
    * Updates the inputs
    */
-  public default void updateInputs(IntakeIOInputs inputs) {}
+  public default void updateInputs(AlgaeIntakeIOInputs inputs) {}
 
   @Override
   default void close() {}
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setIntakemotor1Position(double position, IntakeIOInputs inputs) {}
+  public default void setIntakeMotorPosition(double position, AlgaeIntakeIOInputs inputs) {}
   /*
    * Set voltage of the motor
    */
-  public default void setIntakemotor1Voltage(double voltage, IntakeIOInputs inputs) {}
+  public default void setIntakeMotorVoltage(double voltage, AlgaeIntakeIOInputs inputs) {}
   /*
    * Set solenoid state (forward/reverse)
    * Boolean forward is reverse
    */
-  public default void setIntakeSolenoidState(boolean forward, IntakeIOInputs inputs) {}
+  public default void setIntakeSolenoidState(boolean forward, AlgaeIntakeIOInputs inputs) {}
 }

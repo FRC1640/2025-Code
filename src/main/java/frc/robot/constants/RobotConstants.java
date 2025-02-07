@@ -29,11 +29,6 @@ public class RobotConstants {
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
-public static final String IntakeConstants = null;
-public static final String IntakeConstants = null;
-public static final String IntakeConstants = null;
-public static Object IntakeConstants;
-
   public class RobotConfigConstants {
     public static final RobotType robotType = RobotType.Deux24;
 
@@ -58,6 +53,8 @@ public static Object IntakeConstants;
 
     // odometry
     public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
+
+    public static boolean algaeIntakeSubsystemEnabled;
   }
 
   public static Pose2d addRobotDim(Pose2d pose2d) {
@@ -170,12 +167,12 @@ public static Object IntakeConstants;
     public static final double maxMotorTemp = 60; // in degrees celcius
     public static final double minBatteryVoltage = 10.5;
   }
+
   public static class IntakeConstants {
     public static final int climberLiftMotorID = 0;
     public static final Limit intakeLimits = new Limit(0, 1000);
     public static final ResolverVoltageInfo intakeResolver =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
-  
 
     public static final double intakegearRatio = 5;
 
@@ -186,8 +183,8 @@ public static Object IntakeConstants;
     public static ResolverVoltageInfo intakeResolverInfo;
     public static int solenoidForwardChannel;
     public static int solenoidReverseChannel;
-    public class intakeResolverInfo {
-    }
+
+    public class intakeResolverInfo {}
   }
 
   // TODO replace with actual values

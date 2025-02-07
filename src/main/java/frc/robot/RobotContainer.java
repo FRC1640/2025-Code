@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +48,7 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
+import frc.robot.subsystems.drive.weights.FollowPath;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -216,13 +216,17 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
-    DriveWeightCommand.addPersistentWeight(new PathplannerWeight());
+    DriveWeightCommand.addPersistentWeight(
+        new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
     configureBindings();
   }
 
   private void configureBindings() {
 
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
+
+    new FollowPath(() -> RobotOdometry.instance.getPose("Main"), null, gyro, null, driveSubsystem)
+        .generateTrigger(driveController.y());
 
     new Trigger(
             () ->
@@ -321,9 +325,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return dashboard
-        .getAutoChooserCommand()
-        .alongWith(gantryCommandFactory.gantryHomeCommand())
-        .andThen(driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds()));
+    return dashboard.getAutoChooserCommand().alongWith(gantryCommandFactory.gantryHomeCommand());
   }
 }

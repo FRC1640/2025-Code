@@ -50,6 +50,7 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -214,6 +215,8 @@ public class RobotContainer {
             driveController.leftTrigger()));
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
+
+    DriveWeightCommand.addPersistentWeight(new PathplannerWeight());
     configureBindings();
   }
 

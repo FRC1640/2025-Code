@@ -92,7 +92,7 @@ public class GantrySubsystem extends SubsystemBase {
     io.setGantryVelocity(velocity, inputs);
   }
 
-  public boolean isAtPreset(CoralPreset preset) {
-    return Math.abs(getCarriagePosition() - preset.getGantry()) < 0.01;
+  public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
+    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
   }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -232,29 +233,36 @@ public class RobotContainer {
                     () ->
                         liftSubsystem.setDefaultCommand(
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
-                .alongWith(autoScoringCommandFactory.gantryAlignCommand(() -> coralPreset)));
+                .alongWith(
+                    autoScoringCommandFactory.gantryAlignCommand(
+                        () -> coralPreset,
+                        () ->
+                            AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main")))));
     // coral place routine for autoalign
-    new Trigger(
+    new Trigger(() -> coralAutoAlignWeight.getAutoalignComplete())
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.75)))
+        .and(
             () ->
                 liftSubsystem.isAtPreset(coralPreset)
-                    && gantrySubsystem.isAtPreset(coralPreset)
-                    && coralAutoAlignWeight.getAutoalignComplete())
+                    && gantrySubsystem.isAtPreset(
+                        coralPreset,
+                        AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main"))))
         .onTrue(
             gantryCommandFactory
                 .gantryDriftCommand()
                 .andThen(new WaitCommand(0.1))
                 .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12))
                 .until(() -> coralOuttakeSubsystem.isCoralDetected())
-                .andThen(new WaitCommand(0.1))
                 .andThen(
-                    new InstantCommand(
-                        () ->
-                            liftSubsystem.setDefaultCommand(
-                                liftCommandFactory.runLiftMotionProfile(
-                                    () -> CoralPreset.Safe.getLift()))))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                    new WaitCommand(0.1)
+                        .finallyDo(
+                            () ->
+                                liftSubsystem.setDefaultCommand(
+                                    liftCommandFactory.runLiftMotionProfile(
+                                        () -> CoralPreset.Safe.getLift())))
+                        .alongWith(
+                            gantryCommandFactory.gantryPIDCommand(
+                                () -> GantryConstants.gantryLimits.low / 2))));
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
@@ -306,7 +314,10 @@ public class RobotContainer {
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset))); // TODO jitter?
+                        () -> coralPreset,
+                        () ->
+                            AllianceManager.onDsSideReef(
+                                RobotOdometry.instance.getPose("Main"))))); // TODO jitter?
 
     new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
         .onFalse(

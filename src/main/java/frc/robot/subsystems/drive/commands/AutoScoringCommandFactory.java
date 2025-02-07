@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class AutoScoringCommandFactory {
@@ -16,7 +17,8 @@ public class AutoScoringCommandFactory {
     this.liftCommandFactory = liftCommandFactory;
   }
 
-  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset) {
-    return gantryCommandFactory.gantryPIDCommand(() -> getPreset.get().getGantry());
+  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
+    return gantryCommandFactory.gantryPIDCommand(
+        () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
   }
 }

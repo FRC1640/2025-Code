@@ -58,7 +58,7 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommand() { // TODO: breaks if doesn't detect
+  public Command gantryDriftCommand() {
     return gantrySetVelocityCommand(
             () ->
                 gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2

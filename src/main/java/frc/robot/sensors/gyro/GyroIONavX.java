@@ -14,6 +14,9 @@ public class GyroIONavX implements GyroIO {
   private final Queue<Double> yawTimestampQueue;
   private final Queue<Double> rate;
 
+  double pitchOffset = 0;
+  double rollOffset = 0;
+
   public GyroIONavX() {
     rate = SparkOdometryThread.getInstance().registerSignal(() -> Math.toRadians(gyro.getRate()));
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
@@ -30,8 +33,8 @@ public class GyroIONavX implements GyroIO {
     inputs.angularVelocityDegreesPerSecond = gyro.getRate();
     inputs.angleDegreesRaw = Math.toDegrees(inputs.angleRadiansRaw);
 
-    inputs.roll = new Rotation2d(gyro.getRotation3d().getX());
-    inputs.pitch = new Rotation2d(gyro.getRotation3d().getY());
+    inputs.roll = new Rotation2d(gyro.getRotation3d().getX() - rollOffset);
+    inputs.pitch = new Rotation2d(gyro.getRotation3d().getY() - pitchOffset);
 
     inputs.displacementX = gyro.getDisplacementX();
     inputs.displacementY = gyro.getDisplacementY();
@@ -53,6 +56,8 @@ public class GyroIONavX implements GyroIO {
 
   @Override
   public void resetGyro(GyroIOInputs inputs) {
+    rollOffset = inputs.roll.getRadians();
+    pitchOffset = inputs.pitch.getRadians();
     offset = inputs.angleRadiansRaw;
   }
 

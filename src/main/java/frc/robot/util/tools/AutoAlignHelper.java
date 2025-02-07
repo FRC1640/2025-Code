@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 public class AutoAlignHelper {
   ProfiledPIDController linearDrivePID =
       RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.linearDrivePIDProfiled, new TrapezoidProfile.Constraints(2, 6));
+          RobotPIDConstants.linearDrivePIDProfiled, new TrapezoidProfile.Constraints(2, 2));
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
@@ -28,11 +28,10 @@ public class AutoAlignHelper {
     double linearPID = linearDrivePID.calculate(dist, 0);
     double rotationalPID =
         rotatePID.calculate(robot.getRotation().minus(target.getRotation()).getRadians(), 0);
-    linearPID = MathUtil.clamp(linearPID, -1, 1);
+    linearPID = MathUtil.clamp(linearPID, -DriveConstants.maxSpeed, DriveConstants.maxSpeed);
     rotationalPID = MathUtil.clamp(rotationalPID, -1, 1);
     linearPID = MathUtil.applyDeadband(linearPID, 0.01);
     rotationalPID = MathUtil.applyDeadband(rotationalPID, 0.01);
-    linearPID *= DriveConstants.maxSpeed;
     rotationalPID *= DriveConstants.maxOmega;
 
     double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;

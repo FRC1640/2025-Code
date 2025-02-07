@@ -305,7 +305,7 @@ public class RobotContainer {
                     liftSubsystem.setDefaultCommand(
                         liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
     operatorController
-        .x()
+        .y()
         .onTrue(
             new InstantCommand(
                     () ->

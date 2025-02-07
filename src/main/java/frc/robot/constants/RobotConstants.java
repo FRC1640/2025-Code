@@ -30,7 +30,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Sim;
+    public static final RobotType robotType = RobotType.Deux24;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -114,8 +114,8 @@ public class RobotConstants {
 
     public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
 
-    public static final double maxAntiTipCorrectionSpeed = 0.5;
-    public static final double minTipDegrees = 2;
+    public static final double maxAntiTipCorrectionSpeed = 1.5;
+    public static final double minTipDegrees = 6;
   }
 
   public static class CameraConstants {
@@ -183,7 +183,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 350;
+    public static final double detectionThresh = 465;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.02;
@@ -222,8 +222,8 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.330, null);
-    public static final double gantryPadding = 0.05;
+    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final double gantryPadding = 0.01;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;
   }

@@ -2,12 +2,11 @@ package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
-import frc.robot.sensors.odometry.RobotOdometry;
-import frc.robot.util.tools.AutoAlignHelper;
 import org.littletonrobotics.junction.Logger;
 
 public class AntiTipWeight implements DriveWeight {
@@ -31,7 +30,7 @@ public class AntiTipWeight implements DriveWeight {
       xSpeed = pitchAntiTip.calculate(gyro.getPitch().getRadians(), 0);
     }
     if (Math.abs(gyro.getRoll().getDegrees()) > DriveConstants.minTipDegrees) {
-      ySpeed = rollAntiTip.calculate(gyro.getRoll().getRadians(), 0);
+      ySpeed = -rollAntiTip.calculate(gyro.getRoll().getRadians(), 0);
     }
 
     xSpeed =
@@ -45,11 +44,12 @@ public class AntiTipWeight implements DriveWeight {
             -DriveConstants.maxAntiTipCorrectionSpeed,
             DriveConstants.maxAntiTipCorrectionSpeed);
 
-    ChassisSpeeds speeds =
-        AutoAlignHelper.convertToFieldRelative(
-            new ChassisSpeeds(xSpeed, ySpeed, 0), gyro, RobotOdometry.instance.getPose("Main"));
+    Translation2d speedsNotRotated = new Translation2d(xSpeed, ySpeed);
+    speedsNotRotated = speedsNotRotated.rotateBy(gyro.getAngleRotation2d());
+
+    ChassisSpeeds speeds = new ChassisSpeeds(speedsNotRotated.getX(), speedsNotRotated.getY(), 0);
 
     Logger.recordOutput("AntiTipSpeeds", speeds);
-    return new ChassisSpeeds();
+    return speeds;
   }
 }

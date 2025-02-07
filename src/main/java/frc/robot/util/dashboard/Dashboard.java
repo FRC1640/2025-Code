@@ -8,11 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.constants.RobotPIDConstants;
+// import frc.robot.constants.RobotPIDConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.sysid.CreateSysidCommand;
-import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
+import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
 public class Dashboard {
@@ -36,14 +37,13 @@ public class Dashboard {
   public Dashboard(
       DriveSubsystem driveSubsystem,
       LiftSubsystem liftSubsystem,
-      CommandXboxController controller,
-      String[] pidKeys) {
+      CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
     this.controller = controller;
     autoInit();
     teleopInit();
-    testInit(pidKeys);
+    testInit();
   }
 
   private void autoInit() {
@@ -58,18 +58,18 @@ public class Dashboard {
 
   private void teleopInit() {}
 
-  private void testInit(String[] pidKeys) {
+  private void testInit() {
     SendableChooser<Test> testChooser = new SendableChooser<Test>();
     testChooser.setDefaultOption("womp womp", Test.NONE);
     testChooser.addOption("PID", Test.PID);
     testChooser.addOption("SYSID", Test.SYSID);
     ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
-    testTab.add("STUPID TRASH RAAA", testChooser).withSize(4, 3).withPosition(4, 1);
+    testTab.add("TEST?", testChooser).withSize(4, 3).withPosition(4, 1);
     // System.out.println(testChooser.getSelected() + "sanity check");
-    testChooser.onChange((x) -> testChange(x, new String[0]));
+    testChooser.onChange((x) -> testChange(x, PIDMap.pidMap));
   }
 
-  private void testChange(Test test, String[] pidKey) {
+  private void testChange(Test test, HashMap<PIDKey, PIDController> pidKey) {
     switch (test) { // come back to allow multiple test tabs happening
       case SYSID:
         if (!sysid) {
@@ -122,16 +122,14 @@ public class Dashboard {
     return sysidChooser.getSelected();
   }
 
-  private PIDController defaultPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.dashDefault, "defaultPID");
   private PIDController pidSelected;
 
-  private void pidInit(String[] pidKeys) { // SMACK ALL THE PIDS IN hERE)
+  private void pidInit(HashMap<PIDKey, PIDController> pidKeys) {
     SendableChooser<String> pidChooser = new SendableChooser<String>();
     pidChooser.setDefaultOption("none :/", "defaultPID");
-    for (int i = 0; i <= PIDTrack.idName.size(); i++) {
-      pidChooser.addOption(pidKeys[i], pidKeys[i]);
-    }
+    // for (int i = 0; i <= PIDMap.pidMap.size(); i++) {
+    //   pidChooser.addOption(PIDMap.pidMap.toString(), PIDMap.pidMap.get(PIDKey.GANTRY));
+    // } // might just do this manually rather than for loop tbd
 
     ShuffleboardTab pidTab = Shuffleboard.getTab("PID");
     pidTab.add("PID?", pidChooser).withPosition(0, 0).withSize(3, 1);
@@ -140,4 +138,8 @@ public class Dashboard {
     pidTab.add("D", pidSelected.getD()).withPosition(1, 2).withSize(1, 1);
   }
   ;
+
+  // private void pidChange() {
+  //   pid
+  // }
 }

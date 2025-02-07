@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -58,6 +59,7 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RobotContainer {
   // Subsystems
@@ -76,7 +78,7 @@ public class RobotContainer {
 
   // Dashboard
   private final Dashboard dashboard;
-  private final String[] pidKeys = {"weewoo", "weewoo"};
+  private HashMap<String, PIDController> pidKeys;
 
   private final ReefDetector reefDetector;
 
@@ -87,6 +89,7 @@ public class RobotContainer {
   private final ClimberCommandFactory climberCommandFactory;
 
   public RobotContainer() {
+    pidKeys.put("test", new PIDController(0, 0, 0));
     switch (Robot.getMode()) {
       case REAL:
         gyro = new Gyro(new GyroIONavX());
@@ -165,7 +168,7 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController, pidKeys);
+    dashboard = new Dashboard(driveSubsystem, liftSubsystem, driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,

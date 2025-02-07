@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSim implements ClimberIO {
@@ -18,9 +19,9 @@ public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim winch2Sim; // winch follower motor
   private final DoubleSolenoidSim doubleSolenoidSim;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, PIDKey.CLIMBLIFT);
   private final PIDController winchPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, PIDKey.CLIMBWINCH);
 
   public ClimberIOSim() {
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);

@@ -9,12 +9,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.util.dashboard.PIDMap.PIDKey;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
-  PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
+  PIDController linearDrivePID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID, PIDKey.LINEARDRIVE);
   PIDController rotatePID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
+      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians, PIDKey.ROTTORAD);
 
   public ChassisSpeeds getPoseSpeeds(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;

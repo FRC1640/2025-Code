@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
@@ -16,7 +17,7 @@ public class GantryIOSparkMax implements GantryIO {
   private final RelativeEncoder gantryEncoder;
   private final DigitalInput gantryLimitSwitch;
   private final PIDController gantryPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "GantryPID");
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "GantryPID", PIDKey.GANTRY);
 
   public GantryIOSparkMax() {
     gantrySpark =

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
-import frc.robot.constants.RobotConstants.IntakeConstants;
+import frc.robot.constants.RobotConstants.AlgaeIntakeConstants;
 import frc.robot.util.tools.MotorLim;
 
 public class AlgaeIntakeIOSim implements AlgaeIntakeIO {
@@ -18,7 +18,7 @@ public class AlgaeIntakeIOSim implements AlgaeIntakeIO {
     this.intakemotor =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                intakeMotorSimGearbox, 0.00019125, RobotConstants.IntakeConstants.intakegearRatio),
+                intakeMotorSimGearbox, 0.00019125, RobotConstants.AlgaeIntakeConstants.gearRatio),
             intakeMotorSimGearbox);
     this.doubleSolenoidSim = new DoubleSolenoidSim(PneumaticsModuleType.REVPH, 0, 1);
   }
@@ -28,7 +28,7 @@ public class AlgaeIntakeIOSim implements AlgaeIntakeIO {
     intakemotor.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.intakeMotorPosition, voltage, IntakeConstants.intakeLimts)));
+                inputs.intakeMotorPosition, voltage, AlgaeIntakeConstants.algaeIntakeLimits)));
   }
 
   @Override

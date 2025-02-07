@@ -168,23 +168,14 @@ public class RobotConstants {
     public static final double minBatteryVoltage = 10.5;
   }
 
-  public static class IntakeConstants {
-    public static final int climberLiftMotorID = 0;
-    public static final Limit intakeLimits = new Limit(0, 1000);
-    public static final ResolverVoltageInfo intakeResolver =
-        new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
+  public static class AlgaeIntakeConstants {
+    public static final int algaeIntakeMotorID = new RobotSwitch<Integer>(36).get();
+    public static final Limit algaeIntakeLimits = new Limit(0, 1000);
 
-    public static final double intakegearRatio = 5;
+    public static final double gearRatio = 5;
 
-    public static final int intakesolenoidForwardChannel = 0;
-    public static final int intakesolenoidReverseChannel = 1;
-    public static Limit intakeLimts;
-    public static int intakeMotorID;
-    public static ResolverVoltageInfo intakeResolverInfo;
-    public static int solenoidForwardChannel;
-    public static int solenoidReverseChannel;
-
-    public class intakeResolverInfo {}
+    public static final int solenoidForwardChannel = 2;
+    public static final int solenoidReverseChannel = 3;
   }
 
   // TODO replace with actual values

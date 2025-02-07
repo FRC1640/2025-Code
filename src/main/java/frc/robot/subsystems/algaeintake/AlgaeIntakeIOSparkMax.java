@@ -4,7 +4,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.constants.RobotConstants.IntakeConstants;
+import frc.robot.constants.RobotConstants.AlgaeIntakeConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
@@ -20,14 +20,14 @@ public class AlgaeIntakeIOSparkMax implements AlgaeIntakeIO {
   public AlgaeIntakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(IntakeConstants.intakeMotorID, false));
+            SparkConstants.getDefaultMax(AlgaeIntakeConstants.algaeIntakeMotorID, false));
     doubleSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
-            IntakeConstants
+            AlgaeIntakeConstants
                 .solenoidForwardChannel, // TODO: idk if we are going to use pneumatics just for
             // this.
-            IntakeConstants.solenoidReverseChannel);
+            AlgaeIntakeConstants.solenoidReverseChannel);
   }
   /*
    * Set voltage of the lift motor
@@ -37,7 +37,7 @@ public class AlgaeIntakeIOSparkMax implements AlgaeIntakeIO {
     intakeSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.intakeMotorPosition, voltage, IntakeConstants.intakeLimits)));
+                inputs.intakeMotorPosition, voltage, AlgaeIntakeConstants.algaeIntakeLimits)));
   }
 
   /*

@@ -243,9 +243,9 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> -2));
 
-    operatorController
-        .leftTrigger()
-        .whileTrue(algaeIntakeCommandFactory.algaeIntakeIntakeAlgaeCommand());
+    // operatorController
+    //     .leftTrigger()
+    //     .whileTrue(algaeIntakeCommandFactory.algaeIntakeIntakeAlgaeCommand());
 
     operatorController.back().onTrue(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
 

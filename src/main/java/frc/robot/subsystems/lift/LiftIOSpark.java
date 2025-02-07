@@ -11,7 +11,7 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
-
+import frc.robot.subsystems.lift.LiftIOSpark;
 public class LiftIOSpark implements LiftIO {
   RelativeEncoder leaderEncoder;
   RelativeEncoder followerEncoder;
@@ -67,6 +67,8 @@ public class LiftIOSpark implements LiftIO {
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
+        ProfiledPIDTrack
+        Logger.recordOutput("PIDTrack/" )
   }
 
   @Override

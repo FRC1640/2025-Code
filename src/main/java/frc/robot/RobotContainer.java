@@ -239,11 +239,12 @@ public class RobotContainer {
                         () ->
                             AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main")))));
     // coral place routine for autoalign
-    new Trigger(() -> coralAutoAlignWeight.getAutoalignComplete())
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.75)))
-        .and(
+    new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    new Trigger(
             () ->
-                liftSubsystem.isAtPreset(coralPreset)
+                coralAutoAlignWeight.isAutoalignComplete()
+                    && liftSubsystem.isAtPreset(coralPreset)
                     && gantrySubsystem.isAtPreset(
                         coralPreset,
                         AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main"))))

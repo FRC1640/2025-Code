@@ -64,7 +64,7 @@ public class DriveToNearestWeight implements DriveWeight {
     return getNearestTarget().getRotation().minus(robotPose.get().getRotation());
   }
 
-  public boolean getAutoalignComplete() {
+  public boolean isAutoalignComplete() {
     Pose2d target = getNearestTarget();
     Pose2d robot = robotPose.get();
     boolean complete =

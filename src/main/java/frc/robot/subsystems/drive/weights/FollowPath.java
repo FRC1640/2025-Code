@@ -28,18 +28,21 @@ public class FollowPath {
 
   Command pathCommand = null;
   private DriveSubsystem driveSubsystem;
+  private Pose2d[] pose2dArray;
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
       Supplier<Pose2d[]> targetPoses,
       Gyro gyro,
       Function<Pose2d, Pose2d> poseFunction,
-      DriveSubsystem driveSubsystem) {
+      DriveSubsystem driveSubsystem,
+      Pose2d[] pose2dArray) {
     this.robotPose = robotPose;
     this.targetPoses = targetPoses;
     this.gyro = gyro;
     this.poseFunction = poseFunction;
     this.driveSubsystem = driveSubsystem;
+    this.pose2dArray = pose2dArray;
   }
 
   public void stopPath() {
@@ -51,10 +54,7 @@ public class FollowPath {
   public void startPath() {
     List<Waypoint> waypoints =
         PathPlannerPath.waypointsFromPoses(
-            robotPose.get(),
-            new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
-            new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-            new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90)));
+            List.of(robotPose.get(), pose2dArray).toArray(Pose2d[]::new));
 
     PathConstraints pathConstraints =
         new PathConstraints(DriveConstants.maxSpeed, 3, DriveConstants.maxOmega, 4 * Math.PI);
@@ -67,7 +67,6 @@ public class FollowPath {
             // be null for on-the-fly paths.
             new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
     path.preventFlipping = true;
-    System.out.println("wqoifjf");
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);
       pathCommand.schedule();

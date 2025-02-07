@@ -2,6 +2,7 @@ package frc.robot.util.tools;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +14,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
+  SlewRateLimiter accel = new SlewRateLimiter(4);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
@@ -24,11 +26,13 @@ public class AutoAlignHelper {
     double linearPID = linearDrivePID.calculate(dist, 0);
     double rotationalPID =
         rotatePID.calculate(robot.getRotation().minus(target.getRotation()).getRadians(), 0);
-    linearPID = MathUtil.clamp(linearPID, -DriveConstants.maxSpeed, DriveConstants.maxSpeed);
+    linearPID = MathUtil.clamp(linearPID, -1, 1);
     rotationalPID = MathUtil.clamp(rotationalPID, -1, 1);
     linearPID = MathUtil.applyDeadband(linearPID, 0.01);
     rotationalPID = MathUtil.applyDeadband(rotationalPID, 0.01);
+    linearPID *= DriveConstants.maxSpeed;
     rotationalPID *= DriveConstants.maxOmega;
+    linearPID = accel.calculate(linearPID);
 
     double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
     double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
@@ -38,8 +42,6 @@ public class AutoAlignHelper {
     ChassisSpeeds fieldRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalPID);
     return convertToFieldRelative(fieldRelative, gyro, robot);
   }
-
-  public void getPoseSpeedsProfiled(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {}
 
   public static ChassisSpeeds convertToFieldRelative(
       ChassisSpeeds fieldRelative, Gyro gyro, Pose2d robot) {

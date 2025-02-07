@@ -83,7 +83,7 @@ public class RobotPIDConstants {
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
-  public static final PIDConstants linearDrivePID = new PIDConstants(0.1, 0, 0);
+  public static final PIDConstants linearDrivePID = new PIDConstants(0.3, 0, 0);
 
   public static final PIDConstants linearDrivePIDProfiled = new PIDConstants(0.1, 0, 0);
 

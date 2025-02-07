@@ -71,7 +71,7 @@ public class LiftIOSpark implements LiftIO {
 
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
-    profiledPIDController.reset(inputs.leaderMotorPosition);
+    profiledPIDController.reset(inputs.leaderMotorPosition, inputs.leaderMotorVelocity);
   }
 
   @Override

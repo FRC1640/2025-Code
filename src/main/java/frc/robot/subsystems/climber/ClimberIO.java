@@ -24,8 +24,6 @@ public interface ClimberIO extends AutoCloseable {
     public double winchFollowerMotorTemperature = 0.0;
 
     public boolean solenoidForward = false;
-
-    public double servoPosition = 0.0;
   }
 
   /*

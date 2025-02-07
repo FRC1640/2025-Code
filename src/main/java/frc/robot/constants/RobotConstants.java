@@ -173,6 +173,7 @@ public class RobotConstants {
     public static final int climberWinch2MotorID = 2;
 
     public static final Limit liftLimits = new Limit(0, 1000);
+    public static final double winchVerticalPosition = 500;
     public static final Limit winchLimits = new Limit(0, 1000);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);

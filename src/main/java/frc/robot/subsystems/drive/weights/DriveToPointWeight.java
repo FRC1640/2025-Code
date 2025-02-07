@@ -21,7 +21,7 @@ public class DriveToPointWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    return autoAlignHelper.getPoseSpeeds(robotPose.get(), targetPose.get(), gyro);
+    return autoAlignHelper.getPoseSpeedsLine(robotPose.get(), targetPose.get(), gyro);
   }
 
   public double getTargetDistance() {

@@ -2,7 +2,6 @@ package frc.robot.util.tools;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import java.util.function.Function;
-import org.littletonrobotics.junction.Logger;
 
 public class DistanceManager {
   /**
@@ -51,8 +50,6 @@ public class DistanceManager {
     for (Pose2d pos : checkPoints) {
       double distanceLocalPos = robotPos.getTranslation().getDistance(pos.getTranslation());
       if (distance > distanceLocalPos) {
-        Logger.recordOutput("INPUT", robotPos);
-        Logger.recordOutput("OUTPUT", poseFunction.apply(robotPos));
         distance = distanceLocalPos;
         nearestPos = pos;
       }

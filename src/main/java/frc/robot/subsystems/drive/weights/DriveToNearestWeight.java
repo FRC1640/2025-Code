@@ -38,7 +38,7 @@ public class DriveToNearestWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    return autoAlignHelper.getPoseSpeeds(robotPose.get(), getNearestTarget(), gyro);
+    return autoAlignHelper.getPoseSpeedsLine(robotPose.get(), getNearestTarget(), gyro);
   }
 
   private Pose2d getNearestTarget() {

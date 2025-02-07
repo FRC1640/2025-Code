@@ -28,7 +28,10 @@ public class AlgaeIntakeIOSim implements AlgaeIntakeIO {
     intakemotor.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.intakeMotorPosition, voltage, AlgaeIntakeConstants.algaeIntakeLimits)));
+                inputs.intakeMotorPosition,
+                voltage,
+                AlgaeIntakeConstants.algaeIntakeLimits.low,
+                AlgaeIntakeConstants.algaeIntakeLimits.high)));
   }
 
   @Override

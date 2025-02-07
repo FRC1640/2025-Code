@@ -13,7 +13,6 @@ import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
 import frc.robot.util.tools.logging.TrackedRobotPID.ProfiledPIDTrack;
 
 public class RobotPIDConstants {
-  public static PIDConstants intakePID;
 
   public static final PIDController constructPID(PIDConstants constants) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);

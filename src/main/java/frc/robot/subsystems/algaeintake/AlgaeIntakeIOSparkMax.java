@@ -1,11 +1,9 @@
 package frc.robot.subsystems.algaeintake;
 
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.AlgaeIntakeConstants;
-import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
@@ -13,8 +11,6 @@ import frc.robot.util.tools.MotorLim;
 public class AlgaeIntakeIOSparkMax implements AlgaeIntakeIO {
 
   private final SparkMax intakeSpark;
-  private final PIDController intakePID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.intakePID);
   DoubleSolenoid doubleSolenoid;
 
   public AlgaeIntakeIOSparkMax() {
@@ -37,20 +33,11 @@ public class AlgaeIntakeIOSparkMax implements AlgaeIntakeIO {
     intakeSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.intakeMotorPosition, voltage, AlgaeIntakeConstants.algaeIntakeLimits)));
+                inputs.intakeMotorPosition,
+                voltage,
+                AlgaeIntakeConstants.algaeIntakeLimits.low,
+                AlgaeIntakeConstants.algaeIntakeLimits.high)));
   }
-
-  /*
-   * Sets the position of the lift motor using a PID
-   */
-  @Override
-  public void setIntakeMotorPosition(double position, AlgaeIntakeIOInputs inputs) {
-    setIntakeMotorPosition(
-        MotorLim.clampVoltage(intakePID.calculate(inputs.intakeMotorPosition, position)), inputs);
-  }
-  /*
-   * Set voltage of the winch motors
-   */
 
   @Override
   public void updateInputs(AlgaeIntakeIOInputs inputs) {

@@ -173,7 +173,7 @@ public class RobotConstants {
 
   public static class AlgaeIntakeConstants {
     public static final int algaeIntakeMotorID = new RobotSwitch<Integer>(36).get();
-    public static final Limit algaeIntakeLimits = new Limit(0, 1000);
+    public static final Limits algaeIntakeLimits = new Limits(0.0, 1000.0);
 
     public static final double gearRatio = 5;
 

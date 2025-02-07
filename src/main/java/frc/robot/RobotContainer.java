@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
@@ -242,10 +243,17 @@ public class RobotContainer {
         driveController.x());
 
     new Trigger(
-        () ->
-            liftSubsystem.isAtPreset(coralPreset)
-                && gantrySubsystem.isAtPreset(coralPreset)
-                && DriveWeightCommand.checkWeight(coralAutoAlignWeight));
+            () ->
+                liftSubsystem.isAtPreset(coralPreset)
+                    && gantrySubsystem.isAtPreset(coralPreset)
+                    && coralAutoAlignWeight.getAutoalignComplete())
+        .onTrue(
+            gantryCommandFactory
+                .gantryDriftCommand()
+                .andThen(new WaitCommand(0.1))
+                .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12))
+                .until(() -> coralOuttakeSubsystem.isCoralDetected())
+                .andThen(new WaitCommand(0.1)));
 
     driveController.start().onTrue(gyro.resetGyroCommand());
 

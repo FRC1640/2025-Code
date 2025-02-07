@@ -1,7 +1,6 @@
 package frc.robot.subsystems.drive.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
@@ -18,8 +17,6 @@ public class AutoScoringCommandFactory {
   }
 
   public Command gantryAlignCommand(Supplier<CoralPreset> getPreset) {
-    return gantryCommandFactory.gantryPIDCommand(
-        () ->
-            getPreset.get().getGantry());
+    return gantryCommandFactory.gantryPIDCommand(() -> getPreset.get().getGantry());
   }
 }

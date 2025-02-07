@@ -35,11 +35,13 @@ public class DriveToNearestWeight implements DriveWeight {
       Supplier<Pose2d> robotPose,
       Supplier<Pose2d[]> targetPoses,
       Gyro gyro,
-      Function<Pose2d, Pose2d> poseFunction) {
+      Function<Pose2d, Pose2d> poseFunction,
+      DriveSubsystem driveSubsystem) {
     this.robotPose = robotPose;
     this.targetPoses = targetPoses;
     this.gyro = gyro;
     this.poseFunction = poseFunction;
+    this.driveSubsystem = driveSubsystem;
   }
 
   @Override

@@ -204,7 +204,8 @@ public class RobotContainer {
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
-            (x) -> RobotConstants.addRobotDim(x));
+            (x) -> RobotConstants.addRobotDim(x),
+            driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(

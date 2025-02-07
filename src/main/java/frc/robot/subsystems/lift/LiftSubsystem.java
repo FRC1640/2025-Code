@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
@@ -105,5 +106,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void resetLiftMotionProfile() {
     liftIO.resetLiftMotionProfile(inputs);
+  }
+
+  public boolean isAtPreset(CoralPreset preset) {
+    return Math.abs(getMotorPosition() - preset.getLift()) < 0.01;
   }
 }

@@ -241,6 +241,12 @@ public class RobotContainer {
             gyro),
         driveController.x());
 
+    new Trigger(
+        () ->
+            liftSubsystem.isAtPreset(coralPreset)
+                && gantrySubsystem.isAtPreset(coralPreset)
+                && DriveWeightCommand.checkWeight(coralAutoAlignWeight));
+
     driveController.start().onTrue(gyro.resetGyroCommand());
 
     // gantry button bindings:

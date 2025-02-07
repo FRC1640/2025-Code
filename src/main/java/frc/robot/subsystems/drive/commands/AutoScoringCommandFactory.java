@@ -20,8 +20,6 @@ public class AutoScoringCommandFactory {
   public Command gantryAlignCommand(Supplier<CoralPreset> getPreset) {
     return gantryCommandFactory.gantryPIDCommand(
         () ->
-            getPreset.get().getGantryRight()
-                ? GantryConstants.gantryPadding
-                : GantryConstants.gantryLimits.low + GantryConstants.gantryPadding);
+            getPreset.get().getGantry());
   }
 }

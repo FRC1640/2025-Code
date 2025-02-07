@@ -175,8 +175,9 @@ public class RobotConstants {
         return lift;
       }
 
-      public boolean getGantryRight() {
-        return right;
+      public double getGantry() {
+        return right ? GantryConstants.gantryPadding
+        : GantryConstants.gantryLimits.low + GantryConstants.gantryPadding;
       }
     }
   }

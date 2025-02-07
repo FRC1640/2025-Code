@@ -5,6 +5,7 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -109,6 +110,11 @@ public class Robot extends LoggedRobot {
         5800,
         Filesystem.getDeployDirectory()
             .getPath()); // instructed to add to get elastic config to load automatically
+  }
+
+  @Override
+  public void robotInit() {
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   @Override

@@ -10,7 +10,7 @@ import frc.robot.util.tools.MotorLim;
 
 public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   private final SparkMax intakeSpark;
-  private DigitalInput coralDetector;
+  private final DigitalInput coralDetector;
 
   public CoralOuttakeIOSparkMax() {
     intakeSpark =

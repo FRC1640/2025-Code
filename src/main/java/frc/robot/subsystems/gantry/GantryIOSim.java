@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -15,15 +16,17 @@ public class GantryIOSim implements GantryIO {
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
+  private final PIDController gantryVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
     gantrySim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                gantryGearbox, 0.00019125, GantryConstants.gantryGearRatio),
-            gantryGearbox);
+            LinearSystemId.createDCMotorSystem(gantryGearbox, 0.00019125, 1), gantryGearbox);
   }
 
   @Override
@@ -53,6 +56,17 @@ public class GantryIOSim implements GantryIO {
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
     gantrySim.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.encoderPosition, voltage, GantryConstants.gantryLimits)));
+            MotorLim.applyLimits(
+                inputs.encoderPosition,
+                voltage,
+                GantryConstants.gantryLimits.low,
+                inputs.isLimitSwitchPressed)));
+  }
+
+  @Override
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+    setGantryVoltage(
+        ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
+        inputs);
   }
 }

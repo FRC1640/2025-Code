@@ -99,5 +99,5 @@ public class RobotPIDConstants {
   public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
 
-  public static final PIDConstants driveAntiTip = new PIDConstants(5, 0, 0);
+  public static final PIDConstants driveAntiTip = new PIDConstants(3, 0, 0);
 }

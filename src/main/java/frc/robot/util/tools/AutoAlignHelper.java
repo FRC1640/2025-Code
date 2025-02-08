@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
-  SlewRateLimiter accel = new SlewRateLimiter(4);
+  SlewRateLimiter accel = new SlewRateLimiter(3);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 

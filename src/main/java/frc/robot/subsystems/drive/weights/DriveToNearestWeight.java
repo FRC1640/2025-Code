@@ -9,6 +9,7 @@ import frc.robot.util.tools.AutoAlignHelper;
 import frc.robot.util.tools.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveToNearestWeight implements DriveWeight {
   private Supplier<Pose2d> robotPose;
@@ -68,10 +69,10 @@ public class DriveToNearestWeight implements DriveWeight {
     Pose2d target = getNearestTarget();
     Pose2d robot = robotPose.get();
     boolean complete =
-        (target.getTranslation().minus(robot.getTranslation()).getNorm() < 0.08
-            && target.getRotation().minus(robot.getRotation()).getRadians() < Math.PI / 360);
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
+            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
-    complete &= chassisSpeeds.vxMetersPerSecond < 0.01 && chassisSpeeds.vyMetersPerSecond < 0.01;
+    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
     return complete;
   }
 }

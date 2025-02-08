@@ -102,6 +102,8 @@ public class RobotContainer {
 
   private DriveToNearestWeight coralAutoAlignWeight;
 
+  public FollowPathNearest followPathNearest;
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -245,7 +247,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    new FollowPathNearest(
+    followPathNearest =
+        new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
             AllianceManager.chooseFromAlliance(
@@ -254,8 +257,14 @@ public class RobotContainer {
             1,
             1,
             1,
-            1)
-        .generateTrigger(driveController.y());
+            1,
+            (x) -> x);
+    followPathNearest.setPoseFunction(
+        (x) ->
+            coralAdjust(
+                DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
+                () -> coralPreset));
+    followPathNearest.generateTrigger(driveController.y());
 
     // bind reef align
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());

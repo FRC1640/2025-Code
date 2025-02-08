@@ -48,6 +48,7 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
+import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -223,6 +224,17 @@ public class RobotContainer {
   private void configureBindings() {
 
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
+
+    new FollowPathNearest(
+            () -> RobotOdometry.instance.getPose("Main"),
+            gyro,
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            1,
+            1,
+            1,
+            1)
+        .generateTrigger(driveController.y());
 
     new Trigger(
             () ->

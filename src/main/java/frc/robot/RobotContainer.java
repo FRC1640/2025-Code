@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
@@ -203,7 +205,8 @@ public class RobotContainer {
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
-            (x) -> RobotConstants.addRobotDim(x));
+            (x) -> RobotConstants.addRobotDim(x),
+            driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
@@ -221,9 +224,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-
+    // bind reef align
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
-
+    // lift/gantry presets for autoalign
     new Trigger(
             () ->
                 coralAutoAlignWeight.getTargetDistance() < 1.5
@@ -233,8 +236,38 @@ public class RobotContainer {
                     () ->
                         liftSubsystem.setDefaultCommand(
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
-                .alongWith(autoScoringCommandFactory.gantryAlignCommand(() -> coralPreset)));
-
+                .alongWith(
+                    autoScoringCommandFactory.gantryAlignCommand(
+                        () -> coralPreset,
+                        () ->
+                            AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main")))));
+    // coral place routine for autoalign
+    // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
+    //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    new Trigger(
+            () ->
+                coralAutoAlignWeight.isAutoalignComplete()
+                    && liftSubsystem.isAtPreset(coralPreset)
+                    && gantrySubsystem.isAtPreset(
+                        coralPreset,
+                        AllianceManager.onDsSideReef(RobotOdometry.instance.getPose("Main"))))
+        .onTrue(
+            gantryCommandFactory
+                .gantryDriftCommand()
+                .andThen(new WaitCommand(0.1))
+                .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12))
+                .until(() -> coralOuttakeSubsystem.isCoralDetected())
+                .andThen(
+                    new WaitCommand(0.1)
+                        .finallyDo(
+                            () ->
+                                liftSubsystem.setDefaultCommand(
+                                    liftCommandFactory.runLiftMotionProfile(
+                                        () -> CoralPreset.Safe.getLift())))
+                        .alongWith(
+                            gantryCommandFactory.gantryPIDCommand(
+                                () -> GantryConstants.gantryLimits.low / 2))));
+    // processor autoalign
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -243,23 +276,18 @@ public class RobotContainer {
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
             gyro),
         driveController.x());
-
+    // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
-
     // gantry button bindings:
-
     operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
-
     operatorController
         .leftBumper()
         .whileTrue(
             gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
-
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
-
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
     driveController
@@ -267,6 +295,7 @@ public class RobotContainer {
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
+    // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
     new Trigger(() -> presetBoard.getRl2())
@@ -279,6 +308,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
+    // lift/gantry manual controls
     operatorController
         .a()
         .onTrue(
@@ -288,7 +318,10 @@ public class RobotContainer {
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset))); // TODO jitter?
+                        () -> coralPreset,
+                        () ->
+                            AllianceManager.onDsSideReef(
+                                RobotOdometry.instance.getPose("Main"))))); // TODO jitter?
 
     new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
         .onFalse(

@@ -163,8 +163,8 @@ public class RobotConstants {
       LeftL4(1.5, false),
       RightL4(1.5, true);
 
-      private double lift;
-      private boolean right;
+      private final double lift;
+      private final boolean right; // Driver Station side perspective
 
       private CoralPreset(double lift, boolean right) {
         this.lift = lift;
@@ -175,8 +175,10 @@ public class RobotConstants {
         return lift;
       }
 
-      public boolean getGantryRight() {
-        return right;
+      public double getGantry(boolean dsSide) {
+        return right ^ dsSide
+            ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+            : GantryConstants.gantryPadding;
       }
     }
   }

@@ -240,7 +240,7 @@ public class RobotContainer {
     boolean alliance = AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget());
     boolean side = preset.get().right ^ alliance;
     return DistanceManager.addRotatedDim(
-        pose, side ? -0.1 : 0.15, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
+        pose, side ? -0.1 : 0.1, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
   }
 
   private void configureBindings() {

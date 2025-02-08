@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.constants.RobotConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.tools.DistanceManager;
 import java.util.function.Supplier;
@@ -16,7 +17,8 @@ public class FollowPathNearest extends FollowPath {
       double maxLinearVelocity,
       double maxLinearAcceleration,
       double maxAngularVelocity,
-      double maxAngularAcceleration) {
+      double maxAngularAcceleration,
+      double rotation) {
     super(
         robotPose,
         gyro,
@@ -24,8 +26,8 @@ public class FollowPathNearest extends FollowPath {
         maxLinearVelocity,
         maxLinearAcceleration,
         maxAngularVelocity,
-        maxAngularVelocity,
-        Rotation2d.fromDegrees(maxAngularAcceleration));
+        maxAngularAcceleration,
+        Rotation2d.fromDegrees(rotation));
     this.positions = positions;
     pose2dArray = new Pose2d[] {findNearest(this.positions)};
     endRotation = findNearest(this.positions).getRotation();

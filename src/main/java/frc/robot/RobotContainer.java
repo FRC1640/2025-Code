@@ -245,6 +245,18 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    new FollowPathNearest(
+            () -> RobotOdometry.instance.getPose("Main"),
+            gyro,
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            1,
+            1,
+            1,
+            1,
+            1)
+        .generateTrigger(driveController.y());
+
     // bind reef align
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
     // lift/gantry presets for autoalign

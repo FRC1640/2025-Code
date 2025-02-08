@@ -48,6 +48,9 @@ public class FollowPath {
   }
 
   public void startPath() {
+    if (endRotation == new Rotation2d(0, 0)) {
+      endRotation = new Rotation2d(0.0001, 0.0001);
+    }
     List<Waypoint> waypoints;
     ArrayList<Pose2d> waypointPos = new ArrayList<Pose2d>();
 
@@ -66,7 +69,7 @@ public class FollowPath {
             pathConstraints,
             null, // The ideal starting state, this is only relevant for pre-planned paths, so can
             // be null for on-the-fly paths.
-            new GoalEndState(0.0, (endRotation)));
+            new GoalEndState(0.00, (endRotation)));
     path.preventFlipping = true;
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);

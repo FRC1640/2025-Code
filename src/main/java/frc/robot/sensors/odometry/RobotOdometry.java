@@ -49,7 +49,7 @@ public class RobotOdometry extends PeriodicBase {
     }
     SparkOdometryThread.getInstance().start();
     OdometryStorage main =
-        branchEstimator("Main", cameras, VisionUpdateMode.PHOTONVISION);
+        branchEstimator("Main", new AprilTagVision[0], VisionUpdateMode.PHOTONVISION);
     OdometryStorage mainTrig = branchEstimator("MainTrig", cameras, VisionUpdateMode.TRIG);
     mainTrig.setTrustedRotation(main);
   }

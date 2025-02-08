@@ -2,6 +2,7 @@ package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,7 +14,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.sysid.CreateSysidCommand;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 public class Dashboard {
@@ -64,25 +65,20 @@ public class Dashboard {
     testChooser.addOption("PID", Test.PID);
     testChooser.addOption("SYSID", Test.SYSID);
     ShuffleboardTab testTab = Shuffleboard.getTab("TEST");
-    testTab.add("TEST?", testChooser).withSize(4, 3).withPosition(4, 1);
-    // System.out.println(testChooser.getSelected() + "sanity check");
-    testChooser.onChange((x) -> testChange(x, PIDMap.pidMap));
+    testTab.add("TEST?", testChooser).withSize(4, 3).withPosition(1, 1);
+    testChooser.onChange((x) -> testChange(x));
   }
 
-  private void testChange(Test test, HashMap<PIDKey, PIDController> pidKey) {
-    switch (test) { // come back to allow multiple test tabs happening
+  private void testChange(Test test) {
+    switch (test) {
       case SYSID:
         if (!sysid) {
-          pid = false;
-          sysid = true;
           sysidInit();
         }
         break;
       case PID:
         if (!pid) {
-          pid = true;
-          sysid = false;
-          pidInit(pidKey);
+          pidInit();
         }
         break;
       case NONE:
@@ -122,24 +118,39 @@ public class Dashboard {
     return sysidChooser.getSelected();
   }
 
-  private PIDController pidSelected;
+  private static GenericEntry kP;
+  private static GenericEntry kI;
+  private static GenericEntry kD;
+  private static GenericEntry setpt;
 
-  private void pidInit(HashMap<PIDKey, PIDController> pidKeys) {
-    SendableChooser<String> pidChooser = new SendableChooser<String>();
-    pidChooser.setDefaultOption("none :/", "defaultPID");
-    // for (int i = 0; i <= PIDMap.pidMap.size(); i++) {
-    //   pidChooser.addOption(PIDMap.pidMap.toString(), PIDMap.pidMap.get(PIDKey.GANTRY));
-    // } // might just do this manually rather than for loop tbd
+  private void pidInit() {
+    pid = true;
+    sysid = false;
+
+    SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
+    pidChooser.setDefaultOption("none :/", new PIDController(0, 0, 0));
+    for (Map.Entry<PIDKey, PIDController> entry : PIDMap.pidMap.entrySet()) {
+      pidChooser.addOption(entry.getKey().toString(), entry.getValue());
+    }
+
+    PIDMap.setEntries(kP, kI, kD, setpt);
 
     ShuffleboardTab pidTab = Shuffleboard.getTab("PID");
     pidTab.add("PID?", pidChooser).withPosition(0, 0).withSize(3, 1);
-    pidTab.add("P", pidSelected.getP()).withPosition(1, 0).withSize(1, 1);
-    pidTab.add("I", pidSelected.getI()).withPosition(1, 1).withSize(1, 1);
-    pidTab.add("D", pidSelected.getD()).withPosition(1, 2).withSize(1, 1);
+    kP = pidTab.add("P", 0).withPosition(0, 1).withSize(1, 1).getEntry();
+    kI = pidTab.add("I", 0).withPosition(1, 1).withSize(1, 1).getEntry();
+    kD = pidTab.add("D", 0).withPosition(2, 1).withSize(1, 1).getEntry();
+    setpt = pidTab.add("SETPOINT", 0).withPosition(1, 2).withSize(1, 1).getEntry();
+
+    pidChooser.onChange((x) -> pidChange(x));
   }
   ;
 
-  // private void pidChange() {
-  //   pid
-  // }
+  private void pidChange(PIDController pid) {
+    PIDMap.setPID(pid);
+    pid.setP(kP.getDouble(0));
+    pid.setI(kI.getDouble(0));
+    pid.setD(kD.getDouble(0));
+    pid.setSetpoint(setpt.getDouble(0));
+  }
 }

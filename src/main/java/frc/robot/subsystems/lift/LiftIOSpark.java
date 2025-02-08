@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.dashboard.PIDMap;
 import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
@@ -28,6 +29,7 @@ public class LiftIOSpark implements LiftIO {
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
+    PIDMap.pidMap.put(PIDKey.LIFT, liftController);
     leaderMotor =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false));

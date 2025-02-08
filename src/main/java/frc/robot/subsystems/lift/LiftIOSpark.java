@@ -29,7 +29,7 @@ public class LiftIOSpark implements LiftIO {
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
-    PIDMap.pidMap.put(PIDKey.LIFT, liftController);
+    PIDMap.pidMap.put(PIDKey.LIFT, liftController); // so this doesn't make it show up either
     leaderMotor =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false));

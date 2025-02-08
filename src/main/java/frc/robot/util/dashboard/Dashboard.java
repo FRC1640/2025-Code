@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.constants.RobotPIDConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
+// import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.sysid.CreateSysidCommand;
-import java.util.Map;
+// import java.util.Map;
+// import java.util.Map.Entry;
 import java.util.function.BooleanSupplier;
 
 public class Dashboard {
@@ -127,10 +128,12 @@ public class Dashboard {
     pid = true;
     sysid = false;
 
+    Object[] l = PIDMap.pidMap.keySet().toArray();
+
     SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
     pidChooser.setDefaultOption("none :/", new PIDController(0, 0, 0));
-    for (Map.Entry<PIDKey, PIDController> entry : PIDMap.pidMap.entrySet()) {
-      pidChooser.addOption(entry.getKey().toString(), entry.getValue());
+    for (int i = 0; i < l.length; i++) {
+      pidChooser.addOption(l[i].toString(), PIDMap.pidMap.get(l[i]));
     }
 
     PIDMap.setEntries(kP, kI, kD, setpt);

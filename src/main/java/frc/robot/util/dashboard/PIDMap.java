@@ -12,15 +12,15 @@ public class PIDMap {
   private static PIDController pid;
 
   public static enum PIDKey {
-    DRIVE,
-    STEER,
-    LINEARDRIVE,
-    ROTTORAD,
-    GANTRY,
-    LIFT,
-    CORALOUTTAKE,
-    CLIMBLIFT,
-    CLIMBWINCH
+    DRIVE, // displays (last)
+    STEER, // displays
+    LINEARDRIVE, // displays
+    ROTTORAD, // displays
+    GANTRY, // displays (first)
+    LIFT, // ???
+    CORALOUTTAKE, // doesnt exist in code
+    CLIMBLIFT, // ???
+    CLIMBWINCH // ???
   }
 
   public static HashMap<PIDKey, PIDController> pidMap = new HashMap<>();

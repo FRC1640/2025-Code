@@ -11,6 +11,7 @@ import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
+import java.util.function.BooleanSupplier;
 
 public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim liftSim;
@@ -21,6 +22,7 @@ public class ClimberIOSim implements ClimberIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+  BooleanSupplier cageDetect;
 
   public ClimberIOSim() {
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);
@@ -91,6 +93,7 @@ public class ClimberIOSim implements ClimberIO {
     liftSim.update(.02);
     winch1Sim.update(.02);
     winch2Sim.update(.02);
+    inputs.cageDetected = cageDetect.getAsBoolean();
     inputs.liftMotorPosition = liftSim.getAngularPositionRotations();
     inputs.winchLeaderMotorPosition = winch1Sim.getAngularPositionRotations();
     inputs.winchFollowerMotorPosition = winch2Sim.getAngularPositionRotations();

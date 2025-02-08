@@ -22,6 +22,10 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.liftMotorPosition;
   }
 
+  public boolean isCageDetected() {
+    return inputs.cageDetected;
+  }
+
   public double getWinchLeaderMotorPosition() {
     return inputs.winchLeaderMotorPosition;
   }

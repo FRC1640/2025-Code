@@ -2,6 +2,7 @@ package frc.robot.subsystems.climber;
 
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.ClimberConstants;
@@ -12,6 +13,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSparkMax implements ClimberIO {
+  private DigitalInput cageDetector;
   private final ResolverVoltage liftEncoder;
   private final ResolverVoltage winchEncoder;
   private final SparkMax liftSpark;
@@ -21,10 +23,10 @@ public class ClimberIOSparkMax implements ClimberIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
-
   private final DoubleSolenoid doubleSolenoid;
 
   public ClimberIOSparkMax() {
+    cageDetector = new DigitalInput(ClimberConstants.cageDetectorChannel);
     liftSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
@@ -84,6 +86,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     inputs.liftMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
     inputs.winchLeaderMotorPosition =
         winchEncoder.getDegrees(); // says degrees but really in meters
+    inputs.cageDetected = !cageDetector.get();
     inputs.liftMotorCurrent = liftSpark.getOutputCurrent();
     inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
     inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();

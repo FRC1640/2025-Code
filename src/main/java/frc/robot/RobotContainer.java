@@ -213,12 +213,14 @@ public class RobotContainer {
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
-            (x) ->
-                coralAdjust(
-                    DistanceManager.addRotatedDim(
-                        x, RobotDimensions.robotLength / 2, x.getRotation()),
-                    () -> coralPreset),
+            (x) -> x,
             driveSubsystem);
+
+    coralAutoAlignWeight.setPoseFunction(
+        (x) ->
+            coralAdjust(
+                DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
+                () -> coralPreset));
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
@@ -236,10 +238,10 @@ public class RobotContainer {
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
-    boolean alliance = AllianceManager.onDsSideReef(() -> RobotOdometry.instance.getPose("Main"));
+    boolean alliance = AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget());
     boolean side = preset.get().right ^ alliance;
     return DistanceManager.addRotatedDim(
-        pose, side ? -0.1 : 0.1, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
+        pose, side ? -0.1 : 0.15, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
   }
 
   private void configureBindings() {
@@ -259,8 +261,7 @@ public class RobotContainer {
                     autoScoringCommandFactory.gantryAlignCommand(
                         () -> coralPreset,
                         () ->
-                            AllianceManager.onDsSideReef(
-                                () -> RobotOdometry.instance.getPose("Main")))));
+                            AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget()))));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
@@ -270,7 +271,7 @@ public class RobotContainer {
                     // && liftSubsystem.isAtPreset(coralPreset)
                     && gantrySubsystem.isAtPreset(
                         coralPreset,
-                        AllianceManager.onDsSideReef(() -> RobotOdometry.instance.getPose("Main"))))
+                        AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget())))
         .onTrue(autoScoringCommandFactory.autoPlace());
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
@@ -326,7 +327,7 @@ public class RobotContainer {
                         () -> coralPreset,
                         () ->
                             AllianceManager.onDsSideReef(
-                                () -> RobotOdometry.instance.getPose("Main"))))); // TODO jitter?
+                                () -> coralAutoAlignWeight.getTarget())))); // TODO jitter?
 
     new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
         .onFalse(

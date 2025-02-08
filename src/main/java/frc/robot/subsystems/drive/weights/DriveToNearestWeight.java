@@ -9,13 +9,17 @@ import frc.robot.util.tools.AutoAlignHelper;
 import frc.robot.util.tools.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveToNearestWeight implements DriveWeight {
   private Supplier<Pose2d> robotPose;
   private Supplier<Pose2d[]> targetPoses;
   private Gyro gyro;
   private Function<Pose2d, Pose2d> poseFunction;
+
+  public void setPoseFunction(Function<Pose2d, Pose2d> poseFunction) {
+    this.poseFunction = poseFunction;
+  }
+
   AutoAlignHelper autoAlignHelper = new AutoAlignHelper();
   private boolean enabled = false;
   private DriveSubsystem driveSubsystem;
@@ -50,10 +54,14 @@ public class DriveToNearestWeight implements DriveWeight {
     return autoAlignHelper.getPoseSpeedsLine(robotPose.get(), getNearestTarget(), gyro);
   }
 
-  private Pose2d getNearestTarget() {
+  public Pose2d getNearestTarget() {
     if (poseFunction != null) {
       return DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get(), poseFunction);
     }
+    return DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get());
+  }
+
+  public Pose2d getNearestTargetNoFunction() {
     return DistanceManager.getNearestPosition(robotPose.get(), targetPoses.get());
   }
 
@@ -74,5 +82,12 @@ public class DriveToNearestWeight implements DriveWeight {
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
     complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
     return complete;
+  }
+
+  public Pose2d getTarget() {
+    if (getNearestTargetNoFunction() == null) {
+      return new Pose2d();
+    }
+    return getNearestTargetNoFunction();
   }
 }

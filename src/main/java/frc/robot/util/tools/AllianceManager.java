@@ -27,14 +27,7 @@ public class AllianceManager {
         chooseFromAlliance(FieldConstants.reefCenterPosBlue, FieldConstants.reefCenterPosRed);
     Translation2d robotToReef = reefPos.minus(targetPose.get().getTranslation());
     boolean dsSide =
-        chooseFromAlliance(robotToReef.getX() > 0, robotToReef.getX() < 0)
-            && Math.abs(
-                    targetPose
-                        .get()
-                        .getRotation()
-                        .minus(Rotation2d.fromDegrees(chooseFromAlliance(180, 0)))
-                        .getDegrees())
-                < 90;
+        chooseFromAlliance(robotToReef.getX() > 0, robotToReef.getX() < 0);
     return dsSide;
   }
 }

@@ -41,7 +41,7 @@ public class AutoScoringCommandFactory {
   public Command autoPlace() {
     return gantryCommandFactory
         .gantryDriftCommand()
-        .andThen(new WaitCommand(0.05))
+        .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
         .until(() -> !coralOuttakeSubsystem.isCoralDetected())
         .andThen(

@@ -34,6 +34,11 @@ public class SparkConstants {
         id, IdleMode.kCoast, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
   }
 
+  public static final SparkConfiguration getDefaultMax(int id, boolean inverted, IdleMode breakMode) {
+    return new SparkConfiguration(
+        id, breakMode, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
+  }
+
   public static final SparkConfiguration getDefaultMax(
       int id, boolean inverted, boolean follower, SparkMax followerOf) {
     return new SparkConfiguration(

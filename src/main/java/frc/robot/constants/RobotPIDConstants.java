@@ -45,7 +45,7 @@ public class RobotPIDConstants {
     return feedforward;
   }
 
-  public static final ProfiledPIDController costructProfiledPIDController(
+  public static final ProfiledPIDController constructProfiledPIDController(
       PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
     ProfiledPIDController k =
         new ProfiledPIDController(
@@ -83,7 +83,9 @@ public class RobotPIDConstants {
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
-  public static final PIDConstants linearDrivePID = new PIDConstants(0.1, 0, 0);
+  public static final PIDConstants linearDrivePID = new PIDConstants(0.2, 0, 0);
+
+  public static final PIDConstants linearDrivePIDProfiled = new PIDConstants(0.1, 0, 0);
 
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
 
@@ -96,4 +98,6 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1.4935);
   public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
+
+  public static final PIDConstants driveAntiTip = new PIDConstants(3, 0, 0);
 }

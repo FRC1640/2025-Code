@@ -19,7 +19,7 @@ public class LiftIOSim implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      RobotPIDConstants.costructProfiledPIDController(
+      RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSim() {
@@ -88,6 +88,7 @@ public class LiftIOSim implements LiftIO {
     inputs.followerMotorCurrent = motor2Sim.getCurrentDrawAmps();
     inputs.leaderMotorVoltage = motor1Sim.getInputVoltage();
     inputs.followerMotorVoltage = motor2Sim.getInputVoltage();
+    inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
   }
 
   @Override

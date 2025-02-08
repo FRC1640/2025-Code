@@ -1,7 +1,12 @@
 package frc.robot.util.tools;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.constants.FieldConstants;
+import java.util.function.Supplier;
 
 public class AllianceManager {
 
@@ -15,5 +20,21 @@ public class AllianceManager {
    */
   public static <T> T chooseFromAlliance(T valueBlue, T valueRed) {
     return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? valueRed : valueBlue;
+  }
+
+  public static boolean onDsSideReef(Supplier<Pose2d> targetPose) {
+    Translation2d reefPos =
+        chooseFromAlliance(FieldConstants.reefCenterPosBlue, FieldConstants.reefCenterPosRed);
+    Translation2d robotToReef = reefPos.minus(targetPose.get().getTranslation());
+    boolean dsSide =
+        chooseFromAlliance(robotToReef.getX() > 0, robotToReef.getX() < 0)
+            && Math.abs(
+                    targetPose
+                        .get()
+                        .getRotation()
+                        .minus(Rotation2d.fromDegrees(chooseFromAlliance(180, 0)))
+                        .getDegrees())
+                < 90;
+    return dsSide;
   }
 }

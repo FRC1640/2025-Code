@@ -27,6 +27,7 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
 import java.util.Arrays;
@@ -93,12 +94,11 @@ public class DriveSubsystem extends SubsystemBase {
           RobotOdometry.instance.resetGyro(x);
         },
         this::getChassisSpeeds,
-        (x) -> runVelocity(x, false, 0.0),
+        (x) -> PathplannerWeight.setSpeeds(x),
         new PPHolonomicDriveController(
             new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
-        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-        this);
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {

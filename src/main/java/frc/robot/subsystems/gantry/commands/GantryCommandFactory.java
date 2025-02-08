@@ -20,6 +20,7 @@ public class GantryCommandFactory {
   public Command gantryPIDCommand(DoubleSupplier pos) {
     return new RunCommand(
             () -> gantrySubsystem.setCarriagePosition(pos.getAsDouble()), gantrySubsystem)
+        .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
@@ -57,31 +58,32 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommand() { // TODO: breaks if doesn't detect
+  public Command gantryDriftCommand() {
     return gantrySetVelocityCommand(
             () ->
                 gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
-                    ? 0.1
-                    : -0.1)
+                    ? GantryConstants.alignSpeed
+                    : -GantryConstants.alignSpeed)
         .until(
             () ->
                 Math.abs(
                         gantrySubsystem.getCarriagePosition()
                             - GantryConstants.gantryLimits.low / 2)
-                    < 0.05)
+                    < GantryConstants.gantryPadding)
         .andThen(
             gantrySetVelocityCommand(
                     () ->
                         gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
-                            ? -0.1
-                            : 0.1)
+                            ? -GantryConstants.alignSpeed
+                            : GantryConstants.alignSpeed)
                 .until(
                     () ->
-                        Math.abs(gantrySubsystem.getCarriagePosition()) < 0.05
+                        Math.abs(gantrySubsystem.getCarriagePosition())
+                                < GantryConstants.gantryPadding
                             || Math.abs(
                                     gantrySubsystem.getCarriagePosition()
                                         - GantryConstants.gantryLimits.low)
-                                < 0.05))
+                                < GantryConstants.gantryPadding))
         .repeatedly()
         .until(() -> reefDetector.isDetecting())
         .andThen(

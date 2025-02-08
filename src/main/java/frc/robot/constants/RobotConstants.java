@@ -24,8 +24,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = Units.inchesToMeters(36);
-    public static final double robotLength = Units.inchesToMeters(36);
+    public static final double robotWidth = Units.inchesToMeters(30);
+    public static final double robotLength = Units.inchesToMeters(30);
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -53,16 +53,6 @@ public class RobotConstants {
 
     // odometry
     public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
-  }
-
-  public static Pose2d addRobotDim(Pose2d pose2d) {
-    Translation2d translation =
-        pose2d
-            .getTranslation()
-            .minus(
-                new Translation2d(RobotDimensions.robotWidth / 2, 0)
-                    .rotateBy(pose2d.getRotation()));
-    return new Pose2d(translation, pose2d.getRotation());
   }
 
   public static enum PivotId {
@@ -113,6 +103,9 @@ public class RobotConstants {
     public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
 
     public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+
+    public static final double maxAntiTipCorrectionSpeed = 1.5;
+    public static final double minTipDegrees = 6;
   }
 
   public static class CameraConstants {
@@ -150,14 +143,42 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+
+    public enum CoralPreset {
+      Safe(0.1, false),
+      LeftL2(0.5, false), // TODO correct numbers
+      RightL2(0.5, true),
+      LeftL3(1, false),
+      RightL3(1, true),
+      LeftL4(1.5, false),
+      RightL4(1.5, true);
+
+      public final double lift;
+      public final boolean right; // Driver Station side perspective
+
+      private CoralPreset(double lift, boolean right) {
+        this.lift = lift;
+        this.right = right;
+      }
+
+      public double getLift() {
+        return lift;
+      }
+
+      public double getGantry(boolean dsSide) {
+        return right ^ dsSide
+            ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+            : -GantryConstants.gantryPadding;
+      }
+    }
   }
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 350;
+    public static final double detectionThresh = 550;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
-    public static final double waitTimeSeconds = 0.02;
+    public static final double waitTimeSeconds = 0.1;
   }
 
   // TODO replace with actual values
@@ -193,8 +214,10 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.330, null);
+    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
+    public static final double alignSpeed = 0.1;
   }
 
   public static class CoralOuttakeConstants {

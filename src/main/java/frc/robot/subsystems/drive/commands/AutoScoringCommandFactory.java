@@ -59,7 +59,16 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)).alongWith(new ParallelCommandGroup(new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}))));
+                        () -> GantryConstants.gantryLimits.low / 2))
+                .alongWith(
+                    new ParallelCommandGroup(
+                        new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), 
+                        new WaitCommand(.1), 
+                        new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}), 
+                        new WaitCommand(.1), 
+                        new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), 
+                        new WaitCommand(.1), 
+                        new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}))));
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {

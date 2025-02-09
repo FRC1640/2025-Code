@@ -276,7 +276,7 @@ public class RobotContainer {
                     // && liftSubsystem.isAtPreset(coralPreset)
                     && gantrySubsystem.isAtPreset(
                         coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
-        .onTrue(autoScoringCommandFactory.autoPlace());
+        .onTrue(autoScoringCommandFactory.autoPlace(driveController));
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(

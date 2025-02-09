@@ -1,9 +1,12 @@
 package frc.robot.subsystems.drive.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
@@ -40,7 +43,7 @@ public class AutoScoringCommandFactory {
         () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
   }
 
-  public Command autoPlace() {
+  public Command autoPlace(CommandXboxController driveController) {
     return gantryCommandFactory
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
@@ -56,7 +59,7 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimits.low / 2)).alongWith(new ParallelCommandGroup(new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 0);}), new WaitCommand(.1), new InstantCommand(() -> {driveController.setRumble(RumbleType.kLeftRumble, 1);}))));
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {

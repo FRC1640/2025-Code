@@ -64,22 +64,22 @@ public class AutoScoringCommandFactory {
                     new ParallelCommandGroup(
                         new InstantCommand(
                             () -> {
-                              driveController.setRumble(RumbleType.kLeftRumble, 1);
+                              driveController.setRumble(RumbleType.kRightRumble, 1);
                             }),
                         new WaitCommand(.1),
                         new InstantCommand(
                             () -> {
-                              driveController.setRumble(RumbleType.kLeftRumble, 0);
+                              driveController.setRumble(RumbleType.kRightRumble, 0);
                             }),
                         new WaitCommand(.1),
                         new InstantCommand(
                             () -> {
-                              driveController.setRumble(RumbleType.kLeftRumble, 1);
+                              driveController.setRumble(RumbleType.kRightRumble, 1);
                             }),
                         new WaitCommand(.1),
                         new InstantCommand(
                             () -> {
-                              driveController.setRumble(RumbleType.kLeftRumble, 0);
+                              driveController.setRumble(RumbleType.kRightRumble, 0);
                             }))));
   }
 

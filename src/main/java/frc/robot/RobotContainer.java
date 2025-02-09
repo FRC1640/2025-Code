@@ -33,6 +33,10 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.algae.AlgaeIO;
+import frc.robot.subsystems.algae.AlgaeIOSim;
+import frc.robot.subsystems.algae.AlgaeIOSpark;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -79,6 +83,7 @@ public class RobotContainer {
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private final ClimberSubsystem climberSubsystem;
+  private final AlgaeSubsystem algaeSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -134,6 +139,10 @@ public class RobotContainer {
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
 
+        algaeSubsystem =
+            new AlgaeSubsystem(
+                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
+
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -167,6 +176,10 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSim()
                     : new ClimberIO() {});
+
+        algaeSubsystem =
+            new AlgaeSubsystem(
+                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -175,6 +188,7 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        algaeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);

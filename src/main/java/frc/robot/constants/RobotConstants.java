@@ -259,4 +259,13 @@ public class RobotConstants {
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }
+
+  public static class AlgaeConstants{
+    public static int motorLeftChannel = -1;
+    public static int motorRightChannel = -1;
+    public static int solenoidChannelForward = -1;
+    public static int solenoidChannelReverse = -1;
+    public static double passiveSpeed = 0.1;
+    public static double highSpeed = 0.7;
+  }
 }

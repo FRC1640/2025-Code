@@ -287,8 +287,8 @@ public class RobotContainer {
             gyro),
         driveController.x());
     // Coral Rumble
-    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, .7)));
-    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
+    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, .7)));
+    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
     // gantry button bindings:

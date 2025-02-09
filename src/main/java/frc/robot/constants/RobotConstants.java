@@ -2,7 +2,6 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -60,6 +59,10 @@ public class RobotConstants {
     FR,
     BL,
     BR;
+  }
+
+  public static class AutoAlignConstants {
+    public static final double requiredDistanceForMidpoint = 3; //arbitrary value change or bad things might happen (kaboom boom)
   }
 
   public static class DriveConstants {

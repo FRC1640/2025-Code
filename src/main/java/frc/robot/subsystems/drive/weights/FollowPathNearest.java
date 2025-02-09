@@ -2,14 +2,17 @@ package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.constants.RobotConstants.AutoAlignConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.tools.DistanceManager;
+import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class FollowPathNearest extends FollowPath {
   Pose2d[] positions;
   Function<Pose2d, Pose2d> poseFunction;
+  public boolean atPoint = false;
 
   public FollowPathNearest(
       Supplier<Pose2d> robotPose,
@@ -76,9 +79,20 @@ public class FollowPathNearest extends FollowPath {
         new Pose2d(
             findNearest(this.positions).getX(),
             findNearest(this.positions).getY(),
-            findNearest(this.positions).getRotation().unaryMinus());
+            (findNearest(pose2dArray).getRotation()));
+    ArrayList<Pose2d> posesList = new ArrayList<Pose2d>();
 
-    pose2dArray = new Pose2d[] {nearestPos};
+    posesList.add(robotPose.get());
+
+    if (robotPose.get().getTranslation().getDistance(nearestPos.getTranslation())
+        > AutoAlignConstants.requiredDistanceForMidpoint) {
+      Pose2d midpoint = new Pose2d(nearestPos.getX(), nearestPos.getY(), nearestPos.getRotation());
+      midpoint = DistanceManager.addRotatedDim(nearestPos, 2.0, new Rotation2d(0.00001, 0.0001));
+      posesList.add(midpoint);
+    }
+    posesList.add(nearestPos);
+
+    pose2dArray = posesList.toArray(new Pose2d[pose2dArray.length - 1]);
     endRotation = findNearest(this.positions).getRotation();
 
     super.startPath();

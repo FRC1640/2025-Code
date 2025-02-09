@@ -48,21 +48,16 @@ public class FollowPath {
   }
 
   public void startPath() {
-    if (endRotation == new Rotation2d(0, 0)) {
-      endRotation = new Rotation2d(0.0001, 0.0001);
-    }
+    endRotation = (endRotation);
     List<Waypoint> waypoints;
     ArrayList<Pose2d> waypointPos = new ArrayList<Pose2d>();
-
-    waypointPos.add(robotPose.get());
-    for (Pose2d roboPose : pose2dArray) {
-      waypointPos.add(roboPose);
+    Rotation2d rotation = new Rotation2d(0, 0);
+    for (Pose2d waypointPose : pose2dArray) {
+      waypointPos.add((waypointPose));
     }
-
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);
     PathConstraints pathConstraints =
         new PathConstraints(DriveConstants.maxSpeed, 3, DriveConstants.maxOmega, 4 * Math.PI);
-
     PathPlannerPath path =
         new PathPlannerPath(
             waypoints,

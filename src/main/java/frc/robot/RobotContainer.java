@@ -272,6 +272,7 @@ public class RobotContainer {
             1,
             1,
             1,
+            () -> getTarget(),
             (x) -> x);
     followPathNearest.setPoseFunction(
         (x) ->
@@ -279,7 +280,6 @@ public class RobotContainer {
                 DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
                 () -> coralPreset));
     followPathNearest.generateTrigger(driveController.y());
-
     // bind reef align
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
     // lift/gantry presets for autoalign

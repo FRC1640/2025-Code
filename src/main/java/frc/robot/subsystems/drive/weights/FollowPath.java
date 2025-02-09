@@ -48,9 +48,6 @@ public class FollowPath {
   }
 
   public void startPath() {
-    if (endRotation == new Rotation2d(0, 0)) {
-      endRotation = new Rotation2d(0.0001, 0.0001);
-    }
     List<Waypoint> waypoints;
     ArrayList<Pose2d> waypointPos = new ArrayList<Pose2d>();
 

@@ -44,9 +44,9 @@ public class FieldConstants {
         new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)),
       };
 
-  public static final Translation2d reefCenterPosRed = new Translation2d(12.8824, 4.0259);
+  public static final Translation2d reefCenterPosRed = new Translation2d(13.07, 4);
 
-  public static final Translation2d reefCenterPosBlue = new Translation2d(3.6576, 4.0259);
+  public static final Translation2d reefCenterPosBlue = new Translation2d(4.47, 4);
 
   public static final Pose2d processorPositionRed =
       new Pose2d(6.0, 0.6, Rotation2d.fromDegrees(270));

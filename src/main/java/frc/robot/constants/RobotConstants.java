@@ -143,21 +143,28 @@ public class RobotConstants {
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
 
+    public enum GantrySetpoint {
+      LEFT,
+      RIGHT,
+      CENTER;
+    }
+
     public enum CoralPreset {
-      Safe(0.1, false),
-      LeftL2(0.5, false), // TODO correct numbers
-      RightL2(0.5, true),
-      LeftL3(1, false),
-      RightL3(1, true),
-      LeftL4(1.5, false),
-      RightL4(1.5, true);
+      Safe(0.1, GantrySetpoint.CENTER),
+      LeftL2(0.5, GantrySetpoint.LEFT), // TODO correct numbers
+      RightL2(0.5, GantrySetpoint.RIGHT),
+      LeftL3(1, GantrySetpoint.LEFT),
+      RightL3(1, GantrySetpoint.RIGHT),
+      LeftL4(1.5, GantrySetpoint.LEFT),
+      RightL4(1.5, GantrySetpoint.RIGHT),
+      Troph(0, GantrySetpoint.RIGHT);
 
       public final double lift;
-      public final boolean right; // Driver Station side perspective
+      public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
 
-      private CoralPreset(double lift, boolean right) {
+      private CoralPreset(double lift, GantrySetpoint setpoint) {
         this.lift = lift;
-        this.right = right;
+        this.gantrySetpoint = setpoint;
       }
 
       public double getLift() {
@@ -165,9 +172,33 @@ public class RobotConstants {
       }
 
       public double getGantry(boolean dsSide) {
-        return right ^ dsSide
-            ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-            : -GantryConstants.gantryPadding;
+        switch (gantrySetpoint) {
+          case LEFT:
+            return false ^ dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : -GantryConstants.gantryPadding;
+          case RIGHT:
+            return true ^ dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : -GantryConstants.gantryPadding;
+          case CENTER:
+            return GantryConstants.gantryLimits.low / 2;
+          default:
+            return GantryConstants.gantryLimits.low / 2;
+        }
+      }
+
+      public GantrySetpoint getGantrySetpoint(boolean dSide) {
+        switch (gantrySetpoint) {
+          case LEFT:
+            return false ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case RIGHT:
+            return true ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case CENTER:
+            return GantrySetpoint.CENTER;
+          default:
+            return GantrySetpoint.CENTER;
+        }
       }
     }
   }

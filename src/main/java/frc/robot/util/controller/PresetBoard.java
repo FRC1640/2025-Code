@@ -31,7 +31,7 @@ public class PresetBoard extends GenericHID {
     return super.getRawButton(Button.kLl3);
   }
 
-  public boolean getTroph(){
+  public boolean getTroph() {
     return super.getRawButton(Button.kTrough);
   }
 

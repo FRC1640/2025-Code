@@ -61,6 +61,10 @@ public class RobotConstants {
     BR;
   }
 
+  public static class AutoAlignConfig {
+    public static final double maxDistanceFromTarget = 0.2;
+  }
+
   public static class DriveConstants {
     public static final double wheelYPos = Units.inchesToMeters(22.75 / 2);
     public static final double wheelXPos = Units.inchesToMeters(22.75 / 2);

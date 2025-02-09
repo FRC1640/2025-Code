@@ -26,6 +26,8 @@ public class FollowPath {
   public Pose2d[] pose2dArray;
   public Rotation2d endRotation;
 
+  public BooleanSupplier controllerButtonDown = () -> false;
+
   public FollowPath(
       Supplier<Pose2d> robotPose,
       Gyro gyro,
@@ -42,24 +44,32 @@ public class FollowPath {
   }
 
   public void stopPath() {
-    pathCommand.cancel();
+    if (pathCommand != null) {
+      pathCommand.cancel();
+    }
     PathplannerWeight.setSpeeds(new ChassisSpeeds());
     pathCommand = null;
   }
 
   public void startPath() {
     List<Waypoint> waypoints;
-    ArrayList<Pose2d> waypointPos = new ArrayList<Pose2d>();
-
-    waypointPos.add(robotPose.get());
-    for (Pose2d roboPose : pose2dArray) {
-      waypointPos.add(roboPose);
+    ArrayList<Pose2d> waypointPos = new ArrayList<>();
+    for (Pose2d waypointPose2d : pose2dArray) {
+      waypointPos.add(waypointPose2d);
     }
+    if (waypointPos.size() <= 0) {
+      return;
+    }
+    if (robotPose.get().getTranslation().getDistance(waypointPos.get(0).getTranslation()) < 0.01) {
+      return;
+    }
+    Rotation2d angle =
+        robotPose.get().getTranslation().minus(waypointPos.get(0).getTranslation()).getAngle();
+    waypointPos.add(0, new Pose2d(robotPose.get().getTranslation(), angle));
 
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);
     PathConstraints pathConstraints =
         new PathConstraints(DriveConstants.maxSpeed, 3, DriveConstants.maxOmega, 4 * Math.PI);
-
     PathPlannerPath path =
         new PathPlannerPath(
             waypoints,
@@ -75,6 +85,7 @@ public class FollowPath {
   }
 
   public Trigger generateTrigger(BooleanSupplier condition) {
+    controllerButtonDown = condition;
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> startPath()))
         .onFalse(new InstantCommand(() -> stopPath()));

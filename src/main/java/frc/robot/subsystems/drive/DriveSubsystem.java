@@ -30,6 +30,8 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
+import frc.robot.util.tools.AutoAlignHelper;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
@@ -107,9 +109,10 @@ public class DriveSubsystem extends SubsystemBase {
         });
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
+          PathplannerWeight.setpoint = targetPose;
           Logger.recordOutput("Drive/Path/TrajectorySetpoint", targetPose);
+          
         });
-
     setpointGenerator =
         new SwerveSetpointGenerator(
             config, // The robot configuration. This is the same config used for generating
@@ -118,7 +121,7 @@ public class DriveSubsystem extends SubsystemBase {
     previousSetpoint =
         new SwerveSetpoint(getChassisSpeeds(), getActualSwerveStates(), DriveFeedforwards.zeros(4));
   }
-
+  
   @Override
   public void periodic() {
     odometryLock.lock();
@@ -237,4 +240,5 @@ public class DriveSubsystem extends SubsystemBase {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysIdRoutine.dynamic(direction);
   }
+  
 }

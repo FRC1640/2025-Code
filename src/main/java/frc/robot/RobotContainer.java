@@ -272,7 +272,7 @@ public class RobotContainer {
             1,
             1,
             1,
-            () -> getTarget(),
+            () -> PathplannerWeight.setpoint,
             (x) -> x);
     followPathNearest.setPoseFunction(
         (x) ->

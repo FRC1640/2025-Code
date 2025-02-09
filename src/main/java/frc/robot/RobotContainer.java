@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -285,6 +286,9 @@ public class RobotContainer {
                     FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
             gyro),
         driveController.x());
+    // Coral Rumble
+    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, .7)));
+    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected()).onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
     // gantry button bindings:

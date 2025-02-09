@@ -21,6 +21,8 @@ public class AutoScoringCommandFactory {
   private CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private CoralOuttakeSubsystem coralOuttakeSubsystem;
   private LiftSubsystem liftSubsystem;
+  private CoralPreset preset;
+  private boolean isAcceptingPresetChanges;
 
   public AutoScoringCommandFactory(
       GantryCommandFactory gantryCommandFactory,
@@ -33,6 +35,7 @@ public class AutoScoringCommandFactory {
     this.liftSubsystem = liftSubsystem;
     this.coralOuttakeCommandFactory = coralOuttakeCommandFactory;
     this.coralOuttakeSubsystem = coralOuttakeSubsystem;
+    this.preset = CoralPreset.Safe;
   }
 
   public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
@@ -41,6 +44,7 @@ public class AutoScoringCommandFactory {
   }
 
   public Command autoPlace() {
+    this.isAcceptingPresetChanges = false;
     return gantryCommandFactory
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
@@ -56,14 +60,31 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimits.low / 2))
+                .alongWith(new InstantCommand(() -> setIsAcceptingPresetChanges(true))));
   }
 
-  public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {
+  public Command setupAutoScore(Supplier<Pose2d> target) {
     return new InstantCommand(
             () ->
                 liftSubsystem.setDefaultCommand(
-                    liftCommandFactory.runLiftMotionProfile(() -> preset.get().getLift())))
-        .alongWith(gantryAlignCommand(preset, () -> AllianceManager.onDsSideReef(target)));
+                    liftCommandFactory.runLiftMotionProfile(() -> getPreset().getLift())))
+        .alongWith(
+            gantryAlignCommand(() -> getPreset(), () -> AllianceManager.onDsSideReef(target)));
+  }
+
+  public void setPreset(CoralPreset preset) {
+    if (!isAcceptingPresetChanges) {
+      return;
+    }
+    this.preset = preset;
+  }
+
+  public CoralPreset getPreset() {
+    return preset;
+  }
+
+  private void setIsAcceptingPresetChanges(boolean isAcceptingPresetChanges) {
+    this.isAcceptingPresetChanges = isAcceptingPresetChanges;
   }
 }

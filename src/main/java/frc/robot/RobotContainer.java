@@ -97,7 +97,6 @@ public class RobotContainer {
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
-  private CoralPreset coralPreset = CoralPreset.Safe;
 
   private DriveToNearestWeight coralAutoAlignWeight;
 
@@ -219,7 +218,7 @@ public class RobotContainer {
         (x) ->
             coralAdjust(
                 DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
-                () -> coralPreset));
+                () -> autoScoringCommandFactory.getPreset()));
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
@@ -263,18 +262,24 @@ public class RobotContainer {
     // lift/gantry presets for autoalign
     new Trigger(
             () ->
-                coralAutoAlignWeight.getTargetDistance() < 1.5 // TODO: fix for pathplanner
+                coralAutoAlignWeight.getTargetDistance() < 2 // TODO: fix for pathplanner
                     && DriveWeightCommand.checkWeight(coralAutoAlignWeight))
-        .onTrue(autoScoringCommandFactory.setupAutoScore(() -> coralPreset, () -> getTarget()));
+        .whileTrue(autoScoringCommandFactory.setupAutoScore(() -> getTarget()));
+
+    new Trigger(() -> coralAutoAlignWeight.getTargetDistance() > 2)
+        .onTrue( // TODO: fix for pathplanner
+            gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+
     new Trigger(
             () ->
                 coralAutoAlignWeight.isAutoalignComplete()
                     // && liftSubsystem.isAtPreset(coralPreset)
                     && gantrySubsystem.isAtPreset(
-                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
+                        autoScoringCommandFactory.getPreset(),
+                        AllianceManager.onDsSideReef(() -> getTarget())))
         .onTrue(autoScoringCommandFactory.autoPlace());
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
@@ -305,25 +310,23 @@ public class RobotContainer {
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
     // preset board
     new Trigger(() -> presetBoard.getLl2())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.LeftL2)));
     new Trigger(() -> presetBoard.getRl2())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL2));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.RightL2)));
     new Trigger(() -> presetBoard.getLl3())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL3));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.LeftL3)));
     new Trigger(() -> presetBoard.getRl3())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL3));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.RightL3)));
     new Trigger(() -> presetBoard.getLl4())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.LeftL4)));
     new Trigger(() -> presetBoard.getRl4())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
-    new Trigger(() -> presetBoard.getTroph())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.RightL4)));
+    new Trigger(() -> presetBoard.getTrough())
+        .onTrue(new InstantCommand(() -> autoScoringCommandFactory.setPreset(CoralPreset.Trough)));
     // lift/gantry manual controls
     operatorController
         .a()
-        .onTrue(
-            autoScoringCommandFactory.setupAutoScore(
-                () -> coralPreset, () -> getTarget())); // TODO jitter?
+        .onTrue(autoScoringCommandFactory.setupAutoScore(() -> getTarget())); // TODO jitter?
 
     new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
         .onFalse(
@@ -339,13 +342,20 @@ public class RobotContainer {
         .b()
         .onTrue(
             new InstantCommand(
-                () ->
-                    liftSubsystem.setDefaultCommand(
-                        liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
+                () -> {
+                  liftSubsystem.setDefaultCommand(
+                      liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+                  gantrySubsystem.setDefaultCommand(
+                      gantryCommandFactory.gantrySetVelocityCommand(() -> 0));
+                }));
     operatorController
         .y()
         .onTrue(
-            autoScoringCommandFactory.setupAutoScore(() -> CoralPreset.Safe, () -> getTarget()));
+            new InstantCommand(
+                () -> {
+                  autoScoringCommandFactory.setPreset(CoralPreset.Safe);
+                  autoScoringCommandFactory.setupAutoScore(() -> getTarget());
+                }));
   }
 
   public Command getAutonomousCommand() {

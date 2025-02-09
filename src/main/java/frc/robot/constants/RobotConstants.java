@@ -157,7 +157,7 @@ public class RobotConstants {
       RightL3(1, GantrySetpoint.RIGHT),
       LeftL4(1.5, GantrySetpoint.LEFT),
       RightL4(1.5, GantrySetpoint.RIGHT),
-      Troph(0, GantrySetpoint.RIGHT);
+      Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
@@ -174,11 +174,11 @@ public class RobotConstants {
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:
-            return false ^ dsSide
+            return dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case RIGHT:
-            return true ^ dsSide
+            return !dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case CENTER:

@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive.weights;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
@@ -83,8 +84,8 @@ public class FollowPath {
         new PathPlannerPath(
             waypoints,
             pathConstraints,
-            null, // The ideal starting state, this is only relevant for pre-planned paths, so can
-            // be null for on-the-fly paths.
+            new IdealStartingState(
+                driveSubsystem.chassisSpeedsMagnitude(), driveSubsystem.chassisSpeedsAngle()),
             new GoalEndState(0.00, endRotation));
     path.preventFlipping = true;
     if (pathCommand == null) {
@@ -118,8 +119,7 @@ public class FollowPath {
     boolean complete =
         (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
             && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
-    ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
-    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
+    complete &= driveSubsystem.chassisSpeedsMagnitude() < 0.01;
     return complete;
   }
 }

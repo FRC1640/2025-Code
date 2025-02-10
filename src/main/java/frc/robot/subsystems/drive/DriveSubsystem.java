@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -149,6 +150,19 @@ public class DriveSubsystem extends SubsystemBase {
   @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/Measured")
   public ChassisSpeeds getChassisSpeeds() {
     return DriveConstants.kinematics.toChassisSpeeds(getActualSwerveStates());
+  }
+
+  public double chassisSpeedsMagnitude() {
+    ChassisSpeeds chassisSpeeds = getChassisSpeeds();
+    return Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+  }
+
+  @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/VelocityAngle")
+  public Rotation2d chassisSpeedsAngle() {
+    return new Translation2d(
+            getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
+        .getAngle()
+        .rotateBy(gyro.getAngleRotation2d());
   }
 
   public Module[] getModules() {

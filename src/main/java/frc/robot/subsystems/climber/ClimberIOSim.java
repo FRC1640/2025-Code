@@ -3,6 +3,7 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -17,6 +18,7 @@ public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim winch1Sim; // winch leader motor
   private final DCMotorSim winch2Sim; // winch follower motor
   private final DoubleSolenoidSim doubleSolenoidSim;
+  private final DigitalInput sensor1Sim, sensor2Sim;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
   private final PIDController winchPID =
@@ -43,6 +45,8 @@ public class ClimberIOSim implements ClimberIO {
                 motor3SimGearbox, 0.00019125, RobotConstants.ClimberConstants.gearRatio),
             motor3SimGearbox);
     doubleSolenoidSim = new DoubleSolenoidSim(PneumaticsModuleType.REVPH, 0, 1);
+    sensor1Sim = new DigitalInput(ClimberConstants.sensor1Channel);
+    sensor2Sim = new DigitalInput(ClimberConstants.sensor2Channel);
   }
 
   @Override
@@ -105,5 +109,7 @@ public class ClimberIOSim implements ClimberIO {
     inputs.winchFollowerMotorVoltage = winch2Sim.getInputVoltage();
 
     inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
+    inputs.sensor1 = !sensor1Sim.get();
+    inputs.sensor2 = !sensor2Sim.get();
   }
 }

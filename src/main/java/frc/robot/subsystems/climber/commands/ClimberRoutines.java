@@ -108,11 +108,9 @@ public class ClimberRoutines {
    *
    * @return
    */
-  public void StopRoutine() {
-    initiatePart0().cancel();
-    initiatePart1().cancel();
-    initiatePart2().cancel();
-    resetClimber().cancel();
+  public Command StopRoutine() {
+    // TODO implement
+    return new InstantCommand();
   }
 
   public void manualOverride() {

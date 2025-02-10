@@ -98,6 +98,14 @@ public class ClimberSubsystem extends SubsystemBase {
     return ((inputs.winchLeaderMotorTemperature + inputs.winchFollowerMotorTemperature) / 2.0);
   }
 
+  public boolean getSensor1() {
+    return inputs.sensor1;
+  }
+
+  public boolean getSensor2() {
+    return inputs.sensor2;
+  }
+
   public void setClimberLiftPosition(double pos) {
     climberIO.setClimberLiftPosition(pos, inputs);
   }

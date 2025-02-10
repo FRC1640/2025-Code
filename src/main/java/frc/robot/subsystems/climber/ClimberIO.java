@@ -24,6 +24,8 @@ public interface ClimberIO extends AutoCloseable {
     public double winchFollowerMotorTemperature = 0.0;
 
     public boolean solenoidForward = false;
+    public boolean sensor1 = false;
+    public boolean sensor2 = false;
   }
 
   /*

@@ -54,7 +54,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
-import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -106,8 +105,6 @@ public class RobotContainer {
   private CoralPreset coralPreset = CoralPreset.Safe;
 
   private DriveToNearestWeight coralAutoAlignWeight;
-
-  public FollowPathNearest followPathNearest;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -273,25 +270,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    followPathNearest =
-        new FollowPathNearest(
-            () -> RobotOdometry.instance.getPose("Main"),
-            gyro,
-            AllianceManager.chooseFromAlliance(
-                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
-            1,
-            1,
-            1,
-            1,
-            1,
-            () -> PathplannerWeight.setpoint,
-            (x) -> x);
-    followPathNearest.setPoseFunction(
-        (x) ->
-            coralAdjust(
-                DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
-                () -> coralPreset));
-    followPathNearest.generateTrigger(driveController.y());
     // bind reef align
     DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
     // lift/gantry presets for autoalign

@@ -11,7 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,22 +25,27 @@ public class FollowPath {
   protected Command pathCommand = null;
   public Pose2d[] pose2dArray;
   public Rotation2d endRotation;
-
-  public BooleanSupplier controllerButtonDown = () -> false;
+  private PathConstraints pathConstraints;
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
       Gyro gyro,
       Pose2d[] pose2dArray,
-      double maxLinearVelocity,
-      double maxLinearAcceleration,
-      double maxAngularVelocity,
-      double maxAngularAcceleration,
+      PathConstraints pathConstraints,
       Rotation2d endRotation) {
     this.robotPose = robotPose;
     this.gyro = gyro;
     this.pose2dArray = pose2dArray;
+    this.pathConstraints = pathConstraints;
     this.endRotation = endRotation;
+    new Trigger(() -> isNearSetpoint() && pathCommand != null)
+        .onFalse(new InstantCommand(() -> restartPath()));
+  }
+
+  public void restartPath() {
+    stopPath();
+
+    startPath();
   }
 
   public void stopPath() {
@@ -68,15 +73,13 @@ public class FollowPath {
     waypointPos.add(0, new Pose2d(robotPose.get().getTranslation(), angle));
 
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);
-    PathConstraints pathConstraints =
-        new PathConstraints(DriveConstants.maxSpeed, 3, DriveConstants.maxOmega, 4 * Math.PI);
     PathPlannerPath path =
         new PathPlannerPath(
             waypoints,
             pathConstraints,
             null, // The ideal starting state, this is only relevant for pre-planned paths, so can
             // be null for on-the-fly paths.
-            new GoalEndState(0.00, (endRotation)));
+            new GoalEndState(0.00, endRotation));
     path.preventFlipping = true;
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);
@@ -85,9 +88,13 @@ public class FollowPath {
   }
 
   public Trigger generateTrigger(BooleanSupplier condition) {
-    controllerButtonDown = condition;
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> startPath()))
         .onFalse(new InstantCommand(() -> stopPath()));
+  }
+
+  public boolean isNearSetpoint() {
+    return PathplannerWeight.setpoint.getTranslation().getDistance(robotPose.get().getTranslation())
+        < AutoAlignConfig.maxDistanceFromTarget;
   }
 }

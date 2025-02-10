@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -65,6 +66,8 @@ public class RobotConstants {
 
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.2;
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(3, 3, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {

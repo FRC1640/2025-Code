@@ -99,4 +99,8 @@ public class FollowPath {
     return PathplannerWeight.setpoint.getTranslation().getDistance(robotPose.get().getTranslation())
         < AutoAlignConfig.maxDistanceFromTarget;
   }
+
+  public Pose2d getFinalPosition() {
+    return pose2dArray[pose2dArray.length - 1];
+  }
 }

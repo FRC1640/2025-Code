@@ -328,7 +328,8 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
-    new Trigger(()->presetBoard.getTroph()).onTrue(coralPreset = CoralPreset.Troph)
+    new Trigger(() -> presetBoard.getTroph())
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
     // lift/gantry manual controls
     operatorController
         .a()

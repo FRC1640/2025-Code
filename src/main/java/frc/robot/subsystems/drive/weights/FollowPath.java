@@ -69,7 +69,7 @@ public class FollowPath {
       return;
     }
     Rotation2d angle =
-        robotPose.get().getTranslation().minus(waypointPos.get(0).getTranslation()).getAngle();
+        waypointPos.get(0).getTranslation().minus(robotPose.get().getTranslation()).getAngle();
     waypointPos.add(0, new Pose2d(robotPose.get().getTranslation(), angle));
 
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -54,6 +55,7 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
+import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -224,14 +226,12 @@ public class RobotContainer {
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
-            (x) -> x,
+            (x) ->
+                coralAdjust(
+                    DistanceManager.addRotatedDim(
+                        x, RobotDimensions.robotLength / 2, x.getRotation()),
+                    () -> coralPreset),
             driveSubsystem);
-
-    coralAutoAlignWeight.setPoseFunction(
-        (x) ->
-            coralAdjust(
-                DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
-                () -> coralPreset));
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
@@ -290,6 +290,20 @@ public class RobotContainer {
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+
+    FollowPathNearest followPathNearest =
+        new FollowPathNearest(
+            () -> RobotOdometry.instance.getPose("Main"),
+            gyro,
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            AutoAlignConfig.pathConstraints,
+            (x) ->
+                coralAdjust(
+                    DistanceManager.addRotatedDim(
+                        x, RobotDimensions.robotLength / 2, x.getRotation()),
+                    () -> coralPreset));
+    followPathNearest.generateTrigger(driveController.y());
     new Trigger(
             () ->
                 coralAutoAlignWeight.isAutoalignComplete()

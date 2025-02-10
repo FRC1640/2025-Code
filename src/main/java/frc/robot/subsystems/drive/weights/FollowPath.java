@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.subsystems.drive.DriveSubsystem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -27,18 +28,21 @@ public class FollowPath {
   public Pose2d[] pose2dArray;
   public Rotation2d endRotation;
   private PathConstraints pathConstraints;
+  private DriveSubsystem driveSubsystem;
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
       Gyro gyro,
       Pose2d[] pose2dArray,
       PathConstraints pathConstraints,
-      Rotation2d endRotation) {
+      Rotation2d endRotation,
+      DriveSubsystem driveSubsystem) {
     this.robotPose = robotPose;
     this.gyro = gyro;
     this.pose2dArray = pose2dArray;
     this.pathConstraints = pathConstraints;
     this.endRotation = endRotation;
+    this.driveSubsystem = driveSubsystem;
     new Trigger(() -> !isNearSetpoint() && pathCommand != null)
         .onTrue(new InstantCommand(() -> restartPath()));
   }
@@ -102,5 +106,20 @@ public class FollowPath {
 
   public Pose2d getFinalPosition() {
     return pose2dArray[pose2dArray.length - 1];
+  }
+
+  public boolean isEnabled() {
+    return pathCommand != null;
+  }
+
+  public boolean isAutoalignComplete() {
+    Pose2d target = getFinalPosition();
+    Pose2d robot = robotPose.get();
+    boolean complete =
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
+            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
+    ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
+    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
+    return complete;
   }
 }

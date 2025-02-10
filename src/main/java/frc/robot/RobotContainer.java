@@ -33,6 +33,10 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
 import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
+import frc.robot.subsystems.algae.AlgaeIO;
+import frc.robot.subsystems.algae.AlgaeIOSim;
+import frc.robot.subsystems.algae.AlgaeIOSpark;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -79,6 +83,7 @@ public class RobotContainer {
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private final ClimberSubsystem climberSubsystem;
+  private final AlgaeSubsystem algaeIntakeSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -133,6 +138,9 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
+        algaeIntakeSubsystem =
+            new AlgaeSubsystem(
+                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
 
         break;
       case SIM:
@@ -167,6 +175,9 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSim()
                     : new ClimberIO() {});
+        algaeIntakeSubsystem =
+            new AlgaeSubsystem(
+                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -175,6 +186,7 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -241,17 +253,16 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        
         side = 0.1;
         break;
       case RIGHT:
-      side = -0.1;
-      break;
+        side = -0.1;
+        break;
       case CENTER:
-      side = 0;
-      break;
+        side = 0;
+        break;
       default:
-      side = 0;
+        side = 0;
         break;
     }
     return DistanceManager.addRotatedDim(

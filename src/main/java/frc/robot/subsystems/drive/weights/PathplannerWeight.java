@@ -37,4 +37,8 @@ public class PathplannerWeight implements DriveWeight {
             speedsNotRotated.getX(), speedsNotRotated.getY(), speeds.omegaRadiansPerSecond);
     return speedsRotated;
   }
+
+  public static ChassisSpeeds getSpeedsPath() {
+    return speeds;
+  }
 }

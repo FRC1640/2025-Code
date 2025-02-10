@@ -31,6 +31,7 @@ import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
+import frc.robot.util.tools.ChassisSpeedHelper;
 import frc.robot.util.tools.RequirementHandler;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -153,16 +154,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double chassisSpeedsMagnitude() {
-    ChassisSpeeds chassisSpeeds = getChassisSpeeds();
-    return Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+    return ChassisSpeedHelper.magnitude(getChassisSpeeds());
   }
 
   @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/VelocityAngle")
   public Rotation2d chassisSpeedsAngle() {
-    return new Translation2d(
-            getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond)
-        .getAngle()
-        .rotateBy(gyro.getAngleRotation2d());
+    return ChassisSpeedHelper.angleOf(getChassisSpeeds()).rotateBy(gyro.getAngleRotation2d());
   }
 
   public Module[] getModules() {

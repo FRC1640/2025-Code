@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.util.tools.ChassisSpeedHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -30,6 +31,8 @@ public class FollowPath {
   public Rotation2d endRotation;
   private PathConstraints pathConstraints;
   private DriveSubsystem driveSubsystem;
+  private IdealStartingState idealStartingState = null;
+  private ChassisSpeeds lastSpeeds = new ChassisSpeeds();
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
@@ -50,7 +53,10 @@ public class FollowPath {
 
   public void restartPath() {
     stopPath();
-
+    idealStartingState =
+        new IdealStartingState(
+            ChassisSpeedHelper.magnitude(lastSpeeds), robotPose.get().getRotation());
+    PathplannerWeight.setSpeeds(lastSpeeds);
     startPath();
   }
 
@@ -58,8 +64,10 @@ public class FollowPath {
     if (pathCommand != null) {
       pathCommand.cancel();
     }
+    lastSpeeds = PathplannerWeight.getSpeedsPath();
     PathplannerWeight.setSpeeds(new ChassisSpeeds());
     pathCommand = null;
+    idealStartingState = null;
   }
 
   public void startPath() {
@@ -82,11 +90,7 @@ public class FollowPath {
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);
     PathPlannerPath path =
         new PathPlannerPath(
-            waypoints,
-            pathConstraints,
-            new IdealStartingState(
-                driveSubsystem.chassisSpeedsMagnitude(), driveSubsystem.chassisSpeedsAngle()),
-            new GoalEndState(0.00, endRotation));
+            waypoints, pathConstraints, idealStartingState, new GoalEndState(0.00, endRotation));
     path.preventFlipping = true;
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);

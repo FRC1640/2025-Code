@@ -176,11 +176,11 @@ public class RobotConstants {
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:
-            return false ^ dsSide
+            return dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case RIGHT:
-            return true ^ dsSide
+            return !dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case CENTER:

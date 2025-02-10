@@ -54,6 +54,6 @@ public class AlgaeIOSpark implements AlgaeIO {
     inputs.intakeMotorRightCurrent = motorRight.getOutputCurrent();
     inputs.intakeMotorRightTemperature = motorRight.getMotorTemperature();
 
-    inputs.solenoid = solenoid.get() == Value.kForward
+    inputs.solenoid = solenoid.get() == Value.kForward;
   }
 }

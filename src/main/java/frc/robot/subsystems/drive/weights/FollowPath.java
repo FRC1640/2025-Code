@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class FollowPath {
   protected Supplier<Pose2d> robotPose;
@@ -38,8 +39,8 @@ public class FollowPath {
     this.pose2dArray = pose2dArray;
     this.pathConstraints = pathConstraints;
     this.endRotation = endRotation;
-    new Trigger(() -> isNearSetpoint() && pathCommand != null)
-        .onFalse(new InstantCommand(() -> restartPath()));
+    new Trigger(() -> !isNearSetpoint() && pathCommand != null)
+        .onTrue(new InstantCommand(() -> restartPath()));
   }
 
   public void restartPath() {
@@ -60,6 +61,7 @@ public class FollowPath {
     List<Waypoint> waypoints;
     ArrayList<Pose2d> waypointPos = new ArrayList<>();
     for (Pose2d waypointPose2d : pose2dArray) {
+      Logger.recordOutput("waypointPose2d", waypointPose2d.getRotation().getDegrees());
       waypointPos.add(waypointPose2d);
     }
     if (waypointPos.size() <= 0) {

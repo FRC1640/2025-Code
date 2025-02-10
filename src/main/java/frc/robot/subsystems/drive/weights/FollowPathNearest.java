@@ -38,9 +38,7 @@ public class FollowPathNearest extends FollowPath {
   @Override
   public void startPath() {
     Pose2d nearestPos =
-        new Pose2d(
-            findNearest(positions).getTranslation(),
-            findNearest(positions).getRotation().unaryMinus());
+        new Pose2d(findNearest(positions).getTranslation(), findNearest(positions).getRotation());
 
     pose2dArray = new Pose2d[] {nearestPos};
     endRotation = findNearest(positions).getRotation();

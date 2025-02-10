@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -52,8 +53,8 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
-import frc.robot.subsystems.drive.weights.DriveToNearestWeight;
 import frc.robot.subsystems.drive.weights.DriveToPointWeight;
+import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -103,8 +104,7 @@ public class RobotContainer {
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private CoralPreset coralPreset = CoralPreset.Safe;
-
-  private DriveToNearestWeight coralAutoAlignWeight;
+  private FollowPathNearest followPathNearest;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -215,23 +215,20 @@ public class RobotContainer {
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-
     // weights
-    coralAutoAlignWeight =
-        new DriveToNearestWeight(
+    followPathNearest =
+        new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             gyro,
-            (x) -> x,
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            AutoAlignConfig.pathConstraints,
+            (x) ->
+                coralAdjust(
+                    DistanceManager.addRotatedDim(
+                        x, RobotDimensions.robotLength / 2, x.getRotation()),
+                    () -> coralPreset),
             driveSubsystem);
-
-    coralAutoAlignWeight.setPoseFunction(
-        (x) ->
-            coralAdjust(
-                DistanceManager.addRotatedDim(x, RobotDimensions.robotLength / 2, x.getRotation()),
-                () -> coralPreset));
 
     DriveWeightCommand.addPersistentWeight(
         new JoystickDriveWeight(
@@ -249,7 +246,7 @@ public class RobotContainer {
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
-    boolean alliance = AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget());
+    boolean alliance = AllianceManager.onDsSideReef(() -> getTarget());
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
@@ -270,13 +267,15 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // bind reef align
-    DriveWeightCommand.createWeightTrigger(coralAutoAlignWeight, driveController.a());
     // lift/gantry presets for autoalign
     new Trigger(
             () ->
-                coralAutoAlignWeight.getTargetDistance() < 1.5
-                    && DriveWeightCommand.checkWeight(coralAutoAlignWeight))
+                RobotOdometry.instance
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        < 1.5
+                    && followPathNearest.isEnabled())
         .onTrue(
             new InstantCommand(
                     () ->
@@ -284,19 +283,17 @@ public class RobotContainer {
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset,
-                        () ->
-                            AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget()))));
+                        () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget()))));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    followPathNearest.generateTrigger(driveController.a());
     new Trigger(
             () ->
-                coralAutoAlignWeight.isAutoalignComplete()
+                followPathNearest.isAutoalignComplete()
                     // && liftSubsystem.isAtPreset(coralPreset)
                     && gantrySubsystem.isAtPreset(
-                        coralPreset,
-                        AllianceManager.onDsSideReef(() -> coralAutoAlignWeight.getTarget())))
+                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
         .onTrue(autoScoringCommandFactory.autoPlace());
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
@@ -351,10 +348,7 @@ public class RobotContainer {
                             liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
                 .alongWith(
                     autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset,
-                        () ->
-                            AllianceManager.onDsSideReef(
-                                () -> coralAutoAlignWeight.getTarget())))); // TODO jitter?
+                        () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget()))));
 
     new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
         .onFalse(
@@ -388,5 +382,9 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return dashboard.getAutoChooserCommand().alongWith(gantryCommandFactory.gantryHomeCommand());
+  }
+
+  public Pose2d getTarget() {
+    return followPathNearest.getFinalPosition();
   }
 }

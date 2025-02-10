@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -29,7 +30,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux24;
+    public static final RobotType robotType = RobotType.Deux25;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -61,6 +62,12 @@ public class RobotConstants {
     FR,
     BL,
     BR;
+  }
+
+  public static class AutoAlignConfig {
+    public static final double maxDistanceFromTarget = 0.2;
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(3, 3, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {

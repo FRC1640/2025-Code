@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
@@ -11,6 +12,7 @@ public class PathplannerWeight implements DriveWeight {
   private static ChassisSpeeds speeds = new ChassisSpeeds();
   private Gyro gyro;
   private Supplier<Pose2d> robotPose;
+  public static Pose2d setpoint = new Pose2d(0.00001, 0.00001, new Rotation2d(0.00001));
 
   public PathplannerWeight(Gyro gyro, Supplier<Pose2d> robotPose) {
     this.gyro = gyro;

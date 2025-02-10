@@ -40,6 +40,8 @@ public class RobotConstants {
             .addValue(RobotType.Prime24, false)
             .addValue(RobotType.Deux24, false)
             .get();
+    public static final boolean algaeIntakeEnabled =
+        new RobotSwitch<Boolean>(false).addValue(RobotType.Sim, true).get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
@@ -178,11 +180,11 @@ public class RobotConstants {
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:
-            return false ^ dsSide
+            return dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case RIGHT:
-            return true ^ dsSide
+            return !dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : -GantryConstants.gantryPadding;
           case CENTER:
@@ -262,5 +264,15 @@ public class RobotConstants {
         new RobotSwitch<Integer>(8).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
+  }
+
+  public static class AlgaeConstants {
+    public static int motorLeftChannel = -1;
+    public static int motorRightChannel = -1;
+    public static int solenoidChannelForward = -1;
+    public static int solenoidChannelReverse = -1;
+    public static double passiveSpeed = 0.1;
+    public static double highSpeed = 0.7;
+    public static double gearRatio = 1;
   }
 }

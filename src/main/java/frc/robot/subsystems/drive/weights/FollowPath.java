@@ -33,6 +33,7 @@ public class FollowPath {
   private DriveSubsystem driveSubsystem;
   private IdealStartingState idealStartingState = null;
   private ChassisSpeeds lastSpeeds = new ChassisSpeeds();
+  private boolean checkRestart = true;
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
@@ -65,8 +66,8 @@ public class FollowPath {
       pathCommand.cancel();
     }
     lastSpeeds = PathplannerWeight.getSpeedsPath();
-    PathplannerWeight.setSpeeds(new ChassisSpeeds());
     pathCommand = null;
+    PathplannerWeight.setSpeeds(new ChassisSpeeds());
     idealStartingState = null;
   }
 
@@ -101,7 +102,21 @@ public class FollowPath {
   public Trigger generateTrigger(BooleanSupplier condition) {
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> startPath()))
-        .onFalse(new InstantCommand(() -> stopPath()));
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  checkRestart = false;
+                  stopPath();
+                }));
+  }
+
+  public void checkRestart() {
+    if (!isAutoalignComplete() && checkRestart) {
+      restartPath();
+    } else {
+      pathCommand = null;
+    }
+    checkRestart = true;
   }
 
   public boolean isNearSetpoint() {

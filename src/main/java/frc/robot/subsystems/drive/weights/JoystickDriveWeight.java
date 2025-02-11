@@ -19,6 +19,7 @@ public class JoystickDriveWeight implements DriveWeight {
   private static final double DEADBAND = 0.02;
   private BooleanSupplier slowMode;
   private BooleanSupplier fastMode;
+  private boolean enabled = true;
 
   public JoystickDriveWeight(
       DoubleSupplier xPercent,
@@ -33,9 +34,15 @@ public class JoystickDriveWeight implements DriveWeight {
     this.fastMode = fastMode;
   }
 
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
   @Override
   public ChassisSpeeds getSpeeds() {
-
+    if (!enabled) {
+      return new ChassisSpeeds();
+    }
     if (Robot.getState() != RobotState.TELEOP) {
       return new ChassisSpeeds();
     }

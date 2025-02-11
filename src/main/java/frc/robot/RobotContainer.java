@@ -53,10 +53,10 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
-import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
+import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -105,6 +105,8 @@ public class RobotContainer {
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private CoralPreset coralPreset = CoralPreset.Safe;
   private FollowPathNearest followPathNearest;
+
+  private final JoystickDriveWeight joystickDriveWeight;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -216,12 +218,20 @@ public class RobotContainer {
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
     // weights
+    joystickDriveWeight =
+        new JoystickDriveWeight(
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
+            driveController.rightBumper(),
+            driveController.leftTrigger());
     followPathNearest =
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
-            AllianceManager.chooseFromAlliance(
-                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            () ->
+                AllianceManager.chooseFromAlliance(
+                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
             AutoAlignConfig.pathConstraints,
             (x) ->
                 coralAdjust(
@@ -230,13 +240,7 @@ public class RobotContainer {
                     () -> coralPreset),
             driveSubsystem);
 
-    DriveWeightCommand.addPersistentWeight(
-        new JoystickDriveWeight(
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
-            () -> -driveController.getRightX(),
-            driveController.rightBumper(),
-            driveController.leftTrigger()));
+    DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
@@ -289,25 +293,30 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathNearest.generateTrigger(driveController.a());
     new Trigger(
-            () ->
-                followPathNearest.isAutoalignComplete()
-                    // && liftSubsystem.isAtPreset(coralPreset)
-                    && gantrySubsystem.isAtPreset(
-                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
-        .onTrue(autoScoringCommandFactory.autoPlace());
-    // processor autoalign
+            () -> followPathNearest.isAutoalignComplete()
+            // && liftSubsystem.isAtPreset(coralPreset)
+            // && gantrySubsystem.isAtPreset(
+            //     coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+            )
+        .onTrue(autoScoringCommandFactory.autoPlace((x) -> joystickDriveWeight.setEnabled(x)));
+
     DriveWeightCommand.createWeightTrigger(
-        new DriveToPointWeight(
+        new RotateToAngleWeight(
             () -> RobotOdometry.instance.getPose("Main"),
             () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed),
-            gyro),
-        driveController.x());
+                DistanceManager.getNearestPosition(
+                        RobotOdometry.instance.getPose("Main"),
+                        AllianceManager.chooseFromAlliance(
+                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
+                    .getRotation()
+                    .plus(Rotation2d.fromDegrees(180))),
+        driveController.leftBumper());
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
     // gantry button bindings:
-    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
+    operatorController
+        .x()
+        .whileTrue(autoScoringCommandFactory.autoPlace((x) -> joystickDriveWeight.setEnabled(x)));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));

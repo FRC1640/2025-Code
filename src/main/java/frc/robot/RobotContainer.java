@@ -312,6 +312,8 @@ public class RobotContainer {
                     .getRotation()
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
+
+    driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
     // gantry button bindings:

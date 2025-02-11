@@ -71,7 +71,7 @@ public class FollowPath {
     if (waypointPos.size() <= 0) {
       return;
     }
-    if (robotPose.get().getTranslation().getDistance(waypointPos.get(0).getTranslation()) < 0.01) {
+    if (robotPose.get().getTranslation().getDistance(waypointPos.get(0).getTranslation()) < 0.001) {
       return;
     }
     Rotation2d angle =

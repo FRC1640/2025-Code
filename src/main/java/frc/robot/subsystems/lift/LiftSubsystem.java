@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
@@ -29,8 +30,8 @@ public class LiftSubsystem extends SubsystemBase {
             .createNewRoutine(
                 this::setLiftVoltage,
                 this::getLeaderMotorVoltage,
-                this::getFollowerMotorPosition,
-                this::getFollowerMotorVelocity,
+                this::getLeaderMotorPosition,
+                this::getLeaderMotorVelocity,
                 this,
                 new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(5)));
   }
@@ -41,6 +42,10 @@ public class LiftSubsystem extends SubsystemBase {
     liftIO.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
+  }
+
+  public double getMotorPosition() {
+    return inputs.motorPosition;
   }
 
   public double getLeaderMotorPosition() {
@@ -101,5 +106,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void resetLiftMotionProfile() {
     liftIO.resetLiftMotionProfile(inputs);
+  }
+
+  public boolean isAtPreset(CoralPreset preset) {
+    return Math.abs(getMotorPosition() - preset.getLift()) < 0.01;
   }
 }

@@ -1,8 +1,8 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,7 +15,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.util.tools.Limit;
+import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
@@ -24,8 +24,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = Units.inchesToMeters(36);
-    public static final double robotLength = Units.inchesToMeters(36);
+    public static final double robotWidth = Units.inchesToMeters(30);
+    public static final double robotLength = Units.inchesToMeters(30);
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -34,35 +34,36 @@ public class RobotConstants {
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     public static final boolean liftSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
             .addValue(RobotType.Prime24, false)
             .addValue(RobotType.Deux24, false)
             .get();
+    public static final boolean algaeIntakeEnabled =
+        new RobotSwitch<Boolean>(false).addValue(RobotType.Sim, true).get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     public static final boolean climberSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     // odometry
     public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
-  }
-
-  public static Pose2d addRobotDim(Pose2d pose2d) {
-    Translation2d translation =
-        pose2d
-            .getTranslation()
-            .minus(
-                new Translation2d(RobotDimensions.robotWidth / 2, 0)
-                    .rotateBy(pose2d.getRotation()));
-    return new Pose2d(translation, pose2d.getRotation());
   }
 
   public static enum PivotId {
@@ -70,6 +71,12 @@ public class RobotConstants {
     FR,
     BL,
     BR;
+  }
+
+  public static class AutoAlignConfig {
+    public static final double maxDistanceFromTarget = 0.2;
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -113,6 +120,9 @@ public class RobotConstants {
     public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
 
     public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+
+    public static final double maxAntiTipCorrectionSpeed = 1.5;
+    public static final double minTipDegrees = 6;
   }
 
   public static class CameraConstants {
@@ -144,17 +154,79 @@ public class RobotConstants {
     public static final int liftLeaderMotorID = new RobotSwitch<Integer>(0).get();
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(1).get();
     public static final double gearRatio = 5;
-    public static final Limit liftLimits = new Limit(0, 2);
+    public static final Limits liftLimits = new Limits(0.0, 2.0);
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+
+    public enum GantrySetpoint {
+      LEFT,
+      RIGHT,
+      CENTER;
+    }
+
+    public enum CoralPreset {
+      Safe(0.1, GantrySetpoint.CENTER),
+      LeftL2(0.5, GantrySetpoint.LEFT), // TODO correct numbers
+      RightL2(0.5, GantrySetpoint.RIGHT),
+      LeftL3(1, GantrySetpoint.LEFT),
+      RightL3(1, GantrySetpoint.RIGHT),
+      LeftL4(1.5, GantrySetpoint.LEFT),
+      RightL4(1.5, GantrySetpoint.RIGHT),
+      Troph(0, GantrySetpoint.RIGHT);
+
+      public final double lift;
+      public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
+
+      private CoralPreset(double lift, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.gantrySetpoint = setpoint;
+      }
+
+      public double getLift() {
+        return lift;
+      }
+
+      public double getGantry(boolean dsSide) {
+        switch (gantrySetpoint) {
+          case LEFT:
+            return dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : -GantryConstants.gantryPadding;
+          case RIGHT:
+            return !dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : -GantryConstants.gantryPadding;
+          case CENTER:
+            return GantryConstants.gantryLimits.low / 2;
+          default:
+            return GantryConstants.gantryLimits.low / 2;
+        }
+      }
+
+      public GantrySetpoint getGantrySetpoint(boolean dSide) {
+        switch (gantrySetpoint) {
+          case LEFT:
+            return false ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case RIGHT:
+            return true ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case CENTER:
+            return GantrySetpoint.CENTER;
+          default:
+            return GantrySetpoint.CENTER;
+        }
+      }
+    }
   }
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 325;
+    public static final double detectionThresh = 550;
+    public static final int averageLength = 20;
+    public static final double averagePercentage = 0.8;
+    public static final double waitTimeSeconds = 0.1;
   }
 
   // TODO replace with actual values
@@ -172,8 +244,8 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = 1;
     public static final int climberWinch2MotorID = 2;
 
-    public static final Limit liftLimits = new Limit(0, 1000);
-    public static final Limit winchLimits = new Limit(0, 1000);
+    public static final Limits liftLimits = new Limits(0.0, 1000.0);
+    public static final Limits winchLimits = new Limits(0.0, 1000.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =
@@ -187,16 +259,13 @@ public class RobotConstants {
 
   public static class GantryConstants {
     public static final int gantrySparkID = new RobotSwitch<Integer>(12).get();
-    public static final double gantryGearRatio = 27; // prototype values
-    public static final double pulleyRadius =
-        Units.inchesToMeters(0.5); // inches for now / placeholder
+    public static final double gantryGearRatio = 27.4;
+    public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limit gantryLimits = new Limit(-10000, 10000);
+    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    ;
-
-    public static final double gantryHomeFastVoltage = 6;
-    public static final double gantryHomeSlowVoltage = 3;
+    public static final double alignSpeed = 0.1;
   }
 
   public static class CoralOuttakeConstants {
@@ -204,8 +273,18 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(24).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(25).get(); // update this too
+        new RobotSwitch<Integer>(8).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
+  }
+
+  public static class AlgaeConstants {
+    public static int motorLeftChannel = -1;
+    public static int motorRightChannel = -1;
+    public static int solenoidChannelForward = -1;
+    public static int solenoidChannelReverse = -1;
+    public static double passiveSpeed = 0.1;
+    public static double highSpeed = 0.7;
+    public static double gearRatio = 1;
   }
 }

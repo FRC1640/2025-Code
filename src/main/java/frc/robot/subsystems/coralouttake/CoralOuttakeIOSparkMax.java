@@ -1,6 +1,7 @@
 package frc.robot.subsystems.coralouttake;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
@@ -10,12 +11,13 @@ import frc.robot.util.tools.MotorLim;
 
 public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   private final SparkMax intakeSpark;
-  private DigitalInput coralDetector;
+  private final DigitalInput coralDetector;
 
   public CoralOuttakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(CoralOuttakeConstants.intakeSparkID, true));
+            SparkConstants.getDefaultMax(
+                CoralOuttakeConstants.intakeSparkID, true, IdleMode.kBrake));
     coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
   }
 

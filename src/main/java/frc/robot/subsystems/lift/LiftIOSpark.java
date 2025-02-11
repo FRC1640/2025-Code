@@ -25,7 +25,7 @@ public class LiftIOSpark implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
-      RobotPIDConstants.costructProfiledPIDController(
+      RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
 
   public LiftIOSpark() {
@@ -46,7 +46,11 @@ public class LiftIOSpark implements LiftIO {
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.leaderMotorPosition, voltage, LiftConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.leaderMotorPosition,
+                voltage,
+                LiftConstants.liftLimits.low,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -70,7 +74,7 @@ public class LiftIOSpark implements LiftIO {
 
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
-    profiledPIDController.reset(inputs.leaderMotorPosition);
+    profiledPIDController.reset(inputs.leaderMotorPosition, inputs.leaderMotorVelocity);
   }
 
   @Override
@@ -109,5 +113,6 @@ public class LiftIOSpark implements LiftIO {
         followerMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
+    inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
   }
 }

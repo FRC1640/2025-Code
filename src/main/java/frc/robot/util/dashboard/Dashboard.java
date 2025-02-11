@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.constants.RobotPIDConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
 // import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.sysid.CreateSysidCommand;
@@ -32,6 +33,7 @@ public class Dashboard {
   private SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   private LiftSubsystem liftSubsystem;
+  private GantrySubsystem gantrySubsystem;
 
   private boolean pid = false;
   private boolean sysid = false;
@@ -39,9 +41,11 @@ public class Dashboard {
   public Dashboard(
       DriveSubsystem driveSubsystem,
       LiftSubsystem liftSubsystem,
+      GantrySubsystem gantrySubsystem,
       CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
+    this.gantrySubsystem = gantrySubsystem;
     this.controller = controller;
     autoInit();
     teleopInit();
@@ -111,7 +115,16 @@ public class Dashboard {
             startNext,
             cancel,
             () -> liftSubsystem.setLiftVoltage(0)));
-    ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
+
+    sysidChooser.addOption(
+        "Gantry",
+        CreateSysidCommand.createCommand(
+            gantrySubsystem::sysIdQuasistatic,
+            gantrySubsystem::sysIdDynamic,
+            "Gantry",
+            startNext,
+            cancel,
+            () -> gantrySubsystem.setGantryVoltage(0)));
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 

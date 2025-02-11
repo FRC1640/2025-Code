@@ -34,6 +34,7 @@ import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
+import frc.robot.subsystems.climber.commands.ClimberRoutines;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -84,6 +85,7 @@ public class RobotContainer {
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
+  private final ClimberRoutines climberRoutines;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -176,6 +178,7 @@ public class RobotContainer {
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    climberRoutines = new ClimberRoutines(climberCommandFactory);
 
     // set defaults
 
@@ -236,6 +239,12 @@ public class RobotContainer {
         .whileTrue(
             coralOuttakeCommandFactory.setIntakeVoltage(
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
+
+    // climber button bindings:
+    operatorController.povDown().onTrue(climberRoutines.initiatePart1());
+    operatorController.povUp().onTrue(climberRoutines.initiatePart2());
+    operatorController.povRight().onTrue(climberRoutines.manualOverride());
+    operatorController.povLeft().onTrue(climberRoutines.resetClimber());
   }
 
   public Command getAutonomousCommand() {

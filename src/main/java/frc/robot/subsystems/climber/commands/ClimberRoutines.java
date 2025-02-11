@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.ClimberConstants;
-import frc.robot.subsystems.climber.ClimberIO.ClimberIOInputs;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import java.util.function.BooleanSupplier;
 
 public class ClimberRoutines {
 
   private final ClimberCommandFactory climberCommandFactory;
-  private ClimberIOInputs inputs;
+  private ClimberSubsystem climberSubsystem;
 
   // Time constants (in seconds)
   private final double afterClampDelay = 0.3;
@@ -23,17 +23,28 @@ public class ClimberRoutines {
 
   // State booleans
   public final BooleanSupplier
-      liftIsLow = () -> withinTolerance(inputs.liftMotorPosition, ClimberConstants.liftLimits.low),
+      liftIsLow =
+          () ->
+              withinTolerance(
+                  climberSubsystem.getLiftMotorPosition(), ClimberConstants.liftLimits.low),
       winchIsLow =
-          () -> withinTolerance(inputs.winchLeaderMotorPosition, ClimberConstants.winchLimits.low),
+          () ->
+              withinTolerance(
+                  climberSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.low),
       liftIsHigh =
-          () -> withinTolerance(inputs.liftMotorPosition, ClimberConstants.liftLimits.high),
+          () ->
+              withinTolerance(
+                  climberSubsystem.getLiftMotorPosition(), ClimberConstants.liftLimits.high),
       winchIsVertical =
           () ->
               withinTolerance(
-                  inputs.winchLeaderMotorPosition, ClimberConstants.winchVerticalPosition),
+                  climberSubsystem.getWinchLeaderMotorPosition(),
+                  ClimberConstants.winchVerticalPosition),
       winchIsHigh =
-          () -> withinTolerance(inputs.winchLeaderMotorPosition, ClimberConstants.winchLimits.high);
+          () ->
+              withinTolerance(
+                  climberSubsystem.getWinchLeaderMotorPosition(),
+                  ClimberConstants.winchLimits.high);
 
   public boolean manualOverride;
   // when manualOverride
@@ -48,9 +59,9 @@ public class ClimberRoutines {
     return position > target - tolerance || position < target + tolerance;
   }
 
-  public ClimberRoutines(ClimberCommandFactory climberCommandFactory, ClimberIOInputs inputs) {
+  public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
     this.climberCommandFactory = climberCommandFactory;
-    this.inputs = inputs;
+    climberSubsystem = climberCommandFactory.climberSubsystem;
   }
 
   /**
@@ -109,13 +120,13 @@ public class ClimberRoutines {
    * @return
    */
   public Command StopRoutine() {
-    // TODO implement
-    return new InstantCommand();
+    return climberCommandFactory
+        .climberLiftApplyVoltageCommand(() -> 0)
+        .alongWith(climberCommandFactory.climberWinchApplyVoltageCommand(() -> 0));
   }
 
-  public void manualOverride() {
-    StopRoutine();
-    manualOverride = true;
+  public Command manualOverride() {
+    return StopRoutine().andThen(() -> manualOverride = true);
   }
 
   /**
@@ -176,5 +187,13 @@ public class ClimberRoutines {
         .climberSetWinchPosPID(() -> ClimberConstants.winchLimits.low)
         .alongWith(new WaitCommand(winchTimeout))
         .until(winchIsLow);
+  }
+
+  public boolean isReadyToClamp() {
+    return climberSubsystem.getSolenoidState() == false
+        && liftIsLow.getAsBoolean()
+        && winchIsVertical.getAsBoolean()
+        && climberSubsystem.getSensor1()
+        && climberSubsystem.getSensor2();
   }
 }

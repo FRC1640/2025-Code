@@ -9,6 +9,8 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.tools.logging.LogRunner;
+import frc.robot.util.tools.logging.VelocityLogStorage;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
@@ -42,6 +44,8 @@ public class Module {
         () -> inputs.steerTempCelsius > WarningThresholdConstants.maxMotorTemp,
         id.toString() + " steer motor is hot.",
         AlertType.kWarning);
+    LogRunner.addLog(
+        new VelocityLogStorage(() -> getVelocity(), () -> io.velocitySetpoint(), "driveVelocity"));
   }
 
   public void periodic() {

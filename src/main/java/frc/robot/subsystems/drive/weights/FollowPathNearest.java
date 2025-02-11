@@ -10,20 +10,20 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class FollowPathNearest extends FollowPath {
-  Pose2d[] positions;
+  Supplier<Pose2d[]> positions;
   Function<Pose2d, Pose2d> poseFunction;
 
   public FollowPathNearest(
       Supplier<Pose2d> robotPose,
       Gyro gyro,
-      Pose2d[] positions,
+      Supplier<Pose2d[]> positions,
       PathConstraints pathConstraints,
       Function<Pose2d, Pose2d> poseFunction,
       DriveSubsystem driveSubsystem) {
     super(robotPose, gyro, null, pathConstraints, null, driveSubsystem);
     this.positions = positions;
-    pose2dArray = new Pose2d[] {findNearest(this.positions)};
-    endRotation = findNearest(this.positions).getRotation();
+    pose2dArray = new Pose2d[] {findNearest(positions.get())};
+    endRotation = findNearest(positions.get()).getRotation();
     this.poseFunction = poseFunction;
   }
 
@@ -41,7 +41,9 @@ public class FollowPathNearest extends FollowPath {
   @Override
   public void startPath() {
     Pose2d nearestPos =
-        new Pose2d(findNearest(positions).getTranslation(), findNearest(positions).getRotation());
+        new Pose2d(
+            findNearest(positions.get()).getTranslation(),
+            findNearest(positions.get()).getRotation());
 
     double v = nearestPos.getTranslation().getDistance(robotPose.get().getTranslation());
     Rotation2d angle =
@@ -53,7 +55,7 @@ public class FollowPathNearest extends FollowPath {
         DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.5, nearestPos.getRotation());
 
     pose2dArray = new Pose2d[] {midPoint, nearestPos};
-    endRotation = findNearest(positions).getRotation();
+    endRotation = findNearest(positions.get()).getRotation();
 
     super.startPath();
   }

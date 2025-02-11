@@ -19,7 +19,7 @@ public class JoystickDriveWeight implements DriveWeight {
   private static final double DEADBAND = 0.02;
   private BooleanSupplier slowMode;
   private BooleanSupplier fastMode;
-  private boolean enabled;
+  private boolean enabled = true;
 
   public JoystickDriveWeight(
       DoubleSupplier xPercent,

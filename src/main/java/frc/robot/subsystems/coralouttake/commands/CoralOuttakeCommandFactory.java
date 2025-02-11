@@ -25,7 +25,7 @@ public class CoralOuttakeCommandFactory {
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.isCoralDetected())
+    new Trigger(() -> !intakeSubsystem.isDetectingTimed())
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -33,7 +33,8 @@ public class CoralOuttakeCommandFactory {
                         RobotOdometry.instance.getPose("Main"),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12))
-        .onFalse(setIntakeVoltage(() -> 0));
+        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
+
+    new Trigger(() -> intakeSubsystem.isDetectingTimed()).onTrue(setIntakeVoltage(() -> 0));
   }
 }

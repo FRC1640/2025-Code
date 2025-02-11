@@ -71,7 +71,7 @@ public class FollowPath {
     if (waypointPos.size() <= 0) {
       return;
     }
-    if (robotPose.get().getTranslation().getDistance(waypointPos.get(0).getTranslation()) < 0.01) {
+    if (robotPose.get().getTranslation().getDistance(waypointPos.get(0).getTranslation()) < 0.001) {
       return;
     }
     Rotation2d angle =
@@ -119,8 +119,7 @@ public class FollowPath {
         (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
             && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
-    complete &=
-        Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.001;
+    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
     return complete;
   }
 }

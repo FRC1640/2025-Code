@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive.weights;
 
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.tools.DistanceManager;
@@ -42,7 +43,16 @@ public class FollowPathNearest extends FollowPath {
     Pose2d nearestPos =
         new Pose2d(findNearest(positions).getTranslation(), findNearest(positions).getRotation());
 
-    pose2dArray = new Pose2d[] {nearestPos};
+    double v = nearestPos.getTranslation().getDistance(robotPose.get().getTranslation());
+    Rotation2d angle =
+        nearestPos.getTranslation().minus(robotPose.get().getTranslation()).getAngle();
+
+    double midPointLength = Math.abs(angle.getCos() * v);
+
+    Pose2d midPoint =
+        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.5, nearestPos.getRotation());
+
+    pose2dArray = new Pose2d[] {midPoint, nearestPos};
     endRotation = findNearest(positions).getRotation();
 
     super.startPath();

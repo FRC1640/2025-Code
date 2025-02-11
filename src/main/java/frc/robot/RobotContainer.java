@@ -314,7 +314,7 @@ public class RobotContainer {
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
     // gantry button bindings:
-    operatorController.x().whileTrue(gantryCommandFactory.gantryDriftCommand());
+    operatorController.x().whileTrue(autoScoringCommandFactory.autoPlace((x) -> {}));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));

@@ -106,6 +106,8 @@ public class RobotContainer {
   private CoralPreset coralPreset = CoralPreset.Safe;
   private FollowPathNearest followPathNearest;
 
+  private final JoystickDriveWeight joystickDriveWeight;
+
   public RobotContainer() {
     switch (Robot.getMode()) {
       case REAL:
@@ -216,6 +218,13 @@ public class RobotContainer {
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
     // weights
+    joystickDriveWeight =
+        new JoystickDriveWeight(
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
+            driveController.rightBumper(),
+            driveController.leftTrigger());
     followPathNearest =
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -230,13 +239,7 @@ public class RobotContainer {
                     () -> coralPreset),
             driveSubsystem);
 
-    DriveWeightCommand.addPersistentWeight(
-        new JoystickDriveWeight(
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
-            () -> -driveController.getRightX(),
-            driveController.rightBumper(),
-            driveController.leftTrigger()));
+    DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
@@ -289,12 +292,12 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathNearest.generateTrigger(driveController.a());
     new Trigger(
-            () ->
-                followPathNearest.isAutoalignComplete()
-                    // && liftSubsystem.isAtPreset(coralPreset)
-                    && gantrySubsystem.isAtPreset(
-                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
-        .onTrue(autoScoringCommandFactory.autoPlace());
+            () -> followPathNearest.isAutoalignComplete()
+            // && liftSubsystem.isAtPreset(coralPreset)
+            // && gantrySubsystem.isAtPreset(
+            //     coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+            )
+        .onTrue(autoScoringCommandFactory.autoPlace((x) -> joystickDriveWeight.setEnabled(x)));
     // processor autoalign
     DriveWeightCommand.createWeightTrigger(
         new DriveToPointWeight(

@@ -13,6 +13,7 @@ import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.tools.AllianceManager;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class AutoScoringCommandFactory {
@@ -40,9 +41,9 @@ public class AutoScoringCommandFactory {
         () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
   }
 
-  public Command autoPlace() {
-    return gantryCommandFactory
-        .gantryDriftCommand()
+  public Command autoPlace(Consumer<Boolean> setDriveEnabled) {
+    return new InstantCommand(() -> setDriveEnabled.accept(false))
+        .andThen(gantryCommandFactory.gantryDriftCommand())
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
         .until(() -> !coralOuttakeSubsystem.isCoralDetected())
@@ -56,7 +57,8 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimits.low / 2)))
+        .finallyDo(() -> setDriveEnabled.accept(true));
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {

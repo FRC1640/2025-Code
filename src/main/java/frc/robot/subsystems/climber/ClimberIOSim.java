@@ -13,6 +13,7 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSim implements ClimberIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim liftSim;
   private final DCMotorSim winch1Sim; // winch leader motor
   private final DCMotorSim winch2Sim; // winch follower motor
@@ -60,6 +61,7 @@ public class ClimberIOSim implements ClimberIO {
   public void setClimberLiftPosition(double position, ClimberIOInputs inputs) {
     setClimberLiftVoltage(
         MotorLim.clampVoltage(liftPID.calculate(inputs.liftMotorPosition, position)), inputs);
+    velocitySetpoint = liftPID.getSetpoint();
   }
 
   @Override
@@ -94,6 +96,11 @@ public class ClimberIOSim implements ClimberIO {
     } else {
       doubleSolenoidSim.set(DoubleSolenoid.Value.kReverse);
     }
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 
   @Override

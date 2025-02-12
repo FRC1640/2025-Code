@@ -12,6 +12,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSparkMax implements ClimberIO {
+  private double velocitySetpoint = 0;
   private final ResolverVoltage liftEncoder;
   private final ResolverVoltage winchEncoder;
   private final SparkMax liftSpark;
@@ -55,6 +56,7 @@ public class ClimberIOSparkMax implements ClimberIO {
                 voltage,
                 ClimberConstants.winchLimits.low,
                 ClimberConstants.winchLimits.high)));
+    velocitySetpoint = liftPID.getSetpoint();
   }
   /*
    * Sets the position of the lift motor using a PID
@@ -111,5 +113,10 @@ public class ClimberIOSparkMax implements ClimberIO {
     } else {
       doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

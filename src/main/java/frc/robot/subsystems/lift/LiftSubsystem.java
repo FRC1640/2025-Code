@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+import frc.robot.util.tools.logging.LogRunner;
+import frc.robot.util.tools.logging.VelocityLogStorage;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -42,6 +44,9 @@ public class LiftSubsystem extends SubsystemBase {
     liftIO.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
+    LogRunner.addLog(
+        new VelocityLogStorage(
+            () -> getLeaderMotorVelocity(), () -> liftIO.velocitySetpoint(), getName()));
   }
 
   public double getMotorPosition() {

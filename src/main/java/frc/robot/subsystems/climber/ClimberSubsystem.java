@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.tools.logging.LogRunner;
+import frc.robot.util.tools.logging.VelocityLogStorage;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -9,6 +11,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public ClimberSubsystem(ClimberIO liftIO) {
     this.climberIO = liftIO;
+    LogRunner.addLog(
+        new VelocityLogStorage(
+            () -> getLiftMotorVelocity(), () -> liftIO.velocitySetpoint(), getName()));
   }
 
   @Override

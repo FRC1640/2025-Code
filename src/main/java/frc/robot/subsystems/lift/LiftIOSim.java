@@ -11,6 +11,7 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSim implements LiftIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
@@ -57,6 +58,7 @@ public class LiftIOSim implements LiftIO {
                 voltage,
                 LiftConstants.liftLimits.low,
                 LiftConstants.liftLimits.high)));
+    velocitySetpoint = liftController.getSetpoint();
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -104,5 +106,10 @@ public class LiftIOSim implements LiftIO {
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
     profiledPIDController.reset(inputs.leaderMotorPosition);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

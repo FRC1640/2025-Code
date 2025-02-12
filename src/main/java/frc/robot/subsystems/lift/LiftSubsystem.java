@@ -108,7 +108,7 @@ public class LiftSubsystem extends SubsystemBase {
     liftIO.resetLiftMotionProfile(inputs);
   }
 
-  public boolean isAtPreset(CoralPreset preset) {
-    return Math.abs(getMotorPosition() - preset.getLift()) < 0.01;
+  public boolean isAtPreset(double pos) {
+    return Math.abs(getMotorPosition() - pos) < 0.01;
   }
 }

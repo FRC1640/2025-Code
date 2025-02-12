@@ -303,7 +303,8 @@ public class RobotContainer {
     new Trigger(
             () ->
                 followPathNearest.isAutoalignComplete()
-                    && liftSubsystem.isAtPreset(coralPreset)
+                    && liftSubsystem.isAtPreset(
+                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
                     && gantrySubsystem.isAtPreset(
                         coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
         .onTrue(getAutoPlaceCommand());

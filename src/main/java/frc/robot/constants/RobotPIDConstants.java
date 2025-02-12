@@ -24,7 +24,6 @@ public class RobotPIDConstants {
 
   public static final PIDController constructPID(PIDConstants constants, String pidTrackedName) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    System.out.println(pidTrackedName);
     PIDTrack.pidsTrack.add(j);
     PIDTrack.idName.add(pidTrackedName);
     PIDMap.pidMap.put(pidTrackedName, j);

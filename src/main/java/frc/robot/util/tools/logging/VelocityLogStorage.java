@@ -28,6 +28,7 @@ public class VelocityLogStorage implements Loggable {
   public void log() {
     Logger.recordOutput("VelocityLogging/" + name + "/setpoint", setpointVelocity.getAsDouble());
     Logger.recordOutput(
-        "VelocityLogging/" + name + "/currentVelocity", setpointVelocity.getAsDouble());
+        "VelocityLogging/" + name + "/currentVelocity", currentVelocity.getAsDouble());
+    Logger.recordOutput("VelocityLogging/" + name + "/velocityError", Math.abs(setpointVelocity.getAsDouble()) - Math.abs(currentVelocity.getAsDouble()));
   }
 }

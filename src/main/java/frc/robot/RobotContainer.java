@@ -72,6 +72,8 @@ import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.tools.logging.LogRunner;
+
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
@@ -97,6 +99,7 @@ public class RobotContainer {
 
   private final ReefDetector reefDetector;
 
+  private final LogRunner logRunner;
   private final GantryCommandFactory gantryCommandFactory;
   private final LiftCommandFactory liftCommandFactory;
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
@@ -191,6 +194,7 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
+    logRunner = new LogRunner();
     driveSubsystem = new DriveSubsystem(gyro);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);

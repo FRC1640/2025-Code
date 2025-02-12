@@ -179,14 +179,26 @@ public class RobotConstants {
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
+      private double liftAlgae;
+
+      private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.liftAlgae = liftAlgae;
+        this.gantrySetpoint = setpoint;
+      }
 
       private CoralPreset(double lift, GantrySetpoint setpoint) {
         this.lift = lift;
+        this.liftAlgae = lift;
         this.gantrySetpoint = setpoint;
       }
 
       public double getLift() {
         return lift;
+      }
+
+      public double getLiftAlgae() {
+        return liftAlgae;
       }
 
       public double getGantry(boolean dsSide) {
@@ -286,5 +298,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
+    public static double currentThresh = 10;
   }
 }

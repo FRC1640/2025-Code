@@ -55,10 +55,15 @@ import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import frc.robot.subsystems.winch.WinchIO;
+import frc.robot.subsystems.winch.WinchIOSim;
+import frc.robot.subsystems.winch.WinchIOSparkMax;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
@@ -69,11 +74,13 @@ public class RobotContainer {
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private final ClimberSubsystem climberSubsystem;
+  private final WinchSubsystem winchSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final AlertsManager alertsManager;
+  boolean sanityCheck;
 
   // Dashboard
   private final Dashboard dashboard;
@@ -119,6 +126,11 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
+        winchSubsystem =
+            new WinchSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new WinchIOSparkMax()
+                    : new WinchIO() {});
 
         break;
       case SIM:
@@ -153,6 +165,9 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSim()
                     : new ClimberIO() {});
+        winchSubsystem =
+            new WinchSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -161,6 +176,7 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        winchSubsystem = new WinchSubsystem(new WinchIO() {});
         break;
     }
     driveSubsystem = new DriveSubsystem(gyro);
@@ -177,7 +193,7 @@ public class RobotContainer {
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
-    climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    climberCommandFactory = new ClimberCommandFactory(climberSubsystem, winchSubsystem);
     climberRoutines = new ClimberRoutines(climberCommandFactory);
 
     // set defaults
@@ -244,7 +260,8 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climberRoutines.initiatePart1());
     operatorController.povUp().onTrue(climberRoutines.initiatePart2());
     operatorController.povRight().onTrue(climberRoutines.manualOverride());
-    operatorController.povLeft().onTrue(climberRoutines.resetClimber());
+    operatorController.povLeft().onTrue(new InstantCommand(() -> sanityCheck = true));
+    Logger.recordOutput("hello?", () -> sanityCheck);
   }
 
   public Command getAutonomousCommand() {

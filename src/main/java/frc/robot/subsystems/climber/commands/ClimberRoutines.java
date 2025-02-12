@@ -6,12 +6,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import java.util.function.BooleanSupplier;
 
 public class ClimberRoutines {
 
   private final ClimberCommandFactory climberCommandFactory;
   private ClimberSubsystem climberSubsystem;
+  private WinchSubsystem winchSubsystem;
 
   // Time constants (in seconds)
   private final double afterClampDelay = 0.3;
@@ -30,7 +32,7 @@ public class ClimberRoutines {
       winchIsLow =
           () ->
               withinTolerance(
-                  climberSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.low),
+                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.low),
       liftIsHigh =
           () ->
               withinTolerance(
@@ -38,17 +40,22 @@ public class ClimberRoutines {
       winchIsVertical =
           () ->
               withinTolerance(
-                  climberSubsystem.getWinchLeaderMotorPosition(),
+                  winchSubsystem.getWinchLeaderMotorPosition(),
                   ClimberConstants.winchVerticalPosition),
       winchIsHigh =
           () ->
               withinTolerance(
-                  climberSubsystem.getWinchLeaderMotorPosition(),
-                  ClimberConstants.winchLimits.high);
+                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.high);
 
   public boolean manualOverride;
   // when manualOverride
   // able to cancel manualOverride by activating an autoRoutine
+
+  public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
+    this.climberCommandFactory = climberCommandFactory;
+    climberSubsystem = climberCommandFactory.climberSubsystem;
+    winchSubsystem = climberCommandFactory.winchSubsystem;
+  }
 
   /**
    * @param position in meters
@@ -57,11 +64,6 @@ public class ClimberRoutines {
    */
   public boolean withinTolerance(double position, double target) {
     return position > target - tolerance || position < target + tolerance;
-  }
-
-  public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
-    this.climberCommandFactory = climberCommandFactory;
-    climberSubsystem = climberCommandFactory.climberSubsystem;
   }
 
   /**
@@ -122,7 +124,7 @@ public class ClimberRoutines {
   public Command StopRoutine() {
     return climberCommandFactory
         .climberLiftApplyVoltageCommand(() -> 0)
-        .alongWith(climberCommandFactory.climberWinchApplyVoltageCommand(() -> 0));
+        .andThen(climberCommandFactory.climberWinchApplyVoltageCommand(() -> 0));
   }
 
   public Command manualOverride() {

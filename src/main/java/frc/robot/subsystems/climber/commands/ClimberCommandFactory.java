@@ -3,14 +3,17 @@ package frc.robot.subsystems.climber.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class ClimberCommandFactory {
   ClimberSubsystem climberSubsystem;
+  WinchSubsystem winchSubsystem;
 
-  public ClimberCommandFactory(ClimberSubsystem climberSubsystem) {
+  public ClimberCommandFactory(ClimberSubsystem climberSubsystem, WinchSubsystem winchSubsystem) {
     this.climberSubsystem = climberSubsystem;
+    this.winchSubsystem = winchSubsystem;
   }
 
   public Command climberSetLiftPosPID(DoubleSupplier pos) {
@@ -27,14 +30,14 @@ public class ClimberCommandFactory {
 
   public Command climberSetWinchPosPID(DoubleSupplier pos) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberWinchPosition(pos.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberWinchVoltage(0));
+            () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), climberSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
   public Command climberWinchApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberWinchVoltage(0));
+            () -> winchSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), climberSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
   public Command climberSetClampState(BooleanSupplier isClamped) {

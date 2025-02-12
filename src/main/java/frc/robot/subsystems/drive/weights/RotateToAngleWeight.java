@@ -7,14 +7,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import java.util.function.Supplier;
 
 public class RotateToAngleWeight implements DriveWeight {
   private Supplier<Pose2d> robotPose;
   private Supplier<Rotation2d> angle;
   private PIDController rotPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians, PIDKey.ROTTORAD);
+      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians, "RotateToAnglePID");
 
   public RotateToAngleWeight(Supplier<Pose2d> robotPose, Supplier<Rotation2d> angle) {
     this.robotPose = robotPose;

@@ -142,12 +142,10 @@ public class Dashboard {
     pid = true;
     sysid = false;
 
-    Object[] l = PIDMap.pidMap.keySet().toArray();
-
     SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
     pidChooser.setDefaultOption("none :/", new PIDController(0, 0, 0));
-    for (int i = 0; i < l.length; i++) {
-      pidChooser.addOption(l[i].toString(), PIDMap.pidMap.get(l[i]));
+    for (String controllerName : PIDMap.pidMap.keySet()) {
+      pidChooser.addOption(controllerName, PIDMap.pidMap.get(controllerName));
     }
 
     PIDMap.setEntries(kP, kI, kD, setpt);

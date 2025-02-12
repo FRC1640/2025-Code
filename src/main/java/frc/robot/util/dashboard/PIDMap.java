@@ -2,32 +2,20 @@ package frc.robot.util.dashboard;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import frc.robot.util.periodic.PeriodicBase;
 import java.util.HashMap;
 
-public class PIDMap {
+public class PIDMap extends PeriodicBase {
   private static GenericEntry kP;
   private static GenericEntry kI;
   private static GenericEntry kD;
   private static GenericEntry setpt;
   private static PIDController pid;
 
-  public static enum PIDKey {
-    DRIVE, // displays (last)
-    STEER, // displays
-    LINEARDRIVE, // displays
-    ANTITIP,
-    ROTTORAD, // displays
-    GANTRY, // displays (first)
-    GANTRYVEL,
-    LIFT, // ???
-    CORALOUTTAKE, // doesnt exist in code
-    CLIMBLIFT, // ???
-    CLIMBWINCH // ???
-  }
+  public static HashMap<String, PIDController> pidMap = new HashMap<>();
 
-  public static HashMap<PIDKey, PIDController> pidMap = new HashMap<>();
-
-  public static void periodic() {
+  @Override
+  public void periodic() {
     pid.setP(kP.getDouble(0));
     pid.setI(kI.getDouble(0));
     pid.setD(kD.getDouble(0));

@@ -8,27 +8,26 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
 import frc.robot.util.dashboard.PIDMap;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.tools.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.tools.logging.TrackedFeedForward.FeedForwardTrack;
 import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
 import frc.robot.util.tools.logging.TrackedRobotPID.ProfiledPIDTrack;
 
 public class RobotPIDConstants {
-  public static final PIDController constructPID(PIDConstants constants, PIDKey key) {
-    PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    PIDTrack.pidsTrack.add(j);
-    PIDTrack.idName.add("PID" + (PIDTrack.pidsTrack.size()));
-    PIDMap.pidMap.put(key, j);
-    return j;
-  }
+  // public static final PIDController constructPID(PIDConstants constants,) {
+  //   PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
+  //   PIDTrack.pidsTrack.add(j);
+  //   PIDTrack.idName.add("PID" + (PIDTrack.pidsTrack.size()));
+  //   PIDMap.pidMap.put(key, j);
+  //   return j;
+  // }
 
-  public static final PIDController constructPID(
-      PIDConstants constants, String pidTrackedName, PIDKey key) {
+  public static final PIDController constructPID(PIDConstants constants, String pidTrackedName) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
+    System.out.println(pidTrackedName);
     PIDTrack.pidsTrack.add(j);
     PIDTrack.idName.add(pidTrackedName);
-    PIDMap.pidMap.put(key, j);
+    PIDMap.pidMap.put(pidTrackedName, j);
     return j;
   }
 

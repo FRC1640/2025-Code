@@ -12,7 +12,6 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.sensors.odometry.SparkOdometryThread;
 import frc.robot.sensors.resolvers.ResolverPWM;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.spark.SparkConfigurer;
 import java.util.Queue;
 
@@ -30,11 +29,11 @@ public class ModuleIOSparkMax implements ModuleIO {
   private final SparkMax steerSpark;
 
   private final PIDController drivePID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "DrivePID", PIDKey.DRIVE);
+      RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "DrivePID");
   private final SimpleMotorFeedforward driveFF =
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
   private final PIDController steerPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "SteerPID", PIDKey.STEER);
+      RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "SteerPID");
 
   public ModuleIOSparkMax(ModuleInfo id) {
     driveSpark = SparkConstants.driveFlex(id.driveChannel);

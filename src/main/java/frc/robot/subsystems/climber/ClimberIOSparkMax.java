@@ -8,7 +8,6 @@ import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.sensors.resolvers.ResolverVoltage;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
@@ -19,11 +18,9 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final SparkMax winchLeaderSpark;
   private final SparkMax winchFollowerSpark;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(
-          RobotPIDConstants.climberLiftPID, "ClimberLiftPID", PIDKey.CLIMBLIFT);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "ClimberLiftPID");
   private final PIDController winchPID =
-      RobotPIDConstants.constructPID(
-          RobotPIDConstants.climberWinchPID, "ClimberWinchPID", PIDKey.CLIMBWINCH);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "ClimberWinchPID");
 
   private final DoubleSolenoid doubleSolenoid;
 

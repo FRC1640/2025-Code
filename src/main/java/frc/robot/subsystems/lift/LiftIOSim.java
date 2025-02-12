@@ -8,7 +8,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSim implements LiftIO {
@@ -16,7 +15,7 @@ public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   PIDController liftController =
-      RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, PIDKey.LIFT);
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 

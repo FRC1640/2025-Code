@@ -7,7 +7,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.dashboard.PIDMap.PIDKey;
 import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
@@ -16,11 +15,11 @@ public class GantryIOSim implements GantryIO {
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID", PIDKey.GANTRY);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
   private final SimpleMotorFeedforward ff =
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
   private final PIDController gantryVelocityPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, PIDKey.GANTRYVEL);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocityPID");
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;

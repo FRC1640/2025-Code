@@ -15,8 +15,10 @@ public class PIDMap {
     DRIVE, // displays (last)
     STEER, // displays
     LINEARDRIVE, // displays
+    ANTITIP,
     ROTTORAD, // displays
     GANTRY, // displays (first)
+    GANTRYVEL,
     LIFT, // ???
     CORALOUTTAKE, // doesnt exist in code
     CLIMBLIFT, // ???

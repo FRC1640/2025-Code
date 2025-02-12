@@ -125,6 +125,7 @@ public class Dashboard {
             startNext,
             cancel,
             () -> gantrySubsystem.setGantryVoltage(0)));
+    ShuffleboardTab sysidTab = Shuffleboard.getTab("SYSID");
     sysidTab.add(sysidChooser).withSize(5, 5).withPosition(1, 1);
   }
 

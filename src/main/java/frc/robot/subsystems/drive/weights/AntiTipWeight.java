@@ -7,15 +7,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
+import frc.robot.util.dashboard.PIDMap.PIDKey;
 import org.littletonrobotics.junction.Logger;
 
 public class AntiTipWeight implements DriveWeight {
   private Gyro gyro;
 
   private PIDController pitchAntiTip =
-      RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip);
+      RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip, PIDKey.ANTITIP);
   private PIDController rollAntiTip =
-      RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip);
+      RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip, PIDKey.ANTITIP);
 
   public AntiTipWeight(Gyro gyro) {
 

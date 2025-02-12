@@ -1,10 +1,12 @@
 package frc.robot.subsystems.drive.weights;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -40,5 +42,13 @@ public class PathplannerWeight implements DriveWeight {
 
   public static ChassisSpeeds getSpeedsPath() {
     return speeds;
+  }
+
+  public static void overrideRotation(DoubleSupplier rotFeedback) {
+    PPHolonomicDriveController.overrideRotationFeedback(rotFeedback);
+  }
+
+  public static void clearRotationOverride() {
+    PPHolonomicDriveController.clearRotationFeedbackOverride();
   }
 }

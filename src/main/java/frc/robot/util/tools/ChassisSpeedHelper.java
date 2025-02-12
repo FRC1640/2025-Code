@@ -5,6 +5,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class ChassisSpeedHelper {
   public static Rotation2d angleOf(ChassisSpeeds speeds) {
+    if (magnitude(speeds) < 0.001) {
+      return new Rotation2d();
+    }
+
     return new Rotation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
   }
 

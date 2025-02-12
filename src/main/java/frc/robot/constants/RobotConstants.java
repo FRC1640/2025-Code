@@ -30,11 +30,14 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux25;
+    public static final RobotType robotType = RobotType.Deux24;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     public static final boolean liftSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -45,13 +48,19 @@ public class RobotConstants {
         new RobotSwitch<Boolean>(false).addValue(RobotType.Sim, true).get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     public static final boolean climberSubsystemEnabled =
         new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
     // sensors
     public static final boolean reefDetectorEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Prime24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Deux24, false)
+            .get();
 
     // odometry
     public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
@@ -65,9 +74,9 @@ public class RobotConstants {
   }
 
   public static class AutoAlignConfig {
-    public static final double maxDistanceFromTarget = 0.5;
+    public static final double maxDistanceFromTarget = 0.2;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(3, 3, Math.PI, 4 * Math.PI);
+        new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {

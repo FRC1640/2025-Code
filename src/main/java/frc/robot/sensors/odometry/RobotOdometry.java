@@ -14,11 +14,13 @@ import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -49,7 +51,10 @@ public class RobotOdometry extends PeriodicBase {
     }
     SparkOdometryThread.getInstance().start();
     OdometryStorage main =
-        branchEstimator("Main", new AprilTagVision[0], VisionUpdateMode.PHOTONVISION);
+        branchEstimator(
+            "Main",
+            RobotConfigConstants.robotType == RobotType.Sim ? new AprilTagVision[0] : cameras,
+            VisionUpdateMode.PHOTONVISION);
     OdometryStorage mainTrig = branchEstimator("MainTrig", cameras, VisionUpdateMode.TRIG);
     mainTrig.setTrustedRotation(main);
   }

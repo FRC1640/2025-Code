@@ -51,7 +51,7 @@ public class Module {
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {
 
-    if (Math.abs(state.speedMetersPerSecond) <= 0.01) {
+    if (Math.abs(state.speedMetersPerSecond) <= 0.005) {
       io.setDriveVelocity(0, inputs);
       return;
     }

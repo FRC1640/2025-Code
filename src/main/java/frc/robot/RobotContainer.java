@@ -380,15 +380,7 @@ public class RobotContainer {
                 (!coralOuttakeSubsystem.isCoralDetected()
                     || (algaeIntakeSubsystem.hasAlgae()
                         && !coralOuttakeSubsystem.isCoralDetected())))
-        .onTrue(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift())))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+        .onTrue(runLiftToSafe());
     operatorController
         .b()
         .onTrue(

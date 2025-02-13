@@ -319,6 +319,15 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.povIsDownwards())
         .onTrue(new InstantCommand(() -> algaeMode = false));
 
+    new Trigger(
+            () ->
+                RobotOdometry.instance
+                        .getPose("Main")
+                        .getTranslation()
+                        .getDistance(getTarget().getTranslation())
+                    > 2)
+        .onTrue(runLiftToSafe());
+
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -387,17 +396,7 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.setDefaultCommand(
                         liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
-    operatorController
-        .y()
-        .onTrue(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift())))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+    operatorController.y().onTrue(runLiftToSafe());
 
     driveController
         .rightTrigger()
@@ -457,5 +456,14 @@ public class RobotContainer {
         }
         : AllianceManager.chooseFromAlliance(
             FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
+  }
+
+  public Command runLiftToSafe() {
+    return new InstantCommand(
+            () ->
+                liftSubsystem.setDefaultCommand(
+                    liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())))
+        .alongWith(
+            gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
   }
 }

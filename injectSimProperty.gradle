@@ -1,0 +1,18 @@
+allprojects {
+    afterEvaluate { project ->
+        project.tasks.configureEach { task ->
+            // Find the built-in WPILib simulation task
+            if (task.name == "simulateJava" && task instanceof JavaExec) {
+                // The plugin typically sets its own jvmArgs in doFirst().
+                // To ensure ours stick, append them *inside* a doFirst block as well.
+                task.doFirst {
+                    // Option A: Use systemProperty (most foolproof for JavaExec)
+                    task.systemProperty "REPLAY", "true"
+
+                    // or Option B: Manually append to jvmArgs
+                    // task.jvmArgs "-DREPLAY=true"
+                }
+            }
+        }
+    }
+}

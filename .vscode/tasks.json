@@ -23,6 +23,16 @@
                 "clear": false
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Replay Watch",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": [
+                "replayWatch"
+            ],
+            "group": "build",
+            "problemMatcher": []
         }
     ]
 }

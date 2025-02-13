@@ -58,6 +58,8 @@ import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
+import frc.robot.subsystems.funky.FunkyIO;
+import frc.robot.subsystems.funky.FunkySubsystem;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -90,6 +92,8 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandXboxController testController = new CommandXboxController(2);
+
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final AlertsManager alertsManager;
 
@@ -105,7 +109,7 @@ public class RobotContainer {
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private final AlgaeCommandFactory algaeCommandFactory;
-
+  private final FunkySubsystem funkySubsystem;
   private FollowPathNearest followPathNearest;
 
   private final JoystickDriveWeight joystickDriveWeight;
@@ -148,7 +152,11 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
-
+        funkySubsystem =
+            new FunkySubsystem(
+                new FunkyIO(),
+                () -> testController.a().getAsBoolean(),
+                () -> testController.b().getAsBoolean());
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -185,6 +193,8 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+        funkySubsystem = new FunkySubsystem(new FunkyIO(), null, null);
+
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -193,6 +203,7 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        funkySubsystem = new FunkySubsystem(new FunkyIO(), null, null);
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }

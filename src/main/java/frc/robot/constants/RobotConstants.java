@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.logger.MotorLoggingManager;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
@@ -27,6 +28,20 @@ public class RobotConstants {
     public static final double robotWidth = Units.inchesToMeters(30);
     public static final double robotLength = Units.inchesToMeters(30);
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public class MotorInfo {
+    public static final MotorLoggingManager motorLoggingManager =
+        new MotorLoggingManager()
+            .addMotorAlias(GantryConstants.gantrySparkID, "Gantry")
+            .addMotorAlias(ClimberConstants.climberLiftMotorID, "Climber Lift")
+            .addMotorAlias(ClimberConstants.climberWinch1MotorID, "Climber Winch 1 (Leader)")
+            .addMotorAlias(ClimberConstants.climberWinch2MotorID, "Climber Winch 2 (Follower)")
+            .addMotorAlias(AlgaeConstants.motorLeftChannel, "Algae Motor Left")
+            .addMotorAlias(AlgaeConstants.motorRightChannel, "Algae Motor Right")
+            .addMotorAlias(LiftConstants.liftLeaderMotorID, "Lift Leader")
+            .addMotorAlias(LiftConstants.liftFollowerMotorID, "Lift Follower")
+            .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
   }
 
   public class RobotConfigConstants {

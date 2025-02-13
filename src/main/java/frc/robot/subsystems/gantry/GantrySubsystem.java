@@ -16,6 +16,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 public class GantrySubsystem extends SubsystemBase {
   GantryIOInputsAutoLogged inputs = new GantryIOInputsAutoLogged();
   GantryIO io;
+  public static boolean limit = false;
 
   private LoggedMechanism2d gantryMechanism =
       new LoggedMechanism2d(2, 2); // represents gantry position left/right
@@ -48,8 +49,12 @@ public class GantrySubsystem extends SubsystemBase {
     Logger.recordOutput("Mechanisms/Gantry", gantryMechanism);
   }
 
+  public void homedLimit() {
+    limit = true;
+  }
+
   public void stop() {
-    io.setGantryVoltage(0, inputs);
+    io.setGantryVoltage(0, inputs, limit);
   }
 
   public double getGantryVoltage() {
@@ -73,7 +78,7 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public void setGantryVoltage(double voltage) {
-    io.setGantryVoltage(voltage, inputs);
+    io.setGantryVoltage(voltage, inputs, false);
   }
 
   public void resetEncoder() {

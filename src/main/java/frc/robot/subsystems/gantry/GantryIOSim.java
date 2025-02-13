@@ -49,24 +49,27 @@ public class GantryIOSim implements GantryIO {
   @Override
   public void setGantryPosition(double pos, GantryIOInputs inputs) {
     setGantryVoltage(
-        MotorLim.clampVoltage(gantryPID.calculate(inputs.encoderPosition, pos)), inputs);
+        MotorLim.clampVoltage(gantryPID.calculate(inputs.encoderPosition, pos)),
+        inputs,
+        GantrySubsystem.limit);
   }
 
   @Override
-  public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
+  public void setGantryVoltage(double voltage, GantryIOInputs inputs, boolean limit) {
     gantrySim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.encoderPosition,
                 voltage,
                 GantryConstants.gantryLimits.low,
-                inputs.isLimitSwitchPressed)));
+                limit ? GantryConstants.gantryLimits.high : null)));
   }
 
   @Override
   public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
     setGantryVoltage(
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
-        inputs);
+        inputs,
+        GantrySubsystem.limit);
   }
 }

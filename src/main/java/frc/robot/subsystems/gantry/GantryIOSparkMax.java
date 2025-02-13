@@ -52,27 +52,29 @@ public class GantryIOSparkMax implements GantryIO {
             * GantryConstants.pulleyRadius;
   }
 
-  @Override
   public void setGantryVoltage(
-      double voltage, GantryIOInputs inputs) { // right limit is boolean condition for limitswitch
+      double voltage,
+      GantryIOInputs inputs,
+      boolean limit) { // right limit is boolean condition for limitswitch
     gantrySpark.setVoltage(
         MotorLim.applyLimits(
             inputs.encoderPosition,
             MotorLim.clampVoltage(voltage),
             GantryConstants.gantryLimits.low,
-            inputs.isLimitSwitchPressed));
+            limit ? GantryConstants.gantryLimits.high : null));
   }
 
-  @Override
-  public void setGantryPosition(double position, GantryIOInputs inputs) {
-    setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
+  public void setGantryPosition(double position, GantryIOInputs inputs, boolean limit) {
+    setGantryVoltage(
+        gantryPID.calculate(inputs.encoderPosition, position), inputs, GantrySubsystem.limit);
   }
 
   @Override
   public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
     setGantryVoltage(
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
-        inputs);
+        inputs,
+        GantrySubsystem.limit);
   }
 
   @Override

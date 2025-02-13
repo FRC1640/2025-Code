@@ -29,6 +29,14 @@ public class Gyro {
     return new Rotation2d(io.getActual(inputs));
   }
 
+  public Rotation2d getPitch() {
+    return inputs.pitch;
+  }
+
+  public Rotation2d getRoll() {
+    return inputs.roll;
+  }
+
   public double getRawAngleRadians() {
     return inputs.angleRadiansRaw;
   }

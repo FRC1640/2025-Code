@@ -14,7 +14,6 @@ public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
-  // IMPLEMENT LIMIT SWITCH
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);

@@ -18,7 +18,7 @@ public class LiftIOSpark implements LiftIO {
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
-  SparkLimitSwitch liftLimitSwitch;
+  SparkLimitSwitch liftLimitSwitch; // direction?? the gantry one didn't have it specified
   PIDController liftController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =

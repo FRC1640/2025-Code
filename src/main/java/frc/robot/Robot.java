@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.periodic.PeriodicScheduler;
@@ -26,6 +27,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -100,6 +102,8 @@ public class Robot extends LoggedRobot {
 
     // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
     // Logger.getInstance().disableDeterministicTimestamps()
+    // Register URCL
+    Logger.registerURCL(URCL.startExternal(MotorInfo.motorLoggingManager.getMap()));
 
     // Start AdvantageKit Logger
     Logger.start();

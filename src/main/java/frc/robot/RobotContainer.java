@@ -330,6 +330,15 @@ public class RobotContainer {
     driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
+
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            algaeCommandFactory
+                .setMotorVoltages(() -> 4, () -> 4)
+                .alongWith(algaeCommandFactory.setSolenoidState(true))
+                .andThen(algaeCommandFactory.setSolenoidState(false)));
+
     // gantry button bindings:
     operatorController.x().whileTrue(getAutoPlaceCommand());
     operatorController
@@ -392,6 +401,9 @@ public class RobotContainer {
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
                         () -> GantryConstants.gantryLimits.low / 2)));
+
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
+        .onFalse(algaeCommandFactory.setSolenoidState(false));
   }
 
   public Command getAutonomousCommand() {
@@ -419,11 +431,9 @@ public class RobotContainer {
     return new InstantCommand(
             () ->
                 liftSubsystem.setDefaultCommand(
-                    liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
+                    liftCommandFactory.runLiftMotionProfile(coralPreset.getLift())))
         .alongWith(
-            autoScoringCommandFactory
-                .gantryAlignCommand(
-                    () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget()))
-                .onlyIf(() -> !algaeMode));
+            autoScoringCommandFactory.gantryAlignCommand(
+                () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget())));
   }
 }

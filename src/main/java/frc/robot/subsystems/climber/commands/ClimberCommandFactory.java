@@ -1,6 +1,7 @@
 package frc.robot.subsystems.climber.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.winch.WinchSubsystem;
@@ -30,18 +31,18 @@ public class ClimberCommandFactory {
 
   public Command climberSetWinchPosPID(DoubleSupplier pos) {
     return new RunCommand(
-            () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), climberSubsystem)
+            () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), winchSubsystem)
         .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
   public Command climberWinchApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
-            () -> winchSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), climberSubsystem)
+            () -> winchSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), winchSubsystem)
         .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
   public Command climberSetClampState(BooleanSupplier isClamped) {
-    return new RunCommand(
+    return new InstantCommand(
         () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()), climberSubsystem);
   }
 }

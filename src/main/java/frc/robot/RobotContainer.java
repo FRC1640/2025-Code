@@ -63,7 +63,6 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import java.util.ArrayList;
-import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
@@ -80,7 +79,6 @@ public class RobotContainer {
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final AlertsManager alertsManager;
-  boolean sanityCheck;
 
   // Dashboard
   private final Dashboard dashboard;
@@ -260,8 +258,7 @@ public class RobotContainer {
     operatorController.povDown().onTrue(climberRoutines.initiatePart1());
     operatorController.povUp().onTrue(climberRoutines.initiatePart2());
     operatorController.povRight().onTrue(climberRoutines.manualOverride());
-    operatorController.povLeft().onTrue(new InstantCommand(() -> sanityCheck = true));
-    Logger.recordOutput("hello?", () -> sanityCheck);
+    operatorController.povLeft().onTrue(climberRoutines.resetClimber());
   }
 
   public Command getAutonomousCommand() {

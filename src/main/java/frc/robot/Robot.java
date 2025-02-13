@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
     TEST
   }
 
-  private static RobotState state = RobotState.DISABLED;
+  private static RobotState state = RobotState.TELEOP;
 
   public static RobotState getState() {
     return state;

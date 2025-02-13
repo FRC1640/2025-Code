@@ -17,11 +17,9 @@ public class ClimberRoutines {
 
   // Time constants (in seconds)
   private final double afterClampDelay = 0.3;
-  private final double liftTimeout = 4;
-  private final double winchTimeout = 5;
 
   // Tolerance (in meters)
-  private final double tolerance = 0.02;
+  private final double tolerance = 5;
 
   // State booleans
   public final BooleanSupplier
@@ -63,7 +61,7 @@ public class ClimberRoutines {
    * @return whether position is within tolerance of target
    */
   public boolean withinTolerance(double position, double target) {
-    return position > target - tolerance || position < target + tolerance;
+    return position > target - tolerance && position < target + tolerance;
   }
 
   /**
@@ -86,7 +84,7 @@ public class ClimberRoutines {
   public Command initiatePart1() {
     manualOverride = false;
     return initiatePart0()
-        .andThen(lowerLift(), unwindArm())
+        .andThen(lowerLift().alongWith(unwindArm()))
         .andThen(climberCommandFactory.climberSetClampState(() -> false));
   }
 
@@ -98,10 +96,9 @@ public class ClimberRoutines {
   public Command initiatePart2() {
     manualOverride = false;
     return Commands.sequence(
-            climberCommandFactory
-                .climberSetClampState(() -> true)
-                .andThen(new WaitCommand(afterClampDelay))
-                .andThen(windArm()))
+            climberCommandFactory.climberSetClampState(() -> true),
+            new WaitCommand(afterClampDelay),
+            windArm())
         .onlyIf(() -> liftIsLow.getAsBoolean() && winchIsVertical.getAsBoolean());
   }
 
@@ -113,7 +110,7 @@ public class ClimberRoutines {
    */
   public Command resetClimber() {
     manualOverride = false;
-    return initiatePart1().andThen(raiseLift(), resetArm());
+    return initiatePart1().andThen(raiseLift().alongWith(resetArm()));
   }
 
   /**
@@ -139,7 +136,7 @@ public class ClimberRoutines {
   public Command lowerLift() {
     return climberCommandFactory
         .climberSetLiftPosPID(() -> ClimberConstants.liftLimits.low)
-        .alongWith(new WaitCommand(liftTimeout))
+        .repeatedly()
         .until(liftIsLow);
   }
 
@@ -151,7 +148,7 @@ public class ClimberRoutines {
   public Command raiseLift() {
     return climberCommandFactory
         .climberSetLiftPosPID(() -> ClimberConstants.liftLimits.high)
-        .alongWith(new WaitCommand(liftTimeout))
+        .repeatedly()
         .until(liftIsHigh);
   }
 
@@ -163,7 +160,7 @@ public class ClimberRoutines {
   public Command unwindArm() {
     return climberCommandFactory
         .climberSetWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
-        .alongWith(new WaitCommand(winchTimeout))
+        .repeatedly()
         .until(winchIsVertical);
   }
 
@@ -175,8 +172,8 @@ public class ClimberRoutines {
   public Command resetArm() {
     return climberCommandFactory
         .climberSetWinchPosPID(() -> ClimberConstants.winchLimits.high)
-        .alongWith(new WaitCommand(winchTimeout))
-        .until(winchIsVertical);
+        .repeatedly()
+        .until(winchIsHigh);
   }
 
   /**
@@ -187,7 +184,7 @@ public class ClimberRoutines {
   public Command windArm() {
     return climberCommandFactory
         .climberSetWinchPosPID(() -> ClimberConstants.winchLimits.low)
-        .alongWith(new WaitCommand(winchTimeout))
+        .repeatedly()
         .until(winchIsLow);
   }
 

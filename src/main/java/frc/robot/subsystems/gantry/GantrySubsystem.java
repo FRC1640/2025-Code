@@ -32,7 +32,11 @@ public class GantrySubsystem extends SubsystemBase {
     gantryRoot.append(gantryPos);
     LogRunner.addLog(
         new VelocityLogStorage(() -> getGantryVelocity(), () -> io.velocitySetpoint(), getName()));
-
+    sysIdRoutine =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                (voltage) -> setGantryVoltage(voltage.in(Volts)), null, this));
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(

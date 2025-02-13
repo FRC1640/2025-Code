@@ -1,11 +1,13 @@
 package frc.robot.subsystems.algae;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.RobotConstants.AlgaeConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeSubsystem extends SubsystemBase {
   private AlgaeIO io;
   private AlgaeIOInputsAutoLogged inputs = new AlgaeIOInputsAutoLogged();
+  private boolean hasAlgae = false;
 
   public AlgaeSubsystem(AlgaeIO io) {
     this.io = io;
@@ -51,5 +53,19 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   public void setVoltage(double left, double right) {
     io.setVoltage(left, right);
+  }
+
+  public boolean algaeCurrentHit() {
+    return inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
+        || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh;
+  }
+
+  public boolean hasAlgae() {
+    if (algaeCurrentHit() && !hasAlgae) {
+      hasAlgae = true;
+    } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
+      hasAlgae = false;
+    }
+    return hasAlgae;
   }
 }

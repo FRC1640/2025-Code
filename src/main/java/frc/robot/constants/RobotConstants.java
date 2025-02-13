@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.logger.MotorLoggingManager;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
@@ -29,8 +30,22 @@ public class RobotConstants {
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
+  public class MotorInfo {
+    public static final MotorLoggingManager motorLoggingManager =
+        new MotorLoggingManager()
+            .addMotorAlias(GantryConstants.gantrySparkID, "Gantry")
+            .addMotorAlias(ClimberConstants.climberLiftMotorID, "Climber Lift")
+            .addMotorAlias(ClimberConstants.climberWinch1MotorID, "Climber Winch 1 (Leader)")
+            .addMotorAlias(ClimberConstants.climberWinch2MotorID, "Climber Winch 2 (Follower)")
+            .addMotorAlias(AlgaeConstants.motorLeftChannel, "Algae Motor Left")
+            .addMotorAlias(AlgaeConstants.motorRightChannel, "Algae Motor Right")
+            .addMotorAlias(LiftConstants.liftLeaderMotorID, "Lift Leader")
+            .addMotorAlias(LiftConstants.liftFollowerMotorID, "Lift Follower")
+            .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
+  }
+
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux24;
+    public static final RobotType robotType = RobotType.Sim;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -168,7 +183,7 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
-      Safe(0.1, GantrySetpoint.CENTER),
+      Safe(0, GantrySetpoint.CENTER),
       LeftL2(0.5, GantrySetpoint.LEFT), // TODO correct numbers
       RightL2(0.5, GantrySetpoint.RIGHT),
       LeftL3(1, GantrySetpoint.LEFT),
@@ -179,14 +194,26 @@ public class RobotConstants {
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
+      private double liftAlgae;
+
+      private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.liftAlgae = liftAlgae;
+        this.gantrySetpoint = setpoint;
+      }
 
       private CoralPreset(double lift, GantrySetpoint setpoint) {
         this.lift = lift;
+        this.liftAlgae = lift;
         this.gantrySetpoint = setpoint;
       }
 
       public double getLift() {
         return lift;
+      }
+
+      public double getLiftAlgae() {
+        return liftAlgae;
       }
 
       public double getGantry(boolean dsSide) {
@@ -286,5 +313,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
+    public static double currentThresh = 10;
   }
 }

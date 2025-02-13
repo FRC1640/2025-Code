@@ -54,6 +54,11 @@ public class Module {
   }
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {
+
+    if (Math.abs(state.speedMetersPerSecond) <= 0.005) {
+      io.setDriveVelocity(0, inputs);
+      return;
+    }
     boolean flipDriveTeleop = false;
     Rotation2d delta = state.angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     if (Math.abs(delta.getDegrees()) > 90.0) {

@@ -10,13 +10,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
-import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
@@ -38,6 +38,7 @@ import frc.robot.subsystems.algae.AlgaeIO;
 import frc.robot.subsystems.algae.AlgaeIOSim;
 import frc.robot.subsystems.algae.AlgaeIOSpark;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
+import frc.robot.subsystems.algae.commands.AlgaeCommandFactory;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -106,10 +107,14 @@ public class RobotContainer {
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
-  private CoralPreset coralPreset = CoralPreset.Safe;
+  private final AlgaeCommandFactory algaeCommandFactory;
+
   private FollowPathNearest followPathNearest;
 
   private final JoystickDriveWeight joystickDriveWeight;
+
+  private CoralPreset coralPreset = CoralPreset.Safe;
+  private boolean algaeMode = false;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -210,17 +215,22 @@ public class RobotContainer {
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
+
     autoScoringCommandFactory =
         new AutoScoringCommandFactory(
             gantryCommandFactory,
             liftCommandFactory,
             liftSubsystem,
             coralOuttakeCommandFactory,
-            coralOuttakeSubsystem);
+            coralOuttakeSubsystem,
+            algaeCommandFactory,
+            algaeIntakeSubsystem);
 
     // set defaults
 
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
     // weights
     joystickDriveWeight =
         new JoystickDriveWeight(
@@ -233,9 +243,7 @@ public class RobotContainer {
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
-            () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            () -> chooseAlignPos(),
             AutoAlignConfig.pathConstraints,
             (x) ->
                 coralAdjust(
@@ -254,6 +262,9 @@ public class RobotContainer {
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
+    if (algaeMode) {
+      return pose;
+    }
     boolean alliance = AllianceManager.onDsSideReef(() -> getTarget());
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
@@ -284,26 +295,42 @@ public class RobotContainer {
                             .getDistance(getTarget().getTranslation())
                         < 1.5
                     && followPathNearest.isEnabled())
-        .onTrue(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
-                .alongWith(
-                    autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget()))));
+        .onTrue(setupAutoPlace());
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathNearest.generateTrigger(
         () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(
-            () -> followPathNearest.isAutoalignComplete()
-            // && liftSubsystem.isAtPreset(coralPreset)
-            // && gantrySubsystem.isAtPreset(
-            //     coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
-            )
-        .onTrue(autoScoringCommandFactory.autoPlace((x) -> joystickDriveWeight.setEnabled(x)));
+            () ->
+                followPathNearest.isAutoalignComplete()
+                    && liftSubsystem.isAtPreset(
+                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                    && (gantrySubsystem.isAtPreset(
+                            coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+                        || algaeMode)
+                    && !algaeIntakeSubsystem.hasAlgae())
+        .onTrue(getAutoPlaceCommand());
+    new Trigger(
+            () ->
+                followPathNearest.isAutoalignComplete()
+                    && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
+                    && algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(algaeCommandFactory.processCommand());
+    new Trigger(() -> presetBoard.povIsUpwards())
+        .onTrue(new InstantCommand(() -> algaeMode = true));
+
+    new Trigger(() -> presetBoard.povIsDownwards())
+        .onTrue(new InstantCommand(() -> algaeMode = false));
+
+    new Trigger(
+            () ->
+                RobotOdometry.instance
+                        .getPose("Main")
+                        .getTranslation()
+                        .getDistance(getTarget().getTranslation())
+                    > 2)
+        .onTrue(runLiftToSafe());
 
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
@@ -320,10 +347,9 @@ public class RobotContainer {
     driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
+
     // gantry button bindings:
-    operatorController
-        .x()
-        .whileTrue(autoScoringCommandFactory.autoPlace((x) -> joystickDriveWeight.setEnabled(x)));
+    operatorController.x().whileTrue(getAutoPlaceCommand());
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
@@ -334,11 +360,7 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController
-        .rightTrigger()
-        .whileTrue(
-            coralOuttakeCommandFactory.setIntakeVoltage(
-                () -> CoralOuttakeConstants.passiveSpeed * 12));
+    driveController.povUp().whileTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
@@ -355,27 +377,14 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTroph())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
     // lift/gantry manual controls
-    operatorController
-        .a()
-        .onTrue(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(() -> coralPreset.getLift())))
-                .alongWith(
-                    autoScoringCommandFactory.gantryAlignCommand(
-                        () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget()))));
+    operatorController.a().onTrue(setupAutoPlace());
 
-    new Trigger(() -> coralOuttakeSubsystem.isCoralDetected())
-        .onFalse(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift())))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+    new Trigger(
+            () ->
+                (!coralOuttakeSubsystem.isCoralDetected()
+                    || (algaeIntakeSubsystem.hasAlgae()
+                        && !coralOuttakeSubsystem.isCoralDetected())))
+        .onTrue(runLiftToSafe());
     operatorController
         .b()
         .onTrue(
@@ -383,17 +392,24 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.setDefaultCommand(
                         liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
+    operatorController.y().onTrue(runLiftToSafe());
+
+    driveController
+        .rightTrigger()
+        .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(true)
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
+        .onFalse(algaeCommandFactory.setSolenoidState(false));
+
     operatorController
-        .y()
-        .onTrue(
-            new InstantCommand(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift())))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+        .rightTrigger()
+        .and(() -> algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(true)
+                .andThen(algaeCommandFactory.processCommand()));
   }
 
   public Command getAutonomousCommand() {
@@ -402,5 +418,48 @@ public class RobotContainer {
 
   public Pose2d getTarget() {
     return followPathNearest.getFinalPosition();
+  }
+
+  public Command getAutoPlaceCommand() {
+    return getPlaceCommand()
+        .beforeStarting(new InstantCommand(() -> joystickDriveWeight.setEnabled(false)))
+        .finallyDo(() -> joystickDriveWeight.setEnabled(true));
+  }
+
+  public Command getPlaceCommand() {
+    return new ConditionalCommand(
+        autoScoringCommandFactory.algaeAutoPickup(),
+        autoScoringCommandFactory.autoPlace(),
+        () -> algaeMode);
+  }
+
+  public Command setupAutoPlace() {
+    return new InstantCommand(
+            () ->
+                liftSubsystem.setDefaultCommand(
+                    liftCommandFactory.runLiftMotionProfile(
+                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())))
+        .alongWith(
+            autoScoringCommandFactory.gantryAlignCommand(
+                () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget())));
+  }
+
+  public Pose2d[] chooseAlignPos() {
+    return algaeIntakeSubsystem.hasAlgae()
+        ? new Pose2d[] {
+          AllianceManager.chooseFromAlliance(
+              FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed)
+        }
+        : AllianceManager.chooseFromAlliance(
+            FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
+  }
+
+  public Command runLiftToSafe() {
+    return new InstantCommand(
+            () ->
+                liftSubsystem.setDefaultCommand(
+                    liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())))
+        .alongWith(
+            gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
   }
 }

@@ -45,7 +45,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux24;
+    public static final RobotType robotType = RobotType.Sim;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =

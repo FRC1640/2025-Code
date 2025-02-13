@@ -74,7 +74,7 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public void setCarriagePosition(double pos) {
-    io.setGantryPosition(pos, inputs);
+    io.setGantryPosition(pos, inputs, limit);
   }
 
   public void setGantryVoltage(double voltage) {
@@ -94,7 +94,7 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public void setVelocity(double velocity) {
-    io.setGantryVelocity(velocity, inputs);
+    io.setGantryVelocity(velocity, inputs, limit);
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {

@@ -16,6 +16,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 public class LiftSubsystem extends SubsystemBase {
   LiftIO liftIO;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
+  boolean limit = false;
   SysIdRoutine sysIdRoutine;
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
@@ -85,11 +86,11 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void setLiftPosition(double pos) {
-    liftIO.setLiftPosition(pos, inputs);
+    liftIO.setLiftPosition(pos, inputs, limit);
   }
 
   public void setLiftVoltage(double voltage) {
-    liftIO.setLiftVoltage(voltage, inputs);
+    liftIO.setLiftVoltage(voltage, inputs, limit);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -101,7 +102,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void runLiftMotionProfile(double pos) {
-    liftIO.setLiftPositionMotionProfile(pos, inputs);
+    liftIO.setLiftPositionMotionProfile(pos, inputs, limit);
   }
 
   public void resetLiftMotionProfile() {
@@ -110,5 +111,13 @@ public class LiftSubsystem extends SubsystemBase {
 
   public boolean isAtPreset(CoralPreset preset) {
     return Math.abs(getMotorPosition() - preset.getLift()) < 0.01;
+  }
+
+  public boolean isLimitSwitchPressed() {
+    return inputs.isLimitSwitchPressed;
+  }
+
+  public void homedLimit() {
+    limit = true;
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.lift.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.lift.LiftSubsystem;
@@ -21,6 +22,28 @@ public class LiftCommandFactory {
   public Command liftApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(() -> liftSubsystem.setLiftVoltage(voltage.getAsDouble()), liftSubsystem)
         .finallyDo(() -> liftSubsystem.setLiftVoltage(0));
+  }
+
+  public Command liftHomeCommand() {
+    return liftApplyVoltageCommand(() -> 2) // correct voltage?
+        .repeatedly()
+        .until(() -> liftSubsystem.isLimitSwitchPressed())
+        .andThen(
+            liftApplyVoltageCommand(() -> -1)
+                .repeatedly()
+                .until(() -> !liftSubsystem.isLimitSwitchPressed()))
+        .andThen(
+            liftApplyVoltageCommand(() -> .5)
+                .repeatedly()
+                .until(() -> liftSubsystem.isLimitSwitchPressed()))
+        .andThen(
+            new InstantCommand(
+                () ->
+                    liftSubsystem
+                        .resetLiftMotionProfile())) // i think this does what i'm trying to make it
+        // do (measuredPosition being encoder dealings) but i should double check how the motion
+        // profile works
+        .andThen(new InstantCommand(() -> liftSubsystem.homedLimit()));
   }
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {

@@ -14,6 +14,7 @@ public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
+  // IMPLEMENT LIMIT SWITCH
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
@@ -42,7 +43,7 @@ public class LiftIOSim implements LiftIO {
    * Sets the Lift Voltage
    */
   @Override
-  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs, boolean limit) {
     motor1Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
@@ -56,16 +57,17 @@ public class LiftIOSim implements LiftIO {
                 inputs.followerMotorPosition,
                 voltage,
                 LiftConstants.liftLimits.low,
-                LiftConstants.liftLimits.high)));
+                limit ? LiftConstants.liftLimits.high : null)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position, LiftIOInputs inputs) {
+  public void setLiftPosition(double position, LiftIOInputs inputs, boolean limit) {
     setLiftVoltage(
         MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
-        inputs);
+        inputs,
+        limit);
   }
 
   @Override
@@ -92,13 +94,14 @@ public class LiftIOSim implements LiftIO {
   }
 
   @Override
-  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
+  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs, boolean limit) {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
-        inputs);
+        inputs,
+        limit);
   }
 
   @Override

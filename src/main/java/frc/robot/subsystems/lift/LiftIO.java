@@ -16,6 +16,8 @@ public interface LiftIO extends AutoCloseable {
     public double leaderTemperature = 0.0;
     public double followerTemperature = 0.0;
     public double motorPosition = 0.0;
+
+    public boolean isLimitSwitchPressed = false;
   }
   /*
    * Updates the inputs
@@ -28,13 +30,14 @@ public interface LiftIO extends AutoCloseable {
   /*
    * Set voltage of the motor
    */
-  public default void setLiftVoltage(double voltage, LiftIOInputs inputs) {}
+  public default void setLiftVoltage(double voltage, LiftIOInputs inputs, boolean limit) {}
   /*
    * Sets the position of the motor(s) using a PID
    */
-  public default void setLiftPosition(double position, LiftIOInputs inputs) {}
+  public default void setLiftPosition(double position, LiftIOInputs inputs, boolean limit) {}
 
-  public default void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {}
+  public default void setLiftPositionMotionProfile(
+      double position, LiftIOInputs inputs, boolean limit) {}
 
   public default void resetLiftMotionProfile(LiftIOInputs inputs) {}
 }

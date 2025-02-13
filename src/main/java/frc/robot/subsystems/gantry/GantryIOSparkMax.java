@@ -70,11 +70,11 @@ public class GantryIOSparkMax implements GantryIO {
   }
 
   @Override
-  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs, boolean limit) {
     setGantryVoltage(
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
         inputs,
-        GantrySubsystem.limit);
+        limit);
   }
 
   @Override

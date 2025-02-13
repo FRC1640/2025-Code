@@ -9,7 +9,8 @@ public class RobotSwitchManager {
     Prime25,
     Deux24,
     Prime24,
-    Sim
+    Sim,
+    Replay
   }
 
   /**

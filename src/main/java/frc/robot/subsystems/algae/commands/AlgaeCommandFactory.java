@@ -34,11 +34,13 @@ public class AlgaeCommandFactory {
   }
 
   public Command processCommand() {
-    return setMotorVoltages(() -> -5, () -> -5);
+    return setMotorVoltages(() -> -5, () -> -5).finallyDo(() -> algaeSubsystem.setSolenoid(false));
   }
 
   public Command ioCommand() {
     return new ConditionalCommand(
-        processCommand(), setMotorVoltages(() -> 5, () -> 5), () -> algaeSubsystem.hasAlgae());
+        processCommand(),
+        setMotorVoltages(() -> 5, () -> 5).finallyDo(() -> algaeSubsystem.setSolenoid(false)),
+        () -> algaeSubsystem.hasAlgae());
   }
 }

@@ -239,9 +239,7 @@ public class RobotContainer {
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
-            () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed),
+            () -> chooseAlignPos(),
             AutoAlignConfig.pathConstraints,
             (x) ->
                 coralAdjust(
@@ -306,9 +304,15 @@ public class RobotContainer {
                         algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
                     && (gantrySubsystem.isAtPreset(
                             coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
-                        || algaeMode))
+                        || algaeMode)
+                    && !algaeIntakeSubsystem.hasAlgae())
         .onTrue(getAutoPlaceCommand());
-
+    new Trigger(
+            () ->
+                followPathNearest.isAutoalignComplete()
+                    && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
+                    && algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(algaeCommandFactory.processCommand());
     new Trigger(() -> presetBoard.povIsUpwards())
         .onTrue(new InstantCommand(() -> algaeMode = true));
 
@@ -410,8 +414,7 @@ public class RobotContainer {
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(true)
-                .andThen(algaeCommandFactory.processCommand()))
-        .onFalse(algaeCommandFactory.setSolenoidState(false));
+                .andThen(algaeCommandFactory.processCommand()));
   }
 
   public Command getAutonomousCommand() {
@@ -444,5 +447,15 @@ public class RobotContainer {
         .alongWith(
             autoScoringCommandFactory.gantryAlignCommand(
                 () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget())));
+  }
+
+  public Pose2d[] chooseAlignPos() {
+    return algaeIntakeSubsystem.hasAlgae()
+        ? new Pose2d[] {
+          AllianceManager.chooseFromAlliance(
+              FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed)
+        }
+        : AllianceManager.chooseFromAlliance(
+            FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
   }
 }

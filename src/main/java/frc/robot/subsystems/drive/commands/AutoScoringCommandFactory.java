@@ -71,8 +71,9 @@ public class AutoScoringCommandFactory {
   public Command algaeAutoPickup() {
     return algaeCommandFactory
         .setSolenoidState(true)
-        .alongWith(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
-        .until(() -> algaeSubsystem.hasAlgae());
+        .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
+        .until(() -> algaeSubsystem.hasAlgae())
+        .andThen(algaeCommandFactory.setSolenoidState(false));
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {
@@ -83,9 +84,8 @@ public class AutoScoringCommandFactory {
         .alongWith(gantryAlignCommand(preset, () -> AllianceManager.onDsSideReef(target)));
   }
 
-  public Command outtakeCommand() {
-    return coralOuttakeCommandFactory
-        .setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12)
-        .alongWith(algaeCommandFactory.setMotorVoltages(() -> -4, () -> -4));
+  public Command outtakeCoralCommand() {
+    return coralOuttakeCommandFactory.setIntakeVoltage(
+        () -> CoralOuttakeConstants.passiveSpeed * 12);
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.algae.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
@@ -30,5 +31,14 @@ public class AlgaeCommandFactory {
 
   public double getPassiveVoltage() {
     return algaeSubsystem.hasAlgae() ? 1.2 : 0;
+  }
+
+  public Command processCommand() {
+    return setMotorVoltages(() -> -5, () -> -5);
+  }
+
+  public Command ioCommand() {
+    return new ConditionalCommand(
+        processCommand(), setMotorVoltages(() -> 5, () -> 5), () -> algaeSubsystem.hasAlgae());
   }
 }

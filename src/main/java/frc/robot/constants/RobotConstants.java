@@ -168,7 +168,7 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
-      Safe(0.1, GantrySetpoint.CENTER),
+      Safe(0, GantrySetpoint.CENTER),
       LeftL2(0.5, GantrySetpoint.LEFT), // TODO correct numbers
       RightL2(0.5, GantrySetpoint.RIGHT),
       LeftL3(1, GantrySetpoint.LEFT),

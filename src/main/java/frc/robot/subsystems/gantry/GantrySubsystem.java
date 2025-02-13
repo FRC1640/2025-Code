@@ -28,7 +28,11 @@ public class GantrySubsystem extends SubsystemBase {
     this.io = io;
     LoggedMechanismRoot2d gantryRoot = gantryMechanism.getRoot("gantry root", 0, 1);
     gantryRoot.append(gantryPos);
-
+    sysIdRoutine =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(),
+            new SysIdRoutine.Mechanism(
+                (voltage) -> setGantryVoltage(voltage.in(Volts)), null, this));
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(

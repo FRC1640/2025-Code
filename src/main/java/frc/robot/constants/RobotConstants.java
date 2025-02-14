@@ -30,7 +30,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux24;
+    public static final RobotType robotType = RobotType.Sim;
 
     // subsystems
     public static final boolean gantrySubsystemEnabled =
@@ -262,7 +262,7 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final Limits gantryLimits = new Limits(-0.31, .02);
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;

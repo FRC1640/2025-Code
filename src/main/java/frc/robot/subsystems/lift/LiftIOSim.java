@@ -56,7 +56,7 @@ public class LiftIOSim implements LiftIO {
                 inputs.followerMotorPosition,
                 voltage,
                 LiftConstants.liftLimits.low,
-                limit ? LiftConstants.liftLimits.high : null)));
+                limit ? LiftConstants.liftLimits.high : 99999)));
   }
   /*
    * Sets the position of the motor(s) using a PID

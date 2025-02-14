@@ -60,7 +60,7 @@ public class GantryIOSim implements GantryIO {
                 inputs.encoderPosition,
                 voltage,
                 GantryConstants.gantryLimits.low,
-                limit ? GantryConstants.gantryLimits.high : null)));
+                limit ? GantryConstants.gantryLimits.high : 999999)));
   }
 
   @Override

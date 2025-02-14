@@ -1,5 +1,6 @@
 package frc.robot.subsystems.funky;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -10,6 +11,7 @@ import frc.robot.util.spark.SparkConfigurer;
 public class FunkyIO {
   private final SparkMax sparkMax;
   SparkClosedLoopController sparkClosedLoopController;
+  RelativeEncoder encoder;
 
   public FunkyIO() {
     sparkMax =
@@ -17,6 +19,7 @@ public class FunkyIO {
             SparkConstants.getGantryDefaultSparkMax(13)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     sparkClosedLoopController = sparkMax.getClosedLoopController();
+    encoder = sparkMax.getEncoder();
     setVelocity(0);
   }
 

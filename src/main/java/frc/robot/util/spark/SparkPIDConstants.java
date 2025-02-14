@@ -17,7 +17,7 @@ public class SparkPIDConstants {
   public Double velocityConversionFactor;
   public MAXMotionPositionMode maxPositionMode;
   public ClosedLoopSlot closedLoopSlot;
-
+  public String alias;
   /**
    * @param kP Proportional Gain
    * @param kI Derivative
@@ -221,6 +221,11 @@ public class SparkPIDConstants {
   /** Set Velocity Conversion Factor */
   public SparkPIDConstants setVelocityConversion(Double conversion) {
     this.velocityConversionFactor = conversion;
+    return this;
+  }
+  /** Set Alias of the logged SparkPID */
+  public SparkPIDConstants setAlias(String alias) {
+    this.alias = alias;
     return this;
   }
 }

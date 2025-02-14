@@ -54,7 +54,4 @@ public interface ClimberIO extends AutoCloseable {
    */
   public default void setSolenoidState(boolean forward, ClimberIOInputs inputs) {}
 
-  public default double velocitySetpoint() {
-    return 0.0;
-  }
 }

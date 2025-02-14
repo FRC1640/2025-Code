@@ -58,7 +58,6 @@ public class LiftIOSim implements LiftIO {
                 voltage,
                 LiftConstants.liftLimits.low,
                 LiftConstants.liftLimits.high)));
-    velocitySetpoint = liftController.getSetpoint();
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -101,6 +100,8 @@ public class LiftIOSim implements LiftIO {
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
+
+    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
 
   @Override

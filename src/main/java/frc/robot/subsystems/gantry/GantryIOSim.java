@@ -11,6 +11,7 @@ import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
@@ -69,5 +70,11 @@ public class GantryIOSim implements GantryIO {
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
         inputs,
         limit);
+    velocitySetpoint = velocity;
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

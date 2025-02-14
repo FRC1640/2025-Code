@@ -12,6 +12,7 @@ import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
 public class LiftIOSim implements LiftIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
@@ -105,10 +106,17 @@ public class LiftIOSim implements LiftIO {
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs,
         limit);
+
+    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
 
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
     profiledPIDController.reset(inputs.leaderMotorPosition);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

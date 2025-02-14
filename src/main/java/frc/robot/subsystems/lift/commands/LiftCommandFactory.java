@@ -53,6 +53,19 @@ public class LiftCommandFactory {
             });
   }
 
+  public Command runLiftMotionProfile(double pos) {
+    return new RunCommand(
+            () -> {
+              liftSubsystem.runLiftMotionProfile(pos);
+            },
+            liftSubsystem)
+        .finallyDo(
+            () -> {
+              liftSubsystem.setLiftVoltage(0);
+              liftSubsystem.resetLiftMotionProfile();
+            });
+  }
+
   public boolean getLiftAtPreset(CoralPreset preset) {
     return liftSubsystem.getMotorPosition() - preset.getLift() < 0.1;
   }

@@ -14,6 +14,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSpark implements LiftIO {
+  private double velocitySetpoint = 0;
   RelativeEncoder leaderEncoder;
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
@@ -71,6 +72,7 @@ public class LiftIOSpark implements LiftIO {
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs,
         limit);
+    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
 
   @Override
@@ -122,5 +124,10 @@ public class LiftIOSpark implements LiftIO {
   public void resetEncoder() {
     leaderEncoder.setPosition(0);
     followerEncoder.setPosition(0);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

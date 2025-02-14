@@ -13,6 +13,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class GantryIOSparkMax implements GantryIO {
+  private double velocitySetpoint = 0;
   private final SparkMax gantrySpark;
   private final RelativeEncoder gantryEncoder;
   private final SparkLimitSwitch gantryLimitSwitch;
@@ -75,10 +76,16 @@ public class GantryIOSparkMax implements GantryIO {
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
         inputs,
         limit);
+    velocitySetpoint = velocity;
   }
 
   @Override
   public void resetEncoder() {
     gantryEncoder.setPosition(0);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

@@ -102,6 +102,13 @@ public class SparkConfiguration {
     if (sparkPIDConstant.maxPositionMode != null) {
       inner.closedLoop.maxMotion.positionMode(sparkPIDConstant.maxPositionMode);
     }
+    if (sparkPIDConstant.positionConversionFactor != null) {
+      inner.analogSensor.positionConversionFactor(sparkPIDConstant.positionConversionFactor);
+    }
+    if (sparkPIDConstant.velocityConversionFactor != null) {
+      inner.analogSensor.velocityConversionFactor(sparkPIDConstant.velocityConversionFactor);
+    }
+
     return this;
   }
 

@@ -89,7 +89,6 @@ There are command decorators you can add to it, as follows:
   .setMaxVelocity(double maxVel)
   /*
    * Set Max Acceleration
-   *
    */
   .setMaxAccel(double maxAccel)
   /*
@@ -104,6 +103,17 @@ There are command decorators you can add to it, as follows:
    * Set the Closed Loop Slot on the Spark
    */
   .setClosedLoopSlot(ClosedLoopSlot closedLoopSlot)
+
+  /*
+   * Set Position Conversion Factor 
+   */
+
+  .setPositionConversion(Double conversion)
+
+  /* 
+   * Set Velocity Conversion Factor 
+   */
+  .setVelocityConversion(Double conversion)
 ```
 
 To apply them, do like follows:

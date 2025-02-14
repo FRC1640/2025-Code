@@ -105,13 +105,13 @@ There are command decorators you can add to it, as follows:
   .setClosedLoopSlot(ClosedLoopSlot closedLoopSlot)
 
   /*
-   * Set Position Conversion Factor 
+   * Set Position Conversion Factor
    */
 
   .setPositionConversion(Double conversion)
 
-  /* 
-   * Set Velocity Conversion Factor 
+  /*
+   * Set Velocity Conversion Factor
    */
   .setVelocityConversion(Double conversion)
 ```

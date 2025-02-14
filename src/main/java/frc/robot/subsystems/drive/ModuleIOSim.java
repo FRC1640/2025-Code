@@ -12,6 +12,7 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 
 public class ModuleIOSim implements ModuleIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim driveSim;
   private final DCMotorSim turnSim;
   private double driveAppliedVolts = 0.0;
@@ -42,6 +43,7 @@ public class ModuleIOSim implements ModuleIO {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
     setDriveVoltage(pidSpeed);
+    velocitySetpoint = velocity;
   }
 
   @Override
@@ -88,5 +90,10 @@ public class ModuleIOSim implements ModuleIO {
     inputs.odometryTurnPositions =
         new Rotation2d[] {Rotation2d.fromDegrees(inputs.steerAngleDegrees)};
     inputs.driveVelocities = new double[] {inputs.driveVelocityMetersPerSecond};
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

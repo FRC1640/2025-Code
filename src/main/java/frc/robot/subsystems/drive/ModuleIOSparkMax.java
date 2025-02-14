@@ -16,6 +16,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import java.util.Queue;
 
 public class ModuleIOSparkMax implements ModuleIO {
+  private double velocitySetpoint = 0;
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
@@ -131,6 +132,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
     setDriveVoltage(pidSpeed);
+    velocitySetpoint = velocity;
   }
 
   @Override
@@ -148,5 +150,10 @@ public class ModuleIOSparkMax implements ModuleIO {
   @Override
   public void setSteerVoltage(double voltage) {
     steerSpark.setVoltage(voltage);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

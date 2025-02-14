@@ -37,4 +37,8 @@ public interface LiftIO extends AutoCloseable {
   public default void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {}
 
   public default void resetLiftMotionProfile(LiftIOInputs inputs) {}
+
+  public default double velocitySetpoint() {
+    return 0.0;
+  }
 }

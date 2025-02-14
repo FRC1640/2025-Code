@@ -13,6 +13,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class LiftIOSpark implements LiftIO {
+  private double velocitySetpoint = 0;
   RelativeEncoder leaderEncoder;
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
@@ -67,6 +68,7 @@ public class LiftIOSpark implements LiftIO {
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
         inputs);
+    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
 
   @Override
@@ -111,5 +113,10 @@ public class LiftIOSpark implements LiftIO {
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
     inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

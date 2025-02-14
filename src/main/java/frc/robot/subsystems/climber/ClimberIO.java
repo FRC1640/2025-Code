@@ -53,5 +53,4 @@ public interface ClimberIO extends AutoCloseable {
    * Set solenoid state (forward/reverse)
    */
   public default void setSolenoidState(boolean forward, ClimberIOInputs inputs) {}
-
 }

@@ -40,4 +40,6 @@ public interface LiftIO extends AutoCloseable {
       double position, LiftIOInputs inputs, boolean limit) {}
 
   public default void resetLiftMotionProfile(LiftIOInputs inputs) {}
+
+  public default void resetEncoder() {}
 }

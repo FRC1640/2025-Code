@@ -117,4 +117,10 @@ public class LiftIOSpark implements LiftIO {
     inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
     inputs.isLimitSwitchPressed = liftLimitSwitch.isPressed();
   }
+
+  @Override
+  public void resetEncoder() {
+    leaderEncoder.setPosition(0);
+    followerEncoder.setPosition(0);
+  }
 }

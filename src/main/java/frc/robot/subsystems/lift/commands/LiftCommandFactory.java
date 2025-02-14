@@ -36,13 +36,7 @@ public class LiftCommandFactory {
             liftApplyVoltageCommand(() -> .5)
                 .repeatedly()
                 .until(() -> liftSubsystem.isLimitSwitchPressed()))
-        .andThen(
-            new InstantCommand(
-                () ->
-                    liftSubsystem
-                        .resetLiftMotionProfile())) // i think this does what i'm trying to make it
-        // do (measuredPosition being encoder dealings) but i should double check how the motion
-        // profile works
+        .andThen(new InstantCommand(() -> liftSubsystem.resetEncoder()))
         .andThen(new InstantCommand(() -> liftSubsystem.homedLimit()));
   }
 

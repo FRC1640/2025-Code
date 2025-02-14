@@ -167,7 +167,9 @@ public class RobotContainer {
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
@@ -352,6 +354,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTroph())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
     // lift/gantry manual controls
+    operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController
         .a()
         .onTrue(

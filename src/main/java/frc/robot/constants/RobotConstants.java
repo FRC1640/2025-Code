@@ -155,6 +155,7 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(1).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 2.0);
+    // is this lift limit right? i dont think i touched it
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =

@@ -67,7 +67,7 @@ public class TrackedRobotPID {
     }
   }
 
-  public static double calculate(PIDController controller){
+  public static double calculate(PIDController controller) {
     double p = controller.getError();
     double i = controller.getAccumulatedError();
     double d = controller.getErrorDerivative();

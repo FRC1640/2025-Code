@@ -1,6 +1,7 @@
 package frc.robot.subsystems.coralouttake.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
@@ -25,7 +26,7 @@ public class CoralOuttakeCommandFactory {
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.isDetectingTimed())
+    new Trigger(() -> !intakeSubsystem.hasCoral())
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -35,6 +36,8 @@ public class CoralOuttakeCommandFactory {
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
         .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
 
-    new Trigger(() -> intakeSubsystem.isDetectingTimed()).onTrue(setIntakeVoltage(() -> 0));
+    new Trigger(() -> intakeSubsystem.isCoralDetected())
+        .onFalse(setIntakeVoltage(() -> 0))
+        .onFalse(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
 }

@@ -315,7 +315,11 @@ public class RobotContainer {
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
                     && algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(algaeCommandFactory.processCommand());
+        .whileTrue(
+            algaeCommandFactory
+                .processCommand()
+                .beforeStarting(() -> joystickDriveWeight.setEnabled(false))
+                .finallyDo(() -> joystickDriveWeight.setEnabled(true)));
     new Trigger(() -> presetBoard.povIsUpwards())
         .onTrue(new InstantCommand(() -> algaeMode = true));
 

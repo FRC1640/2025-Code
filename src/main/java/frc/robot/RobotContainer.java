@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.FieldConstants;
@@ -115,6 +116,7 @@ public class RobotContainer {
 
   private CoralPreset coralPreset = CoralPreset.Safe;
   private boolean algaeMode = false;
+  private boolean gantryAuto = false;
 
   public RobotContainer() {
     switch (Robot.getMode()) {
@@ -469,7 +471,7 @@ public class RobotContainer {
             gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
   }
 
-  public static void generateNamedCommands() {
+  public void generateNamedCommands() {
     NamedCommands.registerCommand(
         "EnableAprilTags", new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(true)));
     NamedCommands.registerCommand(
@@ -479,5 +481,51 @@ public class RobotContainer {
         "DisableRotation", new InstantCommand(() -> PathplannerWeight.overrideRotation(() -> 0)));
     NamedCommands.registerCommand(
         "NormalRotation", new InstantCommand(() -> PathplannerWeight.clearRotationOverride()));
+
+    NamedCommands.registerCommand("SetModeAlgae", new InstantCommand(() -> algaeMode = true));
+    NamedCommands.registerCommand("SetModeCoral", new InstantCommand(() -> algaeMode = false));
+    NamedCommands.registerCommand("SetGantryRight", new InstantCommand(() -> gantryAuto = true));
+    NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
+
+    NamedCommands.registerCommand("SetupSafe", setupAutoPlace(CoralPreset.Safe));
+
+    NamedCommands.registerCommand(
+        "SetupL4",
+        new InstantCommand(
+                () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4)
+            .andThen(setupAutoPlace(coralPreset)));
+    NamedCommands.registerCommand(
+        "SetupL3",
+        new InstantCommand(
+                () -> coralPreset = gantryAuto ? CoralPreset.RightL3 : CoralPreset.LeftL3)
+            .andThen(setupAutoPlace(coralPreset)));
+    NamedCommands.registerCommand(
+        "SetupL2",
+        new InstantCommand(
+                () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2)
+            .andThen(setupAutoPlace(coralPreset)));
+
+    NamedCommands.registerCommand("AutoReef", getPlaceCommand());
+
+    NamedCommands.registerCommand(
+        "WaitForAlign",
+        new WaitUntilCommand(
+            () ->
+                liftSubsystem.isAtPreset(
+                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                    && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode)
+                    && followPathNearest.isAutoalignComplete()));
+
+    NamedCommands.registerCommand(
+        "AutoAlign",
+        new InstantCommand(() -> followPathNearest.startPath())
+            .alongWith(
+                new WaitUntilCommand(() -> followPathNearest.isAutoalignComplete())
+                    .finallyDo(() -> followPathNearest.stopPath())));
+
+    NamedCommands.registerCommand(
+        "WaitForCoral", new WaitUntilCommand(() -> coralOuttakeSubsystem.hasCoral()));
+
+    NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
   }
 }

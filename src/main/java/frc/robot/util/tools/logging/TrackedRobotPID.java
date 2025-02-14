@@ -61,8 +61,17 @@ public class TrackedRobotPID {
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
+
+        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/output", calculate(pidsTrack.get(i)));
       }
     }
+  }
+
+  public static double calculate(PIDController controller) {
+    double p = controller.getError();
+    double i = controller.getAccumulatedError();
+    double d = controller.getErrorDerivative();
+    return controller.getP() * p + controller.getI() * i + controller.getD() * d;
   }
 
   // Profiled

@@ -74,7 +74,6 @@ import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import frc.robot.util.tools.logging.LogRunner;
-
 import java.util.ArrayList;
 import java.util.function.Supplier;
 

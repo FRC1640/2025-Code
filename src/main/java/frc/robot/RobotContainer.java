@@ -193,7 +193,7 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
-        funkySubsystem = new FunkySubsystem(new FunkyIO(), null, null);
+        funkySubsystem = new FunkySubsystem(new FunkyIO(), () -> false, () -> false);
 
         break;
       default:

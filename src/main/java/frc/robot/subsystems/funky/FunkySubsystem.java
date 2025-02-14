@@ -17,16 +17,13 @@ public class FunkySubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println(funkyBooleanSupplier.getAsBoolean());
+    System.out.println(funkyBooleanSupplier.getAsBoolean());
     if (funkyBooleanSupplier.getAsBoolean() == true) {
       funkyIO.setVelocity(3);
-    } else {
-      funkyIO.setVelocity(0);
     }
     if (theOtherFunkyBooleanSupplier.getAsBoolean() == true) {
       funkyIO.setPos(10);
-    }
-    else{
-      funkyIO.setPos(1);
     }
   }
 }

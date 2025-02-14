@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -257,6 +258,8 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
+
+    generateNamedCommands();
     configureBindings();
   }
 
@@ -294,7 +297,7 @@ public class RobotContainer {
                             .getDistance(getTarget().getTranslation())
                         < 1.5
                     && followPathNearest.isEnabled())
-        .onTrue(setupAutoPlace());
+        .onTrue(setupAutoPlace(coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
@@ -380,7 +383,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTroph())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
     // lift/gantry manual controls
-    operatorController.a().onTrue(setupAutoPlace());
+    operatorController.a().onTrue(setupAutoPlace(coralPreset));
 
     new Trigger(
             () ->
@@ -436,7 +439,7 @@ public class RobotContainer {
         () -> algaeMode);
   }
 
-  public Command setupAutoPlace() {
+  public Command setupAutoPlace(CoralPreset coralPreset) {
     return new InstantCommand(
             () ->
                 liftSubsystem.setDefaultCommand(
@@ -464,5 +467,17 @@ public class RobotContainer {
                     liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())))
         .alongWith(
             gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
+  }
+
+  public static void generateNamedCommands() {
+    NamedCommands.registerCommand(
+        "EnableAprilTags", new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(true)));
+    NamedCommands.registerCommand(
+        "DisableAprilTags",
+        new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(false)));
+    NamedCommands.registerCommand(
+        "DisableRotation", new InstantCommand(() -> PathplannerWeight.overrideRotation(() -> 0)));
+    NamedCommands.registerCommand(
+        "NormalRotation", new InstantCommand(() -> PathplannerWeight.clearRotationOverride()));
   }
 }

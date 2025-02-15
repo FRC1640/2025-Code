@@ -72,6 +72,7 @@ public class AutoScoringCommandFactory {
     return algaeCommandFactory
         .setSolenoidState(true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
+        .repeatedly()
         .until(() -> algaeSubsystem.hasAlgae())
         .andThen(algaeCommandFactory.setSolenoidState(false));
   }

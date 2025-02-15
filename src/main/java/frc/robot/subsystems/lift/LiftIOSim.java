@@ -24,6 +24,7 @@ public class LiftIOSim implements LiftIO {
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+  private boolean limits;
 
   public LiftIOSim(BooleanSupplier liftLimitSwitch) {
     this.liftLimitSwitch = liftLimitSwitch;
@@ -46,7 +47,7 @@ public class LiftIOSim implements LiftIO {
    * Sets the Lift Voltage
    */
   @Override
-  public void setLiftVoltage(double voltage, LiftIOInputs inputs, boolean limit) {
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     motor1Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
@@ -60,17 +61,16 @@ public class LiftIOSim implements LiftIO {
                 inputs.followerMotorPosition,
                 voltage,
                 LiftConstants.liftLimits.low,
-                limit ? LiftConstants.liftLimits.high : 99999)));
+                limits ? LiftConstants.liftLimits.high : 99999)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position, LiftIOInputs inputs, boolean limit) {
+  public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
         MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
-        inputs,
-        limit);
+        inputs);
   }
 
   @Override
@@ -98,14 +98,13 @@ public class LiftIOSim implements LiftIO {
   }
 
   @Override
-  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs, boolean limit) {
+  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
-        inputs,
-        limit);
+        inputs);
 
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
@@ -118,5 +117,15 @@ public class LiftIOSim implements LiftIO {
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void homedLimit() {
+    limits = true;
+  }
+
+  @Override
+  public void disableLimit() {
+    limits = false;
   }
 }

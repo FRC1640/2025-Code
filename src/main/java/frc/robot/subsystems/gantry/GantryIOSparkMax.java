@@ -23,6 +23,7 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+  private boolean limits = false;
 
   public GantryIOSparkMax() {
     gantrySpark =
@@ -55,27 +56,24 @@ public class GantryIOSparkMax implements GantryIO {
 
   public void setGantryVoltage(
       double voltage,
-      GantryIOInputs inputs,
-      boolean limit) { // right limit is boolean condition for limitswitch
+      GantryIOInputs inputs) { // right limit is boolean condition for limitswitch
     gantrySpark.setVoltage(
         MotorLim.applyLimits(
             inputs.encoderPosition,
             MotorLim.clampVoltage(voltage),
             GantryConstants.gantryLimits.low,
-            limit ? GantryConstants.gantryLimits.high : null));
+            limits ? GantryConstants.gantryLimits.high : null));
   }
 
-  public void setGantryPosition(double position, GantryIOInputs inputs, boolean limit) {
-    setGantryVoltage(
-        gantryPID.calculate(inputs.encoderPosition, position), inputs, GantrySubsystem.limit);
+  public void setGantryPosition(double position, GantryIOInputs inputs) {
+    setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
   }
 
   @Override
-  public void setGantryVelocity(double velocity, GantryIOInputs inputs, boolean limit) {
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
     setGantryVoltage(
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
-        inputs,
-        limit);
+        inputs);
     velocitySetpoint = velocity;
   }
 
@@ -87,5 +85,15 @@ public class GantryIOSparkMax implements GantryIO {
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void homedLimit() {
+    limits = true;
+  }
+
+  @Override
+  public void disableLimit() {
+    limits = false;
   }
 }

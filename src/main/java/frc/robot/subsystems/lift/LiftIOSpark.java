@@ -28,6 +28,7 @@ public class LiftIOSpark implements LiftIO {
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+  private boolean limits;
 
   public LiftIOSpark() {
     leaderMotor =
@@ -43,35 +44,33 @@ public class LiftIOSpark implements LiftIO {
    * Set voltage of the motor
    */
   @Override
-  public void setLiftVoltage(double voltage, LiftIOInputs inputs, boolean limit) {
+  public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
                 LiftConstants.liftLimits.low,
-                limit ? LiftConstants.liftLimits.high : null)));
+                limits ? LiftConstants.liftLimits.high : null)));
   }
   /*
    * Sets the position of the motor(s) using a PID
    */
   @Override
-  public void setLiftPosition(double position, LiftIOInputs inputs, boolean limit) {
+  public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
         MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
-        inputs,
-        limit);
+        inputs);
   }
 
   @Override
-  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs, boolean limit) {
+  public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
-        inputs,
-        limit);
+        inputs);
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;
   }
 
@@ -129,5 +128,15 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void homedLimit() {
+    limits = true;
+  }
+
+  @Override
+  public void disableLimit() {
+    limits = false;
   }
 }

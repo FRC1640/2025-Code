@@ -25,7 +25,8 @@ public class LiftCommandFactory {
   }
 
   public Command liftHomeCommand() {
-    return liftApplyVoltageCommand(() -> 2) // correct voltage?
+    return new InstantCommand(() -> liftSubsystem.disableLimit())
+        .andThen(liftApplyVoltageCommand(() -> 2) // correct voltage?
         .repeatedly()
         .until(() -> liftSubsystem.isLimitSwitchPressed())
         .andThen(
@@ -36,8 +37,8 @@ public class LiftCommandFactory {
             liftApplyVoltageCommand(() -> .5)
                 .repeatedly()
                 .until(() -> liftSubsystem.isLimitSwitchPressed()))
-        .andThen(new InstantCommand(() -> liftSubsystem.resetEncoder()))
-        .andThen(new InstantCommand(() -> liftSubsystem.homedLimit()));
+        .andThen(new InstantCommand(() -> liftSubsystem.resetEncoder())))
+        .finallyDo(() -> liftSubsystem.homedLimit());
   }
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {

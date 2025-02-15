@@ -15,16 +15,16 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class LiftSubsystem extends SubsystemBase {
-  LiftIO liftIO;
+  LiftIO io;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
-  boolean limit = false;
+  // boolean limit = false;
   SysIdRoutine sysIdRoutine;
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
 
   public LiftSubsystem(LiftIO liftIO) {
-    this.liftIO = liftIO;
+    this.io = liftIO;
     LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
     liftMechanismRoot.append(liftHeight);
     sysIdRoutine =
@@ -41,12 +41,12 @@ public class LiftSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     liftHeight.setLength(getLeaderMotorPosition()); // conversion?
-    liftIO.updateInputs(inputs);
+    io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
     LogRunner.addLog(
         new VelocityLogStorage(
-            () -> getLeaderMotorVelocity(), () -> liftIO.velocitySetpoint(), getName()));
+            () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
   }
 
   public double getMotorPosition() {
@@ -90,11 +90,11 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void setLiftPosition(double pos) {
-    liftIO.setLiftPosition(pos, inputs, limit);
+    io.setLiftPosition(pos, inputs);
   }
 
   public void setLiftVoltage(double voltage) {
-    liftIO.setLiftVoltage(voltage, inputs, limit);
+    io.setLiftVoltage(voltage, inputs);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -106,15 +106,15 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void runLiftMotionProfile(double pos) {
-    liftIO.setLiftPositionMotionProfile(pos, inputs, limit);
+    io.setLiftPositionMotionProfile(pos, inputs);
   }
 
   public void resetLiftMotionProfile() {
-    liftIO.resetLiftMotionProfile(inputs);
+    io.resetLiftMotionProfile(inputs);
   }
 
   public void resetEncoder() {
-    liftIO.resetEncoder();
+    io.resetEncoder();
   }
 
   public boolean isAtPreset(double pos) {
@@ -126,6 +126,10 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void homedLimit() {
-    limit = true;
+    io.homedLimit();
+  }
+
+  public void disableLimit() {
+    io.disableLimit();
   }
 }

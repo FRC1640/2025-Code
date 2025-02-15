@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -356,6 +357,15 @@ public class RobotContainer {
         driveController.leftBumper());
 
     driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    // rumble
+    new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))
+        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() /* driveController.getHID().getYButton() */)
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.5)))
+        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
+    // new Trigger(() -> coralPreset.isRight())
+
     // reset gyro
     driveController.start().onTrue(gyro.resetGyroCommand());
 
@@ -386,7 +396,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
     new Trigger(() -> presetBoard.getTroph())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Troph));
+        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 

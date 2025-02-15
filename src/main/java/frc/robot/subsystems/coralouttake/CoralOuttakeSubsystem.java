@@ -21,7 +21,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake/", inputs);
-    if (isCoralDetected()) {
+    if (hasCoral()) {
       time += (System.currentTimeMillis() - lastTime) / 1000;
     } else {
       time = 0;

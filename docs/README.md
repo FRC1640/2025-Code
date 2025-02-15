@@ -9,3 +9,7 @@
 [Utility Tools](/docs/tools/main.md)
 
 [Constants](/docs/constants/main.md)
+
+[Controller Maps](/docs/controllers/Controllers.md)
+
+[Auto Positions](/docs/autos/CalculatedFieldPos.md)

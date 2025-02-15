@@ -63,6 +63,17 @@ public class TrackedRobotPID {
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
 
         Logger.recordOutput("PIDTrack/" + idName.get(i) + "/output", calculate(pidsTrack.get(i)));
+
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/outputDerivative",
+            calculateDerivative(pidsTrack.get(i)));
+
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/outputIntegral", calculateIntegral(pidsTrack.get(i)));
+
+        Logger.recordOutput(
+            "PIDTrack/" + idName.get(i) + "/outputProportional",
+            calculateProportional(pidsTrack.get(i)));
       }
     }
   }
@@ -72,6 +83,21 @@ public class TrackedRobotPID {
     double i = controller.getAccumulatedError();
     double d = controller.getErrorDerivative();
     return controller.getP() * p + controller.getI() * i + controller.getD() * d;
+  }
+
+  public static double calculateDerivative(PIDController controller) {
+    double d = controller.getErrorDerivative();
+    return controller.getD() * d;
+  }
+
+  public static double calculateIntegral(PIDController controller) {
+    double i = controller.getAccumulatedError();
+    return controller.getI() * i;
+  }
+
+  public static double calculateProportional(PIDController controller) {
+    double p = controller.getError();
+    return controller.getP() * p;
   }
 
   // Profiled

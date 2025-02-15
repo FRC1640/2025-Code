@@ -10,6 +10,8 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   CoralOuttakeIO io;
   private double time = 0;
   private double lastTime = 0.0;
+  private double releaseTime = 0.0;
+  private boolean hasCoral;
 
   public CoralOuttakeSubsystem(CoralOuttakeIO io) {
     this.io = io;
@@ -19,11 +21,20 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake/", inputs);
-    if (isCoralDetected()) {
+    if (hasCoral()) {
       time += (System.currentTimeMillis() - lastTime) / 1000;
     } else {
       time = 0;
     }
+
+    if (getVelocity() > 0 && hasCoral() && !isCoralDetected()) {
+      releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
+    }
+    if (releaseTime > 0.2) {
+      hasCoral = false;
+      releaseTime = 0;
+    }
+
     lastTime = System.currentTimeMillis();
     Logger.recordOutput("CoralDetector/DetectionTime", time);
     Logger.recordOutput("CoralDetector/DetectionTimeBool", isDetectingTimed());
@@ -35,6 +46,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public double returnTemp() {
     return inputs.tempCelcius;
+  }
+
+  public void setHasCoral(boolean coral) {
+    hasCoral = coral;
   }
 
   public boolean isCoralDetected() {
@@ -49,7 +64,15 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     io.setIntakeVoltage(voltage);
   }
 
+  public double getVelocity() {
+    return inputs.outtakeVelocity;
+  }
+
   public boolean isDetectingTimed() {
     return (time > ReefDetectorConstants.waitTimeSeconds);
+  }
+
+  public boolean hasCoral() {
+    return hasCoral;
   }
 }

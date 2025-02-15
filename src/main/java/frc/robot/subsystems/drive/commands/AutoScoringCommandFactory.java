@@ -54,7 +54,7 @@ public class AutoScoringCommandFactory {
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
-        .until(() -> !coralOuttakeSubsystem.isCoralDetected())
+        .until(() -> !coralOuttakeSubsystem.hasCoral())
         .andThen(
             new WaitCommand(0.1)
                 .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
@@ -72,6 +72,7 @@ public class AutoScoringCommandFactory {
     return algaeCommandFactory
         .setSolenoidState(true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
+        .repeatedly()
         .until(() -> algaeSubsystem.hasAlgae())
         .andThen(algaeCommandFactory.setSolenoidState(false));
   }

@@ -14,6 +14,9 @@ public interface GyroIO {
     public double displacementX = 0.0;
     public double displacementY = 0.0;
 
+    public Rotation2d roll = new Rotation2d();
+    public Rotation2d pitch = new Rotation2d();
+
     public double accelX;
     public double accelY;
     public double accelZ;

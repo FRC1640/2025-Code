@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import org.photonvision.simulation.VisionSystemSim;
 
 public class FieldConstants {
@@ -42,6 +43,10 @@ public class FieldConstants {
         new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(300)),
         new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)),
       };
+
+  public static final Translation2d reefCenterPosRed = new Translation2d(13.07, 4);
+
+  public static final Translation2d reefCenterPosBlue = new Translation2d(4.47, 4);
 
   public static final Pose2d processorPositionRed =
       new Pose2d(6.0, 0.6, Rotation2d.fromDegrees(270));

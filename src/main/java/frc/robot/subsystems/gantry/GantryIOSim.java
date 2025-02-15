@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -10,20 +11,24 @@ import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
+  private final PIDController gantryVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+  private boolean limits = false;
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
     DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
     gantrySim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                gantryGearbox, 0.00019125, GantryConstants.gantryGearRatio),
-            gantryGearbox);
+            LinearSystemId.createDCMotorSystem(gantryGearbox, 0.00019125, 1), gantryGearbox);
   }
 
   @Override
@@ -53,6 +58,33 @@ public class GantryIOSim implements GantryIO {
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
     gantrySim.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.encoderPosition, voltage, GantryConstants.gantryLimits)));
+            MotorLim.applyLimits(
+                inputs.encoderPosition,
+                voltage,
+                GantryConstants.gantryLimits.low,
+                limits ? GantryConstants.gantryLimits.high : 999999)));
+  }
+
+  @Override
+  public void homedLimit() {
+    limits = true;
+  }
+
+  @Override
+  public void disableLimit() {
+    limits = false;
+  }
+
+  @Override
+  public void setGantryVelocity(double velocity, GantryIOInputs inputs) {
+    setGantryVoltage(
+        ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
+        inputs);
+    velocitySetpoint = velocity;
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

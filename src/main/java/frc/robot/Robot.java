@@ -5,15 +5,19 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.RobotConstants.MotorInfo;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.periodic.PeriodicScheduler;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import frc.robot.util.tools.logging.LoggerManager;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -25,6 +29,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -99,6 +104,8 @@ public class Robot extends LoggedRobot {
 
     // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
     // Logger.getInstance().disableDeterministicTimestamps()
+    // Register URCL
+    Logger.registerURCL(URCL.startExternal(MotorInfo.motorLoggingManager.getMap()));
 
     // Start AdvantageKit Logger
     Logger.start();
@@ -109,6 +116,11 @@ public class Robot extends LoggedRobot {
         5800,
         Filesystem.getDeployDirectory()
             .getPath()); // instructed to add to get elastic config to load automatically
+  }
+
+  @Override
+  public void robotInit() {
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   @Override
@@ -178,6 +190,9 @@ public class Robot extends LoggedRobot {
   public void testExit() {}
 
   public static boolean isReplay() {
+    if (RobotConfigConstants.robotType == RobotType.Replay) {
+      return true;
+    }
     String replay = System.getProperty("REPLAY");
     return replay != null && replay.toLowerCase().equals("true");
   }
@@ -186,7 +201,6 @@ public class Robot extends LoggedRobot {
     if (isReal()) {
       return Mode.REAL;
     }
-
     if (isReplay()) {
       return Mode.REPLAY;
     }

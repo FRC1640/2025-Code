@@ -7,13 +7,16 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
+import java.util.function.BooleanSupplier;
 
 public class AlgaeIOSim implements AlgaeIO {
   private final DCMotorSim motorLeftSim;
   private final DCMotorSim motorRightSim;
   private final DoubleSolenoidSim solenoidSim;
+  private final BooleanSupplier hasSimAlgae;
 
-  public AlgaeIOSim() {
+  public AlgaeIOSim(BooleanSupplier hasSimAlgae) {
+    this.hasSimAlgae = hasSimAlgae;
     DCMotor motorSimGearbox = DCMotor.getNEO(1);
 
     motorLeftSim =
@@ -38,6 +41,11 @@ public class AlgaeIOSim implements AlgaeIO {
   public void setVoltage(double left, double right) {
     motorLeftSim.setInputVoltage(left);
     motorRightSim.setInputVoltage(right);
+  }
+
+  @Override
+  public boolean hasSimAlgae() {
+    return hasSimAlgae.getAsBoolean();
   }
 
   @Override

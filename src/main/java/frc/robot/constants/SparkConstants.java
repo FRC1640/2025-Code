@@ -13,7 +13,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.spark.StatusFrames;
 
 public class SparkConstants {
-  public static final SparkConfiguration getGantryDefaultSparkMax(int id) {
+  public static final SparkConfiguration getGantryDefaultMax(int id) {
     return new SparkConfiguration(
         id,
         IdleMode.kBrake,
@@ -23,9 +23,25 @@ public class SparkConstants {
         16,
         StatusFrames.getDefault(),
         new LimitSwitchConfig()
-            .reverseLimitSwitchEnabled(false)
+            .reverseLimitSwitchEnabled(true)
             .forwardLimitSwitchType(Type.kNormallyOpen)
-            .forwardLimitSwitchEnabled(true),
+            .forwardLimitSwitchEnabled(false),
+        new SparkMaxConfig());
+  }
+
+  public static final SparkConfiguration getLiftDefaultMax(int id) {
+    return new SparkConfiguration(
+        id,
+        IdleMode.kCoast,
+        false,
+        60,
+        8,
+        2,
+        StatusFrames.getDefault(),
+        new LimitSwitchConfig()
+            .reverseLimitSwitchEnabled(true)
+            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .forwardLimitSwitchEnabled(false),
         new SparkMaxConfig());
   }
 

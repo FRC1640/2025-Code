@@ -170,6 +170,7 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 2.0);
+    // is this lift limit right? i dont think i touched it
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
@@ -293,7 +294,7 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final Limits gantryLimits = new Limits(-0.31, .02);
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;

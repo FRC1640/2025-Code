@@ -97,6 +97,7 @@ public class RobotContainer {
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final PresetBoard presetBoard = new PresetBoard(2);
+  private final PresetBoard simBoard = new PresetBoard(3);
   private final AlertsManager alertsManager;
 
   // Dashboard
@@ -178,11 +179,13 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(operatorController.y())
+                    ? new GantryIOSim(() -> simBoard.getLl2())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
@@ -195,7 +198,9 @@ public class RobotContainer {
                     : new ClimberIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+                RobotConfigConstants.algaeIntakeEnabled
+                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -267,6 +272,11 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
+
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+
+    generateNamedCommands();
     configureBindings();
   }
 
@@ -396,9 +406,10 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
-    new Trigger(() -> presetBoard.getTroph())
+    new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
+    operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());

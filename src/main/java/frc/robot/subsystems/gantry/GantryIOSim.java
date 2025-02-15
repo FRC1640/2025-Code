@@ -21,6 +21,7 @@ public class GantryIOSim implements GantryIO {
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+  private boolean limits = false;
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
@@ -61,7 +62,12 @@ public class GantryIOSim implements GantryIO {
                 inputs.encoderPosition,
                 voltage,
                 GantryConstants.gantryLimits.low,
-                inputs.isLimitSwitchPressed)));
+                limits ? GantryConstants.gantryLimits.high : 999999)));
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 
   @Override

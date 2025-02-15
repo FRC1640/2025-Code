@@ -14,6 +14,7 @@ public interface ClimberIO extends AutoCloseable {
     public boolean solenoidForward = false;
     public boolean sensor1 = false;
     public boolean sensor2 = false;
+    public boolean isLimitSwitchPressed = false;
   }
 
   /*
@@ -39,4 +40,8 @@ public interface ClimberIO extends AutoCloseable {
    * Set servo position (between 0 and 1)
    */
   public default void setServoPosition(double position) {}
+  /*
+   * Resets encoder
+   */
+  public default void resetEncoder() {}
 }

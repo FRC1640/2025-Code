@@ -101,6 +101,7 @@ public class RobotContainer {
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final PresetBoard presetBoard = new PresetBoard(2);
+  private final PresetBoard simBoard = new PresetBoard(3);
   private final AlertsManager alertsManager;
 
   // Dashboard
@@ -185,11 +186,13 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(operatorController.y())
+                    ? new GantryIOSim(() -> simBoard.getLl2())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
@@ -205,7 +208,9 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+                RobotConfigConstants.algaeIntakeEnabled
+                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -412,6 +417,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTroph())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
+    operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlace(coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());

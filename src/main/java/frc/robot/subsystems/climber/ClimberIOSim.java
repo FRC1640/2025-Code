@@ -38,7 +38,10 @@ public class ClimberIOSim implements ClimberIO {
     liftSim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.elevatorMotorPosition, voltage, ClimberConstants.liftLimits)));
+                inputs.elevatorMotorPosition,
+                voltage,
+                ClimberConstants.liftLimits.low,
+                ClimberConstants.liftLimits.high)));
   }
 
   @Override

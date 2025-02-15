@@ -23,4 +23,8 @@ public interface AlgaeIO {
   public default void setVoltage(double left, double right) {}
 
   public default void setSolenoid(boolean set) {}
+
+  public default boolean hasSimAlgae() {
+    return false;
+  }
 }

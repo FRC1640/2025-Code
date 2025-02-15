@@ -36,7 +36,10 @@ public class WinchIOSparkMax implements WinchIO {
     winchLeaderSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition, voltage, ClimberConstants.winchLimits)));
+                inputs.winchLeaderMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
   }
   /*
    * Sets the position of the winch motors using a PID

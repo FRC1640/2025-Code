@@ -1,19 +1,20 @@
 package frc.robot.subsystems.climber;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.ClimberConstants;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
-import frc.robot.sensors.resolvers.ResolverVoltage;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSparkMax implements ClimberIO {
-  private final ResolverVoltage liftEncoder;
+  private final RelativeEncoder liftEncoder;
   private final SparkMax liftSpark;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
@@ -26,7 +27,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftSpark =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
-    liftEncoder = new ResolverVoltage(ClimberConstants.liftResolverInfo);
+    liftEncoder = liftSpark.getEncoder();
     doubleSolenoid =
         new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
@@ -43,7 +44,10 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.elevatorMotorPosition, voltage, ClimberConstants.liftLimits)));
+                inputs.elevatorMotorPosition,
+                voltage,
+                ClimberConstants.liftLimits.low,
+                ClimberConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the lift motor using a PID
@@ -65,7 +69,12 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.elevatorMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
+    inputs.elevatorMotorPosition =
+        liftEncoder.getPosition()
+            / GantryConstants.gantryGearRatio
+            * GantryConstants.pulleyRadius
+            * 2
+            * Math.PI; // says degrees but really in meters
     inputs.elevatorMotorCurrent = liftSpark.getOutputCurrent();
     inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
     inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();
@@ -73,5 +82,10 @@ public class ClimberIOSparkMax implements ClimberIO {
     inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
     inputs.sensor1 = !sensor1Input.get();
     inputs.sensor2 = !sensor2Input.get();
+  }
+
+  @Override
+  public void resetEncoder() {
+    liftEncoder.setPosition(0);
   }
 }

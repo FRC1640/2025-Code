@@ -64,4 +64,8 @@ public class ClimberSubsystem extends SubsystemBase {
   public void setSolenoidState(boolean forward) {
     climberIO.setSolenoidState(forward);
   }
+
+  public void resetEncoder() {
+    climberIO.resetEncoder();
+  }
 }

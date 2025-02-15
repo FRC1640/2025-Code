@@ -35,24 +35,7 @@ public class SwerveDriveSysidRoutine {
               bl.setDriveVoltage(volts.in(Volts));
               br.setDriveVoltage(volts.in(Volts));
             },
-            log -> {
-              log.motor("frontLeft")
-                  .voltage(Volts.of(fl.getDriveVoltage()))
-                  .linearPosition(Meters.of(fl.getPosition().distanceMeters))
-                  .linearVelocity(MetersPerSecond.of(fl.getVelocity()));
-              log.motor("frontRight")
-                  .voltage(Volts.of(-fr.getDriveVoltage()))
-                  .linearPosition(Meters.of(fr.getPosition().distanceMeters))
-                  .linearVelocity(MetersPerSecond.of(fr.getVelocity()));
-              log.motor("backLeft")
-                  .voltage(Volts.of(bl.getDriveVoltage()))
-                  .linearPosition(Meters.of(bl.getPosition().distanceMeters))
-                  .linearVelocity(MetersPerSecond.of(bl.getVelocity()));
-              log.motor("backRight")
-                  .voltage(Volts.of(-br.getDriveVoltage()))
-                  .linearPosition(Meters.of(br.getPosition().distanceMeters))
-                  .linearVelocity(MetersPerSecond.of(br.getVelocity()));
-            },
+            null,
             subsystem));
   }
 }

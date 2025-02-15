@@ -53,7 +53,11 @@ public class ClimberIOSparkMax implements ClimberIO {
   public void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {
     liftSpark.setVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.liftMotorPosition, voltage, ClimberConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.liftMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
   }
   /*
    * Sets the position of the lift motor using a PID
@@ -71,7 +75,10 @@ public class ClimberIOSparkMax implements ClimberIO {
     winchLeaderSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition, voltage, ClimberConstants.winchLimits)));
+                inputs.winchLeaderMotorPosition,
+                voltage,
+                ClimberConstants.winchLimits.low,
+                ClimberConstants.winchLimits.high)));
   }
   /*
    * Sets the position of the winch motors using a PID

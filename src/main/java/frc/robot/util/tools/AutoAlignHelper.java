@@ -2,6 +2,7 @@ package frc.robot.util.tools;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,10 +16,11 @@ import org.littletonrobotics.junction.Logger;
 public class AutoAlignHelper {
   PIDController linearDrivePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID, PIDKey.LINEARDRIVE);
+  SlewRateLimiter accel = new SlewRateLimiter(3);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians, PIDKey.ROTTORAD);
 
-  public ChassisSpeeds getPoseSpeeds(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
+  public ChassisSpeeds getPoseSpeedsLine(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;
     Pose2d target = targetPose;
     Rotation2d angleToTarget = robot.getTranslation().minus(target.getTranslation()).getAngle();
@@ -32,18 +34,26 @@ public class AutoAlignHelper {
     rotationalPID = MathUtil.applyDeadband(rotationalPID, 0.01);
     linearPID *= DriveConstants.maxSpeed;
     rotationalPID *= DriveConstants.maxOmega;
+    linearPID = accel.calculate(linearPID);
 
     double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
     double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
     Logger.recordOutput("Drive/AutoAlignPosition", target);
 
     // convert to robot relative from field relative
-    Translation2d fieldRelative = new Translation2d(xSpeed, ySpeed);
-    fieldRelative =
-        fieldRelative.rotateBy(
+    ChassisSpeeds fieldRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalPID);
+    return convertToFieldRelative(fieldRelative, gyro, robot);
+  }
+
+  public static ChassisSpeeds convertToFieldRelative(
+      ChassisSpeeds fieldRelative, Gyro gyro, Pose2d robot) {
+    Translation2d xy =
+        new Translation2d(fieldRelative.vxMetersPerSecond, fieldRelative.vyMetersPerSecond);
+    Translation2d rotated =
+        xy.rotateBy(
             new Rotation2d(
                     gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
                 .unaryMinus());
-    return new ChassisSpeeds(fieldRelative.getX(), fieldRelative.getY(), rotationalPID);
+    return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
   }
 }

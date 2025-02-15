@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+import frc.robot.util.tools.logging.LogRunner;
+import frc.robot.util.tools.logging.VelocityLogStorage;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -29,8 +31,8 @@ public class LiftSubsystem extends SubsystemBase {
             .createNewRoutine(
                 this::setLiftVoltage,
                 this::getLeaderMotorVoltage,
-                this::getFollowerMotorPosition,
-                this::getFollowerMotorVelocity,
+                this::getLeaderMotorPosition,
+                this::getLeaderMotorVelocity,
                 this,
                 new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(5)));
   }
@@ -41,6 +43,13 @@ public class LiftSubsystem extends SubsystemBase {
     liftIO.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
+    LogRunner.addLog(
+        new VelocityLogStorage(
+            () -> getLeaderMotorVelocity(), () -> liftIO.velocitySetpoint(), getName()));
+  }
+
+  public double getMotorPosition() {
+    return inputs.motorPosition;
   }
 
   public double getLeaderMotorPosition() {
@@ -101,5 +110,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void resetLiftMotionProfile() {
     liftIO.resetLiftMotionProfile(inputs);
+  }
+
+  public boolean isAtPreset(double pos) {
+    return Math.abs(getMotorPosition() - pos) < 0.01;
   }
 }

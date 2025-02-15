@@ -14,17 +14,18 @@ import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotOdometry extends PeriodicBase {
@@ -49,7 +50,11 @@ public class RobotOdometry extends PeriodicBase {
       visionMap.put(aprilTagVision.getCameraName(), aprilTagVision);
     }
     SparkOdometryThread.getInstance().start();
-    OdometryStorage main = branchEstimator("Main", cameras, VisionUpdateMode.PHOTONVISION);
+    OdometryStorage main =
+        branchEstimator(
+            "Main",
+            RobotConfigConstants.robotType == RobotType.Sim ? new AprilTagVision[0] : cameras,
+            VisionUpdateMode.PHOTONVISION);
     OdometryStorage mainTrig = branchEstimator("MainTrig", cameras, VisionUpdateMode.TRIG);
     mainTrig.setTrustedRotation(main);
   }
@@ -227,53 +232,57 @@ public class RobotOdometry extends PeriodicBase {
     }
   }
 
-  private Rotation2d interpolateGyro(Double timestamp, OdometryStorage odometryStorage) {
-    Optional<Rotation2d> gyroInterpolated;
-    if (odometryStorage.getTrustedRotation().isPresent()) {
-      gyroInterpolated = odometryStorage.getTrustedRotation().get().getGyroAtTimestamp(timestamp);
-    } else {
-      gyroInterpolated =
-          Optional.of(odometryStorage.estimator.getEstimatedPosition().getRotation());
-    }
-    if (gyroInterpolated.isPresent()) {
-      return gyroInterpolated.get();
-    } else {
-      return odometryStorage.estimator.getEstimatedPosition().getRotation();
-    }
-  }
-
   public void addTrigEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
+    if (odometryStorage.getTrustedRotation().isEmpty()) {
+      return;
+    }
     // pass function
-    Function<Double, Rotation2d> interpolateGyro =
-        (timestamp) -> interpolateGyro(timestamp, odometryStorage);
+    if (vision.getTrigResult(new Rotation2d()).isEmpty()) {
+      return;
+    }
+    Optional<Rotation2d> interpolateGyro =
+        odometryStorage
+            .getTrustedRotation()
+            .get()
+            .getGyroAtTimestamp(vision.getTrigResult(new Rotation2d()).get().timestamp());
+
+    if (interpolateGyro.isEmpty()) {
+      return;
+    }
     // calculate estimated pose (trig)
-    Optional<PoseObservation> result = vision.getTrigResult(interpolateGyro);
+    Optional<PoseObservation> result =
+        vision.getTrigResult(
+            odometryStorage
+                .getTrustedRotation()
+                .get()
+                .estimator
+                .getEstimatedPosition()
+                .getRotation());
     // return if no result; continue otherwise
     if (result.isEmpty()) {
       return;
-    } else {
-      Pose2d visionUpdate = result.get().pose().toPose2d();
-      Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesTrig", visionUpdate);
-      if (Robot.getState() == RobotState.DISABLED
-          || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
-        Logger.recordOutput(
-            "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
-        return;
-      }
-      if (!(isPoseValid(visionUpdate)
-          && vision.isConnected()
-          && result.get().minimumTagDistance() < 7)) {
-        Logger.recordOutput(
-            "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
-        return;
-      }
-      Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesAcceptedTrig", visionUpdate);
-      double xy = vision.getTrigXyStdDev(result.get());
-      odometryStorage.estimator.addVisionMeasurement(
-          visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));
     }
+    Pose2d visionUpdate = result.get().pose().toPose2d();
+    Logger.recordOutput(
+        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesTrig", visionUpdate);
+    if (Robot.getState() == RobotState.DISABLED
+        || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+      return;
+    }
+    if (!(isPoseValid(visionUpdate)
+        && vision.isConnected()
+        && result.get().minimumTagDistance() < 7)) {
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+      return;
+    }
+    Logger.recordOutput(
+        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesAcceptedTrig", visionUpdate);
+    double xy = vision.getTrigXyStdDev(result.get());
+    odometryStorage.estimator.addVisionMeasurement(
+        visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));
   }
 
   public boolean isPoseValid(Pose2d pose) {

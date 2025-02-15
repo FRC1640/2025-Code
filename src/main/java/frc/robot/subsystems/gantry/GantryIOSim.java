@@ -1,10 +1,14 @@
 package frc.robot.subsystems.gantry;
 
+import com.revrobotics.sim.SparkMaxSim;
+import com.revrobotics.sim.SparkRelativeEncoderSim;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
@@ -12,7 +16,6 @@ import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {
   private double velocitySetpoint = 0;
-  private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
@@ -21,30 +24,31 @@ public class GantryIOSim implements GantryIO {
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+  public SparkMax gantryMax;
+  public SparkMaxSim gantrySim;
+  public SparkRelativeEncoderSim gantryEncoder;
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
-    DCMotor gantryGearbox = DCMotor.getNeo550(1); // 550 confirmed
-    gantrySim =
-        new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(gantryGearbox, 0.00019125, 1), gantryGearbox);
+    DCMotor gantryGearBox = DCMotor.getNeo550(1);
+    gantryMax = new SparkMax(GantryConstants.gantrySparkID, MotorType.kBrushless);
+    gantrySim = new SparkMaxSim(gantryMax, gantryGearBox);
+    gantryEncoder = gantrySim.getRelativeEncoderSim();
   }
 
   @Override
   public void updateInputs(GantryIOInputs inputs) {
-    gantrySim.update(.02);
-
-    inputs.currentAmps = gantrySim.getCurrentDrawAmps();
+    gantrySim.iterate(
+        Units.radiansPerSecondToRotationsPerMinute(gantrySim.getVelocityRadPerSec()),
+        RoboRioSim.getVInVoltage(),
+        0.02);
+    inputs.currentAmps = gantrySim.getMotorCurrent();
     inputs.encoderPosition =
-        gantrySim.getAngularPositionRad()
-            / GantryConstants.gantryGearRatio
-            * GantryConstants.pulleyRadius;
+        gantrySim.getPosition() / GantryConstants.gantryGearRatio * GantryConstants.pulleyRadius;
     inputs.isLimitSwitchPressed = gantryLimitSwitch.getAsBoolean();
-    inputs.appliedVoltage = gantrySim.getInputVoltage();
+    inputs.appliedVoltage = gantrySim.getBusVoltage();
     inputs.encoderVelocity =
-        gantrySim.getAngularVelocityRadPerSec()
-            / GantryConstants.gantryGearRatio
-            * GantryConstants.pulleyRadius;
+        gantrySim.getVelocity() / GantryConstants.gantryGearRatio * GantryConstants.pulleyRadius;
   }
 
   @Override
@@ -55,7 +59,7 @@ public class GantryIOSim implements GantryIO {
 
   @Override
   public void setGantryVoltage(double voltage, GantryIOInputs inputs) {
-    gantrySim.setInputVoltage(
+    gantrySim.setBusVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.encoderPosition,

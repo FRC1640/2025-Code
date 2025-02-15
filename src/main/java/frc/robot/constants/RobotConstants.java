@@ -60,7 +60,7 @@ public class RobotConstants {
             .addValue(RobotType.Deux24, false)
             .get();
     public static final boolean algaeIntakeEnabled =
-        new RobotSwitch<Boolean>(false).addValue(RobotType.Sim, true).get();
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -289,7 +289,7 @@ public class RobotConstants {
   }
 
   public static class GantryConstants {
-    public static final int gantrySparkID = new RobotSwitch<Integer>(12).get();
+    public static final int gantrySparkID = new RobotSwitch<Integer>(17).get();
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
@@ -304,7 +304,7 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(17).get(); // update this too
+        new RobotSwitch<Integer>(18).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }

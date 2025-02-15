@@ -201,7 +201,7 @@ public class RobotContainer {
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim()
+                    ? new ClimberIOSim(() -> simBoard.getLl4())
                     : new ClimberIO() {});
         winchSubsystem =
             new WinchSubsystem(

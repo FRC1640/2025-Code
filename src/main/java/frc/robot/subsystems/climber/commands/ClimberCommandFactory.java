@@ -46,4 +46,26 @@ public class ClimberCommandFactory {
     return new InstantCommand(
         () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()), climberSubsystem);
   }
+
+  public Command liftHomeCommand() {
+    return new InstantCommand(() -> climberSubsystem.disableLimit())
+        .andThen(
+            elevatorApplyVoltageCommand(() -> 2)
+                .repeatedly()
+                .until(() -> climberSubsystem.isLimitSwitchPressed())
+                .andThen(
+                    elevatorApplyVoltageCommand(() -> -1)
+                        .repeatedly()
+                        .until(() -> !climberSubsystem.isLimitSwitchPressed()))
+                .andThen(
+                    elevatorApplyVoltageCommand(() -> 0.5)
+                        .repeatedly()
+                        .until(() -> climberSubsystem.isLimitSwitchPressed()))
+                // .andThen(
+                //     liftApplyVoltageCommand(() -> -liftConstants.liftHomeFastVoltage)
+                //         .repeatedly()
+                //         .until(() -> !liftSubsystem.isLimitSwitchPressed()))
+                .andThen(new InstantCommand(() -> climberSubsystem.resetEncoder())))
+        .finallyDo(() -> climberSubsystem.homedLimit());
+  }
 }

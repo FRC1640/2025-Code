@@ -44,4 +44,8 @@ public interface ClimberIO extends AutoCloseable {
    * Resets encoder
    */
   public default void resetEncoder() {}
+
+  public default void homedLimit() {}
+
+  public default void disableLimit() {}
 }

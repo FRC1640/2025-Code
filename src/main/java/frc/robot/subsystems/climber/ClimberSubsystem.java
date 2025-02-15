@@ -68,4 +68,16 @@ public class ClimberSubsystem extends SubsystemBase {
   public void resetEncoder() {
     climberIO.resetEncoder();
   }
+
+  public boolean isLimitSwitchPressed() {
+    return inputs.isLimitSwitchPressed;
+  }
+
+  public void homedLimit() {
+    climberIO.homedLimit();
+  }
+
+  public void disableLimit() {
+    climberIO.disableLimit();
+  }
 }

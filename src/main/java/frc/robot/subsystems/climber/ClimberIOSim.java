@@ -12,15 +12,19 @@ import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
+import java.util.function.BooleanSupplier;
 
 public class ClimberIOSim implements ClimberIO {
   private final DCMotorSim liftSim;
   private final DoubleSolenoidSim doubleSolenoidSim;
   private final DigitalInput sensor1Sim, sensor2Sim;
+  private BooleanSupplier liftLimitSwitch;
+  private boolean limits = false;
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
 
-  public ClimberIOSim() {
+  public ClimberIOSim(BooleanSupplier liftLimitSwitch) {
+    this.liftLimitSwitch = liftLimitSwitch;
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);
 
     liftSim =
@@ -41,7 +45,7 @@ public class ClimberIOSim implements ClimberIO {
                 inputs.elevatorMotorPosition,
                 voltage,
                 ClimberConstants.liftLimits.low,
-                ClimberConstants.liftLimits.high)));
+                limits ? ClimberConstants.liftLimits.high : 999999)));
   }
 
   @Override
@@ -66,9 +70,20 @@ public class ClimberIOSim implements ClimberIO {
     inputs.elevatorMotorVelocity = liftSim.getAngularVelocityRadPerSec();
     inputs.elevatorMotorCurrent = liftSim.getCurrentDrawAmps();
     inputs.elevatorMotorVoltage = liftSim.getInputVoltage();
+    inputs.isLimitSwitchPressed = liftLimitSwitch.getAsBoolean();
 
     inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
     inputs.sensor1 = !sensor1Sim.get();
     inputs.sensor2 = !sensor2Sim.get();
+  }
+
+  @Override
+  public void homedLimit() {
+    limits = true;
+  }
+
+  @Override
+  public void disableLimit() {
+    limits = false;
   }
 }

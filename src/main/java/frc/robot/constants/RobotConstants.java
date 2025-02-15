@@ -128,13 +128,13 @@ public class RobotConstants {
         new SwerveDriveKinematics(
             frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 3, 2, 0, 45);
+    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 1, 2, 0, 45);
 
-    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 9, 8, 2, -45);
+    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 3, 4, 2, -45);
 
-    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
+    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 6, 1, 135);
 
-    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 8, 3, -135);
 
     public static final double maxAntiTipCorrectionSpeed = 1.5;
     public static final double minTipDegrees = 6;
@@ -166,8 +166,8 @@ public class RobotConstants {
   }
 
   public static class LiftConstants {
-    public static final int liftLeaderMotorID = new RobotSwitch<Integer>(0).get();
-    public static final int liftFollowerMotorID = new RobotSwitch<Integer>(1).get();
+    public static final int liftLeaderMotorID = new RobotSwitch<Integer>(9).get();
+    public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 2.0);
     public static final double liftMaxSpeed = 0.4;
@@ -271,9 +271,9 @@ public class RobotConstants {
 
   // TODO replace with actual values
   public static class ClimberConstants {
-    public static final int climberLiftMotorID = 0;
-    public static final int climberWinch1MotorID = 1;
-    public static final int climberWinch2MotorID = 2;
+    public static final int climberLiftMotorID = new RobotSwitch<Integer>(15).get();
+    public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
+    public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
     public static final Limits liftLimits = new Limits(0.0, 1000.0);
     public static final Limits winchLimits = new Limits(0.0, 1000.0);
@@ -301,17 +301,17 @@ public class RobotConstants {
 
   public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
-    public static final int intakeSparkID = new RobotSwitch<Integer>(24).get();
+    public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(8).get(); // update this too
+        new RobotSwitch<Integer>(17).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }
 
   public static class AlgaeConstants {
-    public static int motorLeftChannel = -1;
-    public static int motorRightChannel = -1;
+    public static int motorLeftChannel = new RobotSwitch<Integer>(11).get();
+    public static int motorRightChannel = new RobotSwitch<Integer>(12).get();
     public static int solenoidChannelForward = -1;
     public static int solenoidChannelReverse = -1;
     public static double passiveSpeed = 0.1;

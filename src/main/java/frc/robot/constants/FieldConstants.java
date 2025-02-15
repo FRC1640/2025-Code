@@ -46,23 +46,59 @@ public class FieldConstants {
             Rotation2d.fromDegrees(360)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(new Translation2d(12.64335, 4.745482))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(9)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(300)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(new Translation2d(13.474446, 4.745482))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(8)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(240)),
         new Pose2d(
-            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(13.890498, 4.0259)).get(),
+            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(13.890498, 4.0259))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(7)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
             Rotation2d.fromDegrees(180)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(13.474446, 3.3063179999999996))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(6)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(120)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(12.643358, 3.3063179999999996))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(11)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(60))
       };
@@ -70,29 +106,73 @@ public class FieldConstants {
   public static final Pose2d[] reefPositionsBlue =
       new Pose2d[] {
         new Pose2d(
-            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(5.321046, 4.0259)).get(),
+            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(5.321046, 4.0259))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(21)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
             Rotation2d.fromDegrees(180)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(4.904739999999999, 3.3063179999999996))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(22)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(480)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(4.073905999999999, 3.3063179999999996))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(17)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(420)),
         new Pose2d(
-            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(3.6576, 4.0259)).get(),
+            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(3.6576, 4.0259))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(18)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
             Rotation2d.fromDegrees(360)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(4.073905999999999, 4.745482))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(19)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(300)),
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(4.904739999999999, 4.745482))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(20)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(240)),
       };
@@ -117,17 +197,53 @@ public class FieldConstants {
   public static final Pose2d[] coralStationPosBlue =
       new Pose2d[] {
         new Pose2d(
-            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(0.851154, 0.65532)).get(),
+            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(0.851154, 0.65532))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(12)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
             Rotation2d.fromDegrees(54)), // 12
         new Pose2d(
             new AprilTagPositionSwitcher<Translation2d>(
                     new Translation2d(0.851154, 7.3964799999999995))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(13)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
                 .get(),
             Rotation2d.fromDegrees(306)) // 13
       };
   public static final Pose2d[] coralStationPosRed =
       new Pose2d[] {
-        new Pose2d(16.697198, 0.65532, Rotation2d.fromDegrees(126)), // 1
-        new Pose2d(16.697198, 7.3964799999999995, Rotation2d.fromDegrees(234)) // 2
+        new Pose2d(
+            new AprilTagPositionSwitcher<Translation2d>(new Translation2d(16.697198, 0.65532))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(1)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
+            Rotation2d.fromDegrees(126)), // 1
+        new Pose2d(
+            new AprilTagPositionSwitcher<Translation2d>(
+                    new Translation2d(16.697198, 7.3964799999999995))
+                .addValue(
+                    AprilTagSetting.WPILib,
+                    AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+                        .getTagPose(2)
+                        .get()
+                        .getTranslation()
+                        .toTranslation2d())
+                .get(),
+            Rotation2d.fromDegrees(234)) // 2
       };
 }

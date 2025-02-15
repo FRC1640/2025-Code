@@ -60,7 +60,7 @@ public class RobotConstants {
             .addValue(RobotType.Deux24, false)
             .get();
     public static final boolean algaeIntakeEnabled =
-        new RobotSwitch<Boolean>(false).addValue(RobotType.Sim, true).get();
+        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true)

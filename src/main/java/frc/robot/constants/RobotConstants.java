@@ -25,8 +25,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = Units.inchesToMeters(30);
-    public static final double robotLength = Units.inchesToMeters(30);
+    public static final double robotWidth = 0.927;
+    public static final double robotLength = 0.927;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -290,7 +290,7 @@ public class RobotConstants {
   }
 
   public static class GantryConstants {
-    public static final int gantrySparkID = new RobotSwitch<Integer>(12).get();
+    public static final int gantrySparkID = new RobotSwitch<Integer>(17).get();
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
@@ -305,7 +305,7 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
     // if you dont update this i will find you // *gulp* // You understand what happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(17).get(); // update this too
+        new RobotSwitch<Integer>(18).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }
@@ -318,6 +318,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 10;
+    public static double currentThresh = 10000;
   }
 }

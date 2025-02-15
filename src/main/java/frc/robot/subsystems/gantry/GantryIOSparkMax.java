@@ -55,8 +55,7 @@ public class GantryIOSparkMax implements GantryIO {
   }
 
   public void setGantryVoltage(
-      double voltage,
-      GantryIOInputs inputs) { // right limit is boolean condition for limitswitch
+      double voltage, GantryIOInputs inputs) { // right limit is boolean condition for limitswitch
     gantrySpark.setVoltage(
         MotorLim.applyLimits(
             inputs.encoderPosition,

@@ -56,8 +56,9 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public boolean algaeCurrentHit() {
-    return inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
-        || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh;
+    return (inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
+            || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh)
+        || io.hasSimAlgae();
   }
 
   public boolean hasAlgae() {

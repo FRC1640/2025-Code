@@ -49,7 +49,7 @@ public class GantryCommandFactory {
                 //         .repeatedly()
                 //         .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
                 .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder())))
-                .finallyDo(() -> gantrySubsystem.homedLimit());
+        .finallyDo(() -> gantrySubsystem.homedLimit());
   }
   // I dont think the limit switch as the bound is a good idea because then the gantry will be
   // slamming into the limit switch all the time. -> Bad for the limit switch. So I think we

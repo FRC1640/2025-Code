@@ -189,7 +189,9 @@ public class RobotContainer {
                     : new ClimberIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+                RobotConfigConstants.algaeIntakeEnabled
+                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

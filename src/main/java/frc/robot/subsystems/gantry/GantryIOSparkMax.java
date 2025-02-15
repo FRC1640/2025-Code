@@ -79,7 +79,7 @@ public class GantryIOSparkMax implements GantryIO {
 
   @Override
   public void resetEncoder() {
-    gantryEncoder.setPosition(0);
+    gantryEncoder.setPosition(GantryConstants.gantryLimits.low);
   }
 
   @Override

@@ -442,10 +442,12 @@ public class RobotContainer {
     return new InstantCommand(
             () -> {
               presetActive = coralPreset.get();
-              liftSubsystem.setDefaultCommand(
-                  liftCommandFactory.runLiftMotionProfile(
-                      () -> algaeMode ? presetActive.getLift() : presetActive.getLiftAlgae()));
             })
+        .andThen(
+            liftCommandFactory
+                .runLiftMotionProfile(
+                    () -> algaeMode ? presetActive.getLift() : presetActive.getLiftAlgae())
+                .repeatedly())
         .alongWith(
             autoScoringCommandFactory.gantryAlignCommand(
                 () -> presetActive, () -> AllianceManager.onDsSideReef(() -> getTarget())));
@@ -462,10 +464,9 @@ public class RobotContainer {
   }
 
   public Command runLiftToSafe() {
-    return new InstantCommand(
-            () ->
-                liftSubsystem.setDefaultCommand(
-                    liftCommandFactory.runLiftMotionProfile(() -> CoralPreset.Safe.getLift())))
+    return liftCommandFactory
+        .runLiftMotionProfile(() -> CoralPreset.Safe.getLift())
+        .repeatedly()
         .alongWith(
             gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
   }

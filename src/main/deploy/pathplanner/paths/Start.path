@@ -49,8 +49,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "LeftL4Coral",
-      "waypointRelativePos": 1.131958762886592,
+      "name": "ihjowhtowih",
+      "waypointRelativePos": 0.17938144329896516,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "logtest"
+        }
+      }
+    },
+    {
+      "name": "L4LeftCoral",
+      "waypointRelativePos": 0.9958762886597843,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

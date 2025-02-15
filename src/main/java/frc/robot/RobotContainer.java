@@ -78,6 +78,7 @@ import frc.robot.util.tools.DistanceManager;
 import frc.robot.util.tools.logging.LogRunner;
 import java.util.ArrayList;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
@@ -488,6 +489,10 @@ public class RobotContainer {
         new InstantCommand(
                 () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4)
             .andThen(setupAutoPlace(() -> coralPreset)));
+
+    NamedCommands.registerCommand(
+        "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
+
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(

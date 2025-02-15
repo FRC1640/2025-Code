@@ -42,7 +42,8 @@ public class ClimberIOSparkMax implements ClimberIO {
   public void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {
     liftSpark.setVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.liftMotorPosition, voltage, ClimberConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.elevatorMotorPosition, voltage, ClimberConstants.liftLimits)));
   }
   /*
    * Sets the position of the lift motor using a PID
@@ -50,7 +51,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   @Override
   public void setClimberLiftPosition(double position, ClimberIOInputs inputs) {
     setClimberLiftVoltage(
-        MotorLim.clampVoltage(liftPID.calculate(inputs.liftMotorPosition, position)), inputs);
+        MotorLim.clampVoltage(liftPID.calculate(inputs.elevatorMotorPosition, position)), inputs);
   }
 
   @Override
@@ -64,10 +65,10 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.liftMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
-    inputs.liftMotorCurrent = liftSpark.getOutputCurrent();
-    inputs.liftMotorVoltage = liftSpark.getAppliedOutput();
-    inputs.liftMotorTemperature = liftSpark.getMotorTemperature();
+    inputs.elevatorMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
+    inputs.elevatorMotorCurrent = liftSpark.getOutputCurrent();
+    inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
+    inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();
 
     inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
     inputs.sensor1 = !sensor1Input.get();

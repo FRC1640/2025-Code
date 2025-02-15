@@ -255,10 +255,17 @@ public class RobotContainer {
                 () -> CoralOuttakeConstants.passiveSpeed * 12));
 
     // climber button bindings:
-    operatorController.povDown().onTrue(climberRoutines.initiatePart1());
-    operatorController.povUp().onTrue(climberRoutines.initiatePart2());
-    operatorController.povRight().onTrue(climberRoutines.manualOverride());
-    operatorController.povLeft().onTrue(climberRoutines.resetClimber());
+    operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
+    operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
+    operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
+
+    // for initial testing
+    /*
+    operatorController.y().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 8));
+    operatorController.a().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -8));
+    operatorController.b().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 8));
+    operatorController.x().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> -8));
+     */
   }
 
   public Command getAutonomousCommand() {

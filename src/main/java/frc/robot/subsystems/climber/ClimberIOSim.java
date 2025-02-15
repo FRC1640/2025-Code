@@ -37,13 +37,14 @@ public class ClimberIOSim implements ClimberIO {
   public void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {
     liftSim.setInputVoltage(
         MotorLim.clampVoltage(
-            MotorLim.applyLimits(inputs.liftMotorPosition, voltage, ClimberConstants.liftLimits)));
+            MotorLim.applyLimits(
+                inputs.elevatorMotorPosition, voltage, ClimberConstants.liftLimits)));
   }
 
   @Override
   public void setClimberLiftPosition(double position, ClimberIOInputs inputs) {
     setClimberLiftVoltage(
-        MotorLim.clampVoltage(liftPID.calculate(inputs.liftMotorPosition, position)), inputs);
+        MotorLim.clampVoltage(liftPID.calculate(inputs.elevatorMotorPosition, position)), inputs);
   }
 
   @Override
@@ -58,10 +59,10 @@ public class ClimberIOSim implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     liftSim.update(.02);
-    inputs.liftMotorPosition = liftSim.getAngularPositionRotations();
-    inputs.liftMotorVelocity = liftSim.getAngularVelocityRadPerSec();
-    inputs.liftMotorCurrent = liftSim.getCurrentDrawAmps();
-    inputs.liftMotorVoltage = liftSim.getInputVoltage();
+    inputs.elevatorMotorPosition = liftSim.getAngularPositionRotations();
+    inputs.elevatorMotorVelocity = liftSim.getAngularVelocityRadPerSec();
+    inputs.elevatorMotorCurrent = liftSim.getCurrentDrawAmps();
+    inputs.elevatorMotorVoltage = liftSim.getInputVoltage();
 
     inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
     inputs.sensor1 = !sensor1Sim.get();

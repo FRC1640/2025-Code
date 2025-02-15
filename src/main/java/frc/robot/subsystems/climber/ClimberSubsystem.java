@@ -19,23 +19,23 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public double getLiftMotorPosition() {
-    return inputs.liftMotorPosition;
+    return inputs.elevatorMotorPosition;
   }
 
   public double getLiftMotorVelocity() {
-    return inputs.liftMotorVelocity;
+    return inputs.elevatorMotorVelocity;
   }
 
   public double getLiftMotorCurrent() {
-    return inputs.liftMotorCurrent;
+    return inputs.elevatorMotorCurrent;
   }
 
   public double getLiftMotorVoltage() {
-    return inputs.liftMotorVoltage;
+    return inputs.elevatorMotorVoltage;
   }
 
   public double getLiftTemperature() {
-    return inputs.liftMotorTemperature;
+    return inputs.elevatorMotorTemperature;
   }
 
   public boolean getSensor1() {
@@ -46,11 +46,11 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.sensor2;
   }
 
-  public void setClimberLiftPosition(double pos) {
+  public void setClimberElevatorPosition(double pos) {
     climberIO.setClimberLiftPosition(pos, inputs);
   }
 
-  public void setClimberLiftVoltage(double voltage) {
+  public void setClimberElevatorVoltage(double voltage) {
     climberIO.setClimberLiftVoltage(voltage, inputs);
   }
 

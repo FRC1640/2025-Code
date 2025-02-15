@@ -45,10 +45,6 @@ public class ClimberRoutines {
               withinTolerance(
                   winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.high);
 
-  public boolean manualOverride;
-  // when manualOverride
-  // able to cancel manualOverride by activating an autoRoutine
-
   public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
     this.climberCommandFactory = climberCommandFactory;
     climberSubsystem = climberCommandFactory.climberSubsystem;
@@ -71,7 +67,6 @@ public class ClimberRoutines {
    * @return
    */
   public Command initiatePart0() {
-    manualOverride = false;
     // TODO implement
     return new InstantCommand();
   }
@@ -82,10 +77,9 @@ public class ClimberRoutines {
    * @return
    */
   public Command initiatePart1() {
-    manualOverride = false;
     return initiatePart0()
         .andThen(lowerLift().alongWith(unwindArm()))
-        .andThen(climberCommandFactory.climberSetClampState(() -> false));
+        .andThen(climberCommandFactory.setClampState(() -> false));
   }
 
   /**
@@ -94,9 +88,8 @@ public class ClimberRoutines {
    * @return
    */
   public Command initiatePart2() {
-    manualOverride = false;
     return Commands.sequence(
-            climberCommandFactory.climberSetClampState(() -> true),
+            climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
             windArm())
         .onlyIf(() -> liftIsLow.getAsBoolean() && winchIsVertical.getAsBoolean());
@@ -109,23 +102,7 @@ public class ClimberRoutines {
    * @return
    */
   public Command resetClimber() {
-    manualOverride = false;
     return initiatePart1().andThen(raiseLift().alongWith(resetArm()));
-  }
-
-  /**
-   * Stops all current climber auto routines
-   *
-   * @return
-   */
-  public Command StopRoutine() {
-    return climberCommandFactory
-        .climberLiftApplyVoltageCommand(() -> 0)
-        .andThen(climberCommandFactory.climberWinchApplyVoltageCommand(() -> 0));
-  }
-
-  public Command manualOverride() {
-    return StopRoutine().andThen(() -> manualOverride = true);
   }
 
   /**
@@ -135,7 +112,7 @@ public class ClimberRoutines {
    */
   public Command lowerLift() {
     return climberCommandFactory
-        .climberSetLiftPosPID(() -> ClimberConstants.liftLimits.low)
+        .setElevatorPosPID(() -> ClimberConstants.liftLimits.low)
         .repeatedly()
         .until(liftIsLow);
   }
@@ -147,7 +124,7 @@ public class ClimberRoutines {
    */
   public Command raiseLift() {
     return climberCommandFactory
-        .climberSetLiftPosPID(() -> ClimberConstants.liftLimits.high)
+        .setElevatorPosPID(() -> ClimberConstants.liftLimits.high)
         .repeatedly()
         .until(liftIsHigh);
   }
@@ -159,7 +136,7 @@ public class ClimberRoutines {
    */
   public Command unwindArm() {
     return climberCommandFactory
-        .climberSetWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
+        .setWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
         .repeatedly()
         .until(winchIsVertical);
   }
@@ -171,7 +148,7 @@ public class ClimberRoutines {
    */
   public Command resetArm() {
     return climberCommandFactory
-        .climberSetWinchPosPID(() -> ClimberConstants.winchLimits.high)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
         .repeatedly()
         .until(winchIsHigh);
   }
@@ -183,7 +160,7 @@ public class ClimberRoutines {
    */
   public Command windArm() {
     return climberCommandFactory
-        .climberSetWinchPosPID(() -> ClimberConstants.winchLimits.low)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
         .repeatedly()
         .until(winchIsLow);
   }

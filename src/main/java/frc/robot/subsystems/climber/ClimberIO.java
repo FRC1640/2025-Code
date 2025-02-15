@@ -5,11 +5,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimberIO extends AutoCloseable {
   @AutoLog
   public static class ClimberIOInputs {
-    public double liftMotorPosition = 0.0;
-    public double liftMotorVelocity = 0.0;
-    public double liftMotorCurrent = 0.0;
-    public double liftMotorVoltage = 0.0;
-    public double liftMotorTemperature = 0.0;
+    public double elevatorMotorPosition = 0.0;
+    public double elevatorMotorVelocity = 0.0;
+    public double elevatorMotorCurrent = 0.0;
+    public double elevatorMotorVoltage = 0.0;
+    public double elevatorMotorTemperature = 0.0;
 
     public boolean solenoidForward = false;
     public boolean sensor1 = false;

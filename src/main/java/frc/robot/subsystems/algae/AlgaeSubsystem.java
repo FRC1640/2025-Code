@@ -8,6 +8,8 @@ public class AlgaeSubsystem extends SubsystemBase {
   private AlgaeIO io;
   private AlgaeIOInputsAutoLogged inputs = new AlgaeIOInputsAutoLogged();
   private boolean hasAlgae = false;
+  private double releaseTime = 0.0;
+  private double lastTime = 0.0;
 
   public AlgaeSubsystem(AlgaeIO io) {
     this.io = io;
@@ -17,6 +19,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Algae", inputs);
+    lastTime = System.currentTimeMillis();
   }
 
   public double getIntakeMotorLeftVoltage() {
@@ -65,7 +68,13 @@ public class AlgaeSubsystem extends SubsystemBase {
     if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
-      hasAlgae = false;
+      releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
+      if (releaseTime > 0.3) {
+        hasAlgae = false;
+        releaseTime = 0;
+      }
+    } else {
+      releaseTime = 0;
     }
     return hasAlgae;
   }

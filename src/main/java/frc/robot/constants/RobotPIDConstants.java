@@ -1,12 +1,16 @@
 package frc.robot.constants;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
+import frc.robot.util.spark.SparkPIDConstants;
 import frc.robot.util.tools.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.tools.logging.TrackedFeedForward.FeedForwardTrack;
 import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
@@ -77,6 +81,13 @@ public class RobotPIDConstants {
     return k;
   }
 
+  public static final MAXMotionConfig constructMaxMotionPos(PIDConstants constant) {
+    MAXMotionConfig config = new MAXMotionConfig();
+
+    config.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal);
+    return config;
+  }
+
   public static final PIDConstants drivePID = new PIDConstants(0.1546, 0.0, 0);
   public static final FeedForwardConstants driveFF =
       new FeedForwardConstants(0.21607, 2.6, 0.21035);
@@ -88,11 +99,15 @@ public class RobotPIDConstants {
   public static final PIDConstants linearDrivePIDProfiled = new PIDConstants(0.1, 0, 0);
 
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
+  public static final PIDConstants angleFollowPath = new PIDConstants(0.375, 0, 0.000);
 
   public static final PIDConstants gantryPID = new PIDConstants(50, 0, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants = new PIDConstants(27.25, 0.010569);
   public static final FeedForwardConstants liftFF = new FeedForwardConstants(0, 26.04, 0.0101, 0);
+
+  public static final SparkPIDConstants pidConstantSpark =
+      new SparkPIDConstants(0, 0, 0, -10, 10, ClosedLoopSlot.kSlot0);
   public static final FeedForwardConstants gantryFF =
       new FeedForwardConstants(0.19249, 20.698, 1.1805);
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1.4935);

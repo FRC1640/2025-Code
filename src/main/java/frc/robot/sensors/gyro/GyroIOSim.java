@@ -24,6 +24,9 @@ public class GyroIOSim implements GyroIO {
 
     inputs.odometryYawTimestamps = new double[] {Timer.getFPGATimestamp()};
     inputs.odometryYawPositions = new Rotation2d[] {Rotation2d.fromRadians(inputs.angleRadiansRaw)};
+
+    inputs.pitch = new Rotation2d(0);
+    inputs.roll = new Rotation2d(0);
   }
 
   @Override

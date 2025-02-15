@@ -1,10 +1,7 @@
 package frc.robot.util.sysid;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.Consumer;
@@ -32,15 +29,10 @@ public class SimpleMotorSysidRoutine {
     return new SysIdRoutine(
         config,
         new SysIdRoutine.Mechanism(
-            (Voltage volts) -> {
-              setVoltage.accept(volts.in(Volts));
+            (voltage) -> {
+              setVoltage.accept(voltage.in(Volts));
             },
-            log -> {
-              log.motor("Motor")
-                  .voltage(Volts.of(getVoltage.get()))
-                  .linearPosition(Meters.of(getPositionMeters.get()))
-                  .linearVelocity(MetersPerSecond.of(getVelocityMetersPerSecond.get()));
-            },
+            null,
             subsystem));
   }
 }

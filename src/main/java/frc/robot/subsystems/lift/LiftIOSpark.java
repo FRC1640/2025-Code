@@ -132,12 +132,7 @@ public class LiftIOSpark implements LiftIO {
   }
 
   @Override
-  public void homedLimit() {
-    limits = true;
-  }
-
-  @Override
-  public void disableLimit() {
-    limits = false;
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

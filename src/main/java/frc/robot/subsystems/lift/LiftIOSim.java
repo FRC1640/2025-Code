@@ -53,15 +53,15 @@ public class LiftIOSim implements LiftIO {
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
+                limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
     motor2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.followerMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
-                limits ? LiftConstants.liftLimits.high : 99999)));
+                limits ? LiftConstants.liftLimits.low : -99999,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -120,12 +120,7 @@ public class LiftIOSim implements LiftIO {
   }
 
   @Override
-  public void homedLimit() {
-    limits = true;
-  }
-
-  @Override
-  public void disableLimit() {
-    limits = false;
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

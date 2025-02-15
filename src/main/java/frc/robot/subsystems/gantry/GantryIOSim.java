@@ -66,13 +66,8 @@ public class GantryIOSim implements GantryIO {
   }
 
   @Override
-  public void homedLimit() {
-    limits = true;
-  }
-
-  @Override
-  public void disableLimit() {
-    limits = false;
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 
   @Override

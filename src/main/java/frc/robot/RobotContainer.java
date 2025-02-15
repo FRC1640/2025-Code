@@ -267,6 +267,9 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+
     generateNamedCommands();
     configureBindings();
   }
@@ -397,7 +400,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
-    new Trigger(() -> presetBoard.getTroph())
+    new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
     operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
@@ -429,10 +432,6 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
-    /* new Trigger(() -> Math.abs(operatorController.getRightY()) > 0)
-        .whileTrue(
-            liftCommandFactory.liftApplyVoltageCommand(
-                () -> -4 * operatorController.getRightY())); */
   }
 
   public Command getAutonomousCommand() {

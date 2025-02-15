@@ -125,11 +125,7 @@ public class LiftSubsystem extends SubsystemBase {
     return inputs.isLimitSwitchPressed;
   }
 
-  public void homedLimit() {
-    io.homedLimit();
-  }
-
-  public void disableLimit() {
-    io.disableLimit();
+  public void setLimitEnabled(boolean enable) {
+    io.setLimitEnabled(enable);
   }
 }

@@ -387,12 +387,7 @@ public class RobotContainer {
     // lift/gantry manual controls
     operatorController.a().onTrue(setupAutoPlace(coralPreset));
 
-    new Trigger(
-            () ->
-                (!coralOuttakeSubsystem.isCoralDetected()
-                    || (algaeIntakeSubsystem.hasAlgae()
-                        && !coralOuttakeSubsystem.isCoralDetected())))
-        .onTrue(runLiftToSafe());
+    new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());
     operatorController
         .b()
         .onTrue(

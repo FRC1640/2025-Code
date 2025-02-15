@@ -45,10 +45,13 @@ public class RobotConstants {
             .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
   }
 
-  public class RobotConfigConstants {
-    public static final AprilTagSetting fieldPositionPositions = AprilTagSetting.Hardcoded;
-    public static final RobotType robotType = RobotType.Sim;
+  public class AprilTagPositionSettings {
+    public static final AprilTagSetting fieldPositionType = AprilTagSetting.Hardcoded;
+    public static final String WPICalOutputJson = "PLACEHOLDER.json";
+  }
 
+  public class RobotConfigConstants {
+    public static final RobotType robotType = RobotType.Sim;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)

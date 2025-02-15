@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher;
 import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
+import frc.robot.util.tools.WPICal.WPICALPosManager;
 import org.photonvision.simulation.VisionSystemSim;
 
 public class FieldConstants {
@@ -38,10 +39,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
-                // TODO do
-
-                // .addValue(
-                //     AprilTagSetting.WPICal
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(10))
                 .get(),
             Rotation2d.fromDegrees(360)),
         new Pose2d(
@@ -53,6 +51,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(9))
                 .get(),
             Rotation2d.fromDegrees(300)),
         new Pose2d(
@@ -64,6 +63,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(8))
                 .get(),
             Rotation2d.fromDegrees(240)),
         new Pose2d(
@@ -75,6 +75,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(7))
                 .get(),
             Rotation2d.fromDegrees(180)),
         new Pose2d(
@@ -87,6 +88,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(6))
                 .get(),
             Rotation2d.fromDegrees(120)),
         new Pose2d(
@@ -99,6 +101,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(11))
                 .get(),
             Rotation2d.fromDegrees(60))
       };
@@ -114,6 +117,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(21))
                 .get(),
             Rotation2d.fromDegrees(180)),
         new Pose2d(
@@ -126,6 +130,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(22))
                 .get(),
             Rotation2d.fromDegrees(480)),
         new Pose2d(
@@ -138,6 +143,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(17))
                 .get(),
             Rotation2d.fromDegrees(420)),
         new Pose2d(
@@ -149,6 +155,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(18))
                 .get(),
             Rotation2d.fromDegrees(360)),
         new Pose2d(
@@ -161,6 +168,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(19))
                 .get(),
             Rotation2d.fromDegrees(300)),
         new Pose2d(
@@ -173,6 +181,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(20))
                 .get(),
             Rotation2d.fromDegrees(240)),
       };
@@ -205,6 +214,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(12))
                 .get(),
             Rotation2d.fromDegrees(54)), // 12
         new Pose2d(
@@ -217,6 +227,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(13))
                 .get(),
             Rotation2d.fromDegrees(306)) // 13
       };
@@ -231,6 +242,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(1))
                 .get(),
             Rotation2d.fromDegrees(126)), // 1
         new Pose2d(
@@ -243,6 +255,7 @@ public class FieldConstants {
                         .get()
                         .getTranslation()
                         .toTranslation2d())
+                .addValue(AprilTagSetting.WPICal, WPICALPosManager.getPositionID(2))
                 .get(),
             Rotation2d.fromDegrees(234)) // 2
       };

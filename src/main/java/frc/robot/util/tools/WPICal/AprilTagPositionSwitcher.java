@@ -1,6 +1,6 @@
 package frc.robot.util.tools.WPICal;
 
-import frc.robot.constants.RobotConstants.RobotConfigConstants;
+import frc.robot.constants.RobotConstants.AprilTagPositionSettings;
 import java.util.HashMap;
 
 public class AprilTagPositionSwitcher<T> {
@@ -23,8 +23,8 @@ public class AprilTagPositionSwitcher<T> {
   }
 
   public T get() {
-    if (aprilTagSettingHash.containsKey(RobotConfigConstants.fieldPositionPositions)) {
-      return aprilTagSettingHash.get(RobotConfigConstants.fieldPositionPositions);
+    if (aprilTagSettingHash.containsKey(AprilTagPositionSettings.fieldPositionType)) {
+      return aprilTagSettingHash.get(AprilTagPositionSettings.fieldPositionType);
     } else {
       return defaultValue;
     }

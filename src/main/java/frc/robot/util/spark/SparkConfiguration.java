@@ -1,6 +1,5 @@
 package frc.robot.util.spark;
 
-import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
@@ -20,7 +19,7 @@ public class SparkConfiguration {
   private int encoderMeasurementPeriod;
   private int encoderAverageDepth;
   private StatusFrames statusFrames;
-  private PIDConstants pid;
+  private SparkPIDConstants pid;
   private LimitSwitchConfig limitSwitch;
   private SparkBaseConfig inner;
 
@@ -52,7 +51,7 @@ public class SparkConfiguration {
     return statusFrames;
   }
 
-  public Optional<PIDConstants> getPID() {
+  public Optional<SparkPIDConstants> getPID() {
     return Optional.ofNullable(pid);
   }
 
@@ -69,6 +68,7 @@ public class SparkConfiguration {
   }
 
   public SparkConfiguration applyPIDConfig(SparkPIDConstants sparkPIDConstant) {
+    pid = sparkPIDConstant;
     String loggerName = "Spark-" + id + "-" + sparkPIDConstant.closedLoopSlot.toString();
     if (sparkPIDConstant.alias != null) {
       loggerName = sparkPIDConstant.alias;
@@ -147,7 +147,6 @@ public class SparkConfiguration {
 
       inner.analogSensor.velocityConversionFactor(sparkPIDConstant.velocityConversionFactor);
     }
-
     return this;
   }
 
@@ -197,29 +196,6 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
-      PIDConstants pid,
-      SparkMaxConfig seed) {
-    this(
-        id,
-        idleMode,
-        inverted,
-        currentLimit,
-        encoderMeasurementPeriod,
-        encoderAverageDepth,
-        statusFrames,
-        pid,
-        null,
-        seed);
-  }
-
-  public SparkConfiguration(
-      int id,
-      IdleMode idleMode,
-      boolean inverted,
-      int currentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames,
       LimitSwitchConfig limitSwitchConfig,
       SparkMaxConfig seed) {
     this(
@@ -243,7 +219,7 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
-      PIDConstants pid,
+      SparkPIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkMaxConfig seed) {
     encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
@@ -303,29 +279,6 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
-      PIDConstants pid,
-      SparkFlexConfig seed) {
-    this(
-        id,
-        idleMode,
-        inverted,
-        currentLimit,
-        encoderMeasurementPeriod,
-        encoderAverageDepth,
-        statusFrames,
-        pid,
-        null,
-        seed);
-  }
-
-  public SparkConfiguration(
-      int id,
-      IdleMode idleMode,
-      boolean inverted,
-      int currentLimit,
-      int encoderMeasurementPeriod,
-      int encoderAverageDepth,
-      StatusFrames statusFrames,
       LimitSwitchConfig limitSwitchConfig,
       SparkFlexConfig seed) {
     this(
@@ -349,7 +302,7 @@ public class SparkConfiguration {
       int encoderMeasurementPeriod,
       int encoderAverageDepth,
       StatusFrames statusFrames,
-      PIDConstants pid,
+      SparkPIDConstants pid,
       LimitSwitchConfig limitSwitch,
       SparkFlexConfig seed) {
     encoderMeasurementPeriod /= 2; // seems like this is doubled somehow

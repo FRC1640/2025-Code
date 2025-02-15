@@ -20,7 +20,7 @@ public class SparkPIDConstants {
   public String alias;
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change in error
    * @param closedLoopSlot
    */
@@ -40,7 +40,7 @@ public class SparkPIDConstants {
   }
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change in error
    * @param positionConversionFactor conversion factor for the Position
    * @param closedLoopSlot
@@ -63,7 +63,7 @@ public class SparkPIDConstants {
   }
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change in error
    * @param positionConversionFactor conversion factor for the Position
    * @param velocityConversionFactor conversion factor for the Velocity
@@ -89,7 +89,7 @@ public class SparkPIDConstants {
   }
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change error
    * @param minOutput Minimum output of PID
    * @param maxOutput Maximum output of PID
@@ -125,7 +125,7 @@ public class SparkPIDConstants {
   }
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change in error
    * @param minOutput Minimum output of PID
    * @param maxOutput Maximum output of PID
@@ -151,7 +151,7 @@ public class SparkPIDConstants {
 
   /**
    * @param kP Proportional Gain
-   * @param kI Derivative
+   * @param kI Integral
    * @param kD The rate of change in error
    * @param minOutput Minimum output of PID
    * @param maxOutput Maximum output of PID

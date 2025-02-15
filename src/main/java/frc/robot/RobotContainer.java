@@ -390,13 +390,7 @@ public class RobotContainer {
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());
-    operatorController
-        .b()
-        .onTrue(
-            new InstantCommand(
-                () ->
-                    liftSubsystem.setDefaultCommand(
-                        liftCommandFactory.liftApplyVoltageCommand(() -> 0))));
+    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 
     driveController

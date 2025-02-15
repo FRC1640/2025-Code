@@ -190,7 +190,7 @@ public class RobotConstants {
       RightL3(1, GantrySetpoint.RIGHT),
       LeftL4(1.5, GantrySetpoint.LEFT),
       RightL4(1.5, GantrySetpoint.RIGHT),
-      Troph(0, GantrySetpoint.RIGHT);
+      Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
@@ -244,6 +244,10 @@ public class RobotConstants {
           default:
             return GantrySetpoint.CENTER;
         }
+      }
+
+      public boolean isRight() {
+        return gantrySetpoint == GantrySetpoint.RIGHT;
       }
     }
   }

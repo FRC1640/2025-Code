@@ -19,6 +19,7 @@ import frc.robot.util.logger.MotorLoggingManager;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -45,6 +46,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
+    public static final AprilTagSetting fieldPositionPositions = AprilTagSetting.Hardcoded;
     public static final RobotType robotType = RobotType.Sim;
 
     // subsystems

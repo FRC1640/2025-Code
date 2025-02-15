@@ -429,6 +429,10 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
+    /* new Trigger(() -> Math.abs(operatorController.getRightY()) > 0)
+        .whileTrue(
+            liftCommandFactory.liftApplyVoltageCommand(
+                () -> -4 * operatorController.getRightY())); */
   }
 
   public Command getAutonomousCommand() {

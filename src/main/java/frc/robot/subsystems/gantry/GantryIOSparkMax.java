@@ -28,7 +28,7 @@ public class GantryIOSparkMax implements GantryIO {
   public GantryIOSparkMax() {
     gantrySpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID)
+            SparkConstants.getGantryDefaultMax(GantryConstants.gantrySparkID)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     gantryEncoder = gantrySpark.getEncoder();
     gantryLimitSwitch = gantrySpark.getForwardLimitSwitch();

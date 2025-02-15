@@ -33,11 +33,11 @@ public class LiftIOSpark implements LiftIO {
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false)
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftLeaderMotorID)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftFollowerMotorID, false), leaderMotor);
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftFollowerMotorID), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
   }

@@ -33,15 +33,15 @@ public class GantryCommandFactory {
   public Command gantryHomeCommand() {
     return new InstantCommand(() -> gantrySubsystem.disableLimit())
         .andThen(
-            gantryApplyVoltageCommand(() -> 2)
+            gantryApplyVoltageCommand(() -> -2)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed())
                 .andThen(
-                    gantryApplyVoltageCommand(() -> -1)
+                    gantryApplyVoltageCommand(() -> 1)
                         .repeatedly()
                         .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
                 .andThen(
-                    gantryApplyVoltageCommand(() -> 0.5)
+                    gantryApplyVoltageCommand(() -> -0.5)
                         .repeatedly()
                         .until(() -> gantrySubsystem.isLimitSwitchPressed()))
                 // .andThen(

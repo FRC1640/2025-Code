@@ -29,7 +29,6 @@ public class Dashboard {
   private GantrySubsystem gantrySubsystem;
   private static String lastPID = "";
   public static String lastPIDName = "";
-  public static ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
 
   public Dashboard(
       DriveSubsystem driveSubsystem,
@@ -53,6 +52,8 @@ public class Dashboard {
   }
 
   public void pidInit() {
+    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
+
     PIDTrack.pidsTrack.put("zEmpty", new PIDController(-1, -1, -1));
     pidChooser.setDefaultOption("no PID Selected", "zEmpty");
     for (String name : PIDTrack.pidsTrack.keySet()) {
@@ -61,20 +62,20 @@ public class Dashboard {
 
     pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 0);
     ShuffleboardComponent kPtab =
-        Dashboard.pidTab
+        pidTab
             .addDouble("kP", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getP())
             .withSize(1, 1)
             .withPosition(3, 0);
     ShuffleboardComponent kItab =
-        Dashboard.pidTab
+        pidTab
             .addDouble("kI", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getI())
             .withSize(1, 1)
             .withPosition(4, 0);
-    ShuffleboardComponent kPTab =
-            Dashboard.pidTab
-                .addDouble("kP", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getP())
-                .withSize(1, 1)
-                .withPosition(5, 0); 
+    ShuffleboardComponent kDTab =
+        pidTab
+            .addDouble("kD", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getD())
+            .withSize(1, 1)
+            .withPosition(5, 0);
   }
 
   public Command getAutoChooserCommand() {
@@ -125,17 +126,5 @@ public class Dashboard {
 
   public static String getSelectedPID() {
     return pidChooser.getSelected();
-  }
-
-  public static boolean isDifferentTab() {
-    if (pidChooser.getSelected() == lastPID) {
-      lastPID = pidChooser.getSelected();
-
-      return false;
-    } else {
-      lastPID = pidChooser.getSelected();
-
-      return true;
-    }
   }
 }

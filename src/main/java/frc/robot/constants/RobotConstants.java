@@ -46,7 +46,7 @@ public class RobotConstants {
   }
 
   public class AprilTagPositionSettings {
-    public static final AprilTagSetting fieldPositionType = AprilTagSetting.WPICal;
+    public static final AprilTagSetting fieldPositionType = AprilTagSetting.WPILibWelded;
     public static final String WPICalOutputJson = "ImportedLayout.json";
   }
 

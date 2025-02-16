@@ -453,7 +453,7 @@ public class RobotContainer {
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
-    operatorController.povRight().onTrue(climberCommandFactory.liftHomeCommand());
+    operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
 
     // for initial testing
 

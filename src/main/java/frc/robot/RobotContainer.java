@@ -104,7 +104,7 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard testBoard = new PresetBoard(4);
+  private final PresetBoard motorBoard = new PresetBoard(5);
 
   private final AlertsManager alertsManager;
 
@@ -460,14 +460,18 @@ public class RobotContainer {
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
-    new Trigger(() -> testBoard.getLl2())
+    new Trigger(() -> motorBoard.getLl2())
         .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
-    new Trigger(() -> testBoard.getLl3())
+    new Trigger(() -> motorBoard.getLl3())
         .onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
-    new Trigger(() -> testBoard.getLl4())
+    new Trigger(() -> motorBoard.getLl4())
         .onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
-    new Trigger(() -> testBoard.getRl4())
+    new Trigger(() -> motorBoard.getRl4())
         .onTrue(algaeCommandFactory.setMotorVoltages(() -> 1, () -> 1));
+    new Trigger(() -> motorBoard.getRl3())
+        .onTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getRl2())
+        .onTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
 
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());

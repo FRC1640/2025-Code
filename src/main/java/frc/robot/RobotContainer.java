@@ -258,9 +258,6 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
-    DriveWeightCommand.addPersistentWeight(
-        new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
-    
     followPathNearest =
     new FollowPathNearest(
         gyro,
@@ -272,6 +269,9 @@ public class RobotContainer {
                     x, RobotDimensions.robotLength / 2, x.getRotation()),
                 () -> coralPreset),
         driveSubsystem);
+
+    DriveWeightCommand.addPersistentWeight(
+        new PathplannerWeight(gyro, () -> getAutoVisionProcess()));
 
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
@@ -432,10 +432,11 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
-    // vision swap
-    new Trigger(() -> followPathNearest.seesTarget() && followPathNearest.nearTarget())
-        .onTrue(new InstantCommand(() -> PathplannerWeight.setPoseSupplier(
-            () -> RobotOdometry.instance.getPose("MainTrig")))); // TODO odometry
+  }
+
+  public Pose2d getAutoVisionProcess() {
+    String odometry = followPathNearest.seesTarget() && followPathNearest.isNearSetpoint() ? "MainTrig" : "Main"; // TODO odometry
+    return RobotOdometry.instance.getPose(odometry);
   }
 
   public Command getAutonomousCommand() {

@@ -92,13 +92,7 @@ public class FollowPathNearest extends FollowPath {
     Pose2d target = findNearest(positions.get());
     // Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
     boolean sees = (sightline.apply(target.getX()) - target.getY()) < 0.6; // TODO
-    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && nearTarget());
+    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && isNearSetpoint());
     return sees;
-  }
-
-  public boolean nearTarget() {
-    Pose2d robot = robotPose.get();
-    Pose2d target = findNearest(positions.get());
-    return Math.abs(robot.minus(target).getTranslation().getNorm()) < 1.5;
   }
 }

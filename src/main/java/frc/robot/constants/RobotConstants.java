@@ -19,6 +19,7 @@ import frc.robot.util.logger.MotorLoggingManager;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -44,9 +45,13 @@ public class RobotConstants {
             .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
   }
 
+  public class AprilTagPositionSettings {
+    public static final AprilTagSetting fieldPositionType = AprilTagSetting.WPILibWelded;
+    public static final String WPICalOutputJson = "ImportedLayout.json";
+  }
+
   public class RobotConfigConstants {
     public static final RobotType robotType = RobotType.Sim;
-
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)

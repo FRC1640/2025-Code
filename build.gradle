@@ -52,6 +52,7 @@ deploy {
                     // longer exist in deploy directory on roboRIO
                     deleteOldFiles = false
                 }
+
             }
         }
     }

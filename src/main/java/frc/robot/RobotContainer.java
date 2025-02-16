@@ -602,4 +602,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
   }
+
+  public void dashboardPeriodic() {
+    dashboard.testPeriodic();
+  }
 }

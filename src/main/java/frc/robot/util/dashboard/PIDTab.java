@@ -1,6 +1,8 @@
 package frc.robot.util.dashboard;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
@@ -13,6 +15,9 @@ public class PIDTab {
   public static ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
   private static PIDController displayPID = new PIDController(0, 0, 0);
   public static String currentSelectedPID = "";
+  ShuffleboardComponent pidWidget;
+  NetworkTableInstance nt = NetworkTableInstance.getDefault();
+  NetworkTable networkTable = nt.getTable("/Shuffleboard/PID Tuning/PID");
 
   public PIDTab() {}
 
@@ -29,7 +34,7 @@ public class PIDTab {
   public void buttonBuild() {}
 
   public void selectorBuild() {
-    PIDTrack.pidsTrack.put("empty", new PIDController(0, 0, 0));
+    PIDTrack.pidsTrack.put("empty", displayPID);
     pidChooser.setDefaultOption("no PID Selected", "empty");
     for (String name : PIDTrack.pidsTrack.keySet()) {
       pidChooser.addOption(name, name);
@@ -38,7 +43,7 @@ public class PIDTab {
   }
 
   public void pidTunerBuild() {
-    ShuffleboardComponent pidWidget =
+    pidWidget =
         pidTab
             .add("PID", displayPID)
             .withWidget(BuiltInWidgets.kPIDController)
@@ -47,14 +52,29 @@ public class PIDTab {
   }
 
   public void periodic() {
+
+    if (checkDifferentPID() == false
+        && displayPID != PIDTrack.pidsTrack.get(pidChooser.getSelected())) {
+      System.out.println("cool");
+      PIDTrack.pidsTrack.put(currentSelectedPID, displayPID);
+    }
     if (checkDifferentPID()) {
       displayPID = PIDTrack.pidsTrack.get(pidChooser.getSelected());
       currentSelectedPID = pidChooser.getSelected();
     }
-    if (checkDifferentPID() == false
-        && displayPID != PIDTrack.pidsTrack.get(pidChooser.getSelected())) {
-      PIDTrack.pidsTrack.put(pidChooser.getSelected(), displayPID);
-    }
+    updateNetworkTable();
+    // System.out.println(currentSelectedPID);
+  }
+
+  public void updateNetworkTable() {
+    networkTable.getEntry("p").setDouble(displayPID.getP());
+    networkTable.getEntry("i").setDouble(displayPID.getI());
+    networkTable.getEntry("d").setDouble(displayPID.getD());
+    networkTable.getEntry("setpoint").setDouble(displayPID.getSetpoint());
+    networkTable.getEntry("total error").setDouble(displayPID.getAccumulatedError());
+    networkTable.getEntry("izone").setDouble(displayPID.getIZone());
+    networkTable.getEntry("error").setDouble(displayPID.getError());
+    networkTable.getEntry("error derivative").setDouble(displayPID.getErrorDerivative());
   }
 
   public boolean checkDifferentPID() {

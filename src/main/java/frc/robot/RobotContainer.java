@@ -562,6 +562,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe));
 
+    NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
+
     NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
 
     NamedCommands.registerCommand(

@@ -5,13 +5,13 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
-import frc.robot.sensors.resolvers.ResolverVoltage;
+import frc.robot.sensors.resolvers.ResolverPWM;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class WinchIOSparkMax implements WinchIO {
 
-  private final ResolverVoltage winchEncoder;
+  private final ResolverPWM winchEncoder;
   private final SparkMax winchLeaderSpark;
   private final SparkMax winchFollowerSpark;
   private final PIDController winchPID =
@@ -26,7 +26,7 @@ public class WinchIOSparkMax implements WinchIO {
             SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false),
             winchLeaderSpark);
 
-    winchEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
+    winchEncoder = new ResolverPWM(-1, 0);
   }
   /*
    * Set voltage of the winch motors

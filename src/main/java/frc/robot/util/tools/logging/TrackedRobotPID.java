@@ -2,78 +2,53 @@ package frc.robot.util.tools.logging;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import java.util.ArrayList;
-import java.util.function.Function;
+import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 public class TrackedRobotPID {
   // Regular
   public class PIDTrack {
-    public static ArrayList<PIDController> pidsTrack = new ArrayList<PIDController>();
-
-    public static ArrayList<String> idName = new ArrayList<String>();
-
-    public static String[] getIDNames() {
-      String[] idNameArray = new String[idName.size()];
-      for (int i = 0; i < idName.size(); i++) {
-        idNameArray[i] = idName.get(i);
-      }
-      return idNameArray;
-    }
-
-    public static boolean[] getAtSetPoint() {
-      boolean[] atSetPoint = new boolean[pidsTrack.size()];
-      for (int i = 0; i < pidsTrack.size(); i++) {
-        atSetPoint[i] = pidsTrack.get(i).atSetpoint();
-      }
-      return atSetPoint;
-    }
-
-    public static double[] getValues(Function<PIDController, Double> function) {
-      return pidsTrack.stream().mapToDouble(function::apply).toArray();
-    }
+    public static HashMap<String, PIDController> pidsTrack = new HashMap<String, PIDController>();
 
     public static void logValuesID() {
-      for (int i = 0; i < pidsTrack.size(); i++) {
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/error", pidsTrack.get(i).getError());
+      for (String idName : pidsTrack.keySet()) {
+        Logger.recordOutput("PIDTrack/" + idName + "/error", pidsTrack.get(idName).getError());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/setPoint", pidsTrack.get(i).getSetpoint());
+            "PIDTrack/" + idName + "/setPoint", pidsTrack.get(idName).getSetpoint());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/atSetPoint", pidsTrack.get(i).atSetpoint());
+            "PIDTrack/" + idName + "/atSetPoint", pidsTrack.get(idName).atSetpoint());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/errorDerivative",
-            pidsTrack.get(i).getErrorDerivative());
+            "PIDTrack/" + idName + "/errorDerivative", pidsTrack.get(idName).getErrorDerivative());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/errorTolerance", pidsTrack.get(i).getErrorTolerance());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
+            "PIDTrack/" + idName + "/errorTolerance", pidsTrack.get(idName).getErrorTolerance());
+        Logger.recordOutput("PIDTrack/" + idName + "/period", pidsTrack.get(idName).getPeriod());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/errorDerivativeTolerance",
-            pidsTrack.get(i).getErrorDerivativeTolerance());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/IZone", pidsTrack.get(i).getIZone());
+            "PIDTrack/" + idName + "/errorDerivativeTolerance",
+            pidsTrack.get(idName).getErrorDerivativeTolerance());
+        Logger.recordOutput("PIDTrack/" + idName + "/IZone", pidsTrack.get(idName).getIZone());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/accumulatedError",
-            pidsTrack.get(i).getAccumulatedError());
+            "PIDTrack/" + idName + "/accumulatedError",
+            pidsTrack.get(idName).getAccumulatedError());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/continuosInputEnabled",
-            pidsTrack.get(i).isContinuousInputEnabled());
+            "PIDTrack/" + idName + "/continuosInputEnabled",
+            pidsTrack.get(idName).isContinuousInputEnabled());
 
         // Information of the Values
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kP", pidsTrack.get(idName).getP());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kI", pidsTrack.get(idName).getI());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kD", pidsTrack.get(idName).getD());
 
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/output", calculate(pidsTrack.get(i)));
-
-        Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/outputDerivative",
-            calculateDerivative(pidsTrack.get(i)));
+        Logger.recordOutput("PIDTrack/" + idName + "/output", calculate(pidsTrack.get(idName)));
 
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/outputIntegral", calculateIntegral(pidsTrack.get(i)));
+            "PIDTrack/" + idName + "/outputDerivative", calculateDerivative(pidsTrack.get(idName)));
 
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/outputProportional",
-            calculateProportional(pidsTrack.get(i)));
+            "PIDTrack/" + idName + "/outputIntegral", calculateIntegral(pidsTrack.get(idName)));
+
+        Logger.recordOutput(
+            "PIDTrack/" + idName + "/outputProportional",
+            calculateProportional(pidsTrack.get(idName)));
       }
     }
   }
@@ -102,65 +77,43 @@ public class TrackedRobotPID {
 
   // Profiled
   public class ProfiledPIDTrack {
-    public static ArrayList<ProfiledPIDController> pidsTrack =
-        new ArrayList<ProfiledPIDController>();
-
-    public static ArrayList<String> idName = new ArrayList<String>();
-
-    public static String[] getIDNames() {
-      String[] idNameArray = new String[idName.size()];
-      for (int i = 0; i < idName.size(); i++) {
-        idNameArray[i] = idName.get(i);
-      }
-      return idNameArray;
-    }
-
-    public static boolean[] getAtSetPoint() {
-      boolean[] atSetPoint = new boolean[pidsTrack.size()];
-      for (int i = 0; i < pidsTrack.size(); i++) {
-        atSetPoint[i] = pidsTrack.get(i).atSetpoint();
-      }
-      return atSetPoint;
-    }
-
-    public static double[] getValues(Function<ProfiledPIDController, Double> function) {
-      return pidsTrack.stream().mapToDouble(function::apply).toArray();
-    }
+    public static HashMap<String, ProfiledPIDController> pidsTrack =
+        new HashMap<String, ProfiledPIDController>();
 
     public static void logValuesID() {
-      for (int i = 0; i < pidsTrack.size(); i++) {
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/profiledPID", true);
+      for (String idName : pidsTrack.keySet()) {
+        Logger.recordOutput("PIDTrack/" + idName + "/profiledPID", true);
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/positionError", pidsTrack.get(i).getPositionError());
+            "PIDTrack/" + idName + "/positionError", pidsTrack.get(idName).getPositionError());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/velocityError", pidsTrack.get(i).getVelocityError());
+            "PIDTrack/" + idName + "/velocityError", pidsTrack.get(idName).getVelocityError());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/atSetpoint", pidsTrack.get(i).atSetpoint());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/period", pidsTrack.get(i).getPeriod());
+            "PIDTrack/" + idName + "/atSetpoint", pidsTrack.get(idName).atSetpoint());
+        Logger.recordOutput("PIDTrack/" + idName + "/period", pidsTrack.get(idName).getPeriod());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/velocityTolerance",
-            pidsTrack.get(i).getVelocityTolerance());
+            "PIDTrack/" + idName + "/velocityTolerance",
+            pidsTrack.get(idName).getVelocityTolerance());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/positionTolerance",
-            pidsTrack.get(i).getPositionTolerance());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/IZone", pidsTrack.get(i).getIZone());
+            "PIDTrack/" + idName + "/positionTolerance",
+            pidsTrack.get(idName).getPositionTolerance());
+        Logger.recordOutput("PIDTrack/" + idName + "/IZone", pidsTrack.get(idName).getIZone());
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/constraints/maxAcceleration",
-            pidsTrack.get(i).getConstraints().maxAcceleration);
+            "PIDTrack/" + idName + "/constraints/maxAcceleration",
+            pidsTrack.get(idName).getConstraints().maxAcceleration);
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/constraints/maxVelocity",
-            pidsTrack.get(i).getConstraints().maxVelocity);
+            "PIDTrack/" + idName + "/constraints/maxVelocity",
+            pidsTrack.get(idName).getConstraints().maxVelocity);
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/goal/position", pidsTrack.get(i).getGoal().position);
+            "PIDTrack/" + idName + "/goal/position", pidsTrack.get(idName).getGoal().position);
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/goal/velocity", pidsTrack.get(i).getGoal().velocity);
+            "PIDTrack/" + idName + "/goal/velocity", pidsTrack.get(idName).getGoal().velocity);
         Logger.recordOutput(
-            "PIDTrack/" + idName.get(i) + "/accumulatedError",
-            pidsTrack.get(i).getAccumulatedError());
+            "PIDTrack/" + idName + "/accumulatedError",
+            pidsTrack.get(idName).getAccumulatedError());
         // Information of the Values
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kP", pidsTrack.get(i).getP());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kI", pidsTrack.get(i).getI());
-        Logger.recordOutput("PIDTrack/" + idName.get(i) + "/constants/kD", pidsTrack.get(i).getD());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kP", pidsTrack.get(idName).getP());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kI", pidsTrack.get(idName).getI());
+        Logger.recordOutput("PIDTrack/" + idName + "/constants/kD", pidsTrack.get(idName).getD());
       }
     }
   }

@@ -19,15 +19,13 @@ import frc.robot.util.tools.logging.TrackedRobotPID.ProfiledPIDTrack;
 public class RobotPIDConstants {
   public static final PIDController constructPID(PIDConstants constants) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    PIDTrack.pidsTrack.add(j);
-    PIDTrack.idName.add("PID" + (PIDTrack.pidsTrack.size()));
+    PIDTrack.pidsTrack.put("PID" + (PIDTrack.pidsTrack.size()), j);
     return j;
   }
 
   public static final PIDController constructPID(PIDConstants constants, String pidTrackedName) {
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-    PIDTrack.pidsTrack.add(j);
-    PIDTrack.idName.add(pidTrackedName);
+    PIDTrack.pidsTrack.put(pidTrackedName, j);
     return j;
   }
 
@@ -54,9 +52,7 @@ public class RobotPIDConstants {
     ProfiledPIDController k =
         new ProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    ProfiledPIDTrack.pidsTrack.add(k);
-    ProfiledPIDTrack.idName.add("PPID" + (ProfiledPIDTrack.pidsTrack.size()));
-
+    ProfiledPIDTrack.pidsTrack.put("PPID" + (ProfiledPIDTrack.pidsTrack.size()), k);
     return k;
   }
 
@@ -65,9 +61,7 @@ public class RobotPIDConstants {
     ProfiledPIDController k =
         new ProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    ProfiledPIDTrack.pidsTrack.add(k);
-    ProfiledPIDTrack.idName.add("PPID" + (ProfiledPIDTrack.pidsTrack.size()));
-    ProfiledPIDTrack.idName.add(name);
+    ProfiledPIDTrack.pidsTrack.put(name, k);
 
     return k;
   }

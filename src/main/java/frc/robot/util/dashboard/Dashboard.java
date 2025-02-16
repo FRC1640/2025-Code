@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +21,8 @@ public class Dashboard {
 
   private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  private SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
+
   private LiftSubsystem liftSubsystem;
   private GantrySubsystem gantrySubsystem;
 
@@ -35,12 +38,18 @@ public class Dashboard {
     autoInit();
     teleopInit();
     sysidInit();
+    pidInit();
   }
 
   private void autoInit() {
     autoChooser = AutoBuilder.buildAutoChooser();
     ShuffleboardTab autoTab = Shuffleboard.getTab("AUTO");
     autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
+  }
+
+  public void pidInit() {
+    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
+    pidChooser.setDefaultOption("no PID Selected", new PIDController(0, 0, 0));
   }
 
   public Command getAutoChooserCommand() {

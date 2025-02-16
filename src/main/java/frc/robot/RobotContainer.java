@@ -203,7 +203,7 @@ public class RobotContainer {
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
+                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
@@ -385,7 +385,11 @@ public class RobotContainer {
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
 
-    driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    driveController
+        .povDown()
+        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+
+    driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))

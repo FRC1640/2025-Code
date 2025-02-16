@@ -9,8 +9,9 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.util.alerts.AlertsManager;
-import frc.robot.util.tools.logging.LogRunner;
-import frc.robot.util.tools.logging.VelocityLogStorage;
+import frc.robot.util.logging.LogRunner;
+import frc.robot.util.logging.VelocityLogStorage;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Module {

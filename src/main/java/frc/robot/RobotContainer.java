@@ -456,11 +456,12 @@ public class RobotContainer {
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
 
     // for initial testing
-
+    /*
     operatorController.y().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 8));
     operatorController.a().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -8));
     operatorController.b().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 8));
     operatorController.x().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> -8));
+    */
   }
 
   public Command getAutonomousCommand() {

@@ -413,6 +413,15 @@ public class RobotContainer {
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                algaeIntakeSubsystem.hasAlgae()
+                    && RobotOdometry.instance
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        > 0.3)
+        .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 

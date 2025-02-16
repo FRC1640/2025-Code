@@ -99,7 +99,7 @@ public class RobotPIDConstants {
   public static final PIDConstants linearDrivePIDProfiled = new PIDConstants(0.1, 0, 0);
 
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
-  public static final PIDConstants angleFollowPath = new PIDConstants(0.375, 0, 0.000);
+  public static final PIDConstants angleFollowPath = new PIDConstants(1, 0, 0.8);
 
   public static final PIDConstants gantryPID = new PIDConstants(50, 0, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);

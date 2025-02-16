@@ -1,9 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,7 +11,6 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.util.sysid.CreateSysidCommand;
-import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
 import java.util.function.BooleanSupplier;
 
 public class Dashboard {
@@ -23,12 +20,10 @@ public class Dashboard {
 
   private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-  private static SendableChooser<String> pidChooser = new SendableChooser<String>();
 
   private LiftSubsystem liftSubsystem;
   private GantrySubsystem gantrySubsystem;
-  private static String lastPID = "";
-  public static String lastPIDName = "";
+  private PIDTab pidTab = new PIDTab();
 
   public Dashboard(
       DriveSubsystem driveSubsystem,
@@ -42,7 +37,7 @@ public class Dashboard {
     autoInit();
     teleopInit();
     sysidInit();
-    pidInit();
+    pidTab.init();
   }
 
   private void autoInit() {
@@ -51,35 +46,12 @@ public class Dashboard {
     autoTab.add(autoChooser).withSize(5, 5).withPosition(1, 1);
   }
 
-  public void pidInit() {
-    ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
-
-    PIDTrack.pidsTrack.put("zEmpty", new PIDController(-1, -1, -1));
-    pidChooser.setDefaultOption("no PID Selected", "zEmpty");
-    for (String name : PIDTrack.pidsTrack.keySet()) {
-      pidChooser.addOption(name, name);
-    }
-
-    pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 0);
-    ShuffleboardComponent kPtab =
-        pidTab
-            .addDouble("kP", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getP())
-            .withSize(1, 1)
-            .withPosition(3, 0);
-    ShuffleboardComponent kItab =
-        pidTab
-            .addDouble("kI", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getI())
-            .withSize(1, 1)
-            .withPosition(4, 0);
-    ShuffleboardComponent kDTab =
-        pidTab
-            .addDouble("kD", () -> PIDTrack.pidsTrack.get(pidChooser.getSelected()).getD())
-            .withSize(1, 1)
-            .withPosition(5, 0);
-  }
-
   public Command getAutoChooserCommand() {
     return autoChooser.getSelected();
+  }
+
+  public void testPeriodic() {
+    pidTab.periodic();
   }
 
   private void teleopInit() {}
@@ -122,9 +94,5 @@ public class Dashboard {
 
   public static Command getSysidCommand() {
     return sysidChooser.getSelected();
-  }
-
-  public static String getSelectedPID() {
-    return pidChooser.getSelected();
   }
 }

@@ -9,6 +9,8 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.tools.DistanceManager;
+
+import java.util.function.DoubleFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -78,5 +80,21 @@ public class FollowPathNearest extends FollowPath {
     pid = MathUtil.clamp(pid, -1, 1);
     // pid *= DriveConstants.maxOmega;
     return pid;
+  }
+
+  public boolean seesTarget() {
+    Pose2d robot = robotPose.get();
+    DoubleFunction<Double> sightline = (x) ->
+        Math.tan(robot.getRotation().getRadians())
+        * (x - robot.getTranslation().getX())
+        + robot.getTranslation().getY();
+    Pose2d target = findNearest(positions.get());
+    return (sightline.apply(target.getX()) - target.getY()) < 0.6;
+  }
+
+  public boolean nearTarget() {
+    Pose2d robot = robotPose.get();
+    Pose2d target = findNearest(positions.get());
+    return Math.abs(robot.minus(target).getTranslation().getNorm()) < 1.5;
   }
 }

@@ -255,7 +255,7 @@ public class RobotContainer {
             driveController.leftTrigger());
     followPathNearest =
         new FollowPathNearest(
-            () -> RobotOdometry.instance.getPose("Main"),
+            () -> PathplannerWeight.getRobotPose(),
             gyro,
             () -> chooseAlignPos(),
             AutoAlignConfig.pathConstraints,
@@ -432,6 +432,10 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
+    // vision swap
+    new Trigger(() -> followPathNearest.seesTarget() && followPathNearest.nearTarget())
+        .onTrue(new InstantCommand(() -> PathplannerWeight.setPoseSupplier(
+            () -> RobotOdometry.instance.getPose("MainTrig")))); // TODO odometry
   }
 
   public Command getAutonomousCommand() {

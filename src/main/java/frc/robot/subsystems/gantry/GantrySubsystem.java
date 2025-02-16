@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 public class GantrySubsystem extends SubsystemBase {
   GantryIOInputsAutoLogged inputs = new GantryIOInputsAutoLogged();
   GantryIO io;
+  // public static boolean limit = false;
 
   private LoggedMechanism2d gantryMechanism =
       new LoggedMechanism2d(2, 2); // represents gantry position left/right
@@ -102,5 +103,9 @@ public class GantrySubsystem extends SubsystemBase {
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
     return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+  }
+
+  public void setLimitEnabled(boolean enable) {
+    io.setLimitEnabled(enable);
   }
 }

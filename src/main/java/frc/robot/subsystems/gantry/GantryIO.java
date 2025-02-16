@@ -27,6 +27,8 @@ public interface GantryIO extends AutoCloseable {
     return 0.0;
   }
 
+  public default void setLimitEnabled(boolean enable) {}
+
   @Override
   default void close() {}
 }

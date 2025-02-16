@@ -1,6 +1,7 @@
 package frc.robot.subsystems.lift;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -18,6 +19,7 @@ public class LiftIOSpark implements LiftIO {
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
+  SparkLimitSwitch liftLimitSwitch; // direction?? the gantry one didn't have it specified
   PIDController liftController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
@@ -26,14 +28,16 @@ public class LiftIOSpark implements LiftIO {
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+  private boolean limits;
 
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false));
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftLeaderMotorID)
+                .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftFollowerMotorID, false), leaderMotor);
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftFollowerMotorID), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
   }
@@ -48,7 +52,7 @@ public class LiftIOSpark implements LiftIO {
                 inputs.leaderMotorPosition,
                 voltage,
                 LiftConstants.liftLimits.low,
-                LiftConstants.liftLimits.high)));
+                limits ? LiftConstants.liftLimits.high : null)));
   }
   /*
    * Sets the position of the motor(s) using a PID
@@ -113,10 +117,22 @@ public class LiftIOSpark implements LiftIO {
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
     inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
+    inputs.isLimitSwitchPressed = liftLimitSwitch.isPressed();
+  }
+
+  @Override
+  public void resetEncoder() {
+    leaderEncoder.setPosition(0);
+    followerEncoder.setPosition(0);
   }
 
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

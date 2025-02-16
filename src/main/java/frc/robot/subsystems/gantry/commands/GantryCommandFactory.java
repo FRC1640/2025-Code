@@ -31,22 +31,24 @@ public class GantryCommandFactory {
   }
 
   public Command gantryHomeCommand() {
-    return gantryApplyVoltageCommand(() -> 2)
+    return gantryApplyVoltageCommand(() -> -2)
         .repeatedly()
         .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            gantryApplyVoltageCommand(() -> -1)
+            gantryApplyVoltageCommand(() -> 1)
                 .repeatedly()
                 .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            gantryApplyVoltageCommand(() -> 0.5)
+            gantryApplyVoltageCommand(() -> -0.5)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed()))
         // .andThen(
         //     gantryApplyVoltageCommand(() -> -GantryConstants.gantryHomeFastVoltage)
         //         .repeatedly()
         //         .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
-        .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()));
+        .andThen(new InstantCommand(() -> gantrySubsystem.resetEncoder()))
+        .finallyDo(() -> gantrySubsystem.setLimitEnabled(true))
+        .beforeStarting(() -> gantrySubsystem.setLimitEnabled(false));
   }
   // I dont think the limit switch as the bound is a good idea because then the gantry will be
   // slamming into the limit switch all the time. -> Bad for the limit switch. So I think we

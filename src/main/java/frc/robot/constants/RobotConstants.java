@@ -26,8 +26,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = Units.inchesToMeters(30);
-    public static final double robotLength = Units.inchesToMeters(30);
+    public static final double robotWidth = 0.927;
+    public static final double robotLength = 0.927;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -175,6 +175,7 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 2.0);
+    // is this lift limit right? i dont think i touched it
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
     public static final TrapezoidProfile.Constraints constraints =
@@ -280,17 +281,22 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(0.0, 1000.0);
-    public static final Limits winchLimits = new Limits(0.0, 1000.0);
+    public static final Limits liftLimits = new Limits(-100.0, 0.0);
+    public static final double winchVerticalPosition = 50;
+    public static final Limits winchLimits = new Limits(-1000.0, 1000.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =
         new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
 
     public static final double gearRatio = 5;
+    public static final double pulleyRadius = 1;
 
     public static final int solenoidForwardChannel = 0;
     public static final int solenoidReverseChannel = 1;
+
+    public static final int sensor1Channel = 2;
+    public static final int sensor2Channel = 3;
   }
 
   public static class GantryConstants {
@@ -298,7 +304,7 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.31, null);
+    public static final Limits gantryLimits = new Limits(-0.31, .02);
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;
@@ -322,6 +328,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 10;
+    public static double currentThresh = 10000;
   }
 }

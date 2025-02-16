@@ -13,9 +13,10 @@ import org.photonvision.simulation.VisionSystemSim;
 public class FieldConstants {
   public static final AprilTagFieldLayout aprilTagLayout =
       new AprilTagPositionSwitcher<AprilTagFieldLayout>(
-              AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape))
+              AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded))
           .addValue(
-              AprilTagSetting.WPILib, AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape))
+              AprilTagSetting.WPILibAndyMark,
+              AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark))
           .addValue(AprilTagSetting.WPICal, WPICALPosManager.aprilTagFieldLayout)
           .get();
   public static final int tagCount = 22;

@@ -90,6 +90,7 @@ public class RobotConstants {
 
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.2;
+    public static final double trigDistThreshold = 1.5;
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
   }

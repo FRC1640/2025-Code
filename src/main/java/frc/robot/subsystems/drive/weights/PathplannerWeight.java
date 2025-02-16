@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
+import java.util.function.DoubleFunction;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -15,10 +17,12 @@ public class PathplannerWeight implements DriveWeight {
   private static Gyro gyro;
   private static Supplier<Pose2d> robotPose;
   public static Pose2d setpoint = new Pose2d(0.00001, 0.00001, new Rotation2d(0.00001));
+  private static Supplier<Pose2d> getTarget;
 
-  public PathplannerWeight(Gyro gyro, Supplier<Pose2d> robotPose) {
+  public PathplannerWeight(Gyro gyro, Supplier<Pose2d> robotPose, Supplier<Pose2d> target) {
     PathplannerWeight.gyro = gyro;
     PathplannerWeight.robotPose = robotPose;
+    PathplannerWeight.getTarget = target;
   }
 
   public static void setSpeeds(ChassisSpeeds newSpeeds) {
@@ -58,5 +62,23 @@ public class PathplannerWeight implements DriveWeight {
 
   public static Pose2d getRobotPose() {
     return robotPose.get();
+  }
+
+  public static boolean seesTarget() {
+    Pose2d robot = robotPose.get();
+    DoubleFunction<Double> sightline =
+        (x) ->
+            Math.tan(robot.getRotation().getRadians()) * (x - robot.getTranslation().getX())
+                + robot.getTranslation().getY();
+    Pose2d target = getTarget.get();
+    // Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
+    boolean sees = (sightline.apply(target.getX()) - target.getY()) < 0.6; // TODO
+    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && nearTarget());
+    return sees;
+  }
+
+  public static boolean nearTarget() {
+    return Math.abs(robotPose.get().minus(getTarget.get()).getTranslation().getNorm())
+        < AutoAlignConfig.trigDistThreshold;
   }
 }

@@ -274,20 +274,23 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
-    followPathNearest =
-    new FollowPathNearest(
-        gyro,
-        () -> chooseAlignPos(),
-        AutoAlignConfig.pathConstraints,
-        (x) ->
-            coralAdjust(
-                DistanceManager.addRotatedDim(
-                    x, RobotDimensions.robotLength / 2, x.getRotation()),
-                () -> coralPreset),
-        driveSubsystem);
-
     DriveWeightCommand.addPersistentWeight(
-        new PathplannerWeight(gyro, () -> getAutoVisionProcess()));
+        new PathplannerWeight(
+            gyro,
+            () -> RobotOdometry.instance.getPose("Main"),
+            () -> followPathNearest.getTarget()));
+
+    followPathNearest =
+        new FollowPathNearest(
+            gyro,
+            () -> chooseAlignPos(),
+            AutoAlignConfig.pathConstraints,
+            (x) ->
+                coralAdjust(
+                    DistanceManager.addRotatedDim(
+                        x, RobotDimensions.robotLength / 2, x.getRotation()),
+                    () -> coralPreset),
+            driveSubsystem);
 
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
@@ -463,11 +466,19 @@ public class RobotContainer {
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-  }
 
-  public Pose2d getAutoVisionProcess() {
-    String odometry = followPathNearest.seesTarget() && followPathNearest.isNearSetpoint() ? "MainTrig" : "Main"; // TODO odometry
-    return RobotOdometry.instance.getPose(odometry);
+    // vision swap
+    new Trigger(() -> PathplannerWeight.seesTarget() && PathplannerWeight.nearTarget())
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    PathplannerWeight.setPoseSupplier(
+                        () -> RobotOdometry.instance.getPose("MainTrig")))) // TODO estimator
+        .onFalse(
+            new InstantCommand(
+                () ->
+                    PathplannerWeight.setPoseSupplier(
+                        () -> RobotOdometry.instance.getPose("Main"))));
   }
 
   public Command getAutonomousCommand() {

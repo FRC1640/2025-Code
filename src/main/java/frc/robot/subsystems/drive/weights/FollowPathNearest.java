@@ -9,12 +9,8 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.tools.DistanceManager;
-
-import java.util.function.DoubleFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.Logger;
 
 public class FollowPathNearest extends FollowPath {
   Supplier<Pose2d[]> positions;
@@ -28,7 +24,8 @@ public class FollowPathNearest extends FollowPath {
       PathConstraints pathConstraints,
       Function<Pose2d, Pose2d> poseFunction,
       DriveSubsystem driveSubsystem) {
-    super(() -> PathplannerWeight.getRobotPose(), gyro, null, pathConstraints, null, driveSubsystem);
+    super(
+        () -> PathplannerWeight.getRobotPose(), gyro, null, pathConstraints, null, driveSubsystem);
     this.positions = positions;
     pose2dArray = new Pose2d[] {findNearest(this.positions.get())};
     endRotation = findNearest(this.positions.get()).getRotation();
@@ -83,16 +80,7 @@ public class FollowPathNearest extends FollowPath {
     return pid;
   }
 
-  public boolean seesTarget() {
-    Pose2d robot = robotPose.get();
-    DoubleFunction<Double> sightline = (x) ->
-        Math.tan(robot.getRotation().getRadians())
-        * (x - robot.getTranslation().getX())
-        + robot.getTranslation().getY();
-    Pose2d target = findNearest(positions.get());
-    // Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
-    boolean sees = (sightline.apply(target.getX()) - target.getY()) < 0.6; // TODO
-    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && isNearSetpoint());
-    return sees;
+  public Pose2d getTarget() {
+    return findNearest(positions.get());
   }
 }

@@ -454,14 +454,6 @@ public class RobotContainer {
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-
-    // for initial testing
-    /*
-    operatorController.y().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 8));
-    operatorController.a().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -8));
-    operatorController.b().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 8));
-    operatorController.x().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> -8));
-    */
   }
 
   public Command getAutonomousCommand() {

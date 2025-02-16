@@ -8,33 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9316477272727273,
-        "y": 6.946676136363636
+        "x": 2.496,
+        "y": 7.245823863636363
       },
       "isLocked": false,
       "linkedName": "CoralStationUp"
     },
     {
       "anchor": {
-        "x": 3.8490340909090905,
-        "y": 5.141818181818182
+        "x": 3.194,
+        "y": 4.026
       },
       "prevControl": {
-        "x": 3.2307954545454542,
-        "y": 6.238693181818181
+        "x": 2.194,
+        "y": 4.026
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "UP-LEFT"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4511410181392716,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "L4LeftCoral",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.6981740064446784,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -43,19 +48,19 @@
             {
               "type": "named",
               "data": {
-                "name": "SetGantryRight"
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryLeft"
               }
             },
             {
               "type": "named",
               "data": {
                 "name": "SetModeCoral"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "SetupL4"
               }
             },
             {
@@ -79,7 +84,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "L4",

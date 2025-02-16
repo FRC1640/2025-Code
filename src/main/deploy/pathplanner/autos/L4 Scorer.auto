@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "HaveCoral"
           }
         },
@@ -44,6 +50,36 @@
           "type": "path",
           "data": {
             "pathName": "L4 Scorer 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Scorer 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Scorer 5"
           }
         },
         {

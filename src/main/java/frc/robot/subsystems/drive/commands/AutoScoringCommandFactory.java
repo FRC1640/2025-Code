@@ -68,6 +68,16 @@ public class AutoScoringCommandFactory {
                         () -> GantryConstants.gantryLimits.low / 2)));
   }
 
+  public Command placeTrough() {
+    return coralOuttakeCommandFactory
+        .setIntakeVoltage(() -> 12)
+        .repeatedly()
+        .until(() -> !coralOuttakeSubsystem.hasCoral())
+        .andThen(
+            new WaitCommand(0.1)
+                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly()));
+  }
+
   public Command algaeAutoPickup() {
     return algaeCommandFactory
         .setSolenoidState(true)

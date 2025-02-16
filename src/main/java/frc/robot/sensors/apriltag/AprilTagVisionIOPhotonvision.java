@@ -90,6 +90,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         var target = result.targets.get(0);
 
         // Calculate robot pose
+
         var tagPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
         if (tagPose.isPresent()) {
           Transform3d fieldToTarget =

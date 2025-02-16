@@ -83,8 +83,7 @@ public class AutoScoringCommandFactory {
         .setSolenoidState(true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
         .repeatedly()
-        .until(() -> algaeSubsystem.hasAlgae())
-        .andThen(algaeCommandFactory.setSolenoidState(false));
+        .until(() -> algaeSubsystem.hasAlgae());
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {

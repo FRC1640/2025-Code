@@ -253,18 +253,6 @@ public class RobotContainer {
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger());
-    followPathNearest =
-        new FollowPathNearest(
-            () -> PathplannerWeight.getRobotPose(),
-            gyro,
-            () -> chooseAlignPos(),
-            AutoAlignConfig.pathConstraints,
-            (x) ->
-                coralAdjust(
-                    DistanceManager.addRotatedDim(
-                        x, RobotDimensions.robotLength / 2, x.getRotation()),
-                    () -> coralPreset),
-            driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
@@ -272,6 +260,19 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
+    
+    followPathNearest =
+    new FollowPathNearest(
+        () -> PathplannerWeight.getRobotPose(),
+        gyro,
+        () -> chooseAlignPos(),
+        AutoAlignConfig.pathConstraints,
+        (x) ->
+            coralAdjust(
+                DistanceManager.addRotatedDim(
+                    x, RobotDimensions.robotLength / 2, x.getRotation()),
+                () -> coralPreset),
+        driveSubsystem);
 
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));

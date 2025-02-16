@@ -57,14 +57,6 @@ public class GantrySubsystem extends SubsystemBase {
     Logger.recordOutput("Mechanisms/Gantry", gantryMechanism);
   }
 
-  public void homedLimit() {
-    io.homedLimit();
-  }
-
-  public void disableLimit() {
-    io.disableLimit();
-  }
-
   public void stop() {
     io.setGantryVoltage(0, inputs);
   }
@@ -111,5 +103,9 @@ public class GantrySubsystem extends SubsystemBase {
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
     return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+  }
+
+  public void setLimitEnabled(boolean enable) {
+    io.setLimitEnabled(enable);
   }
 }

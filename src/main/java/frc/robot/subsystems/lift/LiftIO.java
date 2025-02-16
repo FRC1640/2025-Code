@@ -47,7 +47,5 @@ public interface LiftIO extends AutoCloseable {
     return 0.0;
   }
 
-  public default void homedLimit() {}
-
-  public default void disableLimit() {}
+  public default void setLimitEnabled(boolean enable) {}
 }

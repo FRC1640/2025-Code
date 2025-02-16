@@ -28,7 +28,7 @@ public class GantryIOSparkMax implements GantryIO {
   public GantryIOSparkMax() {
     gantrySpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID)
+            SparkConstants.getGantryDefaultMax(GantryConstants.gantrySparkID)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     gantryEncoder = gantrySpark.getEncoder();
     gantryLimitSwitch = gantrySpark.getForwardLimitSwitch();
@@ -79,7 +79,7 @@ public class GantryIOSparkMax implements GantryIO {
 
   @Override
   public void resetEncoder() {
-    gantryEncoder.setPosition(0);
+    gantryEncoder.setPosition(GantryConstants.gantryLimits.low);
   }
 
   @Override
@@ -88,12 +88,7 @@ public class GantryIOSparkMax implements GantryIO {
   }
 
   @Override
-  public void homedLimit() {
-    limits = true;
-  }
-
-  @Override
-  public void disableLimit() {
-    limits = false;
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

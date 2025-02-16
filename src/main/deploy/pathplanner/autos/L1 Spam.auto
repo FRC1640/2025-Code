@@ -57,6 +57,54 @@
           "data": {
             "name": "PlaceTrough"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam 7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
         }
       ]
     }

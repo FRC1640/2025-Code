@@ -8,27 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7327950407434007,
-        "y": 7.166424486166904
+        "x": 2.851875,
+        "y": 5.480852272727272
       },
       "isLocked": false,
       "linkedName": "CoralStationUp"
     },
     {
       "anchor": {
-        "x": 3.709,
-        "y": 5.072
+        "x": 3.194,
+        "y": 4.026
       },
       "prevControl": {
-        "x": 3.3899715909090906,
-        "y": 5.675085227272726
+        "x": 1.9843465909090907,
+        "y": 4.084829545454545
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "UP-LEFT"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -16.58447023398012
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,8 +46,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -59.99999999999999
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "L1 Spam",

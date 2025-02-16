@@ -83,7 +83,6 @@ import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
-
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -602,9 +601,5 @@ public class RobotContainer {
         "WaitForCoral", new WaitUntilCommand(() -> coralOuttakeSubsystem.hasCoral()));
 
     NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
-  }
-
-  public void dashboardPeriodic() {
-    dashboard.testPeriodic();
   }
 }

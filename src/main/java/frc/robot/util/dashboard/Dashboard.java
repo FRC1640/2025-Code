@@ -50,10 +50,6 @@ public class Dashboard {
     return autoChooser.getSelected();
   }
 
-  public void testPeriodic() {
-    pidTab.periodic();
-  }
-
   private void teleopInit() {}
 
   private void sysidInit() {

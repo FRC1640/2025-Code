@@ -185,9 +185,7 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-    m_robotContainer.dashboardPeriodic();
-  }
+  public void testPeriodic() {}
 
   @Override
   public void testExit() {}

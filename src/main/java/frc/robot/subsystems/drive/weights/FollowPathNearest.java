@@ -14,6 +14,8 @@ import java.util.function.DoubleFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class FollowPathNearest extends FollowPath {
   Supplier<Pose2d[]> positions;
   Function<Pose2d, Pose2d> poseFunction;
@@ -89,6 +91,7 @@ public class FollowPathNearest extends FollowPath {
         * (x - robot.getTranslation().getX())
         + robot.getTranslation().getY();
     Pose2d target = findNearest(positions.get());
+    Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
     return (sightline.apply(target.getX()) - target.getY()) < 0.6;
   }
 

@@ -23,13 +23,12 @@ public class FollowPathNearest extends FollowPath {
       RobotPIDConstants.constructPID(RobotPIDConstants.angleFollowPath, "FollowPathNearest");
 
   public FollowPathNearest(
-      Supplier<Pose2d> robotPose,
       Gyro gyro,
       Supplier<Pose2d[]> positions,
       PathConstraints pathConstraints,
       Function<Pose2d, Pose2d> poseFunction,
       DriveSubsystem driveSubsystem) {
-    super(robotPose, gyro, null, pathConstraints, null, driveSubsystem);
+    super(() -> PathplannerWeight.getRobotPose(), gyro, null, pathConstraints, null, driveSubsystem);
     this.positions = positions;
     pose2dArray = new Pose2d[] {findNearest(this.positions.get())};
     endRotation = findNearest(this.positions.get()).getRotation();
@@ -91,8 +90,10 @@ public class FollowPathNearest extends FollowPath {
         * (x - robot.getTranslation().getX())
         + robot.getTranslation().getY();
     Pose2d target = findNearest(positions.get());
-    Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
-    return (sightline.apply(target.getX()) - target.getY()) < 0.6;
+    // Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
+    boolean sees = (sightline.apply(target.getX()) - target.getY()) < 0.6; // TODO
+    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && nearTarget());
+    return sees;
   }
 
   public boolean nearTarget() {

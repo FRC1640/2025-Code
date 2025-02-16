@@ -263,7 +263,6 @@ public class RobotContainer {
     
     followPathNearest =
     new FollowPathNearest(
-        () -> PathplannerWeight.getRobotPose(),
         gyro,
         () -> chooseAlignPos(),
         AutoAlignConfig.pathConstraints,

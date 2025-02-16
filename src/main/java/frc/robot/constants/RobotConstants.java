@@ -276,17 +276,22 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(0.0, 1000.0);
-    public static final Limits winchLimits = new Limits(0.0, 1000.0);
+    public static final Limits liftLimits = new Limits(-100.0, 0.0);
+    public static final double winchVerticalPosition = 50;
+    public static final Limits winchLimits = new Limits(-1000.0, 1000.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =
         new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
 
     public static final double gearRatio = 5;
+    public static final double pulleyRadius = 1;
 
     public static final int solenoidForwardChannel = 0;
     public static final int solenoidReverseChannel = 1;
+
+    public static final int sensor1Channel = 2;
+    public static final int sensor2Channel = 3;
   }
 
   public static class GantryConstants {

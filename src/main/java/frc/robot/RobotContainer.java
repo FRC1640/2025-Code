@@ -228,6 +228,7 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
+    driveSubsystem = new DriveSubsystem(gyro);
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
@@ -246,9 +247,7 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     generateNamedCommands();
-    driveSubsystem = new DriveSubsystem(gyro);
 
-    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);

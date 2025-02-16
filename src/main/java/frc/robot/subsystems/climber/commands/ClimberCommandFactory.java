@@ -48,24 +48,23 @@ public class ClimberCommandFactory {
   }
 
   public Command liftHomeCommand() {
-    return new InstantCommand(() -> climberSubsystem.disableLimit())
+    return elevatorApplyVoltageCommand(() -> 8)
+        .repeatedly()
+        .until(() -> climberSubsystem.isLimitSwitchPressed())
         .andThen(
-            elevatorApplyVoltageCommand(() -> 2)
+            elevatorApplyVoltageCommand(() -> -2)
                 .repeatedly()
-                .until(() -> climberSubsystem.isLimitSwitchPressed())
-                .andThen(
-                    elevatorApplyVoltageCommand(() -> -1)
-                        .repeatedly()
-                        .until(() -> !climberSubsystem.isLimitSwitchPressed()))
-                .andThen(
-                    elevatorApplyVoltageCommand(() -> 0.5)
-                        .repeatedly()
-                        .until(() -> climberSubsystem.isLimitSwitchPressed()))
-                // .andThen(
-                //     liftApplyVoltageCommand(() -> -liftConstants.liftHomeFastVoltage)
-                //         .repeatedly()
-                //         .until(() -> !liftSubsystem.isLimitSwitchPressed()))
-                .andThen(new InstantCommand(() -> climberSubsystem.resetEncoder())))
-        .finallyDo(() -> climberSubsystem.homedLimit());
+                .until(() -> !climberSubsystem.isLimitSwitchPressed()))
+        .andThen(
+            elevatorApplyVoltageCommand(() -> 0.5)
+                .repeatedly()
+                .until(() -> climberSubsystem.isLimitSwitchPressed()))
+        // .andThen(
+        //     liftApplyVoltageCommand(() -> -liftConstants.liftHomeFastVoltage)
+        //         .repeatedly()
+        //         .until(() -> !liftSubsystem.isLimitSwitchPressed()))
+        .andThen(new InstantCommand(() -> climberSubsystem.resetEncoder()))
+        .finallyDo(() -> climberSubsystem.setLimitsEnabled(true))
+        .beforeStarting(() -> climberSubsystem.setLimitsEnabled(false));
   }
 }

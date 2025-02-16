@@ -201,7 +201,7 @@ public class RobotContainer {
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim(() -> simBoard.getLl4())
+                    ? new ClimberIOSim(() -> simBoard.getRl4())
                     : new ClimberIO() {});
         winchSubsystem =
             new WinchSubsystem(
@@ -451,14 +451,14 @@ public class RobotContainer {
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
+    operatorController.povRight().onTrue(climberCommandFactory.liftHomeCommand());
 
     // for initial testing
-    /*
+
     operatorController.y().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 8));
     operatorController.a().whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -8));
     operatorController.b().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 8));
     operatorController.x().whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> -8));
-     */
   }
 
   public Command getAutonomousCommand() {

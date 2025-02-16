@@ -78,12 +78,7 @@ public class ClimberIOSim implements ClimberIO {
   }
 
   @Override
-  public void homedLimit() {
-    limits = true;
-  }
-
-  @Override
-  public void disableLimit() {
-    limits = false;
+  public void setLimitsEnabled(boolean enable) {
+    limits = enable;
   }
 }

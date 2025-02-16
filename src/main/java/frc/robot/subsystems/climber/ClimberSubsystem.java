@@ -73,11 +73,7 @@ public class ClimberSubsystem extends SubsystemBase {
     return inputs.isLimitSwitchPressed;
   }
 
-  public void homedLimit() {
-    climberIO.homedLimit();
-  }
-
-  public void disableLimit() {
-    climberIO.disableLimit();
+  public void setLimitsEnabled(boolean enable) {
+    climberIO.setLimitsEnabled(enable);
   }
 }

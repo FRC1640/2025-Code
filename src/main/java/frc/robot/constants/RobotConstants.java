@@ -276,7 +276,7 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(0.0, 100.0);
+    public static final Limits liftLimits = new Limits(-100.0, 0.0);
     public static final double winchVerticalPosition = 50;
     public static final Limits winchLimits = new Limits(0.0, 100.0);
     public static final ResolverVoltageInfo winchResolverInfo =

@@ -73,12 +73,12 @@ public class PathplannerWeight implements DriveWeight {
     Pose2d target = getTarget.get();
     // Logger.recordOutput("Drive/FollowPathNearest/odometry", robot);
     boolean sees = (sightline.apply(target.getX()) - target.getY()) < 0.6; // TODO
-    // Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && nearTarget());
+    Logger.recordOutput("Drive/FollowPathNearest/odometry_conditions", sees && nearEnd());
     return sees;
   }
 
-  public static boolean nearTarget() {
-    return Math.abs(robotPose.get().minus(getTarget.get()).getTranslation().getNorm())
-        < AutoAlignConfig.trigDistThreshold;
+  public static boolean nearEnd() {
+    double distance = Math.abs(robotPose.get().minus(getTarget.get()).getTranslation().getNorm());
+    return distance < AutoAlignConfig.trigDistThreshold && distance > 0.1;
   }
 }

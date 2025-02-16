@@ -468,7 +468,7 @@ public class RobotContainer {
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
 
     // vision swap
-    new Trigger(() -> PathplannerWeight.seesTarget() && PathplannerWeight.nearTarget())
+    new Trigger(() -> PathplannerWeight.seesTarget() && PathplannerWeight.nearEnd())
         .onTrue(
             new InstantCommand(
                 () ->

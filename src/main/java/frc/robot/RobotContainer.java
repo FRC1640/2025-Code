@@ -472,7 +472,10 @@ public class RobotContainer {
   public Command homing() {
     return new ConditionalCommand(
         new InstantCommand(),
-        gantryCommandFactory.gantryHomeCommand().alongWith(liftCommandFactory.liftHomeCommand()),
+        gantryCommandFactory
+            .gantryHomeCommand()
+            .alongWith(liftCommandFactory.liftHomeCommand())
+            .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);
   }
 

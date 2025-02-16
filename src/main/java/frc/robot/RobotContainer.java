@@ -435,10 +435,14 @@ public class RobotContainer {
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
-    new Trigger(() -> testBoard.getLl2()).onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 6));
-    new Trigger(() -> testBoard.getLl3()).onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 6));
-    new Trigger(() -> testBoard.getLl4()).onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 6));
-    new Trigger(() -> testBoard.getRl4()).onTrue(algaeCommandFactory.setMotorVoltages(() -> 6, () -> 6));
+    new Trigger(() -> testBoard.getLl2())
+        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+    new Trigger(() -> testBoard.getLl3())
+        .onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+    new Trigger(() -> testBoard.getLl4())
+        .onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
+    new Trigger(() -> testBoard.getRl4())
+        .onTrue(algaeCommandFactory.setMotorVoltages(() -> 1, () -> 1));
   }
 
   public Command getAutonomousCommand() {

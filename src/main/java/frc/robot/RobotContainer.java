@@ -473,7 +473,7 @@ public class RobotContainer {
             new InstantCommand(
                 () ->
                     PathplannerWeight.setPoseSupplier(
-                        () -> RobotOdometry.instance.getPose("MainTrig")))) // TODO estimator
+                        () -> RobotOdometry.instance.getPose("TrigAutoalign"))))
         .onFalse(
             new InstantCommand(
                 () ->

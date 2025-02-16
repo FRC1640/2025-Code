@@ -56,7 +56,9 @@ public class RobotOdometry extends PeriodicBase {
             RobotConfigConstants.robotType == RobotType.Sim ? new AprilTagVision[0] : cameras,
             VisionUpdateMode.PHOTONVISION);
     OdometryStorage mainTrig = branchEstimator("MainTrig", cameras, VisionUpdateMode.TRIG);
+    OdometryStorage trigAutoalign = branchEstimator("TrigAutoalign", VisionUpdateMode.TRIG, "Front");
     mainTrig.setTrustedRotation(main);
+    trigAutoalign.setTrustedRotation(main);
   }
 
   // getters/setters
@@ -97,7 +99,7 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public OdometryStorage branchEstimator(
-      String name, String[] cameras, VisionUpdateMode visionUpdateMode) {
+      String name, VisionUpdateMode visionUpdateMode, String... cameras) {
     OdometryStorage o =
         new OdometryStorage(
             name,

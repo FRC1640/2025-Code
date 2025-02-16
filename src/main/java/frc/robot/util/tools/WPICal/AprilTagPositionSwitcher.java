@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 public class AprilTagPositionSwitcher<T> {
   public enum AprilTagSetting {
-    Hardcoded,
     WPILibWelded,
     WPILibAndyMark,
     WPICal,

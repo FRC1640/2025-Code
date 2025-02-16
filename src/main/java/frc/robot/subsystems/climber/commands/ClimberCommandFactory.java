@@ -1,44 +1,70 @@
 package frc.robot.subsystems.climber.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class ClimberCommandFactory {
   ClimberSubsystem climberSubsystem;
+  WinchSubsystem winchSubsystem;
 
-  public ClimberCommandFactory(ClimberSubsystem climberSubsystem) {
+  public ClimberCommandFactory(ClimberSubsystem climberSubsystem, WinchSubsystem winchSubsystem) {
     this.climberSubsystem = climberSubsystem;
+    this.winchSubsystem = winchSubsystem;
   }
 
-  public Command climberSetLiftPosPID(DoubleSupplier pos) {
+  public Command setElevatorPosPID(DoubleSupplier pos) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberLiftPosition(pos.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberLiftVoltage(0));
+            () -> climberSubsystem.setClimberElevatorPosition(pos.getAsDouble()), climberSubsystem)
+        .finallyDo(() -> climberSubsystem.setClimberElevatorVoltage(0));
   }
 
-  public Command climberLiftApplyVoltageCommand(DoubleSupplier voltage) {
+  public Command elevatorApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberLiftVoltage(voltage.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberLiftVoltage(0));
+            () -> climberSubsystem.setClimberElevatorVoltage(voltage.getAsDouble()),
+            climberSubsystem)
+        .finallyDo(() -> climberSubsystem.setClimberElevatorVoltage(0));
   }
 
-  public Command climberSetWinchPosPID(DoubleSupplier pos) {
+  public Command setWinchPosPID(DoubleSupplier pos) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberWinchPosition(pos.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberWinchVoltage(0));
+            () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), winchSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
-  public Command climberWinchApplyVoltageCommand(DoubleSupplier voltage) {
+  public Command winchApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
-            () -> climberSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), climberSubsystem)
-        .finallyDo(() -> climberSubsystem.setClimberWinchVoltage(0));
+            () -> winchSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), winchSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
-  public Command climberSetClampState(BooleanSupplier isClamped) {
-    return new RunCommand(
+  public Command setClampState(BooleanSupplier isClamped) {
+    return new InstantCommand(
         () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()), climberSubsystem);
+  }
+
+  public Command liftHomeCommand() {
+    return elevatorApplyVoltageCommand(() -> 8)
+        .repeatedly()
+        .until(() -> climberSubsystem.isLimitSwitchPressed())
+        .andThen(
+            elevatorApplyVoltageCommand(() -> -2)
+                .repeatedly()
+                .until(() -> !climberSubsystem.isLimitSwitchPressed()))
+        .andThen(
+            elevatorApplyVoltageCommand(() -> 0.5)
+                .repeatedly()
+                .until(() -> climberSubsystem.isLimitSwitchPressed()))
+        // .andThen(
+        //     liftApplyVoltageCommand(() -> -liftConstants.liftHomeFastVoltage)
+        //         .repeatedly()
+        //         .until(() -> !liftSubsystem.isLimitSwitchPressed()))
+        .andThen(new InstantCommand(() -> climberSubsystem.resetEncoder()))
+        .finallyDo(() -> climberSubsystem.setLimitsEnabled(true))
+        .beforeStarting(() -> climberSubsystem.setLimitsEnabled(false));
   }
 }

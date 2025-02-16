@@ -19,106 +19,61 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public double getLiftMotorPosition() {
-    return inputs.liftMotorPosition;
-  }
-
-  public double getWinchLeaderMotorPosition() {
-    return inputs.winchLeaderMotorPosition;
-  }
-
-  public double getWinchFollowerMotorPosition() {
-    return inputs.winchFollowerMotorPosition;
-  }
-
-  public double getWinchMotorPosition() {
-    return ((inputs.winchLeaderMotorPosition + inputs.winchFollowerMotorPosition) / 2.0);
+    return inputs.elevatorMotorPosition;
   }
 
   public double getLiftMotorVelocity() {
-    return inputs.liftMotorVelocity;
-  }
-
-  public double getWinchLeaderMotorVelocity() {
-    return inputs.winchLeaderMotorVelocity;
-  }
-
-  public double getWinchFollowerMotorVelocity() {
-    return inputs.winchFollowerMotorVelocity;
-  }
-
-  public double getWinchMotorVelocity() {
-    return ((inputs.winchLeaderMotorVelocity + inputs.winchFollowerMotorVelocity) / 2.0);
+    return inputs.elevatorMotorVelocity;
   }
 
   public double getLiftMotorCurrent() {
-    return inputs.liftMotorCurrent;
-  }
-
-  public double getWinchLeaderMotorCurrent() {
-    return inputs.winchLeaderMotorCurrent;
-  }
-
-  public double getWinchFollowerMotorCurrent() {
-    return inputs.winchFollowerMotorCurrent;
-  }
-
-  public double getWinchMotorCurrent() {
-    return ((inputs.winchLeaderMotorCurrent + inputs.winchFollowerMotorCurrent) / 2.0);
+    return inputs.elevatorMotorCurrent;
   }
 
   public double getLiftMotorVoltage() {
-    return inputs.liftMotorVoltage;
-  }
-
-  public double getWinchLeaderMotorVoltage() {
-    return inputs.winchLeaderMotorVoltage;
-  }
-
-  public double getWinchFollowerMotorVoltage() {
-    return inputs.winchFollowerMotorVoltage;
-  }
-
-  public double getWinchMotorVoltage() {
-    return ((inputs.winchLeaderMotorVoltage + inputs.winchFollowerMotorVoltage) / 2.0);
+    return inputs.elevatorMotorVoltage;
   }
 
   public double getLiftTemperature() {
-    return inputs.liftMotorTemperature;
+    return inputs.elevatorMotorTemperature;
   }
 
-  public double getWinchLeaderMotorTemperature() {
-    return inputs.winchLeaderMotorTemperature;
+  public boolean getSensor1() {
+    return inputs.sensor1;
   }
 
-  public double getWinchFollowerMotorTemperature() {
-    return inputs.winchFollowerMotorTemperature;
+  public boolean getSensor2() {
+    return inputs.sensor2;
   }
 
-  public double getWinchMotorTemperature() {
-    return ((inputs.winchLeaderMotorTemperature + inputs.winchFollowerMotorTemperature) / 2.0);
-  }
-
-  public void setClimberLiftPosition(double pos) {
+  public void setClimberElevatorPosition(double pos) {
     climberIO.setClimberLiftPosition(pos, inputs);
   }
 
-  public void setClimberLiftVoltage(double voltage) {
+  public void setClimberElevatorVoltage(double voltage) {
     climberIO.setClimberLiftVoltage(voltage, inputs);
   }
 
-  public void setClimberWinchPosition(double pos) {
-    climberIO.setClimberWinchPosition(pos, inputs);
-  }
-
-  public void setClimberWinchVoltage(double voltage) {
-    climberIO.setClimberWinchVoltage(voltage, inputs);
-  }
-
+  /**
+   * @return if the solenoid is in the forward position
+   */
   public boolean getSolenoidState() {
     return inputs.solenoidForward;
   }
 
   public void setSolenoidState(boolean forward) {
-    climberIO.setSolenoidState(forward, inputs);
+    climberIO.setSolenoidState(forward);
+  }
+
+  public void resetEncoder() {
+    climberIO.resetEncoder();
+  }
+
+  public boolean isLimitSwitchPressed() {
+    return inputs.isLimitSwitchPressed;
+  }
+
+  public void setLimitsEnabled(boolean enable) {
+    climberIO.setLimitsEnabled(enable);
   }
 }

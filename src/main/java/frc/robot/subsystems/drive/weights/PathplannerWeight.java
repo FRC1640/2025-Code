@@ -12,13 +12,13 @@ import org.littletonrobotics.junction.Logger;
 
 public class PathplannerWeight implements DriveWeight {
   private static ChassisSpeeds speeds = new ChassisSpeeds();
-  private Gyro gyro;
-  private Supplier<Pose2d> robotPose;
+  private static Gyro gyro;
+  private static Supplier<Pose2d> robotPose;
   public static Pose2d setpoint = new Pose2d(0.00001, 0.00001, new Rotation2d(0.00001));
 
   public PathplannerWeight(Gyro gyro, Supplier<Pose2d> robotPose) {
-    this.gyro = gyro;
-    this.robotPose = robotPose;
+    PathplannerWeight.gyro = gyro;
+    PathplannerWeight.robotPose = robotPose;
   }
 
   public static void setSpeeds(ChassisSpeeds newSpeeds) {
@@ -50,5 +50,13 @@ public class PathplannerWeight implements DriveWeight {
 
   public static void clearRotationOverride() {
     PPHolonomicDriveController.clearRotationFeedbackOverride();
+  }
+
+  public static void setPoseSupplier(Supplier<Pose2d> supplier) {
+    robotPose = supplier;
+  }
+
+  public static Pose2d getRobotPose() {
+    return robotPose.get();
   }
 }

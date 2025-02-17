@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4957386363636362,
-        "y": 7.245823863636363
+        "x": 5.135,
+        "y": 5.147
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7327950407434007,
-        "y": 7.166424486166904
+        "x": 5.26,
+        "y": 5.36350635094611
       },
       "isLocked": false,
-      "linkedName": "CoralStationUp"
+      "linkedName": "UP-RIGHT"
     },
     {
       "anchor": {
-        "x": 3.8490340909090905,
-        "y": 5.142
+        "x": 5.483,
+        "y": 5.749
       },
       "prevControl": {
-        "x": 3.530005681818181,
-        "y": 5.745085227272726
+        "x": 5.303345683814233,
+        "y": 5.437829596567209
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "UP-LEFT"
+      "linkedName": "UP-RIGHT-AWAY"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6813627254509018,
+      "rotationDegrees": -170.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 165.0
   },
   "reversed": false,
-  "folder": "L1 Spam",
+  "folder": "Algae Chucker",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -1,0 +1,139 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetModeCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trust The Process 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetModeAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3LeftCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Chucker 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Chucker 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Chucker 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Chucker 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae Chucker 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

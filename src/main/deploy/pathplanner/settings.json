@@ -3,8 +3,10 @@
   "robotLength": 0.9271,
   "holonomicMode": true,
   "pathFolders": [
+    "Algae Chucker",
     "L1 Spam",
-    "L4"
+    "L4",
+    "Trust The Process"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

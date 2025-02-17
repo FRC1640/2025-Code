@@ -114,6 +114,12 @@ public class TrackedRobotPID {
         Logger.recordOutput("PIDTrack/" + idName + "/constants/kP", pidsTrack.get(idName).getP());
         Logger.recordOutput("PIDTrack/" + idName + "/constants/kI", pidsTrack.get(idName).getI());
         Logger.recordOutput("PIDTrack/" + idName + "/constants/kD", pidsTrack.get(idName).getD());
+        Logger.recordOutput(
+            "PIDTrack/" + idName + "/constants/maxAcceleration",
+            pidsTrack.get(idName).getConstraints().maxAcceleration);
+        Logger.recordOutput(
+            "PIDTrack/" + idName + "/constants/maxVelocity",
+            pidsTrack.get(idName).getConstraints().maxVelocity);
       }
     }
   }

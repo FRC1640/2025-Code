@@ -32,11 +32,12 @@ public class PIDTab {
       pidChooser.addOption(name, PIDTrack.pidsTrack.get(name));
     }
     pidChooser.onChange((x) -> updateNetworkTable(x));
-    pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 1);
+    pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 0);
 
-    kPSet = pidTab.add("kP", 0).withPosition(0, 0).getEntry();
-    kISet = pidTab.add("kI", 0).withPosition(1, 0).getEntry();
-    kDSet = pidTab.add("kD", 0).withPosition(2, 0).getEntry();
+    kPSet = pidTab.add("kP", 0).withPosition(0, 1).getEntry();
+    kISet = pidTab.add("kI", 0).withPosition(1, 1).getEntry();
+    kDSet = pidTab.add("kD", 0).withPosition(2, 1).getEntry();
+
     pidTab
         .add(
             "Set Values",
@@ -48,7 +49,7 @@ public class PIDTab {
                   pidChooser.getSelected().setD(kDSet.getDouble(0));
                   System.out.println("ending");
                 }))
-        .withPosition(3, 0);
+        .withPosition(3, 1);
   }
 
   public void updateNetworkTable(PIDController select) {

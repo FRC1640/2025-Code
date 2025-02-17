@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.util.logging.TrackedRobotPID.PIDTrack;
-import org.littletonrobotics.junction.Logger;
 
 public class PIDTab {
-  private static SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
+  private static SendableChooser<String> pidChooser = new SendableChooser<String>();
   public static ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
   NetworkTableInstance nt = NetworkTableInstance.getDefault();
   NetworkTable networkTable = nt.getTable("/Shuffleboard/PID Tuning");
@@ -24,19 +23,16 @@ public class PIDTab {
   public PIDTab() {}
 
   public void init() {
-    widgetBuild();
-  }
-
-  public void widgetBuild() {
     pidTunerBuild();
   }
 
   public void pidTunerBuild() {
-    pidChooser.setDefaultOption("none", new PIDController(0, 0, 0));
+    PIDTrack.pidsTrack.put("none", new PIDController(0, 0, 0));
+    pidChooser.setDefaultOption("none", "none");
     for (String name : PIDTrack.pidsTrack.keySet()) {
-      pidChooser.addOption(name, PIDTrack.pidsTrack.get(name));
+      pidChooser.addOption(name, name);
     }
-    pidChooser.onChange((x) -> updateNetworkTable(x));
+    pidChooser.onChange((x) -> updateNetworkTable(PIDTrack.pidsTrack.get(x)));
     pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 1);
 
     kPSet = pidTab.add("kP", 0).withPosition(0, 0).getEntry();
@@ -47,11 +43,13 @@ public class PIDTab {
             "Set Values",
             new InstantCommand(
                 () -> {
-                  Logger.recordOutput("weihfow", "ewofhwiof");
                   System.out.println("starting");
-                  pidChooser.getSelected().setP(kPSet.getDouble(0));
-                  pidChooser.getSelected().setI(kISet.getDouble(0));
-                  pidChooser.getSelected().setD(kDSet.getDouble(0));
+                  PIDController constructedController =
+                      PIDTrack.pidsTrack.get(pidChooser.getSelected());
+                  constructedController.setP(kPSet.getDouble(0));
+                  constructedController.setI(kISet.getDouble(0));
+                  constructedController.setD(kDSet.getDouble(0));
+                  PIDTrack.pidsTrack.put(pidChooser.getSelected(), constructedController);
                   System.out.println("ending");
                 }))
         .withPosition(3, 0);

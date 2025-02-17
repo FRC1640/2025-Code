@@ -126,9 +126,9 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    LoggerManager.updateLog();
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
+    LoggerManager.updateLog();
   }
 
   @Override
@@ -181,6 +181,7 @@ public class Robot extends LoggedRobot {
     state = RobotState.TEST;
     CommandScheduler.getInstance().cancelAll();
     Dashboard.getSysidCommand().schedule();
+
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
   }
 

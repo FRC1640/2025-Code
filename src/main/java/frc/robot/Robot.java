@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
+import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
@@ -179,14 +181,24 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     state = RobotState.TEST;
-    CommandScheduler.getInstance().cancelAll();
-    Dashboard.getSysidCommand().schedule();
+    if (TestConfig.tuningMode == TestingSetting.pidTuning) {}
 
-    CommandScheduler.getInstance().getActiveButtonLoop().clear();
+    if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
+      CommandScheduler.getInstance().cancelAll();
+      Dashboard.getSysidCommand().schedule();
+
+      CommandScheduler.getInstance().getActiveButtonLoop().clear();
+    }
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    if (TestConfig.tuningMode == TestingSetting.pidTuning) {
+      CommandScheduler.getInstance().run();
+      PeriodicScheduler.getInstance().run();
+      LoggerManager.updateLog();
+    }
+  }
 
   @Override
   public void testExit() {}

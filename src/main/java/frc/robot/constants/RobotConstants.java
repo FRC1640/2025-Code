@@ -12,7 +12,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.constants.ConfigEnums.TestMode.TuningSetting;
+import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
@@ -31,8 +31,8 @@ public class RobotConstants {
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
-  public class DebugConfig {
-    public static TuningSetting tuningMode = TuningSetting.pidTuning;
+  public class TestConfig {
+    public static TestingSetting tuningMode = TestingSetting.pidTuning;
   }
 
   public class MotorInfo {

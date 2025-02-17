@@ -1,8 +1,9 @@
 package frc.robot.constants.ConfigEnums;
 
 public class TestMode {
-  public enum TuningSetting {
+  public enum TestingSetting {
     none,
-    pidTuning;
+    pidTuning,
+    sysIDTesting;
   }
 }

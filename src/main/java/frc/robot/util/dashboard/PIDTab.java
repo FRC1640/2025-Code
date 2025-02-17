@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.util.logging.TrackedRobotPID.PIDTrack;
 
 public class PIDTab {
-  private static SendableChooser<String> pidChooser = new SendableChooser<String>();
+  private static SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
   public static ShuffleboardTab pidTab = Shuffleboard.getTab("PID Tuning");
   NetworkTableInstance nt = NetworkTableInstance.getDefault();
   NetworkTable networkTable = nt.getTable("/Shuffleboard/PID Tuning");
@@ -27,12 +27,11 @@ public class PIDTab {
   }
 
   public void pidTunerBuild() {
-    PIDTrack.pidsTrack.put("none", new PIDController(0, 0, 0));
-    pidChooser.setDefaultOption("none", "none");
+    pidChooser.setDefaultOption("none", new PIDController(0, 0, 0));
     for (String name : PIDTrack.pidsTrack.keySet()) {
-      pidChooser.addOption(name, name);
+      pidChooser.addOption(name, PIDTrack.pidsTrack.get(name));
     }
-    pidChooser.onChange((x) -> updateNetworkTable(PIDTrack.pidsTrack.get(x)));
+    pidChooser.onChange((x) -> updateNetworkTable(x));
     pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 1);
 
     kPSet = pidTab.add("kP", 0).withPosition(0, 0).getEntry();
@@ -44,12 +43,9 @@ public class PIDTab {
             new InstantCommand(
                 () -> {
                   System.out.println("starting");
-                  PIDController constructedController =
-                      PIDTrack.pidsTrack.get(pidChooser.getSelected());
-                  constructedController.setP(kPSet.getDouble(0));
-                  constructedController.setI(kISet.getDouble(0));
-                  constructedController.setD(kDSet.getDouble(0));
-                  PIDTrack.pidsTrack.put(pidChooser.getSelected(), constructedController);
+                  pidChooser.getSelected().setP(kPSet.getDouble(0));
+                  pidChooser.getSelected().setI(kISet.getDouble(0));
+                  pidChooser.getSelected().setD(kDSet.getDouble(0));
                   System.out.println("ending");
                 }))
         .withPosition(3, 0);

@@ -50,7 +50,16 @@ public class FollowPathNearest extends FollowPath {
             findNearest(positions.get()).getTranslation(),
             findNearest(positions.get()).getRotation());
 
-    pose2dArray = new Pose2d[] {nearestPos};
+    double v = nearestPos.getTranslation().getDistance(robotPose.get().getTranslation());
+    Rotation2d angle =
+        nearestPos.getTranslation().minus(robotPose.get().getTranslation()).getAngle();
+
+    double midPointLength = Math.abs(angle.getCos() * v);
+
+    Pose2d midPoint =
+        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.5, nearestPos.getRotation());
+
+    pose2dArray = new Pose2d[] {midPoint, nearestPos};
     endRotation = findNearest(positions.get()).getRotation();
 
     PathplannerWeight.overrideRotation(() -> omegaOverride(() -> nearestPos.getRotation()));

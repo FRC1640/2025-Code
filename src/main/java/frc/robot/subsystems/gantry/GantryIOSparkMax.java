@@ -23,11 +23,12 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+  private boolean limits = false;
 
   public GantryIOSparkMax() {
     gantrySpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getGantryDefaultSparkMax(GantryConstants.gantrySparkID)
+            SparkConstants.getGantryDefaultMax(GantryConstants.gantrySparkID)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     gantryEncoder = gantrySpark.getEncoder();
     gantryLimitSwitch = gantrySpark.getForwardLimitSwitch();
@@ -54,7 +55,6 @@ public class GantryIOSparkMax implements GantryIO {
             * GantryConstants.pulleyRadius;
   }
 
-  @Override
   public void setGantryVoltage(
       double voltage, GantryIOInputs inputs) { // right limit is boolean condition for limitswitch
     gantrySpark.setVoltage(
@@ -62,10 +62,9 @@ public class GantryIOSparkMax implements GantryIO {
             inputs.encoderPosition,
             MotorLim.clampVoltage(voltage),
             GantryConstants.gantryLimits.low,
-            inputs.isLimitSwitchPressed));
+            limits ? GantryConstants.gantryLimits.high : null));
   }
 
-  @Override
   public void setGantryPosition(double position, GantryIOInputs inputs) {
     setGantryVoltage(gantryPID.calculate(inputs.encoderPosition, position), inputs);
   }
@@ -80,11 +79,16 @@ public class GantryIOSparkMax implements GantryIO {
 
   @Override
   public void resetEncoder() {
-    gantryEncoder.setPosition(0);
+    gantryEncoder.setPosition(GantryConstants.gantryLimits.low);
   }
 
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

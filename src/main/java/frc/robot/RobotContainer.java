@@ -48,6 +48,7 @@ import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
+import frc.robot.subsystems.climber.commands.ClimberRoutines;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSim;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIOSparkMax;
@@ -72,6 +73,10 @@ import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import frc.robot.subsystems.winch.WinchIO;
+import frc.robot.subsystems.winch.WinchIOSim;
+import frc.robot.subsystems.winch.WinchIOSparkMax;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
@@ -92,11 +97,15 @@ public class RobotContainer {
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
   private final ClimberSubsystem climberSubsystem;
   private final AlgaeSubsystem algaeIntakeSubsystem;
+  private final WinchSubsystem winchSubsystem;
   private ArrayList<AprilTagVision> aprilTagVisions = new ArrayList<>();
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final PresetBoard presetBoard = new PresetBoard(2);
+  private final PresetBoard simBoard = new PresetBoard(3);
+  private final PresetBoard motorBoard = new PresetBoard(5);
+
   private final AlertsManager alertsManager;
 
   // Dashboard
@@ -110,6 +119,7 @@ public class RobotContainer {
   private final CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private final DriveCommandFactory driveCommandFactory;
   private final ClimberCommandFactory climberCommandFactory;
+  private final ClimberRoutines climberRoutines;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private final AlgaeCommandFactory algaeCommandFactory;
 
@@ -156,6 +166,11 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
+        winchSubsystem =
+            new WinchSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled
+                    ? new WinchIOSparkMax()
+                    : new WinchIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
@@ -178,24 +193,31 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(operatorController.y())
+                    ? new GantryIOSim(() -> simBoard.getLl2())
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSim() : new LiftIO() {});
+                RobotConfigConstants.liftSubsystemEnabled
+                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
+                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim()
+                    ? new ClimberIOSim(() -> simBoard.getRl4())
                     : new ClimberIO() {});
+        winchSubsystem =
+            new WinchSubsystem(
+                RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+                RobotConfigConstants.algaeIntakeEnabled
+                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -204,14 +226,17 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
+        winchSubsystem = new WinchSubsystem(new WinchIO() {});
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
+    driveSubsystem = new DriveSubsystem(gyro);
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-
-    climberCommandFactory = new ClimberCommandFactory(climberSubsystem);
+    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
+    climberCommandFactory = new ClimberCommandFactory(climberSubsystem, winchSubsystem);
+    climberRoutines = new ClimberRoutines(climberCommandFactory);
     algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
     logRunner = new LogRunner();
     autoScoringCommandFactory =
@@ -224,9 +249,7 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     generateNamedCommands();
-    driveSubsystem = new DriveSubsystem(gyro);
 
-    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);
@@ -267,6 +290,11 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
+
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+
+    generateNamedCommands();
     configureBindings();
   }
 
@@ -357,7 +385,11 @@ public class RobotContainer {
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
 
-    driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    driveController
+        .povDown()
+        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+
+    driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))
@@ -396,12 +428,22 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
     new Trigger(() -> presetBoard.getRl4())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
-    new Trigger(() -> presetBoard.getTroph())
+    new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
+    operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                algaeIntakeSubsystem.hasAlgae()
+                    && RobotOdometry.instance
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        > 0.3)
+        .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 
@@ -421,6 +463,25 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
+    // motor board
+    new Trigger(() -> motorBoard.getLl2())
+        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getLl3())
+        .onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getLl4())
+        .onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
+    new Trigger(() -> motorBoard.getRl4())
+        .onTrue(algaeCommandFactory.setMotorVoltages(() -> 1, () -> 1));
+    new Trigger(() -> motorBoard.getRl3())
+        .onTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getRl2())
+        .onTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
+
+    // climber button bindings:
+    operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
+    operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
+    operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
+    operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
   }
 
   public Command getAutonomousCommand() {
@@ -430,7 +491,10 @@ public class RobotContainer {
   public Command homing() {
     return new ConditionalCommand(
         new InstantCommand(),
-        gantryCommandFactory.gantryHomeCommand(),
+        gantryCommandFactory
+            .gantryHomeCommand()
+            .alongWith(liftCommandFactory.liftHomeCommand())
+            .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);
   }
 
@@ -501,6 +565,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
 
     NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe));
+
+    NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
 
     NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
 

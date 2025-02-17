@@ -9,12 +9,14 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
+import java.util.function.BooleanSupplier;
 
 public class LiftIOSim implements LiftIO {
   private double velocitySetpoint = 0;
   private final DCMotorSim motor1Sim;
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
+  private BooleanSupplier liftLimitSwitch;
   PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
@@ -22,8 +24,10 @@ public class LiftIOSim implements LiftIO {
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+  private boolean limits;
 
-  public LiftIOSim() {
+  public LiftIOSim(BooleanSupplier liftLimitSwitch) {
+    this.liftLimitSwitch = liftLimitSwitch;
     DCMotor motor1SimGearbox = DCMotor.getNEO(1);
     DCMotor motor2SimGearbox = DCMotor.getNEO(1);
 
@@ -49,14 +53,14 @@ public class LiftIOSim implements LiftIO {
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
+                limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
     motor2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.followerMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
+                limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
   }
   /*
@@ -90,6 +94,7 @@ public class LiftIOSim implements LiftIO {
     inputs.leaderMotorVoltage = motor1Sim.getInputVoltage();
     inputs.followerMotorVoltage = motor2Sim.getInputVoltage();
     inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
+    inputs.isLimitSwitchPressed = liftLimitSwitch.getAsBoolean();
   }
 
   @Override
@@ -112,5 +117,10 @@ public class LiftIOSim implements LiftIO {
   @Override
   public double velocitySetpoint() {
     return velocitySetpoint;
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

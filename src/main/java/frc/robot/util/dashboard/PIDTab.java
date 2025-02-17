@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.util.logging.TrackedRobotPID.PIDTrack;
+import frc.robot.util.dashboard.PIDInfo.PIDInfo;
+import frc.robot.util.logging.PIDTracking.PIDTrack;
 
 public class PIDTab {
   private static SendableChooser<PIDController> pidChooser = new SendableChooser<PIDController>();
@@ -28,8 +29,8 @@ public class PIDTab {
 
   public void pidTunerBuild() {
     pidChooser.setDefaultOption("none", new PIDController(0, 0, 0));
-    for (String name : PIDTrack.pidsTrack.keySet()) {
-      pidChooser.addOption(name, PIDTrack.pidsTrack.get(name));
+    for (PIDInfo info : PIDTrack.pidsTrack.keySet()) {
+      pidChooser.addOption(info.name, PIDTrack.pidsTrack.get(info));
     }
     pidChooser.onChange((x) -> updateNetworkTable(x));
     pidTab.add(pidChooser).withSize(3, 1).withPosition(0, 0);

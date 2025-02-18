@@ -175,7 +175,7 @@ public class RobotConstants {
                     Units.inchesToMeters(10.5)),
                 new Rotation3d()),
             1,
-            "Sommar",
+            "Park",
             "Front Right");
 
     public static final CameraConstant backCamera =

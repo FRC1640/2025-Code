@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive.weights;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.util.tools.ChassisSpeedHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -29,6 +31,8 @@ public class FollowPath {
   public Rotation2d endRotation;
   private PathConstraints pathConstraints;
   private DriveSubsystem driveSubsystem;
+  private ChassisSpeeds lastSpeeds = new ChassisSpeeds();
+  IdealStartingState idealStartingState = null;
 
   public FollowPath(
       Supplier<Pose2d> robotPose,
@@ -49,7 +53,9 @@ public class FollowPath {
 
   public void restartPath() {
     stopPath();
-
+    idealStartingState =
+        new IdealStartingState(
+            ChassisSpeedHelper.magnitude(lastSpeeds), robotPose.get().getRotation());
     startPath();
   }
 
@@ -57,8 +63,10 @@ public class FollowPath {
     if (pathCommand != null) {
       pathCommand.cancel();
     }
+    lastSpeeds = PathplannerWeight.getSpeedsPath();
     PathplannerWeight.setSpeeds(new ChassisSpeeds());
     pathCommand = null;
+    idealStartingState = null;
   }
 
   public void startPath() {
@@ -83,11 +91,7 @@ public class FollowPath {
     waypoints = PathPlannerPath.waypointsFromPoses(waypointPos);
     PathPlannerPath path =
         new PathPlannerPath(
-            waypoints,
-            pathConstraints,
-            null, // The ideal starting state, this is only relevant for pre-planned paths, so can
-            // be null for on-the-fly paths.
-            new GoalEndState(0.00, endRotation));
+            waypoints, pathConstraints, idealStartingState, new GoalEndState(0.00, endRotation));
     path.preventFlipping = true;
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);

@@ -140,8 +140,13 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
-                CameraConstants.frontCamera));
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+                CameraConstants.frontCameraLeft));
+
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
+                CameraConstants.frontCameraRight));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -182,9 +187,9 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
-                    CameraConstants.frontCamera,
+                    CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCamera));
+                CameraConstants.frontCameraLeft));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -203,7 +208,7 @@ public class RobotContainer {
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
+                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
@@ -385,7 +390,11 @@ public class RobotContainer {
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
 
-    driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    driveController
+        .povDown()
+        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+
+    driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))

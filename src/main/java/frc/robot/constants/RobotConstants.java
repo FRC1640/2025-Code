@@ -51,7 +51,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Sim;
+    public static final RobotType robotType = RobotType.Deux25;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -65,7 +65,10 @@ public class RobotConstants {
             .addValue(RobotType.Deux24, false)
             .get();
     public static final boolean algaeIntakeEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
+            .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -74,7 +77,10 @@ public class RobotConstants {
             .get();
 
     public static final boolean climberSubsystemEnabled =
-        new RobotSwitch<Boolean>(true).addValue(RobotType.Deux24, false).get();
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
+            .get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true)
@@ -146,7 +152,7 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
-    public static final CameraConstant frontCamera =
+    public static final CameraConstant frontCameraLeft =
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
@@ -156,7 +162,21 @@ public class RobotConstants {
                     Units.inchesToMeters(10.5)),
                 new Rotation3d()),
             1,
-            "Front");
+            "Dodds",
+            "Front Left");
+
+    public static final CameraConstant frontCameraRight =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(29.5 / 2),
+                    -Units.inchesToMeters(29.5 / 2 - 8),
+                    Units.inchesToMeters(10.5)),
+                new Rotation3d()),
+            1,
+            "Park",
+            "Front Right");
 
     public static final CameraConstant backCamera =
         new CameraConstant(
@@ -165,6 +185,7 @@ public class RobotConstants {
                 new Translation3d(0.146, -0.356, 0.406),
                 new Rotation3d(0, Math.toRadians(1), Math.PI)),
             1,
+            "BackLL",
             "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);

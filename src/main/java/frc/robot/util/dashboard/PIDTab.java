@@ -21,6 +21,9 @@ public class PIDTab {
   GenericEntry kPSet;
   GenericEntry kISet;
   GenericEntry kDSet;
+  GenericEntry iZoneSet;
+  GenericEntry tolerance;
+
   GenericEntry setpoint;
 
   public PIDTab() {}
@@ -40,8 +43,9 @@ public class PIDTab {
     kPSet = pidTab.add("kP", 0).withPosition(0, 1).getEntry();
     kISet = pidTab.add("kI", 0).withPosition(1, 1).getEntry();
     kDSet = pidTab.add("kD", 0).withPosition(2, 1).getEntry();
+    iZoneSet = pidTab.add("IZone", 0).withPosition(3, 1).getEntry();
+    tolerance = pidTab.add("Tolerance", 0).withPosition(4, 1).getEntry();
     setpoint = pidTab.add("Set", 0).withPosition(0, 2).withSize(1, 1).getEntry();
-
     pidTab
         .add(
             "Run Attached PID Command",
@@ -70,14 +74,18 @@ public class PIDTab {
                   pidChooser.getSelected().setP(kPSet.getDouble(0));
                   pidChooser.getSelected().setI(kISet.getDouble(0));
                   pidChooser.getSelected().setD(kDSet.getDouble(0));
+                  pidChooser.getSelected().setIZone(iZoneSet.getDouble(0));
+                  pidChooser.getSelected().setTolerance(tolerance.getDouble(0));
                   System.out.println("ending");
                 }))
-        .withPosition(3, 1);
+        .withPosition(5, 1);
   }
 
   public void updateNetworkTable(PIDController select) {
     networkTable.getEntry("kP").setDouble(select.getP());
     networkTable.getEntry("kI").setDouble(select.getI());
     networkTable.getEntry("kD").setDouble(select.getD());
+    networkTable.getEntry("IZone").setDouble(select.getIZone());
+    networkTable.getEntry("Tolerance").setDouble(select.getErrorTolerance());
   }
 }

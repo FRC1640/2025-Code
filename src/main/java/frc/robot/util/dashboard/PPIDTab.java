@@ -18,7 +18,7 @@ public class PPIDTab {
       new SendableChooser<ProfiledPIDController>();
   public static ShuffleboardTab pidTab = Shuffleboard.getTab("ProfiledPID Tuning");
   NetworkTableInstance nt = NetworkTableInstance.getDefault();
-  NetworkTable networkTable = nt.getTable("/Shuffleboard/PID Tuning");
+  NetworkTable networkTable = nt.getTable("/Shuffleboard/ProfiledPID Tuning");
 
   GenericEntry kPSet;
   GenericEntry kISet;
@@ -26,6 +26,9 @@ public class PPIDTab {
   GenericEntry setpoint;
   GenericEntry maxAcceleration;
   GenericEntry maxVelocity;
+  GenericEntry iZoneSet;
+  GenericEntry pTolerance;
+  GenericEntry vTolerance;
 
   public PPIDTab() {}
 
@@ -48,6 +51,9 @@ public class PPIDTab {
     maxAcceleration = pidTab.add("maxAcceleration", 0).withPosition(3, 1).getEntry();
     maxVelocity = pidTab.add("maxVelocity", 0).withPosition(4, 1).getEntry();
     setpoint = pidTab.add("Set", 0).withPosition(0, 2).withSize(1, 1).getEntry();
+    iZoneSet = pidTab.add("IZone", 0).withPosition(5, 1).getEntry();
+    pTolerance = pidTab.add("Pos Tolerance", 0).withPosition(6, 1).getEntry();
+    vTolerance = pidTab.add("Vel Tolerance", 0).withPosition(6, 1).getEntry();
 
     pidTab
         .add(
@@ -73,13 +79,19 @@ public class PPIDTab {
             "Set Values",
             new InstantCommand(
                 () -> {
-                  System.out.println("starting");
                   pidChooser.getSelected().setP(kPSet.getDouble(0));
                   pidChooser.getSelected().setI(kISet.getDouble(0));
                   pidChooser.getSelected().setD(kDSet.getDouble(0));
-                  System.out.println("ending");
+                  pidChooser.getSelected().setIZone(iZoneSet.getDouble(0));
+                  pidChooser
+                      .getSelected()
+                      .setTolerance(pTolerance.getDouble(0), vTolerance.getDouble(0));
+                  pidChooser
+                      .getSelected()
+                      .setConstraints(
+                          new Constraints(maxVelocity.getDouble(0), maxAcceleration.getDouble(0)));
                 }))
-        .withPosition(5, 1);
+        .withPosition(7, 1);
   }
 
   public void updateNetworkTable(ProfiledPIDController select) {
@@ -88,5 +100,8 @@ public class PPIDTab {
     networkTable.getEntry("kD").setDouble(select.getD());
     networkTable.getEntry("maxAcceleration").setDouble(select.getConstraints().maxAcceleration);
     networkTable.getEntry("maxVelocity").setDouble(select.getConstraints().maxVelocity);
+    networkTable.getEntry("IZone").setDouble(select.getIZone());
+    networkTable.getEntry("Pos Tolerance").setDouble(select.getPositionTolerance());
+    networkTable.getEntry("Vel Tolerance").setDouble(select.getVelocityTolerance());
   }
 }

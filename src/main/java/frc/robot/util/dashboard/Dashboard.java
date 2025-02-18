@@ -41,6 +41,7 @@ public class Dashboard {
     teleopInit();
     if (TestConfig.tuningMode == TestingSetting.pidTuning) {
       pidTab.init();
+      ppidTab.init();
     }
     if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
       sysidInit();

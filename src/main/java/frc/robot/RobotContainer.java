@@ -107,6 +107,7 @@ public class RobotContainer {
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
   private final PresetBoard testBoard = new PresetBoard(4);
+  private final PresetBoard motorBoard = new PresetBoard(5);
 
   private final AlertsManager alertsManager;
 
@@ -142,8 +143,13 @@ public class RobotContainer {
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCamera),
-                CameraConstants.frontCamera));
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+                CameraConstants.frontCameraLeft));
+
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
+                CameraConstants.frontCameraRight));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -187,9 +193,9 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
-                    CameraConstants.frontCamera,
+                    CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCamera));
+                CameraConstants.frontCameraLeft));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -208,7 +214,7 @@ public class RobotContainer {
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(operatorController.leftBumper())
+                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
@@ -401,7 +407,11 @@ public class RobotContainer {
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
 
-    driveController.b().onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    driveController
+        .povDown()
+        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+
+    driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))
@@ -475,6 +485,19 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(true)
                 .andThen(algaeCommandFactory.processCommand()));
+    // motor board
+    new Trigger(() -> motorBoard.getLl2())
+        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getLl3())
+        .onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getLl4())
+        .onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
+    new Trigger(() -> motorBoard.getRl4())
+        .onTrue(algaeCommandFactory.setMotorVoltages(() -> 1, () -> 1));
+    new Trigger(() -> motorBoard.getRl3())
+        .onTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getRl2())
+        .onTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
 
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
@@ -565,6 +588,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
 
     NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe));
+
+    NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
 
     NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
 

@@ -13,13 +13,19 @@
         {
           "type": "named",
           "data": {
+            "name": "SetModeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "HaveCoral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 1"
+            "pathName": "L4 Red 1"
           }
         },
         {
@@ -37,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 2"
+            "pathName": "L4 Red 2"
           }
         },
         {
@@ -49,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 3"
+            "pathName": "L4 Red 3"
           }
         },
         {
@@ -67,7 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 2"
+            "pathName": "L4 Red 2"
           }
         },
         {
@@ -79,7 +85,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 5"
+            "pathName": "L4 Red 5"
           }
         },
         {

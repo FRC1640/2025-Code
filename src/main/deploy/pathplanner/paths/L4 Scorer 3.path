@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4LeftCoral",
+      "name": "L4RightCoral",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
@@ -82,7 +82,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L4",
+  "folder": "L4 Blue Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.0

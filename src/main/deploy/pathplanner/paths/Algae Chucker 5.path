@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L3LeftCoral",
+      "name": "L2LeftCoral",
       "waypointRelativePos": 0.41904761904761967,
       "endWaypointRelativePos": null,
       "command": null

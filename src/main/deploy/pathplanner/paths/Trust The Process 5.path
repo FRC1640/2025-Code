@@ -3,47 +3,60 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.0,
-        "y": 0.6
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 5.866965753424658,
-        "y": 1.5164794520547944
-      },
-      "isLocked": false,
-      "linkedName": "Processor"
-    },
-    {
-      "anchor": {
         "x": 5.135,
         "y": 2.905
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.722674094390894,
+        "y": 1.8871186102229434
+      },
+      "isLocked": false,
+      "linkedName": "DOWN-RIGHT"
+    },
+    {
+      "anchor": {
+        "x": 5.483,
+        "y": 2.303
+      },
       "prevControl": {
-        "x": 5.784888698630137,
-        "y": 1.590839041095891
+        "x": 5.357999999999999,
+        "y": 2.5195063509461106
+      },
+      "nextControl": {
+        "x": 5.608,
+        "y": 2.08649364905389
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.0,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 5.9651969178082185,
+        "y": 2.3120719178082187
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DOWN-RIGHT"
+      "linkedName": "Processor"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6913827655310621,
+      "waypointRelativePos": 1.0180360721442885,
       "rotationDegrees": 119.99999999999999
+    },
+    {
+      "waypointRelativePos": 1.9078156312625252,
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4LeftCoral",
-      "waypointRelativePos": 0.6666666666666664,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,13 +67,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Trust The Process",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

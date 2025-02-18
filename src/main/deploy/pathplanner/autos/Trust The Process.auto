@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "L3LeftCoral"
+            "name": "L2LeftCoral"
           }
         },
         {
@@ -74,6 +74,36 @@
           "type": "path",
           "data": {
             "pathName": "Trust the Process 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trust The Process 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trust The Process 5"
           }
         },
         {

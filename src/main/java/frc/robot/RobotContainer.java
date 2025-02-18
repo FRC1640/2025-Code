@@ -259,8 +259,7 @@ public class RobotContainer {
             coralOuttakeSubsystem,
             algaeCommandFactory,
             algaeIntakeSubsystem);
-    generateNamedCommands();
-
+    setDefaultCommands();
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);
@@ -269,11 +268,6 @@ public class RobotContainer {
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
         "Low battery voltage.",
         AlertType.kWarning);
-
-    // set defaults
-
-    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
     // weights
     joystickDriveWeight =
         new JoystickDriveWeight(
@@ -342,6 +336,14 @@ public class RobotContainer {
         "climberLiftPID", (x) -> climberCommandFactory.setElevatorPosPID(() -> x));
     PIDCommandRegistry.attachPIDCommand(
         "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
+    PIDCommandRegistry.attachProfiledPIDCommand(
+        "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
+  }
+
+  private void setDefaultCommands() {
+    generateNamedCommands();
+    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
   }
 
   private void configureBindings() {

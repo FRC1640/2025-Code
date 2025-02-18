@@ -60,14 +60,15 @@ public class PPIDTab {
             "Run Attached PID Command",
             new InstantCommand(
                 () -> {
-                  if (PIDCommandRegistry.attachedCommands.get(pidChooser.getSelected()) != null) {
+                  if (PIDCommandRegistry.profiledAttachedCommands.get(pidChooser.getSelected())
+                      != null) {
                     if (PIDCommandRegistry.currentlyRunningCommand != null) {
                       CommandScheduler.getInstance()
                           .cancel(PIDCommandRegistry.currentlyRunningCommand);
                     }
 
                     PIDCommandRegistry.currentlyRunningCommand =
-                        PIDCommandRegistry.attachedCommands
+                        PIDCommandRegistry.profiledAttachedCommands
                             .get(pidChooser.getSelected())
                             .apply(networkTable.getEntry("Set").getDouble(0));
                     PIDCommandRegistry.currentlyRunningCommand.schedule();

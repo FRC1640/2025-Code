@@ -64,7 +64,7 @@ public class RobotPIDConstants {
     return k;
   }
 
-  public static final ProfiledPIDController costructProfiledPIDController(
+  public static final ProfiledPIDController constructProfiledPIDController(
       PIDConstants pidConstants, TrapezoidProfile.Constraints constraints, String name) {
     ProfiledPIDController k =
         new ProfiledPIDController(

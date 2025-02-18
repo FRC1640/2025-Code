@@ -25,6 +25,7 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.RobotDimensions;
+import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -82,6 +83,7 @@ import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.LogRunner;
+import frc.robot.util.testModeControls.TestModeController;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import java.util.ArrayList;
@@ -301,6 +303,9 @@ public class RobotContainer {
 
     generateNamedCommands();
     configureBindings();
+    if (TestConfig.reconstructTrigger) {
+      TestModeController.reconstructTrigger = () -> (testBoard.getRawAxis(2) == 1);
+    }
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
@@ -338,6 +343,12 @@ public class RobotContainer {
         "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
+  }
+
+  public void reconstructKeybinds() {
+    generateNamedCommands();
+    setDefaultCommands();
+    configureBindings();
   }
 
   private void setDefaultCommands() {

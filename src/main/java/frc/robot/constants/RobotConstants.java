@@ -33,7 +33,8 @@ public class RobotConstants {
   }
 
   public class TestConfig {
-    public static TestingSetting tuningMode = TestingSetting.pidTuning;
+    public static final TestingSetting tuningMode = TestingSetting.none;
+    public static final boolean reconstructTrigger = true;
   }
 
   public class MotorInfo {
@@ -56,7 +57,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux25;
+    public static final RobotType robotType = RobotType.Sim;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)

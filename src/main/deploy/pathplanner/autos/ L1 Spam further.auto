@@ -13,13 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "SetModeCoral"
+            "name": "HaveCoral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "HaveCoral"
+            "name": "SetModeCoral"
           }
         },
         {

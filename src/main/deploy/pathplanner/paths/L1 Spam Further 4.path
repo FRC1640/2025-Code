@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.012,
-        "y": 2.8249999999999997
+        "x": 4.539097270572704,
+        "y": 3.150491014691757
       },
       "isLocked": false,
-      "linkedName": "L1 Spam Further 3"
+      "linkedName": "face 1"
     },
     {
       "anchor": {
         "x": 1.089,
-        "y": 0.661
+        "y": 1.056
       },
       "prevControl": {
-        "x": 0.08899999999999997,
-        "y": 0.6609999999999996
+        "x": 1.3120251965842655,
+        "y": 1.1747198018044405
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L1 spam coral"
+      "linkedName": "CoralStationDown"
     }
   ],
   "rotationTargets": [],

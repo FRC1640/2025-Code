@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.839,
+        "x": 5.135,
         "y": 2.905
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.120357375747051,
-        "y": 2.9287088884193944
+        "x": 5.269643971971727,
+        "y": 2.6943557482111684
       },
       "isLocked": false,
-      "linkedName": "face 2"
+      "linkedName": "Yip"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 1.056
       },
       "prevControl": {
-        "x": 1.342559586987497,
-        "y": 1.0530157016143142
+        "x": 0.6608458782265181,
+        "y": 0.9202729328556386
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "L1 Spam further down",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

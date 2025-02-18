@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2126825477216014,
-        "y": 0.7901338388841963
+        "x": 7.353995443836201,
+        "y": 0.9964636553632107
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 2.905
       },
       "prevControl": {
-        "x": 5.632506973335159,
-        "y": 2.6091682255347424
+        "x": 5.371346829080855,
+        "y": 2.6730020006679895
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L1 Spam Further 1"
+      "linkedName": "Yip"
     }
   ],
   "rotationTargets": [],

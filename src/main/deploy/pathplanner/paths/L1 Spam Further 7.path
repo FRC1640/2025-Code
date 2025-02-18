@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 1.089,
-        "y": 0.661
+        "y": 1.056
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7891025641025635,
-        "y": 0.6914743589743579
+        "x": 3.3484848484848486,
+        "y": 1.0655303030303025
       },
       "isLocked": false,
-      "linkedName": "L1 spam coral"
+      "linkedName": "CoralStationDown"
     },
     {
       "anchor": {

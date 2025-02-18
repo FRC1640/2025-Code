@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 1.089,
-        "y": 0.661
+        "y": 1.056
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.004743589743589,
-        "y": 1.4758333333333338
+        "x": 2.2867673412884435,
+        "y": 1.7582448581874788
       },
       "isLocked": false,
-      "linkedName": "L1 spam coral"
+      "linkedName": "CoralStationDown"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 2.825
       },
       "prevControl": {
-        "x": 2.6008846153846146,
-        "y": 1.7983333333333331
+        "x": 2.585842895029349,
+        "y": 1.9425758712742394
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L1 Spam Further 3"
+      "linkedName": "face 1"
     }
   ],
   "rotationTargets": [],

@@ -9,11 +9,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.RobotContainer.Subsystems;
 import frc.robot.util.control.FeedForwardConstants;
-import frc.robot.util.dashboard.PIDInfo.PIDInfo;
-import frc.robot.util.logging.PIDTrack;
-import frc.robot.util.logging.ProfiledPIDTrack;
+import frc.robot.util.logging.PIDTracking.PIDTrack;
+import frc.robot.util.logging.PIDTracking.ProfiledPIDTrack;
 import frc.robot.util.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.logging.TrackedFeedForward.FeedForwardTrack;
 import frc.robot.util.spark.SparkPIDConstants;
@@ -24,7 +22,7 @@ public class RobotPIDConstants {
 
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
 
-    PIDInfo pidInfo = new PIDInfo(j, "PID" + (PIDTrack.pidsTrack.size()), Subsystems.General);
+    String pidInfo = "PID" + (PIDTrack.pidsTrack.size());
     PIDTrack.pidsTrack.put(pidInfo, j);
 
     return j;
@@ -34,29 +32,7 @@ public class RobotPIDConstants {
 
     PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
 
-    PIDInfo pidInfo = new PIDInfo(j, name, Subsystems.General);
-    PIDTrack.pidsTrack.put(pidInfo, j);
-
-    return j;
-  }
-
-  public static final PIDController constructPID(PIDConstants constants, Subsystems subsystem) {
-
-    PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-
-    PIDInfo pidInfo = new PIDInfo(j, "PID" + (PIDTrack.pidsTrack.size()), subsystem);
-    PIDTrack.pidsTrack.put(pidInfo, j);
-
-    return j;
-  }
-
-  public static final PIDController constructPID(
-      PIDConstants constants, String name, Subsystems subsystem) {
-
-    PIDController j = new PIDController(constants.kP, constants.kI, constants.kD);
-
-    PIDInfo pidInfo = new PIDInfo(j, name, subsystem);
-    PIDTrack.pidsTrack.put(pidInfo, j);
+    PIDTrack.pidsTrack.put(name, j);
 
     return j;
   }

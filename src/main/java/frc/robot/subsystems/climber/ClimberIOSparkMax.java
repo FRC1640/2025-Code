@@ -18,7 +18,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final SparkMax liftSpark;
   private final SparkLimitSwitch liftLimitSwitch;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "climberLiftPID");
 
   private final DoubleSolenoid doubleSolenoid;
   // inductance sensors that pull low when metal is detected

@@ -1,59 +1,51 @@
 package frc.robot.util.logging.PIDTracking;
 
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.util.dashboard.PIDInfo.PIDInfo;
 import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 // Regular
 public class PIDTrack {
-  public static HashMap<PIDInfo, PIDController> pidsTrack = new HashMap<PIDInfo, PIDController>();
+  public static HashMap<String, PIDController> pidsTrack = new HashMap<String, PIDController>();
 
   public static void logValuesID() {
-    for (PIDInfo idName : pidsTrack.keySet()) {
-      Logger.recordOutput("PIDTrack/" + idName.name + "/error", pidsTrack.get(idName).getError());
+    for (String idName : pidsTrack.keySet()) {
+      Logger.recordOutput("PIDTrack/" + idName + "/error", pidsTrack.get(idName).getError());
+      Logger.recordOutput("PIDTrack/" + idName + "/setPoint", pidsTrack.get(idName).getSetpoint());
+      Logger.recordOutput("PIDTrack/" + idName + "/atSetPoint", pidsTrack.get(idName).atSetpoint());
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/setPoint", pidsTrack.get(idName).getSetpoint());
+          "PIDTrack/" + idName + "/errorDerivative", pidsTrack.get(idName).getErrorDerivative());
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/atSetPoint", pidsTrack.get(idName).atSetpoint());
+          "PIDTrack/" + idName + "/errorTolerance", pidsTrack.get(idName).getErrorTolerance());
+      Logger.recordOutput("PIDTrack/" + idName + "/period", pidsTrack.get(idName).getPeriod());
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/errorDerivative",
-          pidsTrack.get(idName).getErrorDerivative());
-      Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/errorTolerance", pidsTrack.get(idName).getErrorTolerance());
-      Logger.recordOutput("PIDTrack/" + idName.name + "/period", pidsTrack.get(idName).getPeriod());
-      Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/errorDerivativeTolerance",
+          "PIDTrack/" + idName + "/errorDerivativeTolerance",
           pidsTrack.get(idName).getErrorDerivativeTolerance());
-      Logger.recordOutput("PIDTrack/" + idName.name + "/IZone", pidsTrack.get(idName).getIZone());
+      Logger.recordOutput("PIDTrack/" + idName + "/IZone", pidsTrack.get(idName).getIZone());
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/accumulatedError",
-          pidsTrack.get(idName).getAccumulatedError());
+          "PIDTrack/" + idName + "/accumulatedError", pidsTrack.get(idName).getAccumulatedError());
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/continuosInputEnabled",
+          "PIDTrack/" + idName + "/continuosInputEnabled",
           pidsTrack.get(idName).isContinuousInputEnabled());
 
       // Information of the Values
-      Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/constants/kP", pidsTrack.get(idName).getP());
-      Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/constants/kI", pidsTrack.get(idName).getI());
-      Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/constants/kD", pidsTrack.get(idName).getD());
+      Logger.recordOutput("PIDTrack/" + idName + "/constants/kP", pidsTrack.get(idName).getP());
+      Logger.recordOutput("PIDTrack/" + idName + "/constants/kI", pidsTrack.get(idName).getI());
+      Logger.recordOutput("PIDTrack/" + idName + "/constants/kD", pidsTrack.get(idName).getD());
 
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/output", TrackedRobotPID.calculate(pidsTrack.get(idName)));
+          "PIDTrack/" + idName + "/output", TrackedRobotPID.calculate(pidsTrack.get(idName)));
 
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/outputDerivative",
+          "PIDTrack/" + idName + "/outputDerivative",
           TrackedRobotPID.calculateDerivative(pidsTrack.get(idName)));
 
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/outputIntegral",
+          "PIDTrack/" + idName + "/outputIntegral",
           TrackedRobotPID.calculateIntegral(pidsTrack.get(idName)));
 
       Logger.recordOutput(
-          "PIDTrack/" + idName.name + "/outputProportional",
+          "PIDTrack/" + idName + "/outputProportional",
           TrackedRobotPID.calculateProportional(pidsTrack.get(idName)));
     }
   }

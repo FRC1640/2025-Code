@@ -26,6 +26,7 @@ public class Dashboard {
   private LiftSubsystem liftSubsystem;
   private GantrySubsystem gantrySubsystem;
   public PIDTab pidTab = new PIDTab();
+  public PPIDTab ppidTab = new PPIDTab();
 
   public Dashboard(
       DriveSubsystem driveSubsystem,

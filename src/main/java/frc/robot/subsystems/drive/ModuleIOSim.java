@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.logging.PIDTracking.PIDTrack;
 
 public class ModuleIOSim implements ModuleIO {
   private double velocitySetpoint = 0;
@@ -18,12 +19,20 @@ public class ModuleIOSim implements ModuleIO {
   private double driveAppliedVolts = 0.0;
   private double turnAppliedVolts = 0.0;
 
-  private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
-  private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
-  private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
+  private final PIDController drivePID;
+  private final SimpleMotorFeedforward driveFF;
+  private final PIDController steerPID;
 
   public ModuleIOSim(ModuleInfo id) {
+    drivePID =
+        RobotPIDConstants.constructPID(
+            RobotPIDConstants.drivePID, "drivePID" + PIDTrack.pidsTrack.size());
+    driveFF =
+        RobotPIDConstants.constructFFSimpleMotor(
+            RobotPIDConstants.driveFF, "driveFF" + PIDTrack.pidsTrack.size());
+    steerPID =
+        RobotPIDConstants.constructPID(
+            RobotPIDConstants.steerPID, "steerPID" + PIDTrack.pidsTrack.size());
     DCMotor driveGearbox = DCMotor.getNeoVortex(1);
     DCMotor turnGearbox = DCMotor.getNeo550(1);
     driveSim =

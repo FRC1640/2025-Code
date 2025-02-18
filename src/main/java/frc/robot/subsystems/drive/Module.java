@@ -11,7 +11,6 @@ import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Module {

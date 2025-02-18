@@ -13,55 +13,37 @@
         {
           "type": "named",
           "data": {
-            "name": "HaveCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "SetModeCoral"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "HaveCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "L1 Spam Further 1"
+            "pathName": "L4 Scorer Opposite 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Further 2"
+            "name": "WaitForLift"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "WaitForCoral"
+            "name": "AutoReef"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L1 Spam Further 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceTrough"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Further 4"
+            "pathName": "L4 Scorer Opposite 2"
           }
         },
         {
@@ -73,19 +55,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L1 Spam Further 5"
+            "pathName": "L4 Scorer Opposite 3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L1 Spam Further 6"
+            "pathName": "L4 Scorer Opposite 2"
           }
         },
         {
@@ -97,13 +85,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L1 Spam Further 7"
+            "pathName": "L4 Scorer Opposite 5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         }
       ]

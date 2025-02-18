@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 1"
+            "pathName": "L4 Processor 1"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 2"
+            "pathName": "L4 Processor 2"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 3"
+            "pathName": "L4 Processor 3"
           }
         },
         {
@@ -73,7 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 2"
+            "pathName": "L4 Processor 2"
           }
         },
         {
@@ -85,7 +85,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Scorer 5"
+            "pathName": "L4 Processor 5"
           }
         },
         {

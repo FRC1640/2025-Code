@@ -3,42 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.089,
-        "y": 1.056
+        "x": 4.012,
+        "y": 2.825
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.088570205479452,
-        "y": 1.1250428082191786
+        "x": 4.539097270572704,
+        "y": 3.150491014691757
       },
       "isLocked": false,
-      "linkedName": "CoralStationDown"
+      "linkedName": "face 1"
     },
     {
       "anchor": {
-        "x": 3.839,
-        "y": 2.905
+        "x": 1.089,
+        "y": 1.056
       },
       "prevControl": {
-        "x": 3.339,
-        "y": 2.038974596215561
+        "x": 1.3120251965842655,
+        "y": 1.1747198018044405
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DOWN-LEFT-CORRECT"
+      "linkedName": "CoralStationDown"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4RightCoral",
-      "waypointRelativePos": 0.559523809523809,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -49,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L4 Red Side",
+  "folder": "L1 Spam Processor",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

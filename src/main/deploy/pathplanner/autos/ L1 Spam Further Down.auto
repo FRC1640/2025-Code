@@ -1,0 +1,115 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetModeCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HaveCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L1 Spam Further 7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

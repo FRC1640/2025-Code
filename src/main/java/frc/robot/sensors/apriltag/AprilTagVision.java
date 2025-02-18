@@ -21,11 +21,13 @@ public class AprilTagVision extends PeriodicBase {
   AprilTagVisionIO io;
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
+  private String displayName;
   public final double standardDeviation;
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
-    cameraName = cameraConstants.name;
+    cameraName = cameraConstants.networkName;
+    displayName = cameraConstants.displayName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
     this.standardDeviation = cameraConstants.standardDevConstant;
     AlertsManager.addAlert(
@@ -41,13 +43,13 @@ public class AprilTagVision extends PeriodicBase {
         Math.pow(observation.minimumTagDistance(), 2.0)
             / observation.tagCount()
             * getStandardDeviation();
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/distFactorPhoton", distFactor);
+    Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/distFactorPhoton", distFactor);
     return distFactor;
   }
 
   public double getPhotonXyStdDev(PoseObservation observation) {
     double xyStdDev = 0.1 * getPhotonDistFactor(observation);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDevPhoton", xyStdDev);
+    Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevPhoton", xyStdDev);
     return xyStdDev;
   }
 
@@ -56,7 +58,7 @@ public class AprilTagVision extends PeriodicBase {
     if (getRotationValidPhotonObservation(observation)) {
       rot = 0.06 * getPhotonDistFactor(observation);
     }
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/rotPhoton", rot);
+    Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/rotPhoton", rot);
     return rot;
   }
 
@@ -69,13 +71,13 @@ public class AprilTagVision extends PeriodicBase {
         Math.pow(observation.averageTagDistance(), 2)
             / observation.tagCount()
             * getStandardDeviation();
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/distFactorTrig", distFactor);
+    Logger.recordOutput("AprilTagVision/" + distFactor + "/Stddevs/distFactorTrig", distFactor);
     return distFactor;
   }
 
   public double getTrigXyStdDev(PoseObservation observation) {
     double xy = 0.01 * getTrigDistFactor(observation);
-    Logger.recordOutput("AprilTagVision/" + cameraName + "/Stddevs/xyStdDevTrig", xy);
+    Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevTrig", xy);
     return xy;
   }
 
@@ -198,10 +200,14 @@ public class AprilTagVision extends PeriodicBase {
     return cameraName;
   }
 
+  public String getDisplayName() {
+    return displayName;
+  }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("AprilTagVision/" + cameraName, inputs);
+    Logger.processInputs("AprilTagVision/" + displayName, inputs);
     ArrayList<Pose3d> tagPoses = new ArrayList<>();
     for (int i = 0; i < inputs.tagIds.length; i++) {
       Optional<Pose3d> pose = FieldConstants.aprilTagLayout.getTagPose(inputs.tagIds[i]);
@@ -210,6 +216,6 @@ public class AprilTagVision extends PeriodicBase {
       }
     }
     Logger.recordOutput(
-        "AprilTagVision/" + cameraName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
+        "AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
   }
 }

@@ -45,10 +45,10 @@
     "rotation": -54.0
   },
   "reversed": false,
-  "folder": "L4",
+  "folder": "L4 Blue Side",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

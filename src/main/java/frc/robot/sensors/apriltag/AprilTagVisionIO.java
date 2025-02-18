@@ -13,6 +13,7 @@ public interface AprilTagVisionIO {
     public PoseObservation[] photonPoseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
     public Transform3d cameraDisplacement;
+    public String networkName;
   }
 
   public static record TrigTargetObservation(

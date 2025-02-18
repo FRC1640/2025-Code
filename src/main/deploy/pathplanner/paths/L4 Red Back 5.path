@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.027,
-        "y": 4.026
+        "x": 1.089,
+        "y": 1.056
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.973121141492572,
-        "y": 4.024142900040845
+        "x": 2.3198892615299753,
+        "y": 1.9116585529610144
       },
       "isLocked": false,
-      "linkedName": "Mid position"
+      "linkedName": "CoralStationDown"
     },
     {
       "anchor": {
-        "x": 5.785,
-        "y": 4.026
+        "x": 3.839,
+        "y": 2.905
       },
       "prevControl": {
-        "x": 7.031509008864367,
-        "y": 4.026293721125288
+        "x": 2.711809048237016,
+        "y": 2.1374808794626485
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RIGHT"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L2LeftCoral",
-      "waypointRelativePos": 0.616666666666666,
+      "name": "L4RightCoral",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -48,14 +48,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 180.0
+    "velocity": 0,
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Trust The Process",
+  "folder": "L4 Red back ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 54.0
   },
   "useDefaultConstraints": true
 }

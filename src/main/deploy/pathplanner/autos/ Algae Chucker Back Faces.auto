@@ -1,0 +1,139 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetModeCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetModeAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2LeftCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForLift"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Algae chucker back faces 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

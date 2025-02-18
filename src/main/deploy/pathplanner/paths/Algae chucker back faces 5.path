@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.027,
-        "y": 4.026
+        "x": 5.613636363636363,
+        "y": 6.068560606060605
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.973121141492572,
-        "y": 4.024142900040845
+        "x": 6.657575757575757,
+        "y": 5.566287878787878
       },
       "isLocked": false,
-      "linkedName": "Mid position"
+      "linkedName": "Algae Back 4"
     },
     {
       "anchor": {
-        "x": 5.785,
-        "y": 4.026
+        "x": 5.135,
+        "y": 2.905
       },
       "prevControl": {
-        "x": 7.031509008864367,
-        "y": 4.026293721125288
+        "x": 6.815151515151515,
+        "y": 1.0261363636363625
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RIGHT"
+      "linkedName": "Algae Back 5"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L2LeftCoral",
-      "waypointRelativePos": 0.616666666666666,
+      "name": "L3LeftCoral",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,10 +49,10 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Trust The Process",
+  "folder": "Algae chucker back faces",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -67,7 +67,7 @@ public class RobotConstants {
     public static final boolean algaeIntakeEnabled =
         new RobotSwitch<Boolean>(true)
             .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, false)
+            .addValue(RobotType.Prime24, true)
             .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
@@ -139,13 +139,13 @@ public class RobotConstants {
         new SwerveDriveKinematics(
             frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 1, 2, 0, 45);
+    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 1, 2, 2, 45);
 
-    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 3, 4, 2, -45);
+    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 3, 4, 0, -45);
 
-    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 6, 1, 135);
+    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 8, 1, 135);
 
-    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 8, 3, -135);
+    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
 
     public static final double maxAntiTipCorrectionSpeed = 1.5;
     public static final double minTipDegrees = 6;

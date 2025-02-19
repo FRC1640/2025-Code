@@ -470,17 +470,17 @@ public class RobotContainer {
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
     new Trigger(() -> motorBoard.getLl2())
-        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getLl3())
-        .onTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getLl4())
-        .onTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
+        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
     new Trigger(() -> motorBoard.getRl4())
-        .onTrue(algaeCommandFactory.setMotorVoltages(() -> 1, () -> 1));
+        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
     new Trigger(() -> motorBoard.getRl3())
-        .onTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
+        .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getRl2())
-        .onTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
+        .whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
 
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());

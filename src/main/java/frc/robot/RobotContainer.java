@@ -25,7 +25,6 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.RobotDimensions;
-import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -81,9 +80,7 @@ import frc.robot.subsystems.winch.WinchSubsystem;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
-import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.LogRunner;
-import frc.robot.util.testModeControls.TestModeController;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import java.util.ArrayList;
@@ -95,7 +92,6 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem;
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
-
   private final GantrySubsystem gantrySubsystem;
   private final LiftSubsystem liftSubsystem;
   private final CoralOuttakeSubsystem coralOuttakeSubsystem;
@@ -108,7 +104,6 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard testBoard = new PresetBoard(4);
   private final PresetBoard motorBoard = new PresetBoard(5);
 
   private final AlertsManager alertsManager;
@@ -132,7 +127,7 @@ public class RobotContainer {
 
   private FollowPathNearest followPathNearest;
 
-  private final JoystickDriveWeight joystickDriveWeight;
+  private JoystickDriveWeight joystickDriveWeight;
 
   private CoralPreset coralPreset = CoralPreset.Safe;
   private boolean algaeMode = false;
@@ -162,7 +157,6 @@ public class RobotContainer {
                 RobotConfigConstants.gantrySubsystemEnabled
                     ? new GantryIOSparkMax()
                     : new GantryIO() {});
-
         liftSubsystem =
             new LiftSubsystem(
                 RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSpark() : new LiftIO() {});
@@ -172,22 +166,20 @@ public class RobotContainer {
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
                     ? new CoralOuttakeIOSparkMax()
                     : new CoralOuttakeIO() {});
-
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new ClimberIOSparkMax()
                     : new ClimberIO() {});
-
         winchSubsystem =
             new WinchSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
                     ? new WinchIOSparkMax()
                     : new WinchIO() {});
-
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
+
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -261,7 +253,8 @@ public class RobotContainer {
             coralOuttakeSubsystem,
             algaeCommandFactory,
             algaeIntakeSubsystem);
-    setDefaultCommands();
+    generateNamedCommands();
+
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard = new Dashboard(driveSubsystem, liftSubsystem, gantrySubsystem, driveController);
@@ -270,6 +263,11 @@ public class RobotContainer {
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
         "Low battery voltage.",
         AlertType.kWarning);
+
+    // set defaults
+
+    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
     // weights
     joystickDriveWeight =
         new JoystickDriveWeight(
@@ -303,9 +301,6 @@ public class RobotContainer {
 
     generateNamedCommands();
     configureBindings();
-    if (TestConfig.reconstructTrigger) {
-      TestModeController.reconstructTrigger = () -> (testBoard.getRawAxis(2) == 1);
-    }
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
@@ -330,31 +325,6 @@ public class RobotContainer {
     }
     return DistanceManager.addRotatedDim(
         pose, side, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
-  }
-
-  public void mapPIDtoCommand() {
-    PIDCommandRegistry.attachPIDCommand(
-        "gantryPID", (x) -> gantryCommandFactory.gantryPIDCommand(() -> x));
-    PIDCommandRegistry.attachPIDCommand(
-        "gantryVelocityPID", (x) -> gantryCommandFactory.gantrySetVelocityCommand(() -> x));
-    PIDCommandRegistry.attachPIDCommand(
-        "climberLiftPID", (x) -> climberCommandFactory.setElevatorPosPID(() -> x));
-    PIDCommandRegistry.attachPIDCommand(
-        "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
-    PIDCommandRegistry.attachProfiledPIDCommand(
-        "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
-  }
-
-  public void reconstructKeybinds() {
-    generateNamedCommands();
-    setDefaultCommands();
-    configureBindings();
-  }
-
-  private void setDefaultCommands() {
-    generateNamedCommands();
-    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
   }
 
   private void configureBindings() {
@@ -517,7 +487,6 @@ public class RobotContainer {
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-    mapPIDtoCommand();
   }
 
   public Command getAutonomousCommand() {

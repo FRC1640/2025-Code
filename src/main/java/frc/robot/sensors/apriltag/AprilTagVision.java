@@ -71,7 +71,7 @@ public class AprilTagVision extends PeriodicBase {
         Math.pow(observation.averageTagDistance(), 2)
             / observation.tagCount()
             * getStandardDeviation();
-    Logger.recordOutput("AprilTagVision/" + distFactor + "/Stddevs/distFactorTrig", distFactor);
+    Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/distFactorTrig", distFactor);
     return distFactor;
   }
 

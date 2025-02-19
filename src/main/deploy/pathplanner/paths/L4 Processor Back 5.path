@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4RightCoral",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.5214285714285712,
       "endWaypointRelativePos": null,
       "command": null
     }

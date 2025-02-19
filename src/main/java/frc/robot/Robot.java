@@ -201,6 +201,9 @@ public class Robot extends LoggedRobot {
     if (TestConfig.reconstructTrigger) {
       TestModeController.reconstructTriggersKeybind(m_robotContainer);
     }
+    CommandScheduler.getInstance().run();
+    PeriodicScheduler.getInstance().run();
+    LoggerManager.updateLog();
   }
 
   @Override

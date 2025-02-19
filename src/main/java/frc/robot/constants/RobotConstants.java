@@ -33,7 +33,7 @@ public class RobotConstants {
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.none;
+    public static final TestingSetting tuningMode = TestingSetting.pidTuning;
     public static final boolean reconstructTrigger = true;
   }
 

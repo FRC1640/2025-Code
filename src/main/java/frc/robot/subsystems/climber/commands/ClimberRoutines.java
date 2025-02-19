@@ -35,7 +35,7 @@ public class ClimberRoutines {
           () ->
               withinTolerance(
                   climberSubsystem.getLiftMotorPosition(), ClimberConstants.liftLimits.high),
-      winchIsVertical =
+      winchIsClimbed =
           () ->
               withinTolerance(
                   winchSubsystem.getWinchLeaderMotorPosition(),
@@ -92,7 +92,7 @@ public class ClimberRoutines {
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
             windArm())
-        .onlyIf(() -> liftIsLow.getAsBoolean() && winchIsVertical.getAsBoolean());
+        .onlyIf(() -> liftIsLow.getAsBoolean() && winchIsClimbed.getAsBoolean());
   }
 
   /**
@@ -136,9 +136,9 @@ public class ClimberRoutines {
    */
   public Command unwindArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
         .repeatedly()
-        .until(winchIsVertical);
+        .until(winchIsClimbed);
   }
 
   /**
@@ -148,7 +148,7 @@ public class ClimberRoutines {
    */
   public Command resetArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
         .repeatedly()
         .until(winchIsHigh);
   }
@@ -160,7 +160,7 @@ public class ClimberRoutines {
    */
   public Command windArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
+        .setWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
         .repeatedly()
         .until(winchIsLow);
   }
@@ -168,7 +168,7 @@ public class ClimberRoutines {
   public boolean isReadyToClamp() {
     return climberSubsystem.getSolenoidState() == false
         && liftIsLow.getAsBoolean()
-        && winchIsVertical.getAsBoolean()
+        && winchIsClimbed.getAsBoolean()
         && climberSubsystem.getSensor1()
         && climberSubsystem.getSensor2();
   }

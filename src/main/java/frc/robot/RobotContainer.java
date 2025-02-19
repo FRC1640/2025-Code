@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -102,6 +103,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
   private final PresetBoard motorBoard = new PresetBoard(5);
@@ -487,6 +489,13 @@ public class RobotContainer {
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
+
+    // climber rumble
+    new Trigger(() -> climberRoutines.isReadyToClamp())
+        .onTrue(
+            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 1)))
+        .onFalse(
+            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
   }
 
   public Command getAutonomousCommand() {

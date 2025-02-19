@@ -53,8 +53,7 @@ public class WinchIOSparkMax implements WinchIO {
 
   @Override
   public void updateInputs(WinchIOInputs inputs) {
-    inputs.winchLeaderMotorPosition =
-        winchEncoder.getDegrees(); // says degrees but really in meters
+    inputs.winchLeaderMotorPosition = winchEncoder.getDegrees();
     inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
     inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();
     inputs.winchLeaderMotorVoltage = winchLeaderSpark.getAppliedOutput();

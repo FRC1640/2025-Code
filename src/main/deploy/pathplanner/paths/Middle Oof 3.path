@@ -20,8 +20,8 @@
         "y": 2.905
       },
       "prevControl": {
-        "x": 6.373297730307076,
-        "y": 0.8734979973297721
+        "x": 6.724766355140186,
+        "y": 0.4985981308411205
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "L4RightCoral",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.42887473460721864,
       "endWaypointRelativePos": null,
       "command": null
     }

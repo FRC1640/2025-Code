@@ -6,8 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.RobotConstants.DriveConstants;
-import frc.robot.util.modesConfig.TestModeManager;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -42,7 +43,7 @@ public class JoystickDriveWeight implements DriveWeight {
     if (!enabled) {
       return new ChassisSpeeds();
     }
-    if (!TestModeManager.isCommandEnabled()) {
+    if (Robot.getState() != RobotState.TELEOP) {
       return new ChassisSpeeds();
     }
     Translation2d linearVelocity =

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.229799442249589,
-        "y": 4.092867561062406
+        "x": 6.9692552155303,
+        "y": 4.0219213335056345
       },
       "isLocked": false,
       "linkedName": "Mid position"
@@ -20,8 +20,8 @@
         "y": 4.026
       },
       "prevControl": {
-        "x": 4.538,
-        "y": 4.026
+        "x": 7.110678971221994,
+        "y": 4.031790021525655
       },
       "nextControl": null,
       "isLocked": false,

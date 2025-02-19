@@ -34,21 +34,20 @@ public class RobotConstants {
 
   public class TestConfig {
     public static final TestingSetting tuningMode = TestingSetting.pidTuning;
-    public static final boolean reconstructTrigger = true;
+
   }
 
   public class MotorInfo {
-    public static final MotorLoggingManager motorLoggingManager =
-        new MotorLoggingManager()
-            .addMotorAlias(GantryConstants.gantrySparkID, "Gantry")
-            .addMotorAlias(ClimberConstants.climberLiftMotorID, "Climber Lift")
-            .addMotorAlias(ClimberConstants.climberWinch1MotorID, "Climber Winch 1 (Leader)")
-            .addMotorAlias(ClimberConstants.climberWinch2MotorID, "Climber Winch 2 (Follower)")
-            .addMotorAlias(AlgaeConstants.motorLeftChannel, "Algae Motor Left")
-            .addMotorAlias(AlgaeConstants.motorRightChannel, "Algae Motor Right")
-            .addMotorAlias(LiftConstants.liftLeaderMotorID, "Lift Leader")
-            .addMotorAlias(LiftConstants.liftFollowerMotorID, "Lift Follower")
-            .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
+    public static final MotorLoggingManager motorLoggingManager = new MotorLoggingManager()
+        .addMotorAlias(GantryConstants.gantrySparkID, "Gantry")
+        .addMotorAlias(ClimberConstants.climberLiftMotorID, "Climber Lift")
+        .addMotorAlias(ClimberConstants.climberWinch1MotorID, "Climber Winch 1 (Leader)")
+        .addMotorAlias(ClimberConstants.climberWinch2MotorID, "Climber Winch 2 (Follower)")
+        .addMotorAlias(AlgaeConstants.motorLeftChannel, "Algae Motor Left")
+        .addMotorAlias(AlgaeConstants.motorRightChannel, "Algae Motor Right")
+        .addMotorAlias(LiftConstants.liftLeaderMotorID, "Lift Leader")
+        .addMotorAlias(LiftConstants.liftFollowerMotorID, "Lift Follower")
+        .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
   }
 
   public class AprilTagPositionSettings {
@@ -57,42 +56,36 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Sim;
+    public static final RobotType robotType = RobotType.Deux25;
     // subsystems
-    public static final boolean gantrySubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, false)
-            .addValue(RobotType.Deux24, false)
-            .get();
+    public static final boolean gantrySubsystemEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Prime24, false)
+        .addValue(RobotType.Deux24, false)
+        .get();
 
-    public static final boolean liftSubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, false)
-            .addValue(RobotType.Deux24, false)
-            .get();
-    public static final boolean algaeIntakeEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, false)
-            .get();
+    public static final boolean liftSubsystemEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Prime24, false)
+        .addValue(RobotType.Deux24, false)
+        .get();
+    public static final boolean algaeIntakeEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Deux24, false)
+        .addValue(RobotType.Prime24, false)
+        .get();
 
-    public static final boolean coralOuttakeSubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, false)
-            .addValue(RobotType.Deux24, false)
-            .get();
+    public static final boolean coralOuttakeSubsystemEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Prime24, false)
+        .addValue(RobotType.Deux24, false)
+        .get();
 
-    public static final boolean climberSubsystemEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, false)
-            .get();
+    public static final boolean climberSubsystemEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Deux24, false)
+        .addValue(RobotType.Prime24, false)
+        .get();
     // sensors
-    public static final boolean reefDetectorEnabled =
-        new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, false)
-            .addValue(RobotType.Deux24, false)
-            .get();
+    public static final boolean reefDetectorEnabled = new RobotSwitch<Boolean>(true)
+        .addValue(RobotType.Prime24, false)
+        .addValue(RobotType.Deux24, false)
+        .get();
 
     // odometry
     public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
@@ -107,29 +100,25 @@ public class RobotConstants {
 
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.2;
-    public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
+    public static final PathConstraints pathConstraints = new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
     public static final double wheelYPos = Units.inchesToMeters(22.75 / 2);
     public static final double wheelXPos = Units.inchesToMeters(22.75 / 2);
     private static final Translation2d frontLeftLocation = new Translation2d(wheelXPos, wheelYPos);
-    private static final Translation2d frontRightLocation =
-        new Translation2d(wheelXPos, -wheelYPos);
+    private static final Translation2d frontRightLocation = new Translation2d(wheelXPos, -wheelYPos);
     public static final Translation2d backLeftLocation = new Translation2d(-wheelXPos, wheelYPos);
     public static final Translation2d backRightLocation = new Translation2d(-wheelXPos, -wheelYPos);
-    public static final Translation2d[] positions =
-        new Translation2d[] {
-          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
-        };
+    public static final Translation2d[] positions = new Translation2d[] {
+        frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
+    };
     public static double odometryFrequency = 200.0;
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
     public static final double maxSpeed = 4.6;
-    public static final double maxNorm =
-        DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
+    public static final double maxNorm = DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
     public static final double wheelRadius = Units.inchesToMeters(1.8892);
 
@@ -141,9 +130,8 @@ public class RobotConstants {
 
     public static final double maxSteerSpeed = 50; // rad per second
 
-    public static final SwerveDriveKinematics kinematics =
-        new SwerveDriveKinematics(
-            frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+        frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
     public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 1, 2, 0, 45);
 
@@ -158,41 +146,38 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
-    public static final CameraConstant frontCameraLeft =
-        new CameraConstant(
-            new SimCameraProperties(),
-            new Transform3d(
-                new Translation3d(
-                    Units.inchesToMeters(29.5 / 2),
-                    -Units.inchesToMeters(29.5 / 2 - 8),
-                    Units.inchesToMeters(10.5)),
-                new Rotation3d()),
-            1,
-            "Dodds",
-            "Front Left");
+    public static final CameraConstant frontCameraLeft = new CameraConstant(
+        new SimCameraProperties(),
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(29.5 / 2),
+                -Units.inchesToMeters(29.5 / 2 - 8),
+                Units.inchesToMeters(10.5)),
+            new Rotation3d()),
+        1,
+        "Dodds",
+        "Front Left");
 
-    public static final CameraConstant frontCameraRight =
-        new CameraConstant(
-            new SimCameraProperties(),
-            new Transform3d(
-                new Translation3d(
-                    Units.inchesToMeters(29.5 / 2),
-                    -Units.inchesToMeters(29.5 / 2 - 8),
-                    Units.inchesToMeters(10.5)),
-                new Rotation3d()),
-            1,
-            "Park",
-            "Front Right");
+    public static final CameraConstant frontCameraRight = new CameraConstant(
+        new SimCameraProperties(),
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(29.5 / 2),
+                -Units.inchesToMeters(29.5 / 2 - 8),
+                Units.inchesToMeters(10.5)),
+            new Rotation3d()),
+        1,
+        "Park",
+        "Front Right");
 
-    public static final CameraConstant backCamera =
-        new CameraConstant(
-            new SimCameraProperties(),
-            new Transform3d(
-                new Translation3d(0.146, -0.356, 0.406),
-                new Rotation3d(0, Math.toRadians(1), Math.PI)),
-            1,
-            "BackLL",
-            "Back");
+    public static final CameraConstant backCamera = new CameraConstant(
+        new SimCameraProperties(),
+        new Transform3d(
+            new Translation3d(0.146, -0.356, 0.406),
+            new Rotation3d(0, Math.toRadians(1), Math.PI)),
+        1,
+        "BackLL",
+        "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
   }
@@ -205,8 +190,8 @@ public class RobotConstants {
     // is this lift limit right? i dont think i touched it
     public static final double liftMaxSpeed = 0.4;
     public static final double liftMaxAccel = 10;
-    public static final TrapezoidProfile.Constraints constraints =
-        new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
+    public static final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(liftMaxSpeed,
+        liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
 
     public enum GantrySetpoint {
@@ -311,10 +296,8 @@ public class RobotConstants {
     public static final Limits liftLimits = new Limits(-100.0, 0.0);
     public static final double winchVerticalPosition = 50;
     public static final Limits winchLimits = new Limits(-1000.0, 1000.0);
-    public static final ResolverVoltageInfo winchResolverInfo =
-        new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
-    public static final ResolverVoltageInfo liftResolverInfo =
-        new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo winchResolverInfo = new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo liftResolverInfo = new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
 
     public static final double gearRatio = 5;
     public static final double pulleyRadius = 1;
@@ -340,9 +323,9 @@ public class RobotConstants {
   public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
     public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
-    // if you dont update this i will find you // *gulp* // You understand what happens if you don't
-    public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(18).get(); // update this too
+    // if you dont update this i will find you // *gulp* // You understand what
+    // happens if you don't
+    public static final int coralDetectorChannel = new RobotSwitch<Integer>(18).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }

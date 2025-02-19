@@ -20,7 +20,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
-import frc.robot.util.testModeControls.TestModeController;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -182,10 +181,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     state = RobotState.TEST;
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
     switch (TestConfig.tuningMode) {
       case sysIDTesting:
         CommandScheduler.getInstance().cancelAll();
@@ -200,14 +195,7 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-    if (TestConfig.reconstructTrigger) {
-      TestModeController.reconstructTriggersKeybind(m_robotContainer);
-    }
-    CommandScheduler.getInstance().run();
-    PeriodicScheduler.getInstance().run();
-    LoggerManager.updateLog();
-  }
+  public void testPeriodic() {}
 
   @Override
   public void testExit() {}

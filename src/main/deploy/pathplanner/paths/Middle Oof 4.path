@@ -8,29 +8,29 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.444488636363636,
-        "y": 1.1182812499999988
+        "x": 6.51388518024032,
+        "y": 1.2952603471295048
       },
       "isLocked": false,
-      "linkedName": "L4 Red back 1"
+      "linkedName": "DOWN-RIGHT"
     },
     {
       "anchor": {
-        "x": 1.089,
-        "y": 1.056
+        "x": 1.614,
+        "y": 0.675
       },
       "prevControl": {
-        "x": 3.041335227272727,
-        "y": 1.576974431818183
+        "x": 3.983311081441922,
+        "y": 1.3421228304405872
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CoralStationDown"
+      "linkedName": "CoralStationDownWall"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.6885813148788932,
       "rotationDegrees": 54.0
     }
   ],
@@ -50,7 +50,7 @@
     "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L4 Processor Back",
+  "folder": "Middle Oof",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

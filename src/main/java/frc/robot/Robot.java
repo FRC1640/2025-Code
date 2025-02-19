@@ -19,8 +19,8 @@ import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
+import frc.robot.util.modesConfig.TestModeManager;
 import frc.robot.util.periodic.PeriodicScheduler;
-import frc.robot.util.testModeControls.TestModeController;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -165,6 +165,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     state = RobotState.TELEOP;
+    TestModeManager.setCommandEnabled(true);
+    LiveWindow.setEnabled(false);
+    CommandScheduler.getInstance().enable();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -191,22 +194,23 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().cancelAll();
         Dashboard.getSysidCommand().schedule();
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        TestModeManager.setCommandEnabled(false);
         break;
       default:
         LiveWindow.setEnabled(false);
         CommandScheduler.getInstance().enable();
+        TestModeManager.setCommandEnabled(true);
         break;
     }
   }
 
   @Override
   public void testPeriodic() {
-    if (TestConfig.reconstructTrigger) {
-      TestModeController.reconstructTriggersKeybind(m_robotContainer);
+    if (TestModeManager.isCommandEnabled()) {
+      CommandScheduler.getInstance().run();
+      PeriodicScheduler.getInstance().run();
+      LoggerManager.updateLog();
     }
-    CommandScheduler.getInstance().run();
-    PeriodicScheduler.getInstance().run();
-    LoggerManager.updateLog();
   }
 
   @Override

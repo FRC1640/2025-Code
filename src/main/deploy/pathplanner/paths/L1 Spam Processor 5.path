@@ -8,27 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2867673412884435,
-        "y": 1.7582448581874788
+        "x": 2.767069574677161,
+        "y": 2.161004302566541
       },
       "isLocked": false,
       "linkedName": "CoralStationDown"
     },
     {
       "anchor": {
-        "x": 4.012,
-        "y": 2.825
+        "x": 3.839,
+        "y": 2.905
       },
       "prevControl": {
-        "x": 2.585842895029349,
-        "y": 1.9425758712742394
+        "x": 2.857861763321754,
+        "y": 2.2439191999272694
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "face 1"
+      "linkedName": "face 2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -45,7 +50,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "L1 Spam further down",
+  "folder": "L1 Spam Processor",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 54.0

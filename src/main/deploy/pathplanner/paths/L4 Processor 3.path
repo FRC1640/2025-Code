@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.027,
-        "y": 0.463
+        "x": 1.089,
+        "y": 1.056
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.353995443836201,
-        "y": 0.9964636553632107
+        "x": 2.088570205479452,
+        "y": 1.1250428082191786
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CoralStationDown"
     },
     {
       "anchor": {
-        "x": 5.135,
+        "x": 3.839,
         "y": 2.905
       },
       "prevControl": {
-        "x": 5.371346829080855,
-        "y": 2.6730020006679895
+        "x": 3.339,
+        "y": 2.038974596215561
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Yip"
+      "linkedName": "DOWN-LEFT-CORRECT"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "L4RightCoral",
+      "waypointRelativePos": 0.559523809523809,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "L1 Spam further down",
+  "folder": "L4 Scorer Processor",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 54.0
   },
   "useDefaultConstraints": true
 }

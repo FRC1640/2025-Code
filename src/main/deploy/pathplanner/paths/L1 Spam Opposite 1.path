@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.839,
-        "y": 5.142
+        "x": 8.057,
+        "y": 7.564914772727272
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.400669151568245,
-        "y": 4.639714692736697
+        "x": 6.162397727272728,
+        "y": 6.817045454545454
       },
       "isLocked": false,
-      "linkedName": "UP-LEFT"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4957386363636362,
-        "y": 7.245823863636363
+        "x": 5.135,
+        "y": 5.147
       },
       "prevControl": {
-        "x": 1.2204075285001705,
-        "y": 7.489406984809596
+        "x": 5.723693181818183,
+        "y": 6.0691761363636365
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CoralStationUp"
+      "linkedName": "UP-RIGHT"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5616438356164393,
+      "rotationDegrees": -119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -54.0
+    "velocity": 0.0,
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "L1 Spam",
+  "folder": "L1 Spam Opposite",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -59.99999999999999
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

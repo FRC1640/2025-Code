@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.839,
-        "y": 5.142
+        "x": 4.012,
+        "y": 5.222
       },
       "prevControl": {
-        "x": 3.5199715909090905,
-        "y": 5.745085227272726
+        "x": 3.69297159090909,
+        "y": 5.8250852272727265
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "UP-LEFT"
+      "linkedName": "UP-LEFT-OFFSET"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L1 Spam",
+  "folder": "L1 Spam Opposite",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.0

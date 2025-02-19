@@ -4,10 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "Algae Chucker",
-    "L4 Scorer Processor",
     "L1 Spam Opposite",
     "L1 Spam Processor",
+    "L4 Processor Back",
     "L4 Scorer Opposite",
+    "L4 Scorer Processor",
+    "Algae Chucker Back Faces",
     "Trust The Process"
   ],
   "autoFolders": [],

@@ -3,42 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.089,
-        "y": 1.056
+        "x": 5.135,
+        "y": 2.905
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3198892615299753,
-        "y": 1.9116585529610144
+        "x": 5.444488636363636,
+        "y": 1.1182812499999988
       },
       "isLocked": false,
-      "linkedName": "CoralStationDown"
+      "linkedName": "L4 Red back 1"
     },
     {
       "anchor": {
-        "x": 3.839,
-        "y": 2.905
+        "x": 1.089,
+        "y": 1.056
       },
       "prevControl": {
-        "x": 2.711809048237016,
-        "y": 2.1374808794626485
+        "x": 3.0413352272727274,
+        "y": 1.5769744318181824
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CoralStationDown"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 54.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4RightCoral",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -49,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L4 Red back ",
+  "folder": "L4 Processor Back",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

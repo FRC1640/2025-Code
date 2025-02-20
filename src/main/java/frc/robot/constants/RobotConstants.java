@@ -12,10 +12,11 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.util.logger.MotorLoggingManager;
+import frc.robot.util.logging.MotorLoggingManager;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
@@ -29,6 +30,10 @@ public class RobotConstants {
     public static final double robotWidth = 0.927;
     public static final double robotLength = 0.927;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public class TestConfig {
+    public static final TestingSetting tuningMode = TestingSetting.pidTuning;
   }
 
   public class MotorInfo {
@@ -51,7 +56,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Deux25;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -333,7 +338,8 @@ public class RobotConstants {
   public static class CoralOuttakeConstants {
     public static final double gearRatio = 0;
     public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
-    // if you dont update this i will find you // *gulp* // You understand what happens if you don't
+    // if you dont update this i will find you // *gulp* // You understand what
+    // happens if you don't
     public static final int coralDetectorChannel =
         new RobotSwitch<Integer>(18).get(); // update this too
     public static final double distanceRequired = 2;

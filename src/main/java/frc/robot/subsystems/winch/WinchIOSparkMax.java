@@ -10,7 +10,7 @@ public class WinchIOSparkMax implements WinchIO {
   // private final SparkMax winchLeaderSpark;
   // private final SparkMax winchFollowerSpark;
   private final PIDController winchPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "winchPID");
 
   public WinchIOSparkMax() {
     // winchLeaderSpark =

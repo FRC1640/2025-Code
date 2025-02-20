@@ -19,7 +19,6 @@ public class AlgaeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Algae", inputs);
-    lastTime = System.currentTimeMillis();
     if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
@@ -31,6 +30,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     } else {
       releaseTime = 0;
     }
+    lastTime = System.currentTimeMillis();
   }
 
   public double getIntakeMotorLeftVoltage() {

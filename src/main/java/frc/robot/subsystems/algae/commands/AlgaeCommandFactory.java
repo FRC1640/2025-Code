@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class AlgaeCommandFactory {
@@ -20,8 +21,9 @@ public class AlgaeCommandFactory {
         .finallyDo(() -> algaeSubsystem.setVoltage(0, 0));
   }
 
-  public Command setSolenoidState(boolean state) {
-    return new InstantCommand(() -> algaeSubsystem.setSolenoid(state), algaeSubsystem);
+  public Command setSolenoidState(BooleanSupplier state) {
+    return new InstantCommand(
+        () -> algaeSubsystem.setSolenoid(state.getAsBoolean()), algaeSubsystem);
   }
 
   public Command algaePassiveCommand() {

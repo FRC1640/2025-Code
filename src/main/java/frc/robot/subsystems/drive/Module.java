@@ -57,6 +57,7 @@ public class Module {
 
     if (Math.abs(state.speedMetersPerSecond) <= 0.005) {
       io.setDriveVelocity(0, inputs);
+      io.setSteerVoltage(0);
       return;
     }
     boolean flipDriveTeleop = false;

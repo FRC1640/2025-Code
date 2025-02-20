@@ -80,7 +80,7 @@ public class AutoScoringCommandFactory {
 
   public Command algaeAutoPickup() {
     return algaeCommandFactory
-        .setSolenoidState(true)
+        .setSolenoidState(() -> true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
         .repeatedly()
         .until(() -> algaeSubsystem.hasAlgae());

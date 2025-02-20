@@ -33,13 +33,14 @@ public class LiftIOSpark implements LiftIO {
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getLiftDefaultMax(LiftConstants.liftLeaderMotorID)
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftLeaderMotorID, false)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getLiftDefaultMax(LiftConstants.liftFollowerMotorID), leaderMotor);
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftFollowerMotorID, true), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
+    liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
   }
   /*
    * Set voltage of the motor
@@ -51,8 +52,8 @@ public class LiftIOSpark implements LiftIO {
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
-                limits ? LiftConstants.liftLimits.high : null)));
+                limits ? LiftConstants.liftLimits.low : -99999,
+                LiftConstants.liftLimits.high)));
   }
   /*
    * Sets the position of the motor(s) using a PID

@@ -1,6 +1,9 @@
 package frc.robot.subsystems.algae;
 
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
 import frc.robot.constants.SparkConstants;
@@ -10,7 +13,7 @@ public class AlgaeIOSpark implements AlgaeIO {
 
   private final SparkMax motorLeft;
   private final SparkMax motorRight;
-  // private final DoubleSolenoid solenoid;
+  private final DoubleSolenoid solenoid;
 
   public AlgaeIOSpark() {
     motorLeft =
@@ -19,17 +22,17 @@ public class AlgaeIOSpark implements AlgaeIO {
     motorRight =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(AlgaeConstants.motorRightChannel, true));
-    // solenoid =
-    //     new DoubleSolenoid(
-    //         PneumaticsModuleType.REVPH,
-    //         AlgaeConstants.solenoidChannelForward,
-    //         AlgaeConstants.solenoidChannelReverse);
+    solenoid =
+        new DoubleSolenoid(
+            PneumaticsModuleType.REVPH,
+            AlgaeConstants.solenoidChannelForward,
+            AlgaeConstants.solenoidChannelReverse);
   }
 
-  // @Override
-  // public void setSolenoid(boolean set) {
-  //   solenoid.set(set ? Value.kForward : Value.kReverse);
-  // }
+  @Override
+  public void setSolenoid(boolean set) {
+    solenoid.set(set ? Value.kForward : Value.kReverse);
+  }
 
   @Override
   public void setVoltage(double left, double right) {
@@ -51,6 +54,6 @@ public class AlgaeIOSpark implements AlgaeIO {
     inputs.intakeMotorRightCurrent = motorRight.getOutputCurrent();
     inputs.intakeMotorRightTemperature = motorRight.getMotorTemperature();
 
-    // inputs.solenoidForward = solenoid.get() == Value.kForward;
+    inputs.solenoidForward = solenoid.get() == Value.kForward;
   }
 }

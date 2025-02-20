@@ -296,8 +296,8 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
     generateNamedCommands();
     configureBindings();
@@ -368,6 +368,9 @@ public class RobotContainer {
 
     new Trigger(() -> presetBoard.povIsDownwards())
         .onTrue(new InstantCommand(() -> algaeMode = false));
+
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
     new Trigger(
             () ->
@@ -457,30 +460,33 @@ public class RobotContainer {
         .and(() -> !algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
             algaeCommandFactory
-                .setSolenoidState(true)
+                .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
-        .onFalse(algaeCommandFactory.setSolenoidState(false));
+        .onFalse(algaeCommandFactory.setSolenoidState(() -> false));
 
     operatorController
         .rightTrigger()
         .and(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
             algaeCommandFactory
-                .setSolenoidState(true)
+                .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
     new Trigger(() -> motorBoard.getLl2())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
     new Trigger(() -> motorBoard.getLl3())
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getLl4())
-        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 1));
+        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
     new Trigger(() -> motorBoard.getRl4())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
     new Trigger(() -> motorBoard.getRl3())
         .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getRl2())
         .whileTrue(climberCommandFactory.winchApplyVoltageCommand(() -> 1));
+
+    new Trigger(() -> motorBoard.getTrough())
+        .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());

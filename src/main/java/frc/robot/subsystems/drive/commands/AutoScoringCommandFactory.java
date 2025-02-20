@@ -65,7 +65,7 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimitCenter)));
   }
 
   public Command placeTrough() {
@@ -80,7 +80,7 @@ public class AutoScoringCommandFactory {
 
   public Command algaeAutoPickup() {
     return algaeCommandFactory
-        .setSolenoidState(true)
+        .setSolenoidState(() -> true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
         .repeatedly()
         .until(() -> algaeSubsystem.hasAlgae());

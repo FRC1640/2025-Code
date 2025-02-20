@@ -19,7 +19,7 @@ public class ClimberRoutines {
   private final double afterClampDelay = 0.3;
 
   // Tolerance (in meters)
-  private final double tolerance = 5;
+  private final double tolerance = 2;
 
   // State booleans
   public final BooleanSupplier
@@ -35,11 +35,11 @@ public class ClimberRoutines {
           () ->
               withinTolerance(
                   climberSubsystem.getLiftMotorPosition(), ClimberConstants.liftLimits.high),
-      winchIsVertical =
+      winchIsClimbed =
           () ->
               withinTolerance(
                   winchSubsystem.getWinchLeaderMotorPosition(),
-                  ClimberConstants.winchVerticalPosition),
+                  ClimberConstants.winchClimbedPosition),
       winchIsHigh =
           () ->
               withinTolerance(
@@ -57,6 +57,10 @@ public class ClimberRoutines {
    * @return whether position is within tolerance of target
    */
   public boolean withinTolerance(double position, double target) {
+    return position > target - tolerance && position < target + tolerance;
+  }
+
+  public boolean withinTolerance(double position, double target, double tolerance) {
     return position > target - tolerance && position < target + tolerance;
   }
 
@@ -92,7 +96,16 @@ public class ClimberRoutines {
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
             windArm())
-        .onlyIf(() -> liftIsLow.getAsBoolean() && winchIsVertical.getAsBoolean());
+        .onlyIf(
+            () ->
+                withinTolerance(
+                        winchSubsystem.getWinchLeaderMotorPosition(),
+                        ClimberConstants.winchLimits.high,
+                        tolerance * 2)
+                    && withinTolerance(
+                        climberSubsystem.getLiftMotorPosition(),
+                        ClimberConstants.liftLimits.low,
+                        tolerance * 2));
   }
 
   /**
@@ -136,9 +149,9 @@ public class ClimberRoutines {
    */
   public Command unwindArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchVerticalPosition)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
         .repeatedly()
-        .until(winchIsVertical);
+        .until(winchIsHigh);
   }
 
   /**
@@ -148,9 +161,9 @@ public class ClimberRoutines {
    */
   public Command resetArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
+        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
         .repeatedly()
-        .until(winchIsHigh);
+        .until(winchIsLow);
   }
 
   /**
@@ -160,15 +173,19 @@ public class ClimberRoutines {
    */
   public Command windArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
+        .setWinchPosPID(() -> ClimberConstants.winchClimbedPosition)
         .repeatedly()
-        .until(winchIsLow);
+        .until(winchIsClimbed);
   }
 
   public boolean isReadyToClamp() {
     return climberSubsystem.getSolenoidState() == false
-        && liftIsLow.getAsBoolean()
-        && winchIsVertical.getAsBoolean()
+        && withinTolerance(
+            winchSubsystem.getWinchLeaderMotorPosition(),
+            ClimberConstants.winchLimits.high,
+            tolerance * 2)
+        && withinTolerance(
+            climberSubsystem.getLiftMotorPosition(), ClimberConstants.liftLimits.low, tolerance * 2)
         && climberSubsystem.getSensor1()
         && climberSubsystem.getSensor2();
   }

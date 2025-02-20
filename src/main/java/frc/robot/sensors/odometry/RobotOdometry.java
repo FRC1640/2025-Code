@@ -47,7 +47,7 @@ public class RobotOdometry extends PeriodicBase {
     instance = this;
     this.gyro = gyro;
     for (AprilTagVision aprilTagVision : cameras) {
-      visionMap.put(aprilTagVision.getCameraName(), aprilTagVision);
+      visionMap.put(aprilTagVision.getDisplayName(), aprilTagVision);
     }
     SparkOdometryThread.getInstance().start();
     OdometryStorage main =
@@ -222,13 +222,15 @@ public class RobotOdometry extends PeriodicBase {
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
     for (Pose2d pose : robotPoses) {
-      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPoses", pose);
+      Logger.recordOutput("AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
     }
     for (Pose2d pose : robotPosesAccepted) {
-      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPosesAccepted", pose);
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesAccepted", pose);
     }
     for (Pose2d pose : robotPosesRejected) {
-      Logger.recordOutput("AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejected", pose);
+      Logger.recordOutput(
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejected", pose);
     }
   }
 
@@ -264,22 +266,22 @@ public class RobotOdometry extends PeriodicBase {
     }
     Pose2d visionUpdate = result.get().pose().toPose2d();
     Logger.recordOutput(
-        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesTrig", visionUpdate);
+        "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesTrig", visionUpdate);
     if (Robot.getState() == RobotState.DISABLED
         || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
       Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig", visionUpdate);
       return;
     }
     if (!(isPoseValid(visionUpdate)
         && vision.isConnected()
         && result.get().minimumTagDistance() < 7)) {
       Logger.recordOutput(
-          "AprilTagVision/" + vision.getCameraName() + "/RobotPosesRejectedTrig", visionUpdate);
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig", visionUpdate);
       return;
     }
     Logger.recordOutput(
-        "AprilTagVision/" + vision.getCameraName() + "/RobotPosesAcceptedTrig", visionUpdate);
+        "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesAcceptedTrig", visionUpdate);
     double xy = vision.getTrigXyStdDev(result.get());
     odometryStorage.estimator.addVisionMeasurement(
         visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));

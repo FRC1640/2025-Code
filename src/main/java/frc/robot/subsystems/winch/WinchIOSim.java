@@ -13,7 +13,7 @@ public class WinchIOSim implements WinchIO {
   private final DCMotorSim winch1Sim; // winch leader motor
   private final DCMotorSim winch2Sim; // winch follower motor
   private final PIDController winchPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "winchPID");
 
   public WinchIOSim() {
     DCMotor motor2SimGearbox = DCMotor.getNEO(1);

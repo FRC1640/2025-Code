@@ -17,6 +17,7 @@ public class ModuleInfo {
     MotorInfo.motorLoggingManager.addMotorAlias(driveChannel, id.name() + " Drive");
     MotorInfo.motorLoggingManager.addMotorAlias(steerChannel, id.name() + " Steer");
 
+    this.id = id;
     this.driveChannel = driveChannel;
     this.steerChannel = steerChannel;
     this.resolverChannel = resolverChannel;

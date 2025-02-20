@@ -29,18 +29,19 @@ public class SparkConstants {
         new SparkMaxConfig());
   }
 
-  public static final SparkConfiguration getLiftDefaultMax(int id) {
+  public static final SparkConfiguration getLiftDefaultMax(int id, boolean inverted) {
     return new SparkConfiguration(
         id,
-        IdleMode.kCoast,
-        false,
+        IdleMode.kBrake,
+        inverted,
         60,
         8,
         2,
         StatusFrames.getDefault(),
         new LimitSwitchConfig()
             .reverseLimitSwitchEnabled(true)
-            .forwardLimitSwitchType(Type.kNormallyOpen)
+            .reverseLimitSwitchType(Type.kNormallyOpen)
+            // .forwardLimitSwitchType(Type.kNormallyOpen)
             .forwardLimitSwitchEnabled(false),
         new SparkMaxConfig());
   }

@@ -18,9 +18,9 @@ public class GantryIOSim implements GantryIO {
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
   private final SimpleMotorFeedforward ff =
-      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF, "gantryFF");
   private final PIDController gantryVelocityPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocityPID");
   private boolean limits = false;
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {

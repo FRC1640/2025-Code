@@ -1,9 +1,9 @@
-package frc.robot.util.tools.logging;
+package frc.robot.util.logging;
 
-import frc.robot.util.tools.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
-import frc.robot.util.tools.logging.TrackedFeedForward.FeedForwardTrack;
-import frc.robot.util.tools.logging.TrackedRobotPID.PIDTrack;
-import frc.robot.util.tools.logging.TrackedRobotPID.ProfiledPIDTrack;
+import frc.robot.util.logging.PIDTracking.PIDTrack;
+import frc.robot.util.logging.PIDTracking.ProfiledPIDTrack;
+import frc.robot.util.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
+import frc.robot.util.logging.TrackedFeedForward.FeedForwardTrack;
 
 public class LoggerManager {
 

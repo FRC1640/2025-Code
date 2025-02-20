@@ -56,7 +56,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux25;
+    public static final RobotType robotType = RobotType.Prime24;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -307,8 +307,8 @@ public class RobotConstants {
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
     public static final Limits liftLimits = new Limits(-100.0, 0.0);
-    public static final double winchVerticalPosition = 50;
-    public static final Limits winchLimits = new Limits(-1000.0, 1000.0);
+    public static final double winchClimbedPosition = 45;
+    public static final Limits winchLimits = new Limits(-30.0, 90.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =

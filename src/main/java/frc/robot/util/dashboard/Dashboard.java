@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
@@ -27,16 +28,19 @@ public class Dashboard {
   private GantrySubsystem gantrySubsystem;
   public PIDTab pidTab = new PIDTab();
   public PPIDTab ppidTab = new PPIDTab();
+  private ClimberSubsystem climberSubsystem;
 
   public Dashboard(
       DriveSubsystem driveSubsystem,
       LiftSubsystem liftSubsystem,
       GantrySubsystem gantrySubsystem,
+      ClimberSubsystem climberSubsystem,
       CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
     this.gantrySubsystem = gantrySubsystem;
     this.controller = controller;
+    this.climberSubsystem = climberSubsystem;
     autoInit();
     teleopInit();
     if (TestConfig.tuningMode == TestingSetting.pidTuning) {
@@ -58,7 +62,24 @@ public class Dashboard {
     return autoChooser.getSelected();
   }
 
-  private void teleopInit() {}
+  private void teleopInit() {
+    ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
+    // TODO add actual url
+    // steps:
+    // 1. https://www.linkedin.com/pulse/howtousetheusbcameraontheorangepizero2-%E9%9B%AA-%E9%99%88
+    teleopTab
+        .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
+        .withSize(5, 4)
+        .withPosition(1, 1);
+    teleopTab
+        .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
+        .withSize(1, 1)
+        .withPosition(1, 0);
+    teleopTab
+        .addBoolean("Right Sensor", () -> climberSubsystem.getSensor2())
+        .withSize(1, 1)
+        .withPosition(5, 0);
+  }
 
   private void sysidInit() {
     BooleanSupplier startNext = controller.b();

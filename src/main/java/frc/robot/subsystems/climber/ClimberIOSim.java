@@ -70,11 +70,13 @@ public class ClimberIOSim implements ClimberIO {
     inputs.elevatorMotorVelocity = liftSim.getAngularVelocityRadPerSec();
     inputs.elevatorMotorCurrent = liftSim.getCurrentDrawAmps();
     inputs.elevatorMotorVoltage = liftSim.getInputVoltage();
+    inputs.sensor1 = liftLimitSwitch.getAsBoolean();
+    inputs.sensor2 = liftLimitSwitch.getAsBoolean();
     inputs.isLimitSwitchPressed = liftLimitSwitch.getAsBoolean();
 
     inputs.solenoidForward = doubleSolenoidSim.get() == DoubleSolenoid.Value.kForward;
-    inputs.sensor1 = !sensor1Sim.get();
-    inputs.sensor2 = !sensor2Sim.get();
+    // inputs.sensor1 = !sensor1Sim.get();
+    // inputs.sensor2 = !sensor2Sim.get();
   }
 
   @Override

@@ -65,7 +65,7 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimitCenter)));
   }
 
   public Command placeTrough() {

@@ -586,8 +586,7 @@ public class RobotContainer {
     return liftCommandFactory
         .runLiftMotionProfile(() -> CoralPreset.Safe.getLift())
         .repeatedly()
-        .alongWith(
-            gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimits.low / 2));
+        .alongWith(gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimitCenter));
   }
 
   public void generateNamedCommands() {

@@ -252,15 +252,15 @@ public class RobotConstants {
           case LEFT:
             return dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-                : -GantryConstants.gantryPadding;
+                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case RIGHT:
             return !dsSide
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-                : -GantryConstants.gantryPadding;
+                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case CENTER:
-            return GantryConstants.gantryLimits.low / 2;
+            return GantryConstants.gantryLimitCenter;
           default:
-            return GantryConstants.gantryLimits.low / 2;
+            return GantryConstants.gantryLimitCenter / 2;
         }
       }
 
@@ -330,6 +330,7 @@ public class RobotConstants {
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
     public static final Limits gantryLimits = new Limits(-0.31, .02);
+    public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;

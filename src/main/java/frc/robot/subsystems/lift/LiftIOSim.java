@@ -17,13 +17,14 @@ public class LiftIOSim implements LiftIO {
   private final DCMotorSim motor2Sim;
   LiftIOInputsAutoLogged inputs = new LiftIOInputsAutoLogged();
   private BooleanSupplier liftLimitSwitch;
-  PIDController liftController = RobotPIDConstants.constructPID(RobotPIDConstants.liftPID);
+  PIDController liftController =
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
   private boolean limits;
 
   public LiftIOSim(BooleanSupplier liftLimitSwitch) {

@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
+import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
@@ -21,8 +23,11 @@ public class Dashboard {
 
   private static SendableChooser<Command> sysidChooser = new SendableChooser<Command>();
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
   private LiftSubsystem liftSubsystem;
   private GantrySubsystem gantrySubsystem;
+  public PIDTab pidTab = new PIDTab();
+  public PPIDTab ppidTab = new PPIDTab();
   private ClimberSubsystem climberSubsystem;
 
   public Dashboard(
@@ -38,7 +43,13 @@ public class Dashboard {
     this.climberSubsystem = climberSubsystem;
     autoInit();
     teleopInit();
-    sysidInit();
+    if (TestConfig.tuningMode == TestingSetting.pidTuning) {
+      pidTab.init();
+      ppidTab.init();
+    }
+    if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
+      sysidInit();
+    }
   }
 
   private void autoInit() {

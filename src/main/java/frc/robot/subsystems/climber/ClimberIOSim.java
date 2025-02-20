@@ -21,7 +21,7 @@ public class ClimberIOSim implements ClimberIO {
   private BooleanSupplier liftLimitSwitch;
   private boolean limits = false;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "climberLiftPID");
 
   public ClimberIOSim(BooleanSupplier liftLimitSwitch) {
     this.liftLimitSwitch = liftLimitSwitch;

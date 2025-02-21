@@ -27,10 +27,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
       time = 0;
     }
 
-    if (getVelocity() > 0 && hasCoral() && !isCoralDetected()) {
+    if (returnAppliedVoltage() > 0.5 && hasCoral()) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
     }
-    if (releaseTime > 0.2) {
+    if (releaseTime > 0.1) {
       hasCoral = false;
       releaseTime = 0;
     }
@@ -38,6 +38,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     lastTime = System.currentTimeMillis();
     Logger.recordOutput("CoralDetector/DetectionTime", time);
     Logger.recordOutput("CoralDetector/DetectionTimeBool", isDetectingTimed());
+    Logger.recordOutput("CoralDetector/HasCoral", hasCoral);
   }
 
   public void stop() {

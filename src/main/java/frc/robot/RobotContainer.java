@@ -420,7 +420,10 @@ public class RobotContainer {
         .povDown()
         .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
 
-    driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12));
+    driveController
+        .b()
+        .and(() -> !coralOuttakeCommandFactory.runningBack)
+        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))
@@ -465,16 +468,16 @@ public class RobotContainer {
     operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
-    new Trigger(() -> (!coralOuttakeSubsystem.isCoralDetected())).onTrue(runLiftToSafe());
-    new Trigger(
-            () ->
-                algaeIntakeSubsystem.hasAlgae()
-                    && RobotOdometry.instance
-                            .getPose("Main")
-                            .getTranslation()
-                            .getDistance(getTarget().getTranslation())
-                        > 0.3)
-        .onTrue(runLiftToSafe());
+    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
+    // new Trigger(
+    //         () ->
+    //             algaeIntakeSubsystem.hasAlgae()
+    //                 && RobotOdometry.instance
+    //                         .getPose("Main")
+    //                         .getTranslation()
+    //                         .getDistance(getTarget().getTranslation())
+    //                     > 0.3)
+    //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 

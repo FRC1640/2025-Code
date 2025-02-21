@@ -329,7 +329,7 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(-0.31, .02);
+    public static final Limits gantryLimits = new Limits(0.01, 0.37);
     public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
@@ -342,7 +342,7 @@ public class RobotConstants {
     // if you dont update this i will find you // *gulp* // You understand what
     // happens if you don't
     public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(18).get(); // update this too
+        new RobotSwitch<Integer>(7).get(); // update this too
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 1;
   }
@@ -355,6 +355,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 20;
+    public static double currentThresh = 40;
   }
 }

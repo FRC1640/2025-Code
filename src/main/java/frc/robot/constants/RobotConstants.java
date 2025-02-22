@@ -175,9 +175,9 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(29.5 / 2),
-                    -Units.inchesToMeters(29.5 / 2 - 8),
-                    Units.inchesToMeters(10.5)),
+                    Units.inchesToMeters(7.575),
+                    Units.inchesToMeters(13.325),
+                    Units.inchesToMeters(14.1875)),
                 new Rotation3d()),
             1,
             "Park",

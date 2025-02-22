@@ -141,8 +141,6 @@ public class RobotContainer {
   private boolean algaeMode = false;
   private boolean gantryAuto = false;
 
-  Command currentlyRunningLift = null;
-
   public RobotContainer() {
 
     switch (Robot.getMode()) {
@@ -478,8 +476,9 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (currentlyRunningLift != null) {
-                    currentlyRunningLift.cancel();
+                  Command liftCurrent = liftSubsystem.getCurrentCommand();
+                  if (liftCurrent != null) {
+                    liftCurrent.cancel();
                   }
                 }))
         .onTrue(setupAutoPlace(() -> coralPreset));
@@ -579,19 +578,16 @@ public class RobotContainer {
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
-    currentlyRunningLift =
-        new InstantCommand(
-                () -> {
-                  presetActive =
-                      algaeMode ? coralPreset.get().getLift() : coralPreset.get().getLiftAlgae();
-                  gantryPresetActive = coralPreset.get();
-                })
-            .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-            .alongWith(
-                autoScoringCommandFactory.gantryAlignCommand(
-                    () -> gantryPresetActive,
-                    () -> AllianceManager.onDsSideReef(() -> getTarget())));
-    return currentlyRunningLift;
+    return new InstantCommand(
+            () -> {
+              presetActive =
+                  algaeMode ? coralPreset.get().getLift() : coralPreset.get().getLiftAlgae();
+              gantryPresetActive = coralPreset.get();
+            })
+        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
+        .alongWith(
+            autoScoringCommandFactory.gantryAlignCommand(
+                () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget())));
   }
 
   public Pose2d[] chooseAlignPos() {

@@ -36,7 +36,10 @@ public class LiftSubsystem extends SubsystemBase {
                 this::getLeaderMotorVelocity,
                 this,
                 new SysIdRoutine.Config(
-                    Volts.per(Seconds).of(0.5), Volts.of(3.5), Seconds.of(100)));
+                    Volts.per(Seconds).of(0.5),
+                    Volts.of(3.5),
+                    Seconds.of(100),
+                    (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
   }
 
   @Override

@@ -80,7 +80,11 @@ public class DriveSubsystem extends SubsystemBase {
                 modules[2],
                 modules[3],
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(15)));
+                new SysIdRoutine.Config(
+                    Volts.per(Seconds).of(2),
+                    Volts.of(8),
+                    Seconds.of(15),
+                    (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
 
     RobotConfig config;
     try {

@@ -34,11 +34,6 @@ public class GantrySubsystem extends SubsystemBase {
     LogRunner.addLog(
         new VelocityLogStorage(() -> getGantryVelocity(), () -> io.velocitySetpoint(), getName()));
     sysIdRoutine =
-        new SysIdRoutine(
-            new SysIdRoutine.Config(),
-            new SysIdRoutine.Mechanism(
-                (voltage) -> setGantryVoltage(voltage.in(Volts)), null, this));
-    sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(
                 this::setGantryVoltage,
@@ -48,7 +43,7 @@ public class GantrySubsystem extends SubsystemBase {
                 this,
                 new SysIdRoutine.Config(
                     Volts.per(Seconds).of(0.5),
-                    Volts.of(4),
+                    Volts.of(5),
                     Seconds.of(20),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
   }

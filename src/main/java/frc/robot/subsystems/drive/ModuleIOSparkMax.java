@@ -151,7 +151,7 @@ public class ModuleIOSparkMax implements ModuleIO {
   public void setSteerPosition(Rotation2d angle, ModuleIOInputs inputs) {
     Rotation2d delta = angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     double sin = Math.sin(delta.getRadians());
-    setSteerVoltage(steerPID.calculate(sin, 0) * 8);
+    setSteerVoltage(steerPID.calculate(sin, 0) * 6);
   }
 
   @Override

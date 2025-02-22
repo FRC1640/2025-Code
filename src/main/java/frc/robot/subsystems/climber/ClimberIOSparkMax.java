@@ -1,10 +1,6 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.util.tools.MotorLim;
 
@@ -15,7 +11,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final PIDController liftPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "climberLiftPID");
 
-  private final DoubleSolenoid doubleSolenoid;
+  // private final DoubleSolenoid doubleSolenoid;
   // inductance sensors that pull low when metal is detected
   // private final DigitalInput sensor1Input, sensor2Input;
   private boolean limits = false;
@@ -25,11 +21,11 @@ public class ClimberIOSparkMax implements ClimberIO {
     //     SparkConfigurer.configSparkMax(
     //         SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
     // liftEncoder = liftSpark.getEncoder();
-    doubleSolenoid =
-        new DoubleSolenoid(
-            PneumaticsModuleType.REVPH,
-            ClimberConstants.solenoidForwardChannel,
-            ClimberConstants.solenoidReverseChannel);
+    // doubleSolenoid =
+    //     new DoubleSolenoid(
+    //         PneumaticsModuleType.REVPH,
+    //         ClimberConstants.solenoidForwardChannel,
+    //         ClimberConstants.solenoidReverseChannel);
     // sensor1Input = new DigitalInput(ClimberConstants.sensor1Channel);
     // sensor2Input = new DigitalInput(ClimberConstants.sensor2Channel);
     // liftLimitSwitch = liftSpark.getForwardLimitSwitch();
@@ -58,7 +54,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void setSolenoidState(boolean forward) {
-    doubleSolenoid.set(forward ? Value.kForward : Value.kReverse);
+    // doubleSolenoid.set(forward ? Value.kForward : Value.kReverse);
   }
 
   @Override
@@ -73,7 +69,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     // inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
     // inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();
 
-    inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
+    // inputs.solenoidFoFrward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
     // inputs.sensor1 = !sensor1Input.get();
     // inputs.sensor2 = !sensor2Input.get();
     // inputs.isLimitSwitchPressed = liftLimitSwitch.isPressed();

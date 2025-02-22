@@ -215,12 +215,12 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Safe(0, GantrySetpoint.CENTER),
-      LeftL2(0.5, GantrySetpoint.LEFT), // TODO correct numbers
-      RightL2(0.5, GantrySetpoint.RIGHT),
-      LeftL3(1, GantrySetpoint.LEFT),
-      RightL3(1, GantrySetpoint.RIGHT),
-      LeftL4(1.5, GantrySetpoint.LEFT),
-      RightL4(1.5, GantrySetpoint.RIGHT),
+      LeftL2(0.114, GantrySetpoint.LEFT),
+      RightL2(0.114, GantrySetpoint.RIGHT),
+      LeftL3(0.28, GantrySetpoint.LEFT),
+      RightL3(0.28, GantrySetpoint.RIGHT),
+      LeftL4(0.569, GantrySetpoint.LEFT),
+      RightL4(0.569, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;

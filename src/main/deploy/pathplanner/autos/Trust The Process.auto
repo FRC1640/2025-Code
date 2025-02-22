@@ -41,9 +41,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "L2LeftCoral"
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetModeAlgae"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetupL2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartSetup"
+                }
+              }
+            ]
           }
         },
         {

@@ -409,14 +409,14 @@ public class RobotContainer {
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
-    // new Trigger(
-    //         () ->
-    //             RobotOdometry.instance
-    //                     .getPose("Main")
-    //                     .getTranslation()
-    //                     .getDistance(getTarget().getTranslation())
-    //                 > 2)
-    //     .onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                RobotOdometry.instance
+                        .getPose("Main")
+                        .getTranslation()
+                        .getDistance(getTarget().getTranslation())
+                    > 2)
+        .onTrue(runLiftToSafe());
 
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
@@ -489,7 +489,7 @@ public class RobotContainer {
                 }))
         .onTrue(setupAutoPlace(() -> coralPreset));
 
-    // new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
+    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()

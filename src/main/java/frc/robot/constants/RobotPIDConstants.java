@@ -106,7 +106,8 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants =
-      new PIDConstants(25); // new PIDConstants(27.25, 0.010569);
+      new PIDConstants(27); // new PIDConstants(27.25, 0.010569);
+  public static final PIDConstants liftVelocityPID = new PIDConstants(0, 0, 0);
   public static final FeedForwardConstants liftFF =
       new FeedForwardConstants(0.62456, 5.4217, 0.84372, 0.5477);
 

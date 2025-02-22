@@ -30,7 +30,10 @@ public class LiftIOSpark implements LiftIO {
 
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+
+  PIDController velocityController =
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");
   private boolean limits;
 
   public LiftIOSpark() {
@@ -78,7 +81,10 @@ public class LiftIOSpark implements LiftIO {
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition, position)
-                + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
+                + elevatorFeedforward.calculate(
+                    profiledPIDController.getSetpoint().velocity, acceleration)
+                + velocityController.calculate(
+                    inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
         inputs);
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;
     lastTime = Timer.getFPGATimestamp();

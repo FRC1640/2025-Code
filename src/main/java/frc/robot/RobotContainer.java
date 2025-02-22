@@ -303,6 +303,11 @@ public class RobotContainer {
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
+    algaeIntakeSubsystem.setDefaultCommand(
+        algaeCommandFactory
+            .setSolenoidState(() -> false)
+            .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
+
     generateNamedCommands();
     configureBindings();
     PeriodicScheduler.getInstance()
@@ -529,9 +534,6 @@ public class RobotContainer {
     new Trigger(() -> motorBoard.getTrough())
         .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
-        .onFalse(algaeCommandFactory.setSolenoidState(() -> false));
-
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
@@ -583,7 +585,7 @@ public class RobotContainer {
         new InstantCommand(
                 () -> {
                   presetActive =
-                      algaeMode ? coralPreset.get().getLift() : coralPreset.get().getLiftAlgae();
+                      algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
                   gantryPresetActive = coralPreset.get();
                 })
             .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))

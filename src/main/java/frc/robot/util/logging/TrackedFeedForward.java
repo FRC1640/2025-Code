@@ -1,4 +1,4 @@
-package frc.robot.util.tools.logging;
+package frc.robot.util.logging;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;

@@ -8,6 +8,8 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
@@ -63,24 +65,24 @@ public class GantryCommandFactory {
   public Command gantryDriftCommand() {
     return gantrySetVelocityCommand(
             () ->
-                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
                     ? GantryConstants.alignSpeed
                     : -GantryConstants.alignSpeed)
         .until(
             () ->
-                Math.abs(
-                        gantrySubsystem.getCarriagePosition()
-                            - GantryConstants.gantryLimits.low / 2)
+                Math.abs(gantrySubsystem.getCarriagePosition() - GantryConstants.gantryLimitCenter)
                     < GantryConstants.gantryPadding)
         .andThen(
             gantrySetVelocityCommand(
                     () ->
-                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
                             ? -GantryConstants.alignSpeed
                             : GantryConstants.alignSpeed)
                 .until(
                     () ->
-                        Math.abs(gantrySubsystem.getCarriagePosition())
+                        Math.abs(
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimits.high)
                                 < GantryConstants.gantryPadding
                             || Math.abs(
                                     gantrySubsystem.getCarriagePosition()

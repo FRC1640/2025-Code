@@ -1,11 +1,13 @@
 package frc.robot.subsystems.funky;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.jni.CANSparkJNI;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.PID.SparkPIDController;
 import frc.robot.util.spark.SparkConfigurer;
 
 public class FunkyIO {

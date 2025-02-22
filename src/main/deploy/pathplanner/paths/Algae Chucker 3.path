@@ -38,10 +38,41 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L3LeftCoral",
+      "name": "AlgaeUp",
       "waypointRelativePos": 0.5666666666666664,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeAlgae"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL3"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

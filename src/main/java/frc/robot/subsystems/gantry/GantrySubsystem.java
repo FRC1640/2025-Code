@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
+import frc.robot.util.logging.LogRunner;
+import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
@@ -16,6 +18,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 public class GantrySubsystem extends SubsystemBase {
   GantryIOInputsAutoLogged inputs = new GantryIOInputsAutoLogged();
   GantryIO io;
+  // public static boolean limit = false;
 
   private LoggedMechanism2d gantryMechanism =
       new LoggedMechanism2d(2, 2); // represents gantry position left/right
@@ -28,11 +31,8 @@ public class GantrySubsystem extends SubsystemBase {
     this.io = io;
     LoggedMechanismRoot2d gantryRoot = gantryMechanism.getRoot("gantry root", 0, 1);
     gantryRoot.append(gantryPos);
-    sysIdRoutine =
-        new SysIdRoutine(
-            new SysIdRoutine.Config(),
-            new SysIdRoutine.Mechanism(
-                (voltage) -> setGantryVoltage(voltage.in(Volts)), null, this));
+    LogRunner.addLog(
+        new VelocityLogStorage(() -> getGantryVelocity(), () -> io.velocitySetpoint(), getName()));
     sysIdRoutine =
         new SimpleMotorSysidRoutine()
             .createNewRoutine(
@@ -41,7 +41,11 @@ public class GantrySubsystem extends SubsystemBase {
                 this::getCarriagePosition,
                 this::getGantryVelocity,
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(0.5), Volts.of(4), Seconds.of(20)));
+                new SysIdRoutine.Config(
+                    Volts.per(Seconds).of(0.5),
+                    Volts.of(5),
+                    Seconds.of(20),
+                    (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
   }
 
   @Override
@@ -97,8 +101,10 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
-    Logger.recordOutput(
-        "OUTPUTs", Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01);
     return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+  }
+
+  public void setLimitEnabled(boolean enable) {
+    io.setLimitEnabled(enable);
   }
 }

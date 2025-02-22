@@ -1,57 +1,65 @@
 package frc.robot.subsystems.lift;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
+import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSpark implements LiftIO {
+  private double velocitySetpoint = 0;
   RelativeEncoder leaderEncoder;
   RelativeEncoder followerEncoder;
   SparkMax leaderMotor;
   SparkMax followerMotor;
+  SparkLimitSwitch liftLimitSwitch; // direction?? the gantry one didn't have it specified
   PIDController liftController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftPID, "LiftPID");
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
+  double lastTime = Timer.getFPGATimestamp();
 
   ProfiledPIDController profiledPIDController =
       RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints);
-  SparkClosedLoopController leaderMotorEncoder;
-  SparkClosedLoopController followerMotorEncoder;
+          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+
+  PIDController velocityController =
+      RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");
+  private boolean limits;
 
   public LiftIOSpark() {
     leaderMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftLeaderMotorID, false)
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftLeaderMotorID, false)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
     followerMotor =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(LiftConstants.liftFollowerMotorID, false), leaderMotor);
+            SparkConstants.getLiftDefaultMax(LiftConstants.liftFollowerMotorID, true), leaderMotor);
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
-    SparkClosedLoopController leaderMotorController = leaderMotor.getClosedLoopController();
+    liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
   }
   /*
    * Set voltage of the motor
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+    Logger.recordOutput("LIFTINPUT", voltage);
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
                 voltage,
-                LiftConstants.liftLimits.low,
+                limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
   }
   /*
@@ -67,11 +75,19 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
+    double acceleration =
+        (profiledPIDController.getSetpoint().velocity - velocitySetpoint)
+            / (Timer.getFPGATimestamp() - lastTime);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition)
-                + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
+            profiledPIDController.calculate(inputs.leaderMotorPosition, position)
+                + elevatorFeedforward.calculate(
+                    profiledPIDController.getSetpoint().velocity, acceleration)
+                - velocityController.calculate(
+                    inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
         inputs);
+    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
+    lastTime = Timer.getFPGATimestamp();
   }
 
   @Override
@@ -116,5 +132,22 @@ public class LiftIOSpark implements LiftIO {
     inputs.leaderTemperature = leaderMotor.getMotorTemperature();
     inputs.followerTemperature = followerMotor.getMotorTemperature();
     inputs.motorPosition = (inputs.leaderMotorPosition + inputs.followerMotorPosition) / 2;
+    inputs.isLimitSwitchPressed = liftLimitSwitch.isPressed();
+  }
+
+  @Override
+  public void resetEncoder() {
+    leaderEncoder.setPosition(0);
+    followerEncoder.setPosition(0);
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 }

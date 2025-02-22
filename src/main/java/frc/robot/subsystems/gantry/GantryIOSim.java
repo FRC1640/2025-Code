@@ -11,15 +11,17 @@ import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim gantrySim;
   private double gantryAppliedVolts = 0.0;
   private BooleanSupplier gantryLimitSwitch;
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
   private final SimpleMotorFeedforward ff =
-      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF);
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF, "gantryFF");
   private final PIDController gantryVelocityPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocityPID");
+  private boolean limits = false;
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
@@ -60,7 +62,12 @@ public class GantryIOSim implements GantryIO {
                 inputs.encoderPosition,
                 voltage,
                 GantryConstants.gantryLimits.low,
-                inputs.isLimitSwitchPressed)));
+                limits ? GantryConstants.gantryLimits.high : 999999)));
+  }
+
+  @Override
+  public void setLimitEnabled(boolean enable) {
+    limits = enable;
   }
 
   @Override
@@ -68,5 +75,11 @@ public class GantryIOSim implements GantryIO {
     setGantryVoltage(
         ff.calculate(velocity) + gantryVelocityPID.calculate(inputs.encoderVelocity, velocity),
         inputs);
+    velocitySetpoint = velocity;
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

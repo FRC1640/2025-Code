@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +17,7 @@ import frc.robot.util.spark.SparkConfigurer;
 import java.util.Queue;
 
 public class ModuleIOSparkMax implements ModuleIO {
+  private double velocitySetpoint = 0;
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
@@ -28,12 +30,18 @@ public class ModuleIOSparkMax implements ModuleIO {
   private final SparkFlex driveSpark;
   private final SparkMax steerSpark;
 
-  private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
-  private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.driveFF);
-  private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
+  private final PIDController drivePID;
+  private final SimpleMotorFeedforward driveFF;
+  private final PIDController steerPID;
 
   public ModuleIOSparkMax(ModuleInfo id) {
+    drivePID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "drivePID" + id.id.toString());
+    driveFF =
+        RobotPIDConstants.constructFFSimpleMotor(
+            RobotPIDConstants.driveFF, "driveFF" + id.id.toString());
+    steerPID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "steerPID" + id.id.toString());
     driveSpark = SparkConstants.driveFlex(id.driveChannel);
     steerSpark =
         SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerChannel, true));
@@ -131,6 +139,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
     setDriveVoltage(pidSpeed);
+    velocitySetpoint = velocity;
   }
 
   @Override
@@ -142,11 +151,16 @@ public class ModuleIOSparkMax implements ModuleIO {
   public void setSteerPosition(Rotation2d angle, ModuleIOInputs inputs) {
     Rotation2d delta = angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     double sin = Math.sin(delta.getRadians());
-    setSteerVoltage(steerPID.calculate(sin, 0) * 12);
+    setSteerVoltage(steerPID.calculate(sin, 0) * 6);
   }
 
   @Override
   public void setSteerVoltage(double voltage) {
-    steerSpark.setVoltage(voltage);
+    steerSpark.setVoltage(MathUtil.clamp(voltage, -12, 12));
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

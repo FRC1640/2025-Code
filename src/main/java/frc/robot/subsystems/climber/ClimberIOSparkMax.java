@@ -1,60 +1,47 @@
 package frc.robot.subsystems.climber;
 
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.constants.SparkConstants;
-import frc.robot.sensors.resolvers.ResolverVoltage;
-import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSparkMax implements ClimberIO {
-  private final ResolverVoltage liftEncoder;
-  private final ResolverVoltage winchEncoder;
-  private final SparkMax liftSpark;
-  private final SparkMax winchLeaderSpark;
-  private final SparkMax winchFollowerSpark;
+  // private final RelativeEncoder liftEncoder;
+  // private final SparkMax liftSpark;
+  // private final SparkLimitSwitch liftLimitSwitch;
   private final PIDController liftPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID);
-  private final PIDController winchPID =
-      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID);
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberLiftPID, "climberLiftPID");
 
-  private final DoubleSolenoid doubleSolenoid;
+  // private final DoubleSolenoid doubleSolenoid;
+  // inductance sensors that pull low when metal is detected
+  // private final DigitalInput sensor1Input, sensor2Input;
+  private boolean limits = false;
 
   public ClimberIOSparkMax() {
-    liftSpark =
-        SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
-    winchLeaderSpark =
-        SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(ClimberConstants.climberWinch1MotorID, false));
-    winchFollowerSpark =
-        SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false),
-            winchLeaderSpark);
-    liftEncoder = new ResolverVoltage(ClimberConstants.liftResolverInfo);
-    winchEncoder = new ResolverVoltage(ClimberConstants.winchResolverInfo);
-    doubleSolenoid =
-        new DoubleSolenoid(
-            PneumaticsModuleType.REVPH,
-            ClimberConstants.solenoidForwardChannel,
-            ClimberConstants.solenoidReverseChannel);
+    // liftSpark =
+    //     SparkConfigurer.configSparkMax(
+    //         SparkConstants.getDefaultMax(ClimberConstants.climberLiftMotorID, false));
+    // liftEncoder = liftSpark.getEncoder();
+    // doubleSolenoid =
+    //     new DoubleSolenoid(
+    //         PneumaticsModuleType.REVPH,
+    //         ClimberConstants.solenoidForwardChannel,
+    //         ClimberConstants.solenoidReverseChannel);
+    // sensor1Input = new DigitalInput(ClimberConstants.sensor1Channel);
+    // sensor2Input = new DigitalInput(ClimberConstants.sensor2Channel);
+    // liftLimitSwitch = liftSpark.getForwardLimitSwitch();
   }
   /*
    * Set voltage of the lift motor
    */
   @Override
   public void setClimberLiftVoltage(double voltage, ClimberIOInputs inputs) {
-    liftSpark.setVoltage(
-        MotorLim.clampVoltage(
-            MotorLim.applyLimits(
-                inputs.liftMotorPosition,
-                voltage,
-                ClimberConstants.winchLimits.low,
-                ClimberConstants.winchLimits.high)));
+    // liftSpark.setVoltage(
+    //     MotorLim.clampVoltage(
+    //         MotorLim.applyLimits(
+    //             inputs.elevatorMotorPosition,
+    //             voltage,
+    //             ClimberConstants.liftLimits.low,
+    //             limits ? ClimberConstants.liftLimits.high : null)));
   }
   /*
    * Sets the position of the lift motor using a PID
@@ -62,54 +49,39 @@ public class ClimberIOSparkMax implements ClimberIO {
   @Override
   public void setClimberLiftPosition(double position, ClimberIOInputs inputs) {
     setClimberLiftVoltage(
-        MotorLim.clampVoltage(liftPID.calculate(inputs.liftMotorPosition, position)), inputs);
+        MotorLim.clampVoltage(liftPID.calculate(inputs.elevatorMotorPosition, position)), inputs);
   }
-  /*
-   * Set voltage of the winch motors
-   */
+
   @Override
-  public void setClimberWinchVoltage(double voltage, ClimberIOInputs inputs) {
-    winchLeaderSpark.setVoltage(
-        MotorLim.clampVoltage(
-            MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition,
-                voltage,
-                ClimberConstants.winchLimits.low,
-                ClimberConstants.winchLimits.high)));
-  }
-  /*
-   * Sets the position of the winch motors using a PID
-   */
-  @Override
-  public void setClimberWinchPosition(double position, ClimberIOInputs inputs) {
-    setClimberWinchVoltage(
-        MotorLim.clampVoltage(winchPID.calculate(inputs.liftMotorPosition, position)), inputs);
+  public void setSolenoidState(boolean forward) {
+    // doubleSolenoid.set(forward ? Value.kForward : Value.kReverse);
   }
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.liftMotorPosition = liftEncoder.getDegrees(); // says degrees but really in meters
-    inputs.winchLeaderMotorPosition =
-        winchEncoder.getDegrees(); // says degrees but really in meters
-    inputs.liftMotorCurrent = liftSpark.getOutputCurrent();
-    inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
-    inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();
-    inputs.liftMotorVoltage = liftSpark.getAppliedOutput();
-    inputs.winchLeaderMotorVoltage = winchLeaderSpark.getAppliedOutput();
-    inputs.winchFollowerMotorVoltage = winchFollowerSpark.getAppliedOutput();
-    inputs.liftMotorTemperature = liftSpark.getMotorTemperature();
-    inputs.winchLeaderMotorTemperature = winchLeaderSpark.getMotorTemperature();
-    inputs.winchFollowerMotorTemperature = winchFollowerSpark.getMotorTemperature();
+    // inputs.elevatorMotorPosition =
+    //     liftEncoder.getPosition()
+    //         / ClimberConstants.gearRatio
+    //         * ClimberConstants.pulleyRadius
+    //         * 2
+    //         * Math.PI;
+    // inputs.elevatorMotorCurrent = liftSpark.getOutputCurrent();
+    // inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
+    // inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();
 
-    inputs.solenoidForward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
+    // inputs.solenoidFoFrward = doubleSolenoid.get() == DoubleSolenoid.Value.kForward;
+    // inputs.sensor1 = !sensor1Input.get();
+    // inputs.sensor2 = !sensor2Input.get();
+    // inputs.isLimitSwitchPressed = liftLimitSwitch.isPressed();
   }
 
   @Override
-  public void setSolenoidState(boolean forward, ClimberIOInputs inputs) {
-    if (forward) {
-      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-    } else {
-      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
+  public void resetEncoder() {
+    // liftEncoder.setPosition(0);
+  }
+
+  @Override
+  public void setLimitsEnabled(boolean enable) {
+    limits = enable;
   }
 }

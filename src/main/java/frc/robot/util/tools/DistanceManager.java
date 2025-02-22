@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import java.util.function.Function;
+import org.littletonrobotics.junction.Logger;
 
 public class DistanceManager {
   /**
@@ -15,6 +16,7 @@ public class DistanceManager {
    * @return the distance from the nearest points
    */
   public static double getNearestPositionDistance(Pose2d robotPos, Pose2d[] checkPoints) {
+
     double distance = Double.MAX_VALUE;
     for (Pose2d pos : checkPoints) {
       double distanceLocalPos = robotPos.getTranslation().getDistance(pos.getTranslation());
@@ -67,6 +69,8 @@ public class DistanceManager {
   public static Pose2d addRotatedDim(Pose2d pose2d, double dim, Rotation2d rot) {
     Translation2d translation =
         pose2d.getTranslation().minus(new Translation2d(dim, 0).rotateBy(rot));
+
+    Logger.recordOutput("OUTPUT", new Pose2d(translation, pose2d.getRotation()));
     return new Pose2d(translation, pose2d.getRotation());
   }
 }

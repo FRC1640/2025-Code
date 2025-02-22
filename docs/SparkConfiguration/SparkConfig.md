@@ -89,7 +89,6 @@ There are command decorators you can add to it, as follows:
   .setMaxVelocity(double maxVel)
   /*
    * Set Max Acceleration
-   *
    */
   .setMaxAccel(double maxAccel)
   /*
@@ -104,18 +103,34 @@ There are command decorators you can add to it, as follows:
    * Set the Closed Loop Slot on the Spark
    */
   .setClosedLoopSlot(ClosedLoopSlot closedLoopSlot)
+
+  /*
+   * Set Position Conversion Factor
+   */
+
+  .setPositionConversion(Double conversion)
+
+  /*
+   * Set Velocity Conversion Factor
+   */
+  .setVelocityConversion(Double conversion)
+
+  /*
+   * Set alias in the logger
+   */
+  .setAlias(String alias)
 ```
 
 To apply them, do like follows:
 ```java
   public static final SparkPIDConstants pidConstantSpark =
-      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0).commandDecorator(parameter).commandDecorator2(parameter);
+      new SparkPIDConstants(kP, kI, kD, minOutput, maxOutput ClosedLoopSlot.kSlot0).commandDecorator(parameter).commandDecorator2(parameter);
 ```
 #### Construct the Spark PID
 On your motor, do this:
 ```java
 public static final SparkPIDConstants variable =
-      new SparkPIDConstants(0, 0, 0, ClosedLoopSlot.kSlot0).commandDecorator(parameter);
+      new SparkPIDConstants(3, 3, 3, -1, 1, ClosedLoopSlot.kSlot0).commandDecorator(parameter);
 leaderMotor =
         SparkConfigurer.configSparkMax(
             SparkConstants.getDefaultMax(LiftConstants.liftleaderMotorID, false)

@@ -20,7 +20,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
 
   public AprilTagVisionIOPhotonvision(
       CameraConstant constant) { // name should match camera "nickname"
-    this.camera = new PhotonCamera(constant.name);
+    this.camera = new PhotonCamera(constant.networkName);
     this.cameraDisplacement = constant.transform;
   }
 
@@ -28,6 +28,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
   public void updateInputs(AprilTagVisionIOInputs inputs) {
     inputs.cameraDisplacement = cameraDisplacement;
     inputs.connected = camera.isConnected();
+    inputs.networkName = camera.getName();
 
     // Read new camera observations
     Set<Short> tagIds = new HashSet<>();
@@ -90,6 +91,7 @@ public class AprilTagVisionIOPhotonvision implements AprilTagVisionIO {
         var target = result.targets.get(0);
 
         // Calculate robot pose
+
         var tagPose = FieldConstants.aprilTagLayout.getTagPose(target.fiducialId);
         if (tagPose.isPresent()) {
           Transform3d fieldToTarget =

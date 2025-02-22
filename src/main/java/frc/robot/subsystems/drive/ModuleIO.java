@@ -42,4 +42,8 @@ public interface ModuleIO extends AutoCloseable {
 
   @Override
   default void close() {}
+
+  public default double velocitySetpoint() {
+    return 0.0;
+  }
 }

@@ -54,7 +54,7 @@ public class AutoScoringCommandFactory {
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
-        .until(() -> !coralOuttakeSubsystem.isCoralDetected())
+        .until(() -> !coralOuttakeSubsystem.hasCoral())
         .andThen(
             new WaitCommand(0.1)
                 .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
@@ -65,15 +65,25 @@ public class AutoScoringCommandFactory {
                                 () -> CoralPreset.Safe.getLift())))
                 .alongWith(
                     gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimits.low / 2)));
+                        () -> GantryConstants.gantryLimitCenter)));
+  }
+
+  public Command placeTrough() {
+    return coralOuttakeCommandFactory
+        .setIntakeVoltage(() -> 12)
+        .repeatedly()
+        .until(() -> !coralOuttakeSubsystem.hasCoral())
+        .andThen(
+            new WaitCommand(0.1)
+                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly()));
   }
 
   public Command algaeAutoPickup() {
     return algaeCommandFactory
-        .setSolenoidState(true)
+        .setSolenoidState(() -> true)
         .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4))
-        .until(() -> algaeSubsystem.hasAlgae())
-        .andThen(algaeCommandFactory.setSolenoidState(false));
+        .repeatedly()
+        .until(() -> algaeSubsystem.hasAlgae());
   }
 
   public Command setupAutoScore(Supplier<CoralPreset> preset, Supplier<Pose2d> target) {

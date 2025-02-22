@@ -23,6 +23,12 @@ public interface GantryIO extends AutoCloseable {
 
   public default void setGantryVelocity(double velocity, GantryIOInputs inputs) {}
 
+  public default double velocitySetpoint() {
+    return 0.0;
+  }
+
+  public default void setLimitEnabled(boolean enable) {}
+
   @Override
   default void close() {}
 }

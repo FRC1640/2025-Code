@@ -35,7 +35,8 @@ public class LiftSubsystem extends SubsystemBase {
                 this::getLeaderMotorPosition,
                 this::getLeaderMotorVelocity,
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(5)));
+                new SysIdRoutine.Config(
+                    Volts.per(Seconds).of(0.5), Volts.of(3.5), Seconds.of(100)));
   }
 
   @Override

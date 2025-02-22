@@ -33,15 +33,15 @@ public class CoralOuttakeCommandFactory {
     // FieldConstants.coralStationPosRed)))
     //     .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
 
-    new Trigger(() -> !intakeSubsystem.isCoralDetected() && !intakeSubsystem.hasCoral())
-        .onTrue(setIntakeVoltage(() -> 0))
+    new Trigger(() -> !intakeSubsystem.isCoralDetected())
         .onTrue(
-            new InstantCommand(() -> runningBack = true)
-                .andThen(
-                    setIntakeVoltage(() -> -0.75)
-                        .repeatedly()
-                        .until(() -> intakeSubsystem.isCoralDetected())
-                        .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true))))
-                .andThen(new InstantCommand(() -> runningBack = false)));
+            (new InstantCommand(() -> runningBack = true)
+                    .andThen(
+                        setIntakeVoltage(() -> -0.75)
+                            .repeatedly()
+                            .until(() -> intakeSubsystem.isCoralDetected())
+                            .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true))))
+                    .andThen(new InstantCommand(() -> runningBack = false)))
+                .onlyIf(() -> !intakeSubsystem.hasCoral()));
   }
 }

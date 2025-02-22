@@ -30,7 +30,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     if (returnAppliedVoltage() > 0.5 && hasCoral()) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
     }
-    if (releaseTime > 0.1) {
+    if (releaseTime > 0.4) {
       hasCoral = false;
       releaseTime = 0;
     }

@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.Module;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveDriveSysidRoutine {
 
@@ -35,7 +36,7 @@ public class SwerveDriveSysidRoutine {
               bl.setDriveVoltage(volts.in(Volts));
               br.setDriveVoltage(volts.in(Volts));
             },
-            null,
+            (state) -> Logger.recordOutput("SysIdTestState", state.toString()),
             subsystem));
   }
 }

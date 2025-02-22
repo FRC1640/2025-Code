@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class SimpleMotorSysidRoutine {
 
@@ -32,7 +33,7 @@ public class SimpleMotorSysidRoutine {
             (voltage) -> {
               setVoltage.accept(voltage.in(Volts));
             },
-            null,
+            (state) -> Logger.recordOutput("SysIdTestState", state.toString()),
             subsystem));
   }
 }

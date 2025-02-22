@@ -83,6 +83,8 @@ import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.LogRunner;
+import frc.robot.util.periodic.PeriodicBase;
+import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import java.util.ArrayList;
@@ -305,6 +307,14 @@ public class RobotContainer {
 
     generateNamedCommands();
     configureBindings();
+    PeriodicScheduler.getInstance()
+        .addPeriodic(
+            new PeriodicBase() {
+              @Override
+              public void periodic() {
+                Logger.recordOutput("AlgaeMode", algaeMode);
+              }
+            });
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
@@ -395,14 +405,14 @@ public class RobotContainer {
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
-    new Trigger(
-            () ->
-                RobotOdometry.instance
-                        .getPose("Main")
-                        .getTranslation()
-                        .getDistance(getTarget().getTranslation())
-                    > 2)
-        .onTrue(runLiftToSafe());
+    // new Trigger(
+    //         () ->
+    //             RobotOdometry.instance
+    //                     .getPose("Main")
+    //                     .getTranslation()
+    //                     .getDistance(getTarget().getTranslation())
+    //                 > 2)
+    //     .onTrue(runLiftToSafe());
 
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
@@ -466,7 +476,7 @@ public class RobotContainer {
     operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
-    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
+    // new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()
@@ -485,8 +495,7 @@ public class RobotContainer {
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
-        .onFalse(algaeCommandFactory.setSolenoidState(() -> false));
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)));
 
     operatorController
         .rightTrigger()
@@ -511,6 +520,9 @@ public class RobotContainer {
 
     new Trigger(() -> motorBoard.getTrough())
         .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
+        .onFalse(algaeCommandFactory.setSolenoidState(() -> false));
 
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());

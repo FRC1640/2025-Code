@@ -83,7 +83,7 @@ public class LiftIOSpark implements LiftIO {
             profiledPIDController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(
                     profiledPIDController.getSetpoint().velocity, acceleration)
-                - velocityController.calculate(
+                + velocityController.calculate(
                     inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
         inputs);
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;

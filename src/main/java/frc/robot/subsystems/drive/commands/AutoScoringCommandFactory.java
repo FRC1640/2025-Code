@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
-import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.algae.commands.AlgaeCommandFactory;
@@ -53,19 +52,11 @@ public class AutoScoringCommandFactory {
     return gantryCommandFactory
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
-        .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
+        .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly())
         .until(() -> !coralOuttakeSubsystem.hasCoral())
         .andThen(
             new WaitCommand(0.1)
-                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 12).repeatedly())
-                .finallyDo(
-                    () ->
-                        liftSubsystem.setDefaultCommand(
-                            liftCommandFactory.runLiftMotionProfile(
-                                () -> CoralPreset.Safe.getLift())))
-                .alongWith(
-                    gantryCommandFactory.gantryPIDCommand(
-                        () -> GantryConstants.gantryLimitCenter)));
+                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly()));
   }
 
   public Command placeTrough() {

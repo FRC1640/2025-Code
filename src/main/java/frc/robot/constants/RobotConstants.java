@@ -217,8 +217,8 @@ public class RobotConstants {
       Safe(0, GantrySetpoint.CENTER),
       LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
       RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.28, 0.467, GantrySetpoint.LEFT),
-      RightL3(0.28, 0.467, GantrySetpoint.RIGHT),
+      LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
+      RightL3(0.28, 0.485, GantrySetpoint.RIGHT),
       LeftL4(0.569, GantrySetpoint.LEFT),
       RightL4(0.569, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);

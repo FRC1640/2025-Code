@@ -301,6 +301,11 @@ public class RobotContainer {
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
+    algaeIntakeSubsystem.setDefaultCommand(
+        algaeCommandFactory
+            .setSolenoidState(() -> false)
+            .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
+
     generateNamedCommands();
     configureBindings();
     PeriodicScheduler.getInstance()
@@ -367,6 +372,7 @@ public class RobotContainer {
                             .getDistance(getTarget().getTranslation())
                         < 1.5
                     && followPathNearest.isEnabled())
+        .onTrue(clearLiftCommand())
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
@@ -402,14 +408,14 @@ public class RobotContainer {
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
-    // new Trigger(
-    //         () ->
-    //             RobotOdometry.instance
-    //                     .getPose("Main")
-    //                     .getTranslation()
-    //                     .getDistance(getTarget().getTranslation())
-    //                 > 2)
-    //     .onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                RobotOdometry.instance
+                        .getPose("Main")
+                        .getTranslation()
+                        .getDistance(getTarget().getTranslation())
+                    > 2)
+        .onTrue(runLiftToSafe());
 
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
@@ -471,19 +477,9 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
     operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
-    operatorController
-        .a()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  Command liftCurrent = liftSubsystem.getCurrentCommand();
-                  if (liftCurrent != null) {
-                    liftCurrent.cancel();
-                  }
-                }))
-        .onTrue(setupAutoPlace(() -> coralPreset));
+    operatorController.a().onTrue(clearLiftCommand()).onTrue(setupAutoPlace(() -> coralPreset));
 
-    // new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
+    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()
@@ -528,9 +524,6 @@ public class RobotContainer {
     new Trigger(() -> motorBoard.getTrough())
         .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
-        .onFalse(algaeCommandFactory.setSolenoidState(() -> false));
-
     // climber button bindings:
     operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
@@ -544,6 +537,16 @@ public class RobotContainer {
         .onFalse(
             new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
     mapPIDtoCommand();
+  }
+
+  public Command clearLiftCommand() {
+    return new InstantCommand(
+        () -> {
+          Command liftCurrent = liftSubsystem.getCurrentCommand();
+          if (liftCurrent != null) {
+            liftCurrent.cancel();
+          }
+        });
   }
 
   public Command getAutonomousCommand() {
@@ -581,7 +584,7 @@ public class RobotContainer {
     return new InstantCommand(
             () -> {
               presetActive =
-                  algaeMode ? coralPreset.get().getLift() : coralPreset.get().getLiftAlgae();
+                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
               gantryPresetActive = coralPreset.get();
             })
         .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
@@ -622,11 +625,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetGantryRight", new InstantCommand(() -> gantryAuto = true));
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
 
-    NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe));
+    NamedCommands.registerCommand(
+        "SetupSafe", setupAutoPlace(() -> CoralPreset.Safe).beforeStarting(clearLiftCommand()));
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
 
-    NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
+    NamedCommands.registerCommand(
+        "StartSetup", setupAutoPlace(() -> coralPreset).beforeStarting(clearLiftCommand()));
 
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
@@ -665,7 +670,7 @@ public class RobotContainer {
                     liftSubsystem.isAtPreset(
                             algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
                         && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
-            .deadlineFor(setupAutoPlace(() -> coralPreset)));
+            .deadlineFor(setupAutoPlace(() -> coralPreset).beforeStarting(clearLiftCommand())));
 
     NamedCommands.registerCommand(
         "AutoAlign",

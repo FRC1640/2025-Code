@@ -25,6 +25,12 @@
         {
           "type": "named",
           "data": {
+            "name": "SetupL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "WaitForLift"
           }
         },
@@ -32,18 +38,6 @@
           "type": "named",
           "data": {
             "name": "AutoReef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetModeAlgae"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
           }
         },
         {
@@ -74,20 +68,20 @@
                 "data": {
                   "name": "StartSetup"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
           }
         },
         {

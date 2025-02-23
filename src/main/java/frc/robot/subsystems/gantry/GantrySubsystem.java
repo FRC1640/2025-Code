@@ -101,7 +101,9 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
-    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+    boolean match = Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+    Logger.recordOutput("A_DEBUG/isAtPresetGantry", match);
+    return match;
   }
 
   public void setLimitEnabled(boolean enable) {

@@ -198,7 +198,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> 0.0, () -> 0.0)
+                    ? new ReefDetectorIOSim(() -> 251.0, () -> 0.0, () -> simBoard.getTrough())
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -675,10 +675,10 @@ public class RobotContainer {
         new WaitUntilCommand(
                 () ->
                     (liftSubsystem.isAtPreset(
-                                algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
-                            && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
-                        || simBoard.getRl3())
-            .deadlineFor(setupAutoPlace(() -> coralPreset)));
+                            algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode)))
+            .deadlineFor(setupAutoPlace(() -> coralPreset))
+            .finallyDo(() -> System.out.println("preset & wait complete")));
 
     NamedCommands.registerCommand(
         "AutoAlign",

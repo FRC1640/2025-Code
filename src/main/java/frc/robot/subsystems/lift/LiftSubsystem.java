@@ -122,7 +122,9 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.01;
+    boolean match = Math.abs(getMotorPosition() - pos) < 0.01;
+    Logger.recordOutput("A_DEBUG/isAtPreset", match);
+    return match;
   }
 
   public boolean isLimitSwitchPressed() {

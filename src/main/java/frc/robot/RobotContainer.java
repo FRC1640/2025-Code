@@ -606,11 +606,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetGantryRight", new InstantCommand(() -> gantryAuto = true));
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
 
-    NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe));
+    NamedCommands.registerCommand("SetupSafe", setupAutoPlace(() -> CoralPreset.Safe).asProxy());
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
 
-    NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
+    NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset).asProxy());
 
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
@@ -649,7 +649,7 @@ public class RobotContainer {
                     liftSubsystem.isAtPreset(
                             algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
                         && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
-            .deadlineFor(setupAutoPlace(() -> coralPreset)));
+            .alongWith(setupAutoPlace(() -> coralPreset).asProxy()));
 
     NamedCommands.registerCommand(
         "AutoAlign",

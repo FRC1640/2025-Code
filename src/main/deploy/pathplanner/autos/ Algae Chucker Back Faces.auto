@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SetModeCoral"
+            "name": "HaveCoral"
           }
         },
         {
@@ -38,6 +38,12 @@
           "type": "named",
           "data": {
             "name": "SetModeAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         },
         {

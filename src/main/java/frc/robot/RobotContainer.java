@@ -240,16 +240,15 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
-    generateNamedCommands();
-    driveSubsystem = new DriveSubsystem(gyro);
+
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem, winchSubsystem);
     climberRoutines = new ClimberRoutines(climberCommandFactory);
     algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
     logRunner = new LogRunner();
+
     autoScoringCommandFactory =
         new AutoScoringCommandFactory(
             gantryCommandFactory,
@@ -260,6 +259,9 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
+    generateNamedCommands();
+    driveSubsystem = new DriveSubsystem(gyro);
+    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =
         new Dashboard(
@@ -313,8 +315,6 @@ public class RobotContainer {
     // climberSubsystem.setDefaultCommand(
     //     climberCommandFactory.elevatorApplyVoltageCommand(
     //         () -> -operatorController.getRightY() * 4));
-
-    generateNamedCommands();
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(

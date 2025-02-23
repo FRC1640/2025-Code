@@ -15,6 +15,15 @@
 ### Drive Controller
 Port: 0
 Right X Axis Joystick: Rotates Robot
+Left Joystick: Controls robot movement (X axis for left/right, Y axis for forward/backward)
+Start Button: Sets the robot's movement direction based on its current orientation
+Button A: Align with the reef
+Button B: Runs Coral Outtake
+Left Bumper: Align with nearest reef
+Left Trigger: Speeds up robot
+Right Bumper: Slow Mode
+Right Trigger: Shoots algae grabber
+
 ### Operator Controller
 Port: 1
 ## **FightSticks Controller**

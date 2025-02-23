@@ -12,24 +12,24 @@ import frc.robot.util.spark.SparkConfigurer;
 
 public class FunkyIO {
   private final SparkMax sparkMax;
-  SparkClosedLoopController sparkClosedLoopController;
+  SparkPIDController sparkPIDController;
   RelativeEncoder encoder;
 
   public FunkyIO() {
     sparkMax =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getGantryDefaultSparkMax(13)
+            SparkConstants.getDefaultMax(13, false)
                 .applyPIDConfig(RobotPIDConstants.pidConstantSpark));
-    sparkClosedLoopController = sparkMax.getClosedLoopController();
+    sparkPIDController = new SparkPIDController(sparkMax.getClosedLoopController(), "FunkySpark");
     encoder = sparkMax.getEncoder();
     setVelocity(0);
   }
 
   public void setPos(double pos) {
-    sparkClosedLoopController.setReference(pos, ControlType.kMAXMotionPositionControl);
+    sparkPIDController.setReference(pos, ControlType.kMAXMotionPositionControl);
   }
 
   public void setVelocity(double velocity) {
-    sparkClosedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl);
+    sparkPIDController.setReference(velocity, ControlType.kMAXMotionVelocityControl);
   }
 }

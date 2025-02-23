@@ -25,20 +25,6 @@ public class SparkPIDConstants {
    * @param kD             The rate of change in error
    * @param closedLoopSlot
    */
-  public SparkPIDConstants(
-      double kP,
-      double kI,
-      double kD,
-      double minOutput,
-      double maxOutput,
-      ClosedLoopSlot closedLoopSlot) {
-    this.kP = kP;
-    this.kI = kI;
-    this.kD = kD;
-    this.minOutput = minOutput;
-    this.maxOutput = maxOutput;
-    this.closedLoopSlot = closedLoopSlot;
-  }
 
   /**
    * @param kP                       Proportional Gain

@@ -1,5 +1,7 @@
 package frc.robot.util.PID;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.REVLibError;
 import com.revrobotics.jni.CANSparkJNI;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -14,8 +16,10 @@ public class SparkPIDController {
   public SparkClosedLoopController sparkClosedLoopController;
   public double set;
   public ControlType controlType;
-  public SparkPIDController(SparkClosedLoopController sparkClosedLoopController) {
+  public String alias;
+  public SparkPIDController(SparkClosedLoopController sparkClosedLoopController, String alias) {
     this.sparkClosedLoopController = sparkClosedLoopController;
+    this.alias = alias;
   }
 
   
@@ -28,7 +32,6 @@ public class SparkPIDController {
    *     (Amps). Native units can be changed using the setPositionConversionFactor() or
    *     setVelocityConversionFactor() methods of the RelativeEncoder class
    * @param ctrl the control type
-   * @return {@link REVLibError#kOk} if successful
    */
   public void setReference(double value, SparkBase.ControlType ctrl) {
     sparkClosedLoopController.setReference(value, ctrl);
@@ -45,9 +48,11 @@ public class SparkPIDController {
    *     setVelocityConversionFactor() methods of the RelativeEncoder class
    * @param ctrl Is the control type to override with
    * @param slot The {@link ClosedLoopSlot} to use
-   * @return {@link REVLibError#kOk} if successful
    */
   public void setReference(double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot) {
+    Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
     sparkClosedLoopController.setReference(value, ctrl, slot);
   }
 
@@ -65,10 +70,13 @@ public class SparkPIDController {
    * @param arbFeedforward A value from which is represented in voltage applied to the motor after
    *     the result of the specified control mode. The units for the parameter is Volts. This value
    *     is set after the control mode, but before any current limits or ramp rates.
-   * @return {@link REVLibError#kOk} if successful
    */
   public void setReference(
       double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot, double arbFeedforward) {
+        Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
     sparkClosedLoopController.setReference(value, ctrl, slot, arbFeedforward);
   }
 
@@ -87,7 +95,6 @@ public class SparkPIDController {
    *     the result of the specified control mode. The units for the parameter is Volts. This value
    *     is set after the control mode, but before any current limits or ramp rates.
    * @param arbFFUnits The units the arbitrary feed forward term is in
-   * @return {@link REVLibError#kOk} if successful
    */
   public void setReference(
       double value,
@@ -95,7 +102,14 @@ public class SparkPIDController {
       ClosedLoopSlot slot,
       double arbFeedforward,
       ArbFFUnits arbFFUnits) {
+        Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
+        Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
+        Logger.recordOutput("REVClosedLoop/" + alias + "/arbFFUnits", arbFFUnits.toString());
+
     sparkClosedLoopController.setReference(value, ctrl, slot, arbFeedforward, arbFFUnits);
+    
   }
 
   /**
@@ -107,9 +121,9 @@ public class SparkPIDController {
    * setReference()
    *
    * @param iAccum The value to set the I accumulator to
-   * @return {@link REVLibError#kOk} if successful
    */
   public void setIAccum(double iAccum) {
+    Logger.recordOutput("REVClosedLoop/" + alias + "/Set IAccum", iAccum);
     sparkClosedLoopController.setIAccum(iAccum);
   }
   

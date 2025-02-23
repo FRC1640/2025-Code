@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot.Mode;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -237,8 +238,7 @@ public class RobotContainer {
             new WinchSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         algaeIntakeSubsystem =
-            new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim() : new AlgaeIO() {});
+            new AlgaeSubsystem(RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim(() -> false) : new AlgaeIO() {});
         funkySubsystem = new FunkySubsystem(new FunkyIO(), () -> false, () -> false);
         break;
       default:

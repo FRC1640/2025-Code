@@ -65,8 +65,6 @@ import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
-import frc.robot.subsystems.funky.FunkyIO;
-import frc.robot.subsystems.funky.FunkySubsystem;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -132,7 +130,6 @@ public class RobotContainer {
   private final ClimberRoutines climberRoutines;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private final AlgaeCommandFactory algaeCommandFactory;
-  private final FunkySubsystem funkySubsystem;
 
   CoralPreset presetActive = CoralPreset.Safe;
 
@@ -194,11 +191,6 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
-        funkySubsystem =
-            new FunkySubsystem(
-                new FunkyIO(),
-                () -> testController.a().getAsBoolean(),
-                () -> testController.b().getAsBoolean());
         break;
       case SIM:
         gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
@@ -239,7 +231,6 @@ public class RobotContainer {
                 RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         algaeIntakeSubsystem =
             new AlgaeSubsystem(RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim(() -> false) : new AlgaeIO() {});
-        funkySubsystem = new FunkySubsystem(new FunkyIO(), () -> false, () -> false);
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -248,7 +239,6 @@ public class RobotContainer {
         liftSubsystem = new LiftSubsystem(new LiftIO() {});
         coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
-        funkySubsystem = new FunkySubsystem(new FunkyIO(), null, null);
         winchSubsystem = new WinchSubsystem(new WinchIO() {});
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;

@@ -26,6 +26,8 @@ Right Trigger: Shoots algae grabber
 
 ### Operator Controller
 Port: 1
+Button Y: Return to safe position
+Button A: Confirm Preset Board Position
 ## **FightSticks Controller**
 ### Preset Board
 Port: 2

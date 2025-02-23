@@ -59,7 +59,6 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
-import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
@@ -292,7 +291,7 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
-    DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
+    // DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
@@ -309,11 +308,11 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 2));
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 2));
+            () -> -operatorController.getRightY() * 4));
 
     generateNamedCommands();
     configureBindings();
@@ -450,7 +449,10 @@ public class RobotContainer {
     driveController.start().onTrue(gyro.resetGyroCommand());
 
     // gantry button bindings:
-    operatorController.x().whileTrue(getAutoPlaceCommand());
+    // operatorController.x().whileTrue(getAutoPlaceCommand());
+    operatorController
+        .x()
+        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));

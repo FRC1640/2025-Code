@@ -21,7 +21,6 @@ import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;

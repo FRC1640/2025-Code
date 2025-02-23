@@ -5,7 +5,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.helpers.AutoAlignHelper;
 import frc.robot.util.misc.DistanceManager;
-
 import java.util.function.Supplier;
 
 public class DriveToPointWeight implements DriveWeight {

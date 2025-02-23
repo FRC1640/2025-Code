@@ -21,7 +21,6 @@ import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;

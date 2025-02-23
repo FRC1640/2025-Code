@@ -21,7 +21,6 @@ import frc.robot.util.logging.MotorLoggingManager;
 import frc.robot.util.misc.Limits;
 import frc.robot.util.robotswitch.RobotSwitch;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
-
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {

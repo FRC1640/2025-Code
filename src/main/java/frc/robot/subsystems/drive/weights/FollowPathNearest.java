@@ -9,7 +9,6 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.misc.DistanceManager;
-
 import java.util.function.Function;
 import java.util.function.Supplier;
 

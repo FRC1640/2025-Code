@@ -10,9 +10,8 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ClimberConstants;
-import frc.robot.util.misc.MotorLim;
 import frc.robot.constants.RobotPIDConstants;
-
+import frc.robot.util.misc.MotorLim;
 import java.util.function.BooleanSupplier;
 
 public class ClimberIOSim implements ClimberIO {

@@ -14,7 +14,6 @@ import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 import frc.robot.util.misc.AllianceManager;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 

@@ -228,7 +228,7 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled
-                    ? new AlgaeIOSim(() -> false)
+                    ? new AlgaeIOSim(() -> simBoard.getLl4())
                     : new AlgaeIO() {});
         break;
       default:

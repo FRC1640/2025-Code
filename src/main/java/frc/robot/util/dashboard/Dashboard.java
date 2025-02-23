@@ -28,6 +28,7 @@ public class Dashboard {
   private GantrySubsystem gantrySubsystem;
   public PIDTab pidTab = new PIDTab();
   public PPIDTab ppidTab = new PPIDTab();
+  public MAXMotorTab maxMotorTab = new MAXMotorTab();
   private ClimberSubsystem climberSubsystem;
 
   public Dashboard(
@@ -50,7 +51,8 @@ public class Dashboard {
     if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
       sysidInit();
     }
-    if(TestConfig.tuningMode == TestingSetting.motorTest){
+    if (TestConfig.tuningMode == TestingSetting.motorTest) {
+      maxMotorTab.init();
     }
   }
 

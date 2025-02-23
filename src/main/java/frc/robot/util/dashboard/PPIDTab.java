@@ -16,7 +16,7 @@ import frc.robot.util.logging.PIDTracking.ProfiledPIDTrack;
 public class PPIDTab {
   private static SendableChooser<ProfiledPIDController> pidChooser =
       new SendableChooser<ProfiledPIDController>();
-  public static ShuffleboardTab pidTab = Shuffleboard.getTab("ProfiledPID Tuning");
+  public static ShuffleboardTab pidTab;
   NetworkTableInstance nt = NetworkTableInstance.getDefault();
   NetworkTable networkTable = nt.getTable("/Shuffleboard/ProfiledPID Tuning");
 
@@ -33,6 +33,7 @@ public class PPIDTab {
   public PPIDTab() {}
 
   public void init() {
+    pidTab = Shuffleboard.getTab("ProfiledPID");
     pidTunerBuild();
   }
 

@@ -23,21 +23,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "SetupL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartSetup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              }
+            ]
           }
         },
         {
@@ -80,6 +93,12 @@
                 "data": {
                   "name": "AutoReef"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
               }
             ]
           }
@@ -103,15 +122,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
+              }
+            ]
           }
         },
         {
@@ -133,15 +171,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
+              }
+            ]
           }
         },
         {

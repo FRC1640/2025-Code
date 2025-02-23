@@ -642,9 +642,7 @@ public class RobotContainer {
         new InstantCommand(
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
 
-    NamedCommands.registerCommand(
-        "AutoReef",
-        getPlaceCommand().beforeStarting(new InstantCommand(() -> System.out.println("egkjhsd"))));
+    NamedCommands.registerCommand("AutoReef", getPlaceCommand());
 
     NamedCommands.registerCommand(
         "HaveCoral", new InstantCommand(() -> coralOuttakeSubsystem.setHasCoral(true)));
@@ -661,10 +659,12 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "WaitForLift",
         new WaitUntilCommand(
-            () ->
-                liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
-                    && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode)));
+                () ->
+                    liftSubsystem.isAtPreset(
+                            algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
+            .asProxy()); // TODO a wait as proxy seems like a terrible idea, but this is the only
+    // way to do this as this command clearly requires the lift
 
     NamedCommands.registerCommand(
         "AutoAlign",

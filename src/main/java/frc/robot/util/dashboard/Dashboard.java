@@ -29,6 +29,7 @@ public class Dashboard {
   public PIDTab pidTab = new PIDTab();
   public PPIDTab ppidTab = new PPIDTab();
   public MAXMotorTab maxMotorTab = new MAXMotorTab();
+  public FLEXMotorTab flexMotorTab = new FLEXMotorTab();
   private ClimberSubsystem climberSubsystem;
 
   public Dashboard(
@@ -53,6 +54,7 @@ public class Dashboard {
     }
     if (TestConfig.tuningMode == TestingSetting.motorTest) {
       maxMotorTab.init();
+      flexMotorTab.init();
     }
   }
 

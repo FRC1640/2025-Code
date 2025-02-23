@@ -8,7 +8,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.constants.RobotConstants.TestConfig;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,6 +22,7 @@ public class SparkConfiguration {
   private SparkPIDConstants pid;
   private LimitSwitchConfig limitSwitch;
   private SparkBaseConfig inner;
+
   public int getId() {
     return id;
   }
@@ -151,7 +151,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkMax leader) {
-    if(leader == null){
+    if (leader == null) {
       inner.disableFollowerMode();
       return;
     }
@@ -159,7 +159,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkMax leader, boolean inverted) {
-    if(leader == null){
+    if (leader == null) {
       inner.disableFollowerMode();
       return;
     }
@@ -167,7 +167,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkFlex leader) {
-    if(leader == null){
+    if (leader == null) {
       inner.disableFollowerMode();
       return;
     }
@@ -175,7 +175,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkFlex leader, boolean inverted) {
-    if(leader == null){
+    if (leader == null) {
       inner.disableFollowerMode();
       return;
     }

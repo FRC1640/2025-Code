@@ -296,8 +296,8 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -307,12 +307,13 @@ public class RobotContainer {
     generateNamedCommands();
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
+    // 4));
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 4));
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.elevatorApplyVoltageCommand(
+    //         () -> -operatorController.getRightY() * 4));
 
     generateNamedCommands();
     configureBindings();

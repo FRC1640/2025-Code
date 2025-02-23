@@ -1,6 +1,6 @@
-package frc.robot.util.tools;
+package frc.robot.util.robotswitch;
 
-import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 
 public class RobotTypeParm<T> {
   public T value;

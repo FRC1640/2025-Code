@@ -5,8 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.util.tools.AutoAlignHelper;
-import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.helpers.AutoAlignHelper;
+import frc.robot.util.misc.DistanceManager;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 

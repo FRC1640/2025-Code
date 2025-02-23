@@ -6,8 +6,8 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ClimberConstants;
+import frc.robot.util.misc.MotorLim;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.tools.MotorLim;
 
 public class WinchIOSim implements WinchIO {
   private final DCMotorSim winch1Sim; // winch leader motor

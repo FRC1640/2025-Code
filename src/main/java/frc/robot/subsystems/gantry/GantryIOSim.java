@@ -6,8 +6,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.util.misc.MotorLim;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.tools.MotorLim;
+
 import java.util.function.BooleanSupplier;
 
 public class GantryIOSim implements GantryIO {

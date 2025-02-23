@@ -8,8 +8,9 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
-import frc.robot.util.tools.AllianceManager;
-import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.misc.AllianceManager;
+import frc.robot.util.misc.DistanceManager;
+
 import java.util.function.DoubleSupplier;
 
 public class CoralOuttakeCommandFactory {

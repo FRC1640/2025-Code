@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
-import frc.robot.util.tools.MotorLim;
+
 import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSpark implements LiftIO {

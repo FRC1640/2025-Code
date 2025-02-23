@@ -28,6 +28,10 @@ Right Trigger: Shoots algae grabber
 Port: 1
 Button Y: Return to safe position
 Button A: Confirm Preset Board Position
+Button X: Clamp Climber
+
+Right Joystick Y: Lift Up/Down
+
 ## **FightSticks Controller**
 ### Preset Board
 Port: 2

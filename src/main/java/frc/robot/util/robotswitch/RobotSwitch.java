@@ -1,7 +1,8 @@
-package frc.robot.util.tools;
+package frc.robot.util.robotswitch;
 
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
-import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
+
 import java.util.HashMap;
 
 public class RobotSwitch<T> {

@@ -306,9 +306,9 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(-100.0, 0.0);
+    public static final Limits liftLimits = new Limits(-999999999999.0, 999999999.0);
     public static final double winchClimbedPosition = 45;
-    public static final Limits winchLimits = new Limits(-30.0, 90.0);
+    public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
     public static final ResolverVoltageInfo liftResolverInfo =

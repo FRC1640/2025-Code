@@ -9,6 +9,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.logging.MotorTrack;
+
 import org.littletonrobotics.junction.Logger;
 
 public class SparkConfigurer {
@@ -21,6 +23,7 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + config.getId(), flash);
     createAlerts(spark.getFaults(), spark.getWarnings());
+    MotorTrack.motorMaxHashMap.put(config.getId(), spark);
     return spark;
   }
 

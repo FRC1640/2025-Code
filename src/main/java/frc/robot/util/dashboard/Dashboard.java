@@ -50,6 +50,8 @@ public class Dashboard {
     if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
       sysidInit();
     }
+    if(TestConfig.tuningMode == TestingSetting.motorTest){
+    }
   }
 
   private void autoInit() {

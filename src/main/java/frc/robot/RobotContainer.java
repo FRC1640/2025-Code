@@ -259,7 +259,6 @@ public class RobotContainer {
             coralOuttakeSubsystem,
             algaeCommandFactory,
             algaeIntakeSubsystem);
-    setDefaultCommands();
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =
@@ -298,13 +297,23 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
             .setSolenoidState(() -> false)
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
+
+    generateNamedCommands();
+    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 2));
+
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.elevatorApplyVoltageCommand(
+            () -> -operatorController.getRightY() * 2));
 
     generateNamedCommands();
     configureBindings();
@@ -354,12 +363,6 @@ public class RobotContainer {
         "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
-  }
-
-  private void setDefaultCommands() {
-    generateNamedCommands();
-    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
-    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.algaePassiveCommand());
   }
 
   private void configureBindings() {
@@ -499,7 +502,7 @@ public class RobotContainer {
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)));
 
-    operatorController
+    driveController
         .rightTrigger()
         .and(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
@@ -517,11 +520,6 @@ public class RobotContainer {
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
     new Trigger(() -> motorBoard.getRl3())
         .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -1));
-    new Trigger(() -> Math.abs(-operatorController.getLeftY()) > 0.01)
-        .whileTrue(
-            climberCommandFactory.winchApplyVoltageCommand(
-                () -> -operatorController.getLeftY() * 2));
-
     new Trigger(() -> motorBoard.getTrough())
         .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 

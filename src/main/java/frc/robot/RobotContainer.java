@@ -240,6 +240,7 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
+    generateNamedCommands();
     driveSubsystem = new DriveSubsystem(gyro);
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
@@ -296,23 +297,22 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
             .setSolenoidState(() -> false)
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
-
-    generateNamedCommands();
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
+    // 4));
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 4));
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.elevatorApplyVoltageCommand(
+    //         () -> -operatorController.getRightY() * 4));
 
     generateNamedCommands();
     configureBindings();

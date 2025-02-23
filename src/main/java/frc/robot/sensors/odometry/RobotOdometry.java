@@ -218,6 +218,18 @@ public class RobotOdometry extends PeriodicBase {
       robotPosesAccepted.add(visionUpdate);
       double xy = vision.getPhotonXyStdDev(poseObservation);
       double rot = vision.getPhotonRotStdDev(poseObservation);
+      if (Math.abs(
+                  poseObservation
+                      .pose()
+                      .getRotation()
+                      .toRotation2d()
+                      .minus(RobotOdometry.instance.getPose("Main").getRotation())
+                      .getDegrees())
+              > 1
+          && !vision.getRotationValidPhotonObservation(poseObservation)) {
+        robotPosesRejected.add(visionUpdate);
+        continue;
+      }
       odometry.addVisionMeasurement(
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }

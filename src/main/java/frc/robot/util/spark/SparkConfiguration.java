@@ -6,6 +6,9 @@ import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import frc.robot.constants.RobotConstants.TestConfig;
+
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import java.util.Optional;
@@ -151,18 +154,35 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkMax leader) {
+    if(TestConfig.sparkFollowerDisabled){
+      inner.disableFollowerMode();
+      return;
+    }
     inner.follow(leader, leader.configAccessor.getInverted() != inverted);
+
   }
 
   public void follow(SparkMax leader, boolean inverted) {
+    if(TestConfig.sparkFollowerDisabled){
+      inner.disableFollowerMode();
+      return;
+    }
     inner.follow(leader, inverted);
   }
 
   public void follow(SparkFlex leader) {
+    if(TestConfig.sparkFollowerDisabled){
+      inner.disableFollowerMode();
+      return;
+    }
     inner.follow(leader, leader.configAccessor.getInverted() != inverted);
   }
 
   public void follow(SparkFlex leader, boolean inverted) {
+    if(TestConfig.sparkFollowerDisabled){
+      inner.disableFollowerMode();
+      return;
+    }
     inner.follow(leader, inverted);
   }
 

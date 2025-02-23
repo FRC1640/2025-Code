@@ -34,7 +34,8 @@ public class RobotConstants {
 
   public class TestConfig {
     public static final TestingSetting tuningMode = TestingSetting.sysIDTesting;
-  }
+    public static final boolean sparkFollowerDisabled = false;
+  }                                                                          
 
   public class MotorInfo {
     public static final MotorLoggingManager motorLoggingManager =

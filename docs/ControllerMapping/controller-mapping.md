@@ -18,21 +18,22 @@ Right X Axis Joystick: Rotates Robot
 Left Joystick: Controls robot movement (X axis for left/right, Y axis for forward/backward)
 Start Button: Sets the robot's movement direction based on its current orientation
 Button A: Align with the reef
-Button B: Runs Coral Outtake
+Button B: Runs intake voltage at 3 volts
 Left Bumper: Align with nearest reef
 Left Trigger: Speeds up robot
 Right Bumper: Slow Mode
 Right Trigger: Shoots algae grabber
-
+POVUp: Outtakes coral
 ### Operator Controller
 Port: 1
 Button Y: Return to safe position
-Button A: Confirm Preset Board Position
+Button A: Confirm Coral Preset Board Position
 Button X: Clamp Climber
 Left Bumper: Move Gantry Left
 Right Bumper: Move Gantry Right
 Right Joystick Y: Lift Up/Down
-
+Back Button: Sets gantry to home
+Start Button: Lift Home
 ## **FightSticks Controller**
 ### Preset Board
 Port: 2

@@ -8,8 +8,6 @@ import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import java.util.function.DoubleSupplier;
 
-import org.littletonrobotics.junction.Logger;
-
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
@@ -22,7 +20,7 @@ public class GantryCommandFactory {
   public Command gantryPIDCommand(DoubleSupplier pos) {
     return new RunCommand(
             () -> gantrySubsystem.setCarriagePosition(pos.getAsDouble()), gantrySubsystem)
-        .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
+        // .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 

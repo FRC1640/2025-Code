@@ -175,9 +175,9 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(29.5 / 2),
-                    -Units.inchesToMeters(29.5 / 2 - 8),
-                    Units.inchesToMeters(10.5)),
+                    Units.inchesToMeters(7.575),
+                    Units.inchesToMeters(13.325),
+                    Units.inchesToMeters(14.1875)),
                 new Rotation3d()),
             1,
             "Park",
@@ -201,7 +201,7 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
-    public static final double liftMaxSpeed = 2;
+    public static final double liftMaxSpeed = 3;
     public static final double liftMaxAccel = 1.5;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
@@ -215,10 +215,10 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Safe(0, GantrySetpoint.CENTER),
-      LeftL2(0.114, GantrySetpoint.LEFT),
-      RightL2(0.114, GantrySetpoint.RIGHT),
-      LeftL3(0.28, GantrySetpoint.LEFT),
-      RightL3(0.28, GantrySetpoint.RIGHT),
+      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
+      LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
+      RightL3(0.28, 0.485, GantrySetpoint.RIGHT),
       LeftL4(0.569, GantrySetpoint.LEFT),
       RightL4(0.569, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);

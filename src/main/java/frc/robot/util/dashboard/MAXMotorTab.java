@@ -1,7 +1,6 @@
 package frc.robot.util.dashboard;
 
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,10 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.RobotConstants.MotorInfo;
-import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.MotorTrack;
 import java.util.Map;
 
@@ -21,6 +18,7 @@ public class MAXMotorTab {
   private static SendableChooser<SparkMax> motorSelect = new SendableChooser<SparkMax>();
   public SparkMax selectedSparkMax;
   NetworkTable networkTable;
+
   public void init() {
     motorTab = Shuffleboard.getTab("Max Motor Testing");
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
@@ -41,12 +39,13 @@ public class MAXMotorTab {
     motorSelect.onChange((x) -> update());
     motorTab.add(motorSelect).withSize(3, 1).withPosition(0, 0);
     GenericEntry voltageSet =
-    motorTab
-        .add("Voltage Set", 0)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", -12, "max", 12))
-        .withPosition(0, 1)
-        .withSize(9, 1).getEntry();
+        motorTab
+            .add("Voltage Set", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -12, "max", 12))
+            .withPosition(0, 1)
+            .withSize(9, 1)
+            .getEntry();
     motorTab
         .add(
             "Run Spark At Voltage",
@@ -57,7 +56,7 @@ public class MAXMotorTab {
                   }
                 }))
         .withPosition(0, 2);
-      motorTab
+    motorTab
         .add(
             "Stop Spark",
             new InstantCommand(
@@ -67,7 +66,6 @@ public class MAXMotorTab {
                   }
                 }))
         .withPosition(0, 3);
-    
   }
 
   public void update() {

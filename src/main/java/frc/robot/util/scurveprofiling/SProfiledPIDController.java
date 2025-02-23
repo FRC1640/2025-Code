@@ -460,10 +460,10 @@ public class SProfiledPIDController implements Sendable {
     builder.addDoubleProperty(
         "maxAcceleration",
         () -> getConstraints().maxAcceleration,
+        maxAcceleration ->
             setConstraints(
                 new SCurveProfile.Constraints(getConstraints().maxVelocity, maxAcceleration, getConstraints().maxJerk), 
                 getConstraints().maxJerk));
-                new SCurveProfile.Constraints(getConstraints().maxVelocity, maxAcceleration, getConstraints().maxJerk)));
     builder.addDoubleProperty("goal", () -> getGoal().position, goal -> setGoal(goal, 0.0));
   }
 }

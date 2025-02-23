@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot.Mode;
 import frc.robot.constants.FieldConstants;
-import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -64,7 +63,7 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
-import frc.robot.subsystems.drive.weights.RotateToAngleWeight;  
+import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -227,7 +226,10 @@ public class RobotContainer {
             new WinchSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
         algaeIntakeSubsystem =
-            new AlgaeSubsystem(RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSim(() -> false) : new AlgaeIO() {});
+            new AlgaeSubsystem(
+                RobotConfigConstants.algaeIntakeEnabled
+                    ? new AlgaeIOSim(() -> false)
+                    : new AlgaeIO() {});
         break;
       default:
         gyro = new Gyro(new GyroIO() {});

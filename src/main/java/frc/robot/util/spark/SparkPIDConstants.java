@@ -20,16 +20,16 @@ public class SparkPIDConstants {
   public String alias;
 
   /**
-   * @param kP             Proportional Gain
-   * @param kI             Integral
-   * @param kD             The rate of change in error
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change in error
    * @param closedLoopSlot
    */
 
   /**
-   * @param kP                       Proportional Gain
-   * @param kI                       Integral
-   * @param kD                       The rate of change in error
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change in error
    * @param positionConversionFactor conversion factor for the Position
    * @param closedLoopSlot
    */
@@ -51,9 +51,9 @@ public class SparkPIDConstants {
   }
 
   /**
-   * @param kP                       Proportional Gain
-   * @param kI                       Integral
-   * @param kD                       The rate of change in error
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change in error
    * @param positionConversionFactor conversion factor for the Position
    * @param velocityConversionFactor conversion factor for the Velocity
    * @param closedLoopSlot
@@ -78,17 +78,17 @@ public class SparkPIDConstants {
   }
 
   /**
-   * @param kP              Proportional Gain
-   * @param kI              Integral
-   * @param kD              The rate of change error
-   * @param minOutput       Minimum output of PID
-   * @param maxOutput       Maximum output of PID
-   * @param velocityFF      Velocity Feed Forward
-   * @param maxVel          Max Velocity
-   * @param maxAccel        Max Acceleration
-   * @param allowedErr      Allowed Error Amount
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change error
+   * @param minOutput Minimum output of PID
+   * @param maxOutput Maximum output of PID
+   * @param velocityFF Velocity Feed Forward
+   * @param maxVel Max Velocity
+   * @param maxAccel Max Acceleration
+   * @param allowedErr Allowed Error Amount
    * @param maxPositionMode The position mode
-   * @param closedLoopSlot  The closed loop slot
+   * @param closedLoopSlot The closed loop slot
    */
   public SparkPIDConstants(
       double kP,
@@ -115,14 +115,13 @@ public class SparkPIDConstants {
   }
 
   /**
-   * @param kP             Proportional Gain
-   * @param kI             Integral
-   * @param kD             The rate of change in error
-   * @param minOutput      Minimum output of PID
-   * @param maxOutput      Maximum output of PID
-   * @param velocityFF     Velocity Feed Forward
-   * @param closedLoopSlot The closed loop slot
-   *                       <<<<<<< HEAD
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change in error
+   * @param minOutput Minimum output of PID
+   * @param maxOutput Maximum output of PID
+   * @param velocityFF Velocity Feed Forward
+   * @param closedLoopSlot The closed loop slot <<<<<<< HEAD
    */
   public SparkPIDConstants(
       double kP,
@@ -141,13 +140,13 @@ public class SparkPIDConstants {
   }
 
   /**
-   * @param kP             Proportional Gain
-   * @param kI             Integral
-   * @param kD             The rate of change in error
-   * @param minOutput      Minimum output of PID
-   * @param maxOutput      Maximum output of PID
-   * @param maxVel         Max Velocity
-   * @param maxAccel       Max Acceleration
+   * @param kP Proportional Gain
+   * @param kI Integral
+   * @param kD The rate of change in error
+   * @param minOutput Minimum output of PID
+   * @param maxOutput Maximum output of PID
+   * @param maxVel Max Velocity
+   * @param maxAccel Max Acceleration
    * @param closedLoopSlot The closed loop slot
    */
   public SparkPIDConstants(

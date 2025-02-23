@@ -39,7 +39,8 @@ public class RobotPIDConstants {
 
   public static final SimpleMotorFeedforward constructFFSimpleMotor(
       FeedForwardConstants constants) {
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(constants.kS, constants.kV, constants.kA);
+    SimpleMotorFeedforward feedforward =
+        new SimpleMotorFeedforward(constants.kS, constants.kV, constants.kA);
     FeedForwardTrack.feedTrack.add(feedforward);
     FeedForwardTrack.idName.add("SimpleMotorFeedForward" + FeedForwardTrack.feedTrack.size());
     return feedforward;
@@ -47,7 +48,8 @@ public class RobotPIDConstants {
 
   public static final SimpleMotorFeedforward constructFFSimpleMotor(
       FeedForwardConstants constants, String name) {
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(constants.kS, constants.kV, constants.kA);
+    SimpleMotorFeedforward feedforward =
+        new SimpleMotorFeedforward(constants.kS, constants.kV, constants.kA);
     FeedForwardTrack.feedTrack.add(feedforward);
     FeedForwardTrack.idName.add(name);
     return feedforward;
@@ -55,23 +57,26 @@ public class RobotPIDConstants {
 
   public static final ProfiledPIDController constructProfiledPIDController(
       PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
-    ProfiledPIDController k = new ProfiledPIDController(
-        pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDController k =
+        new ProfiledPIDController(
+            pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
     ProfiledPIDTrack.pidsTrack.put("PPID" + (ProfiledPIDTrack.pidsTrack.size()), k);
     return k;
   }
 
   public static final ProfiledPIDController constructProfiledPIDController(
       PIDConstants pidConstants, TrapezoidProfile.Constraints constraints, String name) {
-    ProfiledPIDController k = new ProfiledPIDController(
-        pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDController k =
+        new ProfiledPIDController(
+            pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
     ProfiledPIDTrack.pidsTrack.put(name, k);
 
     return k;
   }
 
   public static final ElevatorFeedforward constructFFElevator(FeedForwardConstants constants) {
-    ElevatorFeedforward k = new ElevatorFeedforward(constants.kS, constants.kG, constants.kV, constants.kA);
+    ElevatorFeedforward k =
+        new ElevatorFeedforward(constants.kS, constants.kG, constants.kV, constants.kA);
     ElevatorFeedForwardTrack.elevatorFeedTrack.add(k);
     ElevatorFeedForwardTrack.idName.add(
         "ElevatorFeedForward" + (ElevatorFeedForwardTrack.elevatorFeedTrack.size()));
@@ -86,7 +91,8 @@ public class RobotPIDConstants {
   }
 
   public static final PIDConstants drivePID = new PIDConstants(0.1546, 0.0, 0);
-  public static final FeedForwardConstants driveFF = new FeedForwardConstants(0.21607, 2.6, 0.21035);
+  public static final FeedForwardConstants driveFF =
+      new FeedForwardConstants(0.21607, 2.6, 0.21035);
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
@@ -105,9 +111,10 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants liftFF =
       new FeedForwardConstants(0.62456, 5.4217, 0.84372, 0.5477);
 
-  public static final SparkPIDConstants pidConstantSpark = new SparkPIDConstants(0, 0, 0, -10, 10,
-      ClosedLoopSlot.kSlot0);
-  public static final FeedForwardConstants gantryFF = new FeedForwardConstants(0.23823, 19.874, 1.5284);
+  public static final SparkPIDConstants pidConstantSpark =
+      new SparkPIDConstants(0, 0, 0, -10, 10, ClosedLoopSlot.kSlot0);
+  public static final FeedForwardConstants gantryFF =
+      new FeedForwardConstants(0.23823, 19.874, 1.5284);
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1);
   public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);

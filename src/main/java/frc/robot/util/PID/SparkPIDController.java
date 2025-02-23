@@ -1,28 +1,23 @@
 package frc.robot.util.PID;
 
-import org.littletonrobotics.junction.Logger;
-
-import com.revrobotics.REVLibError;
-import com.revrobotics.jni.CANSparkJNI;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits;
-
-import frc.robot.util.spark.SparkPIDConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class SparkPIDController {
   public SparkClosedLoopController sparkClosedLoopController;
   public double set;
   public ControlType controlType;
   public String alias;
+
   public SparkPIDController(SparkClosedLoopController sparkClosedLoopController, String alias) {
     this.sparkClosedLoopController = sparkClosedLoopController;
     this.alias = alias;
   }
 
-  
   /**
    * Set the controller reference value based on the selected control mode.
    *
@@ -73,10 +68,10 @@ public class SparkPIDController {
    */
   public void setReference(
       double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot, double arbFeedforward) {
-        Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
+    Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
     sparkClosedLoopController.setReference(value, ctrl, slot, arbFeedforward);
   }
 
@@ -102,14 +97,13 @@ public class SparkPIDController {
       ClosedLoopSlot slot,
       double arbFeedforward,
       ArbFFUnits arbFFUnits) {
-        Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
-        Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
-        Logger.recordOutput("REVClosedLoop/" + alias + "/arbFFUnits", arbFFUnits.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/set reference value", value);
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ControlType", ctrl.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ClosedLoopSlot", slot.toString());
+    Logger.recordOutput("REVClosedLoop/" + alias + "/ArbFeedForward", arbFeedforward);
+    Logger.recordOutput("REVClosedLoop/" + alias + "/arbFFUnits", arbFFUnits.toString());
 
     sparkClosedLoopController.setReference(value, ctrl, slot, arbFeedforward, arbFFUnits);
-    
   }
 
   /**
@@ -126,5 +120,4 @@ public class SparkPIDController {
     Logger.recordOutput("REVClosedLoop/" + alias + "/Set IAccum", iAccum);
     sparkClosedLoopController.setIAccum(iAccum);
   }
-  
 }

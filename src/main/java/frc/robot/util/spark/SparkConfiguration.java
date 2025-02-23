@@ -23,7 +23,6 @@ public class SparkConfiguration {
   private SparkPIDConstants pid;
   private LimitSwitchConfig limitSwitch;
   private SparkBaseConfig inner;
-
   public int getId() {
     return id;
   }
@@ -152,7 +151,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkMax leader) {
-    if (TestConfig.sparkFollowerDisabled) {
+    if(leader == null){
       inner.disableFollowerMode();
       return;
     }
@@ -160,7 +159,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkMax leader, boolean inverted) {
-    if (TestConfig.sparkFollowerDisabled) {
+    if(leader == null){
       inner.disableFollowerMode();
       return;
     }
@@ -168,7 +167,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkFlex leader) {
-    if (TestConfig.sparkFollowerDisabled) {
+    if(leader == null){
       inner.disableFollowerMode();
       return;
     }
@@ -176,7 +175,7 @@ public class SparkConfiguration {
   }
 
   public void follow(SparkFlex leader, boolean inverted) {
-    if (TestConfig.sparkFollowerDisabled) {
+    if(leader == null){
       inner.disableFollowerMode();
       return;
     }
@@ -264,6 +263,7 @@ public class SparkConfiguration {
       seed.limitSwitch.apply(limitSwitch);
     }
     inner = seed;
+    inner.disableFollowerMode();
   }
 
   public SparkConfiguration(

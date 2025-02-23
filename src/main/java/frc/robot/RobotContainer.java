@@ -633,11 +633,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetGantryRight", new InstantCommand(() -> gantryAuto = true));
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
 
-    NamedCommands.registerCommand("SetupSafe", setupAutoPlaceProxy(() -> CoralPreset.Safe));
+    NamedCommands.registerCommand("RunToSafe", setupAutoPlace(() -> CoralPreset.Safe));
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
 
-    NamedCommands.registerCommand("StartSetup", setupAutoPlaceProxy(() -> coralPreset));
+    NamedCommands.registerCommand("StartSetup", setupAutoPlace(() -> coralPreset));
 
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
@@ -655,7 +655,8 @@ public class RobotContainer {
         new InstantCommand(
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
 
-    NamedCommands.registerCommand("AutoReef", getPlaceCommand());
+    NamedCommands.registerCommand(
+        "AutoReef", getPlaceCommand().alongWith(runLift(() -> coralPreset)));
 
     NamedCommands.registerCommand(
         "HaveCoral", new InstantCommand(() -> coralOuttakeSubsystem.setHasCoral(true)));
@@ -670,12 +671,13 @@ public class RobotContainer {
                     && followPathNearest.isAutoalignComplete()));
 
     NamedCommands.registerCommand(
-        "AutoPlaceAndWait",
+        "PresetAndWait",
         new WaitUntilCommand(
                 () ->
-                    liftSubsystem.isAtPreset(
-                            algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
-                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
+                    (liftSubsystem.isAtPreset(
+                                algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                            && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
+                        || simBoard.getRl3())
             .deadlineFor(setupAutoPlace(() -> coralPreset)));
 
     NamedCommands.registerCommand(

@@ -35,28 +35,22 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "PresetAndWait"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "AutoReef"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "RunToSafe"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
           }
         },
         {
@@ -78,15 +72,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PresetAndWait"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToSafe"
+                }
+              }
+            ]
           }
         },
         {
@@ -108,15 +115,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PresetAndWait"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToSafe"
+                }
+              }
+            ]
           }
         }
       ]

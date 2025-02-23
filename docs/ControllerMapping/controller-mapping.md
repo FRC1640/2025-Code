@@ -29,7 +29,8 @@ Port: 1
 Button Y: Return to safe position
 Button A: Confirm Preset Board Position
 Button X: Clamp Climber
-
+Left Bumper: Move Gantry Left
+Right Bumper: Move Gantry Right
 Right Joystick Y: Lift Up/Down
 
 ## **FightSticks Controller**

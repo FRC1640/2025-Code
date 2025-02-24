@@ -59,7 +59,6 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
-import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
@@ -241,15 +240,15 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
-    driveSubsystem = new DriveSubsystem(gyro);
+
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);
-    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     climberCommandFactory = new ClimberCommandFactory(climberSubsystem, winchSubsystem);
     climberRoutines = new ClimberRoutines(climberCommandFactory);
     algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
     logRunner = new LogRunner();
+
     autoScoringCommandFactory =
         new AutoScoringCommandFactory(
             gantryCommandFactory,
@@ -260,6 +259,9 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
+    generateNamedCommands();
+    driveSubsystem = new DriveSubsystem(gyro);
+    driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =
         new Dashboard(
@@ -292,7 +294,7 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
-    DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
+    // DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
@@ -304,18 +306,14 @@ public class RobotContainer {
         algaeCommandFactory
             .setSolenoidState(() -> false)
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
-
-    generateNamedCommands();
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 2));
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 2));
-
-    generateNamedCommands();
+            () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -439,10 +437,10 @@ public class RobotContainer {
     // operatorController.b().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 0.1));
     // rumble
     new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 1)))
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0.4)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae() /* driveController.getHID().getYButton() */)
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.5)))
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
     // new Trigger(() -> coralPreset.isRight())
 
@@ -451,6 +449,9 @@ public class RobotContainer {
 
     // gantry button bindings:
     operatorController.x().whileTrue(getAutoPlaceCommand());
+    // operatorController
+    // .x()
+    // .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));

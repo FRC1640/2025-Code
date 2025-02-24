@@ -6,14 +6,14 @@ import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
 import frc.robot.util.logging.PIDTracking.PIDTrack;
-import frc.robot.util.logging.PIDTracking.ProfiledPIDTrack;
+import frc.robot.util.logging.PIDTracking.SProfiledPIDTrack;
 import frc.robot.util.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.logging.TrackedFeedForward.FeedForwardTrack;
+import frc.robot.util.scurveprofiling.SCurveProfile;
+import frc.robot.util.scurveprofiling.SProfiledPIDController;
 import frc.robot.util.spark.SparkPIDConstants;
 
 public class RobotPIDConstants {
@@ -55,21 +55,21 @@ public class RobotPIDConstants {
     return feedforward;
   }
 
-  public static final ProfiledPIDController constructProfiledPIDController(
-      PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
-    ProfiledPIDController k =
-        new ProfiledPIDController(
+  public static final SProfiledPIDController constructSProfiledPIDController(
+      PIDConstants pidConstants, SCurveProfile.Constraints constraints) {
+    SProfiledPIDController k =
+        new SProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    ProfiledPIDTrack.pidsTrack.put("PPID" + (ProfiledPIDTrack.pidsTrack.size()), k);
+    SProfiledPIDTrack.pidsTrack.put("SPPID" + (SProfiledPIDTrack.pidsTrack.size()), k);
     return k;
   }
 
-  public static final ProfiledPIDController constructProfiledPIDController(
-      PIDConstants pidConstants, TrapezoidProfile.Constraints constraints, String name) {
-    ProfiledPIDController k =
-        new ProfiledPIDController(
+  public static final SProfiledPIDController constructSProfiledPIDController(
+      PIDConstants pidConstants, SCurveProfile.Constraints constraints, String name) {
+    SProfiledPIDController k =
+        new SProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    ProfiledPIDTrack.pidsTrack.put(name, k);
+    SProfiledPIDTrack.pidsTrack.put(name, k);
 
     return k;
   }
@@ -106,6 +106,8 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants =
+      new PIDConstants(40); // new PIDConstants(27.25, 0.010569);
+  public static final PIDConstants liftSProfiledPIDConstants =
       new PIDConstants(40); // new PIDConstants(27.25, 0.010569);
   public static final PIDConstants liftVelocityPID = new PIDConstants(1, 0, 0);
   public static final FeedForwardConstants liftFF =

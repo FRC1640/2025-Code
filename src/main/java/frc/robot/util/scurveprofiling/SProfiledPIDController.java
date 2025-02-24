@@ -1,18 +1,19 @@
+// Copyright Subhash Muthu (jk)
+
 package frc.robot.util.scurveprofiling;
 
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
-
-import edu.wpi.first.math.MathSharedStore;
-import edu.wpi.first.math.MathUsageId;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
+
+/**
+ * Implements a PID control loop whose setpoint is constrained by a trapezoid profile. Users should
+ * call reset() when they first start running the controller to avoid unwanted behavior.
+ */
 public class SProfiledPIDController implements Sendable {
   private static int instances;
 
@@ -26,7 +27,7 @@ public class SProfiledPIDController implements Sendable {
   private SCurveProfile.State m_setpoint = new SCurveProfile.State();
 
   /**
-   * Allocates a SProfiledPIDController with the given constants for Kp, Ki, and Kd.
+   * Allocates a ProfiledPIDController with the given constants for Kp, Ki, and Kd.
    *
    * @param Kp The proportional coefficient.
    * @param Ki The integral coefficient.
@@ -38,11 +39,11 @@ public class SProfiledPIDController implements Sendable {
    */
   public SProfiledPIDController(
       double Kp, double Ki, double Kd, SCurveProfile.Constraints constraints) {
-    this(Kp, Ki, Kd, constraints, 0.02, 0.0);
+    this(Kp, Ki, Kd, constraints, 0.02);
   }
 
   /**
-   * Allocates a SProfiledPIDController with the given constants for Kp, Ki, and Kd.
+   * Allocates a ProfiledPIDController with the given constants for Kp, Ki, and Kd.
    *
    * @param Kp The proportional coefficient.
    * @param Ki The integral coefficient.
@@ -56,13 +57,13 @@ public class SProfiledPIDController implements Sendable {
    */
   @SuppressWarnings("this-escape")
   public SProfiledPIDController(
-      double Kp, double Ki, double Kd, SCurveProfile.Constraints constraints, double period, double jerkPercent) {
+      double Kp, double Ki, double Kd, SCurveProfile.Constraints constraints, double period) {
     m_controller = new PIDController(Kp, Ki, Kd, period);
     m_constraints = constraints;
-    m_profile = new SCurveProfile(m_constraints);
+    m_profile = new SCurveProfile(m_constraints, m_setpoint);
     instances++;
 
-    SendableRegistry.add(this, "SProfiledPIDController", instances);
+    SendableRegistry.add(this, "ProfiledPIDController", instances);
     MathSharedStore.reportUsage(MathUsageId.kController_ProfiledPIDController, instances);
   }
 
@@ -193,7 +194,7 @@ public class SProfiledPIDController implements Sendable {
   }
 
   /**
-   * Sets the goal for the SProfiledPIDController.
+   * Sets the goal for the ProfiledPIDController.
    *
    * @param goal The desired goal state.
    */
@@ -202,16 +203,16 @@ public class SProfiledPIDController implements Sendable {
   }
 
   /**
-   * Sets the goal for the SProfiledPIDController.
+   * Sets the goal for the ProfiledPIDController.
    *
    * @param goal The desired goal position.
    */
-  public void setGoal(double goal, double maxJerk) {
-    m_goal = new SCurveProfile.State(goal, 0, maxJerk);
+  public void setGoal(double goal) {
+    m_goal = new SCurveProfile.State(goal, 0);
   }
 
   /**
-   * Gets the goal for the SProfiledPIDController.
+   * Gets the goal for the ProfiledPIDController.
    *
    * @return The goal.
    */
@@ -235,9 +236,9 @@ public class SProfiledPIDController implements Sendable {
    *
    * @param constraints Velocity and acceleration constraints for goal.
    */
-  public void setConstraints(SCurveProfile.Constraints constraints, double jerkPercent) {
+  public void setConstraints(SCurveProfile.Constraints constraints) {
     m_constraints = constraints;
-    m_profile = new SCurveProfile(m_constraints);
+    m_profile = new SCurveProfile(m_constraints, m_setpoint);
   }
 
   /**
@@ -250,7 +251,7 @@ public class SProfiledPIDController implements Sendable {
   }
 
   /**
-   * Returns the current setpoint of the SProfiledPIDController.
+   * Returns the current setpoint of the ProfiledPIDController.
    *
    * @return The current setpoint.
    */
@@ -362,7 +363,7 @@ public class SProfiledPIDController implements Sendable {
       m_setpoint.position = setpointMinDistance + measurement;
     }
 
-    m_setpoint = m_profile.calculate(getPeriod(), m_setpoint, m_goal);
+    m_setpoint = m_profile.calculate(m_setpoint, m_goal);
     return m_controller.calculate(measurement, m_setpoint.position);
   }
 
@@ -385,8 +386,8 @@ public class SProfiledPIDController implements Sendable {
    * @param goal The new goal of the controller.
    * @return The controller's next output.
    */
-  public double calculate(double measurement, double goal, double maxjerk) {
-    setGoal(goal, maxjerk);
+  public double calculate(double measurement, double goal) {
+    setGoal(goal);
     return calculate(measurement);
   }
 
@@ -399,8 +400,8 @@ public class SProfiledPIDController implements Sendable {
    * @return The controller's next output.
    */
   public double calculate(
-      double measurement, SCurveProfile.State goal, SCurveProfile.Constraints constraints, double jerkPercent) {
-    setConstraints(constraints, jerkPercent);
+      double measurement, SCurveProfile.State goal, SCurveProfile.Constraints constraints) {
+    setConstraints(constraints);
     return calculate(measurement, goal);
   }
 
@@ -420,8 +421,8 @@ public class SProfiledPIDController implements Sendable {
    * @param measuredPosition The current measured position of the system.
    * @param measuredVelocity The current measured velocity of the system.
    */
-  public void reset(double measuredPosition, double measuredVelocity, double maxJerk) {
-    reset(new SCurveProfile.State(measuredPosition, measuredVelocity, maxJerk));
+  public void reset(double measuredPosition, double measuredVelocity) {
+    reset(new SCurveProfile.State(measuredPosition, measuredVelocity));
   }
 
   /**
@@ -431,12 +432,12 @@ public class SProfiledPIDController implements Sendable {
    *     be zero.
    */
   public void reset(double measuredPosition) {
-    reset(measuredPosition, 0.0, 0.0);
+    reset(measuredPosition, 0.0);
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("SProfiledPIDController");
+    builder.setSmartDashboardType("ProfiledPIDController");
     builder.addDoubleProperty("p", this::getP, this::setP);
     builder.addDoubleProperty("i", this::getI, this::setI);
     builder.addDoubleProperty("d", this::getD, this::setD);
@@ -455,15 +456,15 @@ public class SProfiledPIDController implements Sendable {
         () -> getConstraints().maxVelocity,
         maxVelocity ->
             setConstraints(
-                new SCurveProfile.Constraints(maxVelocity, getConstraints().maxAcceleration, getConstraints().maxJerk), 
-                getConstraints().maxJerk));
+                new SCurveProfile.Constraints(
+                    maxVelocity, getConstraints().maxAcceleration, getConstraints().maxJerk)));
     builder.addDoubleProperty(
         "maxAcceleration",
         () -> getConstraints().maxAcceleration,
         maxAcceleration ->
             setConstraints(
-                new SCurveProfile.Constraints(getConstraints().maxVelocity, maxAcceleration, getConstraints().maxJerk), 
-                getConstraints().maxJerk));
-    builder.addDoubleProperty("goal", () -> getGoal().position, goal -> setGoal(goal, 0.0));
+                new SCurveProfile.Constraints(
+                    getConstraints().maxVelocity, maxAcceleration, getConstraints().maxJerk)));
+    builder.addDoubleProperty("goal", () -> getGoal().position, this::setGoal);
   }
 }

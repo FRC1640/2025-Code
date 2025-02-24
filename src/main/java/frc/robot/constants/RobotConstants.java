@@ -17,6 +17,7 @@ import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.logging.MotorLoggingManager;
+import frc.robot.util.scurveprofiling.SCurveProfile;
 import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
@@ -203,8 +204,11 @@ public class RobotConstants {
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 3;
     public static final double liftMaxAccel = 1.5;
-    public static final TrapezoidProfile.Constraints constraints =
+    public static final double liftMaxJerk = 1;
+    public static final TrapezoidProfile.Constraints trapConstraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
+    public static final SCurveProfile.Constraints sCurveConstraints =
+        new SCurveProfile.Constraints(liftMaxSpeed, liftMaxAccel, liftMaxJerk);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
 
     public enum GantrySetpoint {

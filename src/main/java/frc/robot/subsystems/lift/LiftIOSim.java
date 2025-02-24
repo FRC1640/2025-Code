@@ -2,12 +2,12 @@ package frc.robot.subsystems.lift;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
+import frc.robot.util.scurveprofiling.SProfiledPIDController;
 import frc.robot.util.tools.MotorLim;
 import java.util.function.BooleanSupplier;
 
@@ -22,9 +22,11 @@ public class LiftIOSim implements LiftIO {
   ElevatorFeedforward elevatorFeedforward =
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
 
-  ProfiledPIDController profiledPIDController =
-      RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+  SProfiledPIDController sProfiledPIDController =
+      RobotPIDConstants.constructSProfiledPIDController(
+          RobotPIDConstants.liftSProfiledPIDConstants,
+          LiftConstants.sCurveConstraints,
+          "LiftSPPID");
   private boolean limits;
 
   public LiftIOSim(BooleanSupplier liftLimitSwitch) {
@@ -100,19 +102,19 @@ public class LiftIOSim implements LiftIO {
 
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
-    profiledPIDController.setGoal(position);
+    sProfiledPIDController.setGoal(position);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition)
-                + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)),
+            sProfiledPIDController.calculate(inputs.leaderMotorPosition)
+                + elevatorFeedforward.calculate(sProfiledPIDController.getSetpoint().velocity)),
         inputs);
 
-    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
+    velocitySetpoint = sProfiledPIDController.getSetpoint().velocity;
   }
 
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
-    profiledPIDController.reset(inputs.leaderMotorPosition);
+    sProfiledPIDController.reset(inputs.leaderMotorPosition);
   }
 
   @Override

@@ -1,22 +1,13 @@
 package frc.robot.util.scurveprofiling;
 
-import java.util.Objects;
+import edu.wpi.first.wpilibj.Timer;
 
-import edu.wpi.first.math.MathSharedStore;
-import edu.wpi.first.math.MathUsageId;
-
-/**
- * A class for generating smooth S-curve motion profiles with controlled jerk.
- */
+/** A class for generating smooth S-curve motion profiles with controlled jerk. */
 public class SCurveProfile {
+  private Constraints m_constraints;
+  private State m_initial;
+  private double m_initialTime;
   private int m_direction;
-  private final Constraints m_constraints;
-  private State m_current;
-  private double m_endJerk;
-  private double m_endAccel;
-  private double m_endFullSpeed;
-  private double m_endDecel;
-  private double m_jerk;
 
   public static class Constraints {
     public final double maxVelocity;
@@ -27,64 +18,53 @@ public class SCurveProfile {
       this.maxVelocity = maxVelocity;
       this.maxAcceleration = maxAcceleration;
       this.maxJerk = maxJerk;
-      MathSharedStore.reportUsage(MathUsageId.kTrajectory_TrapezoidProfile, 1);
+      // MathSharedStore.reportUsage(MathUsageId.kTrajectory_TrapezoidProfile, 1);
     }
   }
 
   public static class State {
     public double position;
     public double velocity;
-    public double acceleration;
 
     public State() {}
 
-    public State(double position, double velocity, double acceleration) {
+    public State(double position, double velocity) {
       this.position = position;
       this.velocity = velocity;
-      this.acceleration = acceleration;
     }
   }
 
-  public SCurveProfile(Constraints constraints) {
+  public SCurveProfile(Constraints constraints, State initial) {
     m_constraints = constraints;
-    m_jerk = constraints.maxJerk;
+    m_initial = initial;
+    m_initialTime = Timer.getFPGATimestamp();
   }
 
-  public State calculate(double t, State current, State goal) {
+  public State calculate(State current, State goal) {
+    double t = Timer.getFPGATimestamp() - m_initialTime;
+
     m_direction = shouldFlipAcceleration(current, goal) ? -1 : 1;
-    m_current = direct(current);
     goal = direct(goal);
 
-    double jerkTime = m_constraints.maxAcceleration / m_constraints.maxJerk;
-    double accelTime = jerkTime + (m_constraints.maxVelocity / m_constraints.maxAcceleration);
+    double D = goal.position - m_initial.position;
+    double T_vel = 1.875 * D / m_constraints.maxVelocity;
+    double T_acc = Math.sqrt(5.778 * D / m_constraints.maxAcceleration);
+    double T_jerk = Math.cbrt(60 * D / (0.8 * m_constraints.maxJerk));
+    double T = Math.max(Math.max(T_vel, T_acc), T_jerk);
 
-    m_endJerk = jerkTime;
-    m_endAccel = accelTime;
-    m_endFullSpeed = m_endAccel + (goal.position - m_current.position) / m_constraints.maxVelocity;
-    m_endDecel = m_endFullSpeed + accelTime;
+    double position =
+        m_initial.position
+            + D
+                * (10 * Math.pow((t / T), 3)
+                    - 15 * Math.pow((t / T), 4)
+                    + 6 * Math.pow((t / T), 5));
+    double velocity =
+        D
+            * (30 * Math.pow(t, 2) / Math.pow(T, 3)
+                - 60 * Math.pow(t, 3) / Math.pow(T, 4)
+                + 30 * Math.pow(t, 4) / Math.pow(T, 5));
 
-    State result = new State(m_current.position, m_current.velocity, m_current.acceleration);
-
-    if (t < m_endJerk) {
-      result.acceleration += t * m_jerk;
-      result.velocity += result.acceleration * t;
-      result.position += result.velocity * t + 0.5 * result.acceleration * t * t;
-    } else if (t < m_endAccel) {
-      result.acceleration = m_constraints.maxAcceleration;
-      result.velocity += result.acceleration * t;
-      result.position += result.velocity * t;
-    } else if (t < m_endFullSpeed) {
-      result.acceleration = 0;
-      result.velocity = m_constraints.maxVelocity;
-      result.position += result.velocity * t;
-    } else if (t < m_endDecel) {
-      result.acceleration = -m_constraints.maxAcceleration;
-      result.velocity += result.acceleration * t;
-      result.position += result.velocity * t;
-    } else {
-      result = goal;
-    }
-
+    State result = new State(position, velocity);
     return direct(result);
   }
 
@@ -93,6 +73,6 @@ public class SCurveProfile {
   }
 
   private State direct(State in) {
-    return new State(in.position * m_direction, in.velocity * m_direction, in.acceleration * m_direction);
+    return new State(in.position * m_direction, in.velocity * m_direction);
   }
 }

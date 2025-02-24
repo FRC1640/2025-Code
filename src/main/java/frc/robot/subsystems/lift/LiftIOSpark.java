@@ -5,12 +5,12 @@ import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.scurveprofiling.SProfiledPIDController;
 import frc.robot.util.spark.SparkConfigurer;
 import frc.robot.util.tools.MotorLim;
 import org.littletonrobotics.junction.Logger;
@@ -28,9 +28,11 @@ public class LiftIOSpark implements LiftIO {
       RobotPIDConstants.constructFFElevator(RobotPIDConstants.liftFF);
   double lastTime = Timer.getFPGATimestamp();
 
-  ProfiledPIDController profiledPIDController =
-      RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+  SProfiledPIDController sProfiledPIDController =
+      RobotPIDConstants.constructSProfiledPIDController(
+          RobotPIDConstants.liftSProfiledPIDConstants,
+          LiftConstants.sCurveConstraints,
+          "LiftSPPID");
 
   PIDController velocityController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");
@@ -74,25 +76,25 @@ public class LiftIOSpark implements LiftIO {
 
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
-    profiledPIDController.setGoal(position);
+    sProfiledPIDController.setGoal(position);
     double acceleration =
-        (profiledPIDController.getSetpoint().velocity - velocitySetpoint)
+        (sProfiledPIDController.getSetpoint().velocity - velocitySetpoint)
             / (Timer.getFPGATimestamp() - lastTime);
     setLiftVoltage(
         MotorLim.clampVoltage(
-            profiledPIDController.calculate(inputs.leaderMotorPosition, position)
+            sProfiledPIDController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(
-                    profiledPIDController.getSetpoint().velocity, acceleration)
+                    sProfiledPIDController.getSetpoint().velocity, acceleration)
                 + velocityController.calculate(
-                    inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
+                    inputs.leaderMotorVelocity, sProfiledPIDController.getSetpoint().velocity)),
         inputs);
-    velocitySetpoint = profiledPIDController.getSetpoint().velocity;
+    velocitySetpoint = sProfiledPIDController.getSetpoint().velocity;
     lastTime = Timer.getFPGATimestamp();
   }
 
   @Override
   public void resetLiftMotionProfile(LiftIOInputs inputs) {
-    profiledPIDController.reset(inputs.leaderMotorPosition, inputs.leaderMotorVelocity);
+    sProfiledPIDController.reset(inputs.leaderMotorPosition, inputs.leaderMotorVelocity);
   }
 
   @Override

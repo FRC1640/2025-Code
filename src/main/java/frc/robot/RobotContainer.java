@@ -541,6 +541,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return (homing()
+        .asProxy()
         .andThen(
             dashboard
                 .getAutoChooserCommand()

@@ -35,7 +35,7 @@ public class CoralOuttakeCommandFactory {
                         RobotOdometry.instance.getPose("Main"),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
+        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12).repeatedly());
 
     new Trigger(() -> !intakeSubsystem.isCoralDetected() && !intakeSubsystem.hasCoral())
         .onTrue(

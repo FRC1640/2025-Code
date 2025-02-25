@@ -331,6 +331,7 @@ public class RobotContainer {
               public void periodic() {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
+                Logger.recordOutput("TargetPosAutoalign", getTarget());
               }
             });
   }

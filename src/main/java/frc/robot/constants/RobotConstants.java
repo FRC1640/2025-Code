@@ -57,7 +57,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Sim;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -215,7 +215,7 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
-      Safe(0, GantrySetpoint.CENTER),
+      Safe(0, 0.095, GantrySetpoint.CENTER),
       LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
       RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.28, 0.485, GantrySetpoint.LEFT),

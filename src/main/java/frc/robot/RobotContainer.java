@@ -22,6 +22,7 @@ import frc.robot.Robot.Mode;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
+import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
@@ -92,7 +93,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   // Subsystems
-  private final DriveSubsystem driveSubsystem;
+  private DriveSubsystem driveSubsystem;
   private final Gyro gyro;
   private final RobotOdometry robotOdometry;
 
@@ -187,7 +188,15 @@ public class RobotContainer {
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
         break;
       case SIM:
-        gyro = new Gyro(RobotConfigConstants.gyroEnabled ? new GyroIOSim() : new GyroIO() {});
+        gyro =
+            new Gyro(
+                RobotConfigConstants.gyroEnabled
+                    ? new GyroIOSim(
+                        () ->
+                            DriveConstants.kinematics.toChassisSpeeds(
+                                    driveSubsystem.getActualSwerveStates())
+                                .omegaRadiansPerSecond)
+                    : new GyroIO() {});
 
         aprilTagVisions.add(
             new AprilTagVision(
@@ -483,15 +492,15 @@ public class RobotContainer {
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
-    new Trigger(
-            () ->
-                algaeIntakeSubsystem.hasAlgae()
-                    && RobotOdometry.instance
-                            .getPose("Main")
-                            .getTranslation()
-                            .getDistance(getTarget().getTranslation())
-                        > 0.3)
-        .onTrue(runLiftToSafe());
+    // new Trigger(
+    //         () ->
+    //             algaeIntakeSubsystem.hasAlgae()
+    //                 && RobotOdometry.instance
+    //                         .getPose("Main")
+    //                         .getTranslation()
+    //                         .getDistance(getTarget().getTranslation())
+    //                     > 0.3)
+    //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 
@@ -572,17 +581,19 @@ public class RobotContainer {
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
     return (new InstantCommand(
-            () -> {
-              presetActive =
-                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
-              gantryPresetActive = coralPreset.get();
-            })
-        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
-        .alongWith(
-            autoScoringCommandFactory
-                .gantryAlignCommand(
-                    () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget()))
-                .asProxy()));
+                () -> {
+                  presetActive =
+                      algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
+                  gantryPresetActive = coralPreset.get();
+                })
+            .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
+            .alongWith(
+                autoScoringCommandFactory
+                    .gantryAlignCommand(
+                        () -> gantryPresetActive,
+                        () -> AllianceManager.onDsSideReef(() -> getTarget()))
+                    .asProxy()))
+        .asProxy();
   }
 
   public Pose2d[] chooseAlignPos() {
@@ -596,11 +607,7 @@ public class RobotContainer {
   }
 
   public Command runLiftToSafe() {
-    return (liftCommandFactory
-            .runLiftMotionProfile(() -> CoralPreset.Safe.getLift())
-            .alongWith(
-                gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimitCenter)))
-        .asProxy();
+    return setupAutoPlace(() -> CoralPreset.Safe);
   }
 
   public void generateNamedCommands() {

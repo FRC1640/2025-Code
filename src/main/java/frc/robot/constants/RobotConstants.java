@@ -3,6 +3,7 @@ package frc.robot.constants;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,8 +28,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.927;
-    public static final double robotLength = 0.927;
+    public static final double robotWidth = 0.96;
+    public static final double robotLength = 0.96; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -107,7 +108,7 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.2;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
+        new PathConstraints(1, 0.75, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -176,9 +177,9 @@ public class RobotConstants {
             new Transform3d(
                 new Translation3d(
                     Units.inchesToMeters(7.575),
-                    Units.inchesToMeters(13.325),
+                    -Units.inchesToMeters(13.325),
                     Units.inchesToMeters(14.1875)),
-                new Rotation3d()),
+                new Rotation3d(Rotation2d.fromDegrees(2))),
             1,
             "Park",
             "Front Right");

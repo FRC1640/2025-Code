@@ -448,10 +448,10 @@ public class RobotContainer {
     driveController.start().onTrue(gyro.resetGyroCommand());
 
     // gantry button bindings:
-    // operatorController.x().whileTrue(getAutoPlaceCommand());
-    operatorController
-        .x()
-        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    operatorController.x().whileTrue(getAutoPlaceCommand());
+    // operatorController
+    //     .x()
+    //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
@@ -483,15 +483,15 @@ public class RobotContainer {
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
-    // new Trigger(
-    //         () ->
-    //             algaeIntakeSubsystem.hasAlgae()
-    //                 && RobotOdometry.instance
-    //                         .getPose("Main")
-    //                         .getTranslation()
-    //                         .getDistance(getTarget().getTranslation())
-    //                     > 0.3)
-    //     .onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                algaeIntakeSubsystem.hasAlgae()
+                    && RobotOdometry.instance
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        > 0.3)
+        .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
     operatorController.y().onTrue(runLiftToSafe());
 
@@ -503,7 +503,7 @@ public class RobotContainer {
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)));
 
-    driveController
+    operatorController
         .rightTrigger()
         .and(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
@@ -572,17 +572,17 @@ public class RobotContainer {
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
     return (new InstantCommand(
-                () -> {
-                  presetActive =
-                      algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
-                  gantryPresetActive = coralPreset.get();
-                })
-            .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-            .alongWith(
-                autoScoringCommandFactory.gantryAlignCommand(
-                    () -> gantryPresetActive,
-                    () -> AllianceManager.onDsSideReef(() -> getTarget()))))
-        .asProxy();
+            () -> {
+              presetActive =
+                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
+              gantryPresetActive = coralPreset.get();
+            })
+        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
+        .alongWith(
+            autoScoringCommandFactory
+                .gantryAlignCommand(
+                    () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget()))
+                .asProxy()));
   }
 
   public Pose2d[] chooseAlignPos() {

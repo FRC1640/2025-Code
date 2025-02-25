@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.logging.MotorTrack;
 import org.littletonrobotics.junction.Logger;
 
 public class SparkConfigurer {
@@ -21,6 +22,7 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + config.getId(), flash);
     createAlerts(spark.getFaults(), spark.getWarnings());
+    MotorTrack.addSpark(config.getId(), spark);
     return spark;
   }
 
@@ -29,11 +31,15 @@ public class SparkConfigurer {
    */
   public static SparkMax configSparkMax(SparkConfiguration config, SparkMax leader) {
     config.follow(leader);
-    return configSparkMax(config);
+    SparkMax spark = configSparkMax(config);
+    MotorTrack.addSpark(config.getId(), spark);
+    return spark;
   }
 
   public static SparkMax configSparkMax(SparkConfiguration config, SparkFlex leader) {
     config.follow(leader);
+    SparkFlex spark = configSparkFlex(config);
+    MotorTrack.addSpark(config.getId(), spark);
     return configSparkMax(config);
   }
   /*
@@ -48,17 +54,22 @@ public class SparkConfigurer {
         flash ? PersistMode.kPersistParameters : PersistMode.kNoPersistParameters);
     Logger.recordOutput("SparkFlashes/" + config.getId(), flash);
     createAlerts(spark.getFaults(), spark.getWarnings());
+    MotorTrack.addSpark(config.getId(), spark);
     return spark;
   }
 
   public static SparkFlex configSparkFlex(SparkConfiguration config, SparkMax leader) {
     config.follow(leader);
-    return configSparkFlex(config);
+    SparkFlex temp = configSparkFlex(config);
+    MotorTrack.addSpark(config.getId(), temp);
+    return temp;
   }
 
   public static SparkFlex configSparkFlex(SparkConfiguration config, SparkFlex leader) {
     config.follow(leader);
-    return configSparkFlex(config);
+    SparkFlex sparkFlex = configSparkFlex(config);
+    MotorTrack.addSpark(config.getId(), sparkFlex);
+    return sparkFlex;
   }
   /*
    * Check if the spark needs to be flashed for settings that are currently flashed

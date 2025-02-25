@@ -34,7 +34,7 @@ public class RobotConstants {
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.sysIDTesting;
+    public static final TestingSetting tuningMode = TestingSetting.motorTest;
   }
 
   public class MotorInfo {

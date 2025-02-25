@@ -198,8 +198,8 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> 251.0, () -> 0.0, () -> simBoard.getTrough())
-                    : new ReefDetectorIO() {});
+                ? new ReefDetectorIOSim(() -> 251.0, () -> 0.0, () -> simBoard.getTrough())
+                : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
@@ -248,7 +248,7 @@ public class RobotContainer {
     climberRoutines = new ClimberRoutines(climberCommandFactory);
     algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
     logRunner = new LogRunner();
-
+    Logger.recordOutput("Mode", Robot.getMode().toString());
     autoScoringCommandFactory =
         new AutoScoringCommandFactory(
             gantryCommandFactory,
@@ -541,7 +541,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return (homing()
-        .asProxy()
         .andThen(
             dashboard
                 .getAutoChooserCommand()
@@ -660,7 +659,7 @@ public class RobotContainer {
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
 
     NamedCommands.registerCommand(
-        "AutoReef", getPlaceCommand().alongWith(runLift(() -> coralPreset)));
+        "AutoReef", getPlaceCommand().alongWith(runLift(() -> coralPreset)).finallyDo(() -> System.out.println("reefing")));
 
     NamedCommands.registerCommand(
         "HaveCoral", new InstantCommand(() -> coralOuttakeSubsystem.setHasCoral(true)));

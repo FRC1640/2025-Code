@@ -27,7 +27,8 @@ public class CoralOuttakeCommandFactory {
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.hasCoral())
+    new Trigger(
+            () -> !intakeSubsystem.hasCoral() && !intakeSubsystem.isCoralDetected() && !runningBack)
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired

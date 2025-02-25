@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot.Mode;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
@@ -481,8 +482,8 @@ public class RobotContainer {
     // lift/gantry manual controls
     operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
     operatorController.a().onTrue(setupAutoPlaceProxy(() -> coralPreset));
-
-    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafeProxy());
+    
+    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)).onTrue(runLiftToSafeProxy());
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()
@@ -575,7 +576,7 @@ public class RobotContainer {
   }
 
   public Command setupAutoPlaceProxy(Supplier<CoralPreset> coralPreset) {
-    return setupAutoPlace(coralPreset).asProxy();
+    return new ConditionalCommand(setupAutoPlace(coralPreset).asProxy(), new InstantCommand(), () -> Robot.getState() != RobotState.AUTONOMOUS);
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -585,10 +586,11 @@ public class RobotContainer {
                   algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
               gantryPresetActive = coralPreset.get();
             })
-        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-        .alongWith(
-            autoScoringCommandFactory.gantryAlignCommand(
-                () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget()))));
+        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive)
+        // ) .alongWith(
+        //     autoScoringCommandFactory.gantryAlignCommand(
+        //         () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget()))
+                ));
   }
 
   public Command runLift(Supplier<CoralPreset> coralPreset) {
@@ -611,7 +613,7 @@ public class RobotContainer {
   }
 
   public Command runLiftToSafeProxy() {
-    return runLiftToSafe().asProxy();
+    return new ConditionalCommand(runLiftToSafe().asProxy(), new InstantCommand(), () -> Robot.getState() != RobotState.AUTONOMOUS);
   }
 
   public Command runLiftToSafe() {

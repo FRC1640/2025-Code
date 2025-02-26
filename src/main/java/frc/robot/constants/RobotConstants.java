@@ -201,8 +201,8 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
-    public static final double liftMaxSpeed = 3;
-    public static final double liftMaxAccel = 1.5;
+    public static final double liftMaxSpeed = 4;
+    public static final double liftMaxAccel = 3;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);

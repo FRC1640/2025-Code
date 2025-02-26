@@ -371,7 +371,8 @@ public class RobotContainer {
         "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
-    PIDCommandRegistry.attachProfiledPIDCommand("GantryPPID", (x) -> gantryCommandFactory.runGantryMotionProfile(x));
+    PIDCommandRegistry.attachProfiledPIDCommand(
+        "GantryPPID", (x) -> gantryCommandFactory.runGantryMotionProfile(() -> x));
   }
 
   private void configureBindings() {

@@ -93,5 +93,20 @@ public class GantryCommandFactory {
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
   }
 
+  public Command runGantryMotionProfile(DoubleSupplier pos) {
+    return new InstantCommand(() -> gantrySubsystem.resetGantryMotionProfile())
+        .andThen(
+            new RunCommand(
+                    () -> {
+                      gantrySubsystem.runGantryMotionProfile(pos.getAsDouble());
+                    },
+                    gantrySubsystem)
+                .finallyDo(
+                    () -> {
+                      gantrySubsystem.setGantryVoltage(0);
+                      gantrySubsystem.resetGantryMotionProfile();
+                    }));
+  }
+
   public void constructTriggers() {}
 }

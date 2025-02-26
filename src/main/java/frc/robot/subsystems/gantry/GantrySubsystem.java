@@ -115,4 +115,12 @@ public class GantrySubsystem extends SubsystemBase {
   public void resetGantryMotionProfile() {
     io.resetGantryMotionProfile(inputs);
   }
+
+  public void runGantryVelocityMotionProfile(double vel) {
+    io.setGantryVelocityMotionProfile(vel, inputs);
+  }
+
+  public void resetGantryVelocityMotionProfile() {
+    io.resetGantryVelocityMotionProfile(inputs);
+  }
 }

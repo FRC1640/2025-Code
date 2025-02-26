@@ -26,6 +26,9 @@ public class GantryIOSim implements GantryIO {
   private final ProfiledPIDController gantryPPID =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.gantryProfiledPID, GantryConstants.constraints);
+  private final ProfiledPIDController gantryVelocityProfiledPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryVelocityProfiledPID, GantryConstants.velocityConstraints);
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
@@ -84,6 +87,23 @@ public class GantryIOSim implements GantryIO {
   @Override
   public void resetGantryMotionProfile(GantryIOInputs inputs) {
     gantryPPID.reset(inputs.encoderPosition);
+  }
+
+  @Override
+  public void setGantryVelocityMotionProfile(double vel, GantryIOInputs inputs) {
+    gantryPPID.setGoal(vel);
+    setGantryVoltage(
+        MotorLim.clampVoltage(
+            gantryVelocityProfiledPID.calculate(inputs.encoderPosition)
+                + ff.calculate(gantryVelocityProfiledPID.getSetpoint().velocity)),
+        inputs);
+
+    velocitySetpoint = vel;
+  }
+
+  @Override
+  public void resetGantryVelocityMotionProfile(GantryIOInputs inputs) {
+    gantryVelocityProfiledPID.reset(inputs.encoderPosition);
   }
 
   @Override

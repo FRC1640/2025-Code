@@ -373,6 +373,8 @@ public class RobotContainer {
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "GantryPPID", (x) -> gantryCommandFactory.runGantryMotionProfile(() -> x));
+    PIDCommandRegistry.attachProfiledPIDCommand(
+        "GantryVelPPID", (x) -> gantryCommandFactory.runGantryVelocityMotionProfile(() -> x));
   }
 
   private void configureBindings() {

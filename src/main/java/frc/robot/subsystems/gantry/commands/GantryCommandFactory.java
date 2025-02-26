@@ -108,5 +108,20 @@ public class GantryCommandFactory {
                     }));
   }
 
+  public Command runGantryVelocityMotionProfile(DoubleSupplier vel) {
+    return new InstantCommand(() -> gantrySubsystem.resetGantryVelocityMotionProfile())
+        .andThen(
+            new RunCommand(
+                    () -> {
+                      gantrySubsystem.runGantryVelocityMotionProfile(vel.getAsDouble());
+                    },
+                    gantrySubsystem)
+                .finallyDo(
+                    () -> {
+                      gantrySubsystem.setGantryVoltage(0);
+                      gantrySubsystem.resetGantryVelocityMotionProfile();
+                    }));
+  }
+
   public void constructTriggers() {}
 }

@@ -104,7 +104,7 @@ public class RobotPIDConstants {
   public static final PIDConstants angleFollowPath = new PIDConstants(1, 0, 0);
 
   public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
-  public static final PIDConstants gantryProfiledPID = new PIDConstants(2, 0, 0); // PLACEHOLDE
+  public static final PIDConstants gantryProfiledPID = new PIDConstants(2, 0, 0); // PLACEHOLDER
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants =
       new PIDConstants(40); // new PIDConstants(27.25, 0.010569);
@@ -117,6 +117,8 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants gantryFF =
       new FeedForwardConstants(0.23823, 19.874, 1.5284);
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1);
+  public static final PIDConstants gantryVelocityProfiledPID =
+      new PIDConstants(2, 0, 0); // PLACEHOLDER
   public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
 

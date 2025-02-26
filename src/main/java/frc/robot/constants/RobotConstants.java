@@ -335,10 +335,6 @@ public class RobotConstants {
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;
-    public static final double gantryMaxSpeed = 3;
-    public static final double gantryMaxAccel = 1.5;
-    public static final TrapezoidProfile.Constraints constraints =
-        new TrapezoidProfile.Constraints(gantryMaxSpeed, gantryMaxAccel);
   }
 
   public static class CoralOuttakeConstants {

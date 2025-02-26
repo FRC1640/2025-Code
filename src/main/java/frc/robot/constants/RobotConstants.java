@@ -28,13 +28,13 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.927;
-    public static final double robotLength = 0.927;
+    public static final double robotWidth = 1;
+    public static final double robotLength = 1; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.sysIDTesting;
+    public static final TestingSetting tuningMode = TestingSetting.motorTest;
   }
 
   public class MotorInfo {
@@ -106,9 +106,9 @@ public class RobotConstants {
   }
 
   public static class AutoAlignConfig {
-    public static final double maxDistanceFromTarget = 0.2;
+    public static final double maxDistanceFromTarget = 0.5;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 1.5, Math.PI, 4 * Math.PI);
+        new PathConstraints(1, 0.7, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -177,9 +177,9 @@ public class RobotConstants {
             new Transform3d(
                 new Translation3d(
                     Units.inchesToMeters(7.575),
-                    Units.inchesToMeters(13.325),
+                    -Units.inchesToMeters(13.325),
                     Units.inchesToMeters(14.1875)),
-                new Rotation3d()),
+                new Rotation3d(Math.toRadians(0), Math.toRadians(-2), Math.toRadians(-2.5))),
             1,
             "Park",
             "Front Right");
@@ -202,9 +202,11 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
-    public static final double liftMaxSpeed = 3;
-    public static final double liftMaxAccel = 1.5;
+
     public static final double liftMaxJerk = 1;
+    public static final double liftMaxSpeed = 4;
+    public static final double liftMaxAccel = 3;
+
     public static final TrapezoidProfile.Constraints trapConstraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final SCurveProfile.Constraints sCurveConstraints =
@@ -218,7 +220,8 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
-      Safe(0, GantrySetpoint.CENTER),
+      Pickup(0, GantrySetpoint.CENTER),
+      Safe(0, 0.08, GantrySetpoint.CENTER),
       LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
       RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
@@ -289,7 +292,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 550;
+    public static final double detectionThresh = 545;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -359,6 +362,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 40;
+    public static double currentThresh = 45;
   }
 }

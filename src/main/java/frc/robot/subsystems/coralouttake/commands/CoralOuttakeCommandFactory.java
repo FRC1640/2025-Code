@@ -41,7 +41,7 @@ public class CoralOuttakeCommandFactory {
         .onTrue(
             (new InstantCommand(() -> runningBack = true)
                     .andThen(
-                        setIntakeVoltage(() -> -0.75)
+                        setIntakeVoltage(() -> -1)
                             .repeatedly()
                             .until(() -> intakeSubsystem.isCoralDetected()))
                     .andThen(new InstantCommand(() -> runningBack = false)))

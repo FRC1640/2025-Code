@@ -52,11 +52,11 @@ public class AutoScoringCommandFactory {
     return gantryCommandFactory
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
-        .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly())
+        .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly())
         .until(() -> !coralOuttakeSubsystem.hasCoral())
         .andThen(
             new WaitCommand(0.1)
-                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly()));
+                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly()));
   }
 
   public Command placeTrough() {

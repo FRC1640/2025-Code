@@ -101,15 +101,15 @@ public class RobotPIDConstants {
   public static final PIDConstants linearDrivePIDProfiled = new PIDConstants(0.1, 0, 0);
 
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
-  public static final PIDConstants angleFollowPath = new PIDConstants(4.5, 0.001, 1.2);
+  public static final PIDConstants angleFollowPath = new PIDConstants(1.25, 0, 0);
 
   public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants =
       new PIDConstants(40); // new PIDConstants(27.25, 0.010569);
   public static final PIDConstants liftSProfiledPIDConstants =
-      new PIDConstants(40); // new PIDConstants(27.25, 0.010569);
-  public static final PIDConstants liftVelocityPID = new PIDConstants(1, 0, 0);
+      new PIDConstants(40); // new PIDConstants(27.25, 0.010569);//TODO CLEAN this up
+  public static final PIDConstants liftVelocityPID = new PIDConstants(2, 0, 0);
   public static final FeedForwardConstants liftFF =
       new FeedForwardConstants(0.62456, 5.4217, 0.84372, 0.5477);
 

@@ -4,6 +4,7 @@ public class TestMode {
   public enum TestingSetting {
     none,
     pidTuning,
-    sysIDTesting;
+    sysIDTesting,
+    motorTest;
   }
 }

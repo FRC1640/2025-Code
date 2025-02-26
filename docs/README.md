@@ -11,3 +11,5 @@
 [Constants](/docs/constants/main.md)
 
 [Autos](/docs/autos/CalculatedFieldPos.md)
+
+[WPILib rotations](/docs/rotations/rotations.md)

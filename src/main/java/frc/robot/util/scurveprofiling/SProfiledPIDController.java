@@ -60,7 +60,7 @@ public class SProfiledPIDController implements Sendable {
       double Kp, double Ki, double Kd, SCurveProfile.Constraints constraints, double period) {
     m_controller = new PIDController(Kp, Ki, Kd, period);
     m_constraints = constraints;
-    m_profile = new SCurveProfile(m_constraints, m_setpoint);
+    m_profile = new SCurveProfile(m_constraints);
     instances++;
 
     SendableRegistry.add(this, "ProfiledPIDController", instances);
@@ -208,6 +208,7 @@ public class SProfiledPIDController implements Sendable {
    * @param goal The desired goal position.
    */
   public void setGoal(double goal) {
+    m_profile.initialize(m_setpoint.position, m_setpoint.velocity, m_goal.position);
     m_goal = new SCurveProfile.State(goal, 0);
   }
 
@@ -238,7 +239,7 @@ public class SProfiledPIDController implements Sendable {
    */
   public void setConstraints(SCurveProfile.Constraints constraints) {
     m_constraints = constraints;
-    m_profile = new SCurveProfile(m_constraints, m_setpoint);
+    m_profile = new SCurveProfile(m_constraints);
   }
 
   /**
@@ -363,7 +364,7 @@ public class SProfiledPIDController implements Sendable {
       m_setpoint.position = setpointMinDistance + measurement;
     }
 
-    m_setpoint = m_profile.calculate(m_setpoint, m_goal);
+    m_setpoint = m_profile.calculate(getPeriod());
     return m_controller.calculate(measurement, m_setpoint.position);
   }
 

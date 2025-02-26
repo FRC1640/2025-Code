@@ -107,7 +107,7 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.5;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(1.25, 0.8, Math.PI, 4 * Math.PI);
+        new PathConstraints(1, 0.7, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -178,7 +178,7 @@ public class RobotConstants {
                     Units.inchesToMeters(7.575),
                     -Units.inchesToMeters(13.325),
                     Units.inchesToMeters(14.1875)),
-                new Rotation3d(Math.toRadians(0), Math.toRadians(2), Math.toRadians(-3))),
+                new Rotation3d(Math.toRadians(0), Math.toRadians(-2), Math.toRadians(-2.5))),
             1,
             "Park",
             "Front Right");
@@ -214,7 +214,8 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
-      Safe(0, 0.095, GantrySetpoint.CENTER),
+      Pickup(0, GantrySetpoint.CENTER),
+      Safe(0, 0.08, GantrySetpoint.CENTER),
       LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
       RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
@@ -355,6 +356,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 40;
+    public static double currentThresh = 45;
   }
 }

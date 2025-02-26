@@ -354,10 +354,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.1;
+        side = 0;
         break;
       case RIGHT:
-        side = -0.1;
+        side = 0;
         break;
       case CENTER:
         side = 0;
@@ -403,7 +403,7 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
                     && (gantrySubsystem.isAtPreset(
                             coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
                         || algaeMode)
@@ -427,7 +427,6 @@ public class RobotContainer {
 
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
-
     new Trigger(
             () ->
                 RobotOdometry.instance
@@ -521,7 +520,8 @@ public class RobotContainer {
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)));
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
 
     operatorController
         .rightTrigger()

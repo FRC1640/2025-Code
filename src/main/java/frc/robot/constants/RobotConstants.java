@@ -335,8 +335,8 @@ public class RobotConstants {
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.1;
-    public static final double gantryMaxVel = 2;
-    public static final double gantryMaxAccel = 2;
+    public static final double gantryMaxVel = 2; // PLACEHOLDER
+    public static final double gantryMaxAccel = 2; // PLACEHOLDER
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(gantryMaxVel, gantryMaxAccel);
   }

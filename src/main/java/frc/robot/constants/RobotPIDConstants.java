@@ -104,6 +104,7 @@ public class RobotPIDConstants {
   public static final PIDConstants angleFollowPath = new PIDConstants(1, 0, 0);
 
   public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
+  public static final PIDConstants gantryProfiledPID = new PIDConstants(2, 0, 0); // PLACEHOLDE
   public static final PIDConstants liftPID = new PIDConstants(0.001, 0, 0);
   public static final PIDConstants liftProfiledPIDConstants =
       new PIDConstants(40); // new PIDConstants(27.25, 0.010569);

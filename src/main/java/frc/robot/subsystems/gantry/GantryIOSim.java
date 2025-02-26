@@ -25,7 +25,7 @@ public class GantryIOSim implements GantryIO {
   private boolean limits = false;
   private final ProfiledPIDController gantryPPID =
       RobotPIDConstants.constructProfiledPIDController(
-          RobotPIDConstants.gantryPID, GantryConstants.constraints);
+          RobotPIDConstants.gantryProfiledPID, GantryConstants.constraints);
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;

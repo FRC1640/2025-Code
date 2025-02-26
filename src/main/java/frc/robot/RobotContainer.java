@@ -332,6 +332,16 @@ public class RobotContainer {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
+                Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
+                Logger.recordOutput(
+                    "LiftDone",
+                    liftSubsystem.isAtPreset(
+                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae()));
+                Logger.recordOutput(
+                    "GantryDone",
+                    gantrySubsystem.isAtPreset(
+                            coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+                        || algaeMode);
               }
             });
   }
@@ -581,20 +591,25 @@ public class RobotContainer {
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
-    return (new InstantCommand(
-                () -> {
-                  presetActive =
-                      algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
-                  gantryPresetActive = coralPreset.get();
-                })
-            .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
-            .alongWith(
-                autoScoringCommandFactory
-                    .gantryAlignCommand(
-                        () -> gantryPresetActive,
-                        () -> AllianceManager.onDsSideReef(() -> getTarget()))
-                    .asProxy()))
-        .asProxy();
+    return new InstantCommand(
+        () -> {
+          (new InstantCommand(
+                      () -> {
+                        presetActive =
+                            algaeMode
+                                ? coralPreset.get().getLiftAlgae()
+                                : coralPreset.get().getLift();
+                        gantryPresetActive = coralPreset.get();
+                      })
+                  .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
+                  .andThen(
+                      autoScoringCommandFactory
+                          .gantryAlignCommand(
+                              () -> gantryPresetActive,
+                              () -> AllianceManager.onDsSideReef(() -> getTarget()))
+                          .asProxy()))
+              .schedule();
+        });
   }
 
   public Pose2d[] chooseAlignPos() {

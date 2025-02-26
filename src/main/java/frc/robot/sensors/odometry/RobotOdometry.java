@@ -255,9 +255,11 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   public void addTrigEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
+
     if (odometryStorage.getTrustedRotation().isEmpty()) {
       return;
     }
+
     // pass function
     if (vision.getTrigResult(new Rotation2d()).isEmpty()) {
       return;
@@ -304,7 +306,7 @@ public class RobotOdometry extends PeriodicBase {
         "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesAcceptedTrig", visionUpdate);
     double xy = vision.getTrigXyStdDev(result.get());
     odometryStorage.estimator.addVisionMeasurement(
-        visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, Double.MAX_VALUE));
+        visionUpdate, result.get().timestamp(), VecBuilder.fill(xy, xy, 0.000001));
   }
 
   public boolean isPoseValid(Pose2d pose) {
@@ -351,11 +353,7 @@ public class RobotOdometry extends PeriodicBase {
 
       // Apply update
       e.estimator.updateWithTime(sampleTimestamps[i], e.rawGyroRotation, modulePositions);
-      if (e.getTrustedRotation().isPresent()) {
-        e.addGyroSample(
-            e.getTrustedRotation().get().estimator.getEstimatedPosition().getRotation(),
-            sampleTimestamps[i]);
-      }
+      e.addGyroSample(e.estimator.getEstimatedPosition().getRotation(), sampleTimestamps[i]);
       Logger.recordOutput(
           "Drive/Odometry/" + odometryStorage.getName(), e.estimator.getEstimatedPosition());
     }

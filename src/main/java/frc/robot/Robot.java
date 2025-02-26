@@ -84,7 +84,7 @@ public class Robot extends LoggedRobot {
         // Running on a real robot, log to a USB stick
       case REAL:
         @SuppressWarnings("unused")
-        PowerDistribution p = new PowerDistribution(1, ModuleType.kRev);
+        PowerDistribution p = new PowerDistribution(21, ModuleType.kRev);
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
         break;

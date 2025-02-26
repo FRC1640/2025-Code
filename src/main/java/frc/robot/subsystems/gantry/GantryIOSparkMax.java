@@ -95,4 +95,20 @@ public class GantryIOSparkMax implements GantryIO {
   public void setLimitEnabled(boolean enable) {
     limits = enable;
   }
+
+  @Override
+  public void setGantryPositionMotionProfile(double pos, GantryIOInputs inputs) {
+    gantryPPID.setGoal(pos);
+    setGantryVoltage(
+        MotorLim.clampVoltage(gantryPPID.calculate(inputs.encoderPosition))
+            + ff.calculate(gantryPPID.getSetpoint().velocity)
+            + gantryVelocityPID.calculate(
+                inputs.encoderVelocity, gantryPPID.getSetpoint().velocity),
+        inputs);
+  }
+
+  @Override
+  public void resetGantryMotionProfile(GantryIOInputs inputs) {
+    gantryPPID.reset(inputs.encoderPosition);
+  }
 }

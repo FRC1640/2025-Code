@@ -12,6 +12,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -21,6 +23,8 @@ import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
+
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -250,13 +254,13 @@ public class RobotConstants {
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:
-            return dsSide
+            return (Robot.getState() == RobotState.AUTONOMOUS || !dsSide)
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case RIGHT:
-            return !dsSide
-                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+            return (Robot.getState() == RobotState.AUTONOMOUS || !dsSide)
+              ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+              : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case CENTER:
             return GantryConstants.gantryLimitCenter;
           default:

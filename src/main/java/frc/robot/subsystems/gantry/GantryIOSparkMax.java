@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -21,6 +22,9 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF, "gantryFF");
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
+  private final ProfiledPIDController gantryPPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryPID, GantryConstants.constraints);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocity");
   private boolean limits = false;

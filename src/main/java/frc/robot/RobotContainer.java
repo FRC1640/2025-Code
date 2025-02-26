@@ -199,7 +199,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                ? new ReefDetectorIOSim(() -> 251.0, () -> 0.0, () -> simBoard.getTrough())
+                ? new ReefDetectorIOSim(() -> 250.0, () -> 0.0, () -> simBoard.getTrough())
                 : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(

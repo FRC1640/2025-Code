@@ -53,7 +53,7 @@ public class AutoScoringCommandFactory {
         .gantryDriftCommand()
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly())
-        .until(() -> !coralOuttakeSubsystem.hasCoral())
+        .until(() -> !coralOuttakeSubsystem.isCoralDetected()) // TODO change back to hasCoral
         .andThen(
             new WaitCommand(0.1)
                 .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 8).repeatedly()));

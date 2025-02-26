@@ -9,7 +9,9 @@ public class ReefDetectorIOSim implements ReefDetectorIO {
   private BooleanSupplier detectedSupplier;
 
   public ReefDetectorIOSim(
-      Supplier<Double> distanceToReefSupplier, Supplier<Double> deltaXSupplier, BooleanSupplier detectedSupplier) {
+      Supplier<Double> distanceToReefSupplier,
+      Supplier<Double> deltaXSupplier,
+      BooleanSupplier detectedSupplier) {
     this.distanceToReefSupplier = distanceToReefSupplier;
     this.deltaXSupplier = deltaXSupplier;
     this.detectedSupplier = detectedSupplier;

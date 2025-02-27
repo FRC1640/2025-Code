@@ -23,8 +23,6 @@ import frc.robot.util.tools.Limits;
 import frc.robot.util.tools.RobotSwitch;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
-
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
@@ -259,8 +257,8 @@ public class RobotConstants {
                 : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case RIGHT:
             return (Robot.getState() == RobotState.AUTONOMOUS || !dsSide)
-              ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-              : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case CENTER:
             return GantryConstants.gantryLimitCenter;
           default:

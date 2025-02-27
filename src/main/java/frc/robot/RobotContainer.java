@@ -199,7 +199,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> 250.0, () -> 0.0, () -> simBoard.getTrough())
+                    ? new ReefDetectorIOSim(() -> 249.0, () -> 0.0, () -> simBoard.getTrough())
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -373,7 +373,8 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.5
-                    && followPathNearest.isEnabled())
+                    && followPathNearest.isEnabled()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlaceProxy(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
@@ -412,10 +413,11 @@ public class RobotContainer {
     new Trigger(
             () ->
                 RobotOdometry.instance
-                        .getPose("Main")
-                        .getTranslation()
-                        .getDistance(getTarget().getTranslation())
-                    > 2)
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        > 2
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(runLiftToSafeProxy());
 
     DriveWeightCommand.createWeightTrigger(
@@ -670,7 +672,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "AutoReef",
         getPlaceCommand()
-            .alongWith(runLift(() -> coralPreset))
+            .deadlineFor(runLift(() -> coralPreset))
             .finallyDo(() -> System.out.println("reefing")));
 
     NamedCommands.registerCommand(
@@ -707,5 +709,6 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
     NamedCommands.registerCommand("RunLift", runLift(() -> coralPreset));
+    NamedCommands.registerCommand("RetractCoral", coralOuttakeCommandFactory.retractCoral());
   }
 }

@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.Logger;
 public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
   private boolean isConnected;
+  private boolean detect;
   private TimeInterpolatableBuffer<Double> distanceBuffer =
       TimeInterpolatableBuffer.createDoubleBuffer(2);
 
@@ -51,7 +52,6 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = isConnected;
-    inputs.isDetecting = false;
     inputs.distanceToReef = getDistance();
     if (getDistance() < Double.MAX_VALUE) {
       distanceBuffer.addSample(System.currentTimeMillis(), getDistance());
@@ -60,10 +60,15 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
           if (distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get() - getDistance() > 15
               && distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get()
                   < ReefDetectorConstants.detectionThresh) {
-            inputs.isDetecting = true;
+            detect = true;
           }
         }
       }
     }
+
+    if (getDistance() >= ReefDetectorConstants.detectionThresh) {
+      detect = false;
+    }
+    inputs.isDetecting = detect;
   }
 }

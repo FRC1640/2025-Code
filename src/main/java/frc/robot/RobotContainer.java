@@ -354,10 +354,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.1;
+        side = 0.05;
         break;
       case RIGHT:
-        side = -0.1;
+        side = -0.05;
         break;
       case CENTER:
         side = 0;
@@ -498,7 +498,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
-    operatorController.start().whileTrue(liftCommandFactory.liftHomeCommand());
+    operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());

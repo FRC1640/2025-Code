@@ -336,7 +336,7 @@ public class RobotContainer {
                 Logger.recordOutput(
                     "LiftDone",
                     liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae()));
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(
@@ -354,10 +354,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0;
+        side = 0.1;
         break;
       case RIGHT:
-        side = 0;
+        side = -0.1;
         break;
       case CENTER:
         side = 0;
@@ -585,8 +585,8 @@ public class RobotContainer {
 
   public Command getPlaceCommand() {
     return new ConditionalCommand(
-        autoScoringCommandFactory.algaeAutoPickup(),
-        autoScoringCommandFactory.autoPlace(),
+        autoScoringCommandFactory.algaeAutoPickup().repeatedly(),
+        autoScoringCommandFactory.autoPlace().repeatedly(),
         () -> algaeMode);
   }
 

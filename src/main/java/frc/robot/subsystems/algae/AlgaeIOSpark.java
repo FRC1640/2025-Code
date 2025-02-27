@@ -24,6 +24,7 @@ public class AlgaeIOSpark implements AlgaeIO {
             SparkConstants.getDefaultMax(AlgaeConstants.motorRightChannel, true));
     solenoid =
         new DoubleSolenoid(
+            22,
             PneumaticsModuleType.REVPH,
             AlgaeConstants.solenoidChannelForward,
             AlgaeConstants.solenoidChannelReverse);

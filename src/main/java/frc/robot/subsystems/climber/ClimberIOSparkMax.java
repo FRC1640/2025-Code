@@ -32,6 +32,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftEncoder = liftSpark.getEncoder();
     doubleSolenoid =
         new DoubleSolenoid(
+            22,
             PneumaticsModuleType.REVPH,
             ClimberConstants.solenoidForwardChannel,
             ClimberConstants.solenoidReverseChannel);

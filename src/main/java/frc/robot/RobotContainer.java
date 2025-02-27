@@ -336,7 +336,7 @@ public class RobotContainer {
                 Logger.recordOutput(
                     "LiftDone",
                     liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae()));
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(
@@ -403,7 +403,7 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
                     && (gantrySubsystem.isAtPreset(
                             coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
                         || algaeMode)
@@ -427,7 +427,6 @@ public class RobotContainer {
 
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
-
     new Trigger(
             () ->
                 RobotOdometry.instance
@@ -521,7 +520,8 @@ public class RobotContainer {
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)));
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
 
     operatorController
         .rightTrigger()
@@ -585,8 +585,8 @@ public class RobotContainer {
 
   public Command getPlaceCommand() {
     return new ConditionalCommand(
-        autoScoringCommandFactory.algaeAutoPickup(),
-        autoScoringCommandFactory.autoPlace(),
+        autoScoringCommandFactory.algaeAutoPickup().repeatedly(),
+        autoScoringCommandFactory.autoPlace().repeatedly(),
         () -> algaeMode);
   }
 

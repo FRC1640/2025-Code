@@ -62,7 +62,7 @@ public class FollowPathNearest extends FollowPath {
     pose2dArray = new Pose2d[] {midPoint, nearestPos};
     endRotation = findNearest(positions.get()).getRotation();
 
-    PathplannerWeight.overrideRotation(() -> omegaOverride(() -> nearestPos.getRotation()));
+    // PathplannerWeight.overrideRotation(() -> omegaOverride(() -> nearestPos.getRotation()));
 
     super.startPath();
   }

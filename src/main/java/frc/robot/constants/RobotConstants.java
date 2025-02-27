@@ -107,7 +107,7 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.5;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(1, 0.7, Math.PI, 4 * Math.PI);
+        new PathConstraints(1, 0.3, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {

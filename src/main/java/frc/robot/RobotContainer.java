@@ -698,6 +698,16 @@ public class RobotContainer {
             .finallyDo(() -> System.out.println("preset & wait complete")));
 
     NamedCommands.registerCommand(
+        "SafeAndWait",
+        new WaitUntilCommand(
+                () ->
+                    (liftSubsystem.isAtPreset(
+                            algaeMode ? coralPreset.getLift() : coralPreset.getLiftAlgae())
+                        && gantrySubsystem.isAtPreset(coralPreset, true)))
+            .deadlineFor(setupAutoPlace(() -> CoralPreset.Safe))
+            .finallyDo(() -> System.out.println("safe")));
+
+    NamedCommands.registerCommand(
         "AutoAlign",
         new InstantCommand(() -> followPathNearest.startPath())
             .alongWith(

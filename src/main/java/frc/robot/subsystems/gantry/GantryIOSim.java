@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gantry;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -22,6 +23,12 @@ public class GantryIOSim implements GantryIO {
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocityPID");
   private boolean limits = false;
+  private final ProfiledPIDController gantryPPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryProfiledPID, GantryConstants.constraints);
+  private final ProfiledPIDController gantryVelocityProfiledPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryVelocityProfiledPID, GantryConstants.velocityConstraints);
 
   public GantryIOSim(BooleanSupplier gantryLimitSwitch) {
     this.gantryLimitSwitch = gantryLimitSwitch;
@@ -63,6 +70,40 @@ public class GantryIOSim implements GantryIO {
                 voltage,
                 GantryConstants.gantryLimits.low,
                 limits ? GantryConstants.gantryLimits.high : 999999)));
+  }
+
+  @Override
+  public void setGantryPositionMotionProfile(double position, GantryIOInputs inputs) {
+    gantryPPID.setGoal(position);
+    setGantryVoltage(
+        MotorLim.clampVoltage(
+            gantryPPID.calculate(inputs.encoderPosition)
+                + ff.calculate(gantryPPID.getSetpoint().velocity)),
+        inputs);
+
+    velocitySetpoint = gantryPPID.getSetpoint().velocity;
+  }
+
+  @Override
+  public void resetGantryMotionProfile(GantryIOInputs inputs) {
+    gantryPPID.reset(inputs.encoderPosition);
+  }
+
+  @Override
+  public void setGantryVelocityMotionProfile(double vel, GantryIOInputs inputs) {
+    gantryPPID.setGoal(vel);
+    setGantryVoltage(
+        MotorLim.clampVoltage(
+            gantryVelocityProfiledPID.calculate(inputs.encoderPosition)
+                + ff.calculate(gantryVelocityProfiledPID.getSetpoint().velocity)),
+        inputs);
+
+    velocitySetpoint = vel;
+  }
+
+  @Override
+  public void resetGantryVelocityMotionProfile(GantryIOInputs inputs) {
+    gantryVelocityProfiledPID.reset(inputs.encoderPosition);
   }
 
   @Override

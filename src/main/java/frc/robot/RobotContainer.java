@@ -298,7 +298,7 @@ public class RobotContainer {
             (x) ->
                 coralAdjust(
                     DistanceManager.addRotatedDim(
-                        x, RobotDimensions.robotLength / 2, x.getRotation()),
+                        x, (algaeMode ? 0 : RobotDimensions.robotLength / 2), x.getRotation()),
                     () -> coralPreset),
             driveSubsystem);
 
@@ -397,7 +397,8 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.5
-                    && followPathNearest.isEnabled())
+                    && followPathNearest.isEnabled()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
@@ -410,15 +411,16 @@ public class RobotContainer {
                     && liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
                     && (gantrySubsystem.isAtPreset(
-                            coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
-                        || algaeMode)
-                    && !algaeIntakeSubsystem.hasAlgae())
+                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
+                    && !algaeIntakeSubsystem.hasAlgae()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
     new Trigger(
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
-                    && algaeIntakeSubsystem.hasAlgae())
+                    && algaeIntakeSubsystem.hasAlgae()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(
             algaeCommandFactory
                 .processCommand()
@@ -464,14 +466,14 @@ public class RobotContainer {
             () ->
                 coralOuttakeSubsystem.hasCoral()
                     && Robot.getState()
-                        != RobotState.AUTONOMOUS /* driveController.getHID().getXButton() */)
+                        == RobotState.TELEOP /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0.4)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
     new Trigger(
             () ->
                 algaeIntakeSubsystem.hasAlgae()
                     && Robot.getState()
-                        != RobotState.AUTONOMOUS /* driveController.getHID().getYButton() */)
+                        == RobotState.TELEOP /* driveController.getHID().getYButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
     // new Trigger(() -> coralPreset.isRight())

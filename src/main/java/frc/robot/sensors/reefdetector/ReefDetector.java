@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO reefDetectorIO;
   private ReefDetectorIOInputsAutoLogged inputs = new ReefDetectorIOInputsAutoLogged();
+  private boolean detect;
 
   public ReefDetector(ReefDetectorIO reefDetectorIO) {
     this.reefDetectorIO = reefDetectorIO;
@@ -26,7 +27,7 @@ public class ReefDetector extends PeriodicBase {
   }
 
   public boolean isDetecting() {
-    return inputs.isDetecting;
+    return detect;
   }
 
   public double getDistanceToReef() {

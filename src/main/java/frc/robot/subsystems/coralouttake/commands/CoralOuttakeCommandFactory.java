@@ -49,7 +49,11 @@ public class CoralOuttakeCommandFactory {
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
         .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
 
-    new Trigger(() -> !intakeSubsystem.isCoralDetected() && intakeSubsystem.hasCoral())
+    new Trigger(
+            () ->
+                !intakeSubsystem.isCoralDetected()
+                    && intakeSubsystem.hasCoral()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(runBack());
   }
 }

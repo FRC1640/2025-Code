@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot.Mode;
@@ -429,7 +430,7 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.povIsDownwards())
         .onTrue(new InstantCommand(() -> algaeMode = false));
 
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae())
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
     new Trigger(
             () ->
@@ -682,6 +683,31 @@ public class RobotContainer {
         new InstantCommand(
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
 
+    NamedCommands.registerCommand(
+        "HoldAlgae", algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
+    NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
+    NamedCommands.registerCommand(
+        "WaitForCoral",
+        new WaitUntilCommand(() -> coralOuttakeSubsystem.hasCoral())
+            .alongWith(coralOuttakeCommandFactory.setIntakeVoltage(() -> 3)));
+
+    NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));
+    NamedCommands.registerCommand("Safe", autonAutoPlace(() -> CoralPreset.Safe));
+    NamedCommands.registerCommand(
+        "WaitForPreset",
+        new WaitUntilCommand(
+                () ->
+                    liftSubsystem.isAtPreset(
+                            algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
+                        && (gantrySubsystem.isAtPreset(
+                                coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+                            || algaeMode))
+            .alongWith(autonAutoPlace(() -> coralPreset)));
+    NamedCommands.registerCommand(
+        "",
+        getPlaceCommand().alongWith(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
+
+    NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
   }

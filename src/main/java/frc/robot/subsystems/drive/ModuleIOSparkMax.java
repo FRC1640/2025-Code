@@ -43,8 +43,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     steerPID =
         RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "steerPID" + id.id.toString());
     driveSpark = SparkConstants.driveFlex(id.driveID);
-    steerSpark =
-        SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerID, true));
+    steerSpark = SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerID, true));
     timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     drivePositionQueue =
         SparkOdometryThread.getInstance()

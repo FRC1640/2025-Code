@@ -2,7 +2,9 @@
   "robotWidth": 0.9271,
   "robotLength": 0.9271,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "L1 Spam Opposite"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

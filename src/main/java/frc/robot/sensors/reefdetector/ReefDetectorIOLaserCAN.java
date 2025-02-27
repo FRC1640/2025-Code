@@ -28,28 +28,42 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
 
   public double getDistance() {
     Measurement m = laserCan.getMeasurement();
-    if (isDetecting()) {
-      return m.distance_mm;
+    if (m != null) {
+      if (m.status == 0) {
+        return m.distance_mm;
+      }
     }
     return Double.MAX_VALUE;
   }
 
-  public boolean isDetecting() {
-    if (getDistance() < ReefDetectorConstants.detectionThresh
-        && distanceBuffer.getSample(System.currentTimeMillis() - 0.06).isPresent()) {
-      if (distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get() - getDistance() > 20) {
-        return true;
-      }
-    }
+  // public boolean isDetecting() {
+  //   if (getDistance() < ReefDetectorConstants.detectionThresh
+  //       && distanceBuffer.getSample(System.currentTimeMillis() - 0.06).isPresent()) {
+  //     if (distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get() - getDistance() > 20)
+  // {
+  //       return true;
+  //     }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = isConnected;
-    inputs.isDetecting = getDistance() < ReefDetectorConstants.detectionThresh;
+    inputs.isDetecting = false;
     inputs.distanceToReef = getDistance();
-    distanceBuffer.addSample(System.currentTimeMillis(), getDistance());
+    if (getDistance() < Double.MAX_VALUE) {
+      distanceBuffer.addSample(System.currentTimeMillis(), getDistance());
+      if (getDistance() < ReefDetectorConstants.detectionThresh) {
+        if (distanceBuffer.getSample(System.currentTimeMillis() - 0.06).isPresent()) {
+          if (distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get() - getDistance() > 15
+              && distanceBuffer.getSample(System.currentTimeMillis() - 0.06).get()
+                  < ReefDetectorConstants.detectionThresh) {
+            inputs.isDetecting = true;
+          }
+        }
+      }
+    }
   }
 }

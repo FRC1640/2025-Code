@@ -66,6 +66,50 @@
           "data": {
             "name": "PlaceTrough"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L1 Spam Opposite 4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunBackCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L1 Spam Opposite 5"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PlaceTrough"
+          }
         }
       ]
     }

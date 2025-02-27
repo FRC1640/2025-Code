@@ -54,12 +54,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "L4 Processor Back 2"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "WaitForCoral"
@@ -94,6 +88,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": []
           }
         },
         {

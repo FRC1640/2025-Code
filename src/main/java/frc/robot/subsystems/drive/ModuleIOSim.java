@@ -12,17 +12,24 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 
 public class ModuleIOSim implements ModuleIO {
+  private double velocitySetpoint = 0;
   private final DCMotorSim driveSim;
   private final DCMotorSim turnSim;
   private double driveAppliedVolts = 0.0;
   private double turnAppliedVolts = 0.0;
 
-  private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
-  private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFF(RobotPIDConstants.driveFF);
-  private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
+  private final PIDController drivePID;
+  private final SimpleMotorFeedforward driveFF;
+  private final PIDController steerPID;
 
   public ModuleIOSim(ModuleInfo id) {
+    drivePID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "drivePID" + id.id.toString());
+    driveFF =
+        RobotPIDConstants.constructFFSimpleMotor(
+            RobotPIDConstants.driveFF, "driveFF" + id.id.toString());
+    steerPID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "steerPID" + id.id.toString());
     DCMotor driveGearbox = DCMotor.getNeoVortex(1);
     DCMotor turnGearbox = DCMotor.getNeo550(1);
     driveSim =
@@ -42,6 +49,7 @@ public class ModuleIOSim implements ModuleIO {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
     setDriveVoltage(pidSpeed);
+    velocitySetpoint = velocity;
   }
 
   @Override
@@ -77,7 +85,7 @@ public class ModuleIOSim implements ModuleIO {
     inputs.driveAppliedVoltage = driveAppliedVolts;
     inputs.driveCurrentAmps = driveSim.getCurrentDrawAmps();
 
-    inputs.turnConnected = true;
+    inputs.steerConnected = true;
     inputs.steerAngleDegrees += (turnSim.getAngularVelocityRPM() * 360 / 60) * 0.02;
     inputs.steerRadPerSec = turnSim.getAngularVelocityRPM() * 2 * Math.PI / 60;
     inputs.steerAppliedVoltage = turnAppliedVolts;
@@ -88,5 +96,10 @@ public class ModuleIOSim implements ModuleIO {
     inputs.odometryTurnPositions =
         new Rotation2d[] {Rotation2d.fromDegrees(inputs.steerAngleDegrees)};
     inputs.driveVelocities = new double[] {inputs.driveVelocityMetersPerSecond};
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

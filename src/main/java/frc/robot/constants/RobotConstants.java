@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -9,17 +10,108 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
+import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.logging.MotorLoggingManager;
+import frc.robot.util.tools.Limits;
+import frc.robot.util.tools.RobotSwitch;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
+  // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
+
+  public class RobotDimensions {
+    public static final double robotWidth = 1;
+    public static final double robotLength = 1; // 0.927
+    public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
+  }
+
+  public class TestConfig {
+    public static final TestingSetting tuningMode = TestingSetting.motorTest;
+  }
+
+  public class MotorInfo {
+    public static final MotorLoggingManager motorLoggingManager =
+        new MotorLoggingManager()
+            .addMotorAlias(GantryConstants.gantrySparkID, "Gantry")
+            .addMotorAlias(ClimberConstants.climberLiftMotorID, "Climber Lift")
+            .addMotorAlias(ClimberConstants.climberWinch1MotorID, "Climber Winch 1 (Leader)")
+            .addMotorAlias(ClimberConstants.climberWinch2MotorID, "Climber Winch 2 (Follower)")
+            .addMotorAlias(AlgaeConstants.motorLeftChannel, "Algae Motor Left")
+            .addMotorAlias(AlgaeConstants.motorRightChannel, "Algae Motor Right")
+            .addMotorAlias(LiftConstants.liftLeaderMotorID, "Lift Leader")
+            .addMotorAlias(LiftConstants.liftFollowerMotorID, "Lift Follower")
+            .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
+  }
+
+  public class PneumaticsConstants {
+    public static final int pneumaticsHubID = 22;
+  }
+
+  public class AprilTagPositionSettings {
+    public static final AprilTagSetting fieldPositionType = AprilTagSetting.WPILibWelded;
+    public static final String WPICalOutputJson = "ImportedLayout.json";
+  }
+
+  public class RobotConfigConstants {
+    public static final RobotType robotType = RobotType.Prime24;
+    // subsystems
+    public static final boolean gantrySubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Deux24, false)
+            .get();
+
+    public static final boolean liftSubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Deux24, false)
+            .get();
+    public static final boolean algaeIntakeEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, true)
+            .get();
+
+    public static final boolean coralOuttakeSubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Deux24, false)
+            .get();
+
+    public static final boolean climberSubsystemEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, true)
+            .get();
+    // sensors
+    public static final boolean reefDetectorEnabled =
+        new RobotSwitch<Boolean>(true)
+            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Deux24, false)
+            .get();
+
+    // odometry
+    public static final boolean gyroEnabled = new RobotSwitch<Boolean>(true).get();
+  }
+
   public static enum PivotId {
     FL,
     FR,
     BL,
     BR;
+  }
+
+  public static class AutoAlignConfig {
+    public static final double maxDistanceFromTarget = 0.5;
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(1, 0.3, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -56,23 +148,225 @@ public class RobotConstants {
         new SwerveDriveKinematics(
             frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 3, 2, 0, 45);
+    public static final ModuleInfo FL = new ModuleInfo(PivotId.FL, 1, 2, 2, 45);
 
-    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 9, 8, 2, -45);
+    public static final ModuleInfo FR = new ModuleInfo(PivotId.FR, 3, 4, 0, -45);
 
-    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 4, 1, 135);
+    public static final ModuleInfo BL = new ModuleInfo(PivotId.BL, 5, 6, 1, 135);
 
-    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 6, 3, -135);
+    public static final ModuleInfo BR = new ModuleInfo(PivotId.BR, 7, 8, 3, -135);
+
+    public static final double maxAntiTipCorrectionSpeed = 1.5;
+    public static final double minTipDegrees = 6;
   }
 
   public static class CameraConstants {
-    public static final CameraConstant frontCamera =
+    public static final CameraConstant frontCameraLeft =
         new CameraConstant(
             new SimCameraProperties(),
-            new Transform3d(new Translation3d(), new Rotation3d()),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(29.5 / 2),
+                    -Units.inchesToMeters(29.5 / 2 - 8),
+                    Units.inchesToMeters(10.5)),
+                new Rotation3d()),
             1,
-            "Front");
-    public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.00001);
+            "Dodds",
+            "Front Left");
+
+    public static final CameraConstant frontCameraRight =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(7.575),
+                    -Units.inchesToMeters(13.325),
+                    Units.inchesToMeters(14.1875)),
+                new Rotation3d(Math.toRadians(0), Math.toRadians(-2), Math.toRadians(-2.5))),
+            1,
+            "Park",
+            "Front Right");
+
+    public static final CameraConstant backCamera =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(
+                new Translation3d(0.146, -0.356, 0.406),
+                new Rotation3d(0, Math.toRadians(1), Math.PI)),
+            1,
+            "BackLL",
+            "Back");
+    public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);
     public static final Matrix<N3, N1> defaultVisionStandardDev = VecBuilder.fill(2, 2, 9999999);
+  }
+
+  public static class LiftConstants {
+    public static final int liftLeaderMotorID = new RobotSwitch<Integer>(9).get();
+    public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
+    public static final double gearRatio = 5;
+    public static final Limits liftLimits = new Limits(0.0, 0.575);
+    public static final double liftMaxSpeed = 2;
+    public static final double liftMaxAccel = 2;
+    public static final TrapezoidProfile.Constraints constraints =
+        new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
+    public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+
+    public enum GantrySetpoint {
+      LEFT,
+      RIGHT,
+      CENTER;
+    }
+
+    public enum CoralPreset {
+      Pickup(0, GantrySetpoint.CENTER),
+      Safe(0, 0.08, GantrySetpoint.CENTER),
+      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
+      LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
+      RightL3(0.28, 0.485, GantrySetpoint.RIGHT),
+      LeftL4(0.569, GantrySetpoint.LEFT),
+      RightL4(0.569, GantrySetpoint.RIGHT),
+      Trough(0, GantrySetpoint.RIGHT);
+
+      public final double lift;
+      public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
+      private double liftAlgae;
+
+      private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.liftAlgae = liftAlgae;
+        this.gantrySetpoint = setpoint;
+      }
+
+      private CoralPreset(double lift, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.liftAlgae = lift;
+        this.gantrySetpoint = setpoint;
+      }
+
+      public double getLift() {
+        return lift;
+      }
+
+      public double getLiftAlgae() {
+        return liftAlgae;
+      }
+
+      public double getGantry(boolean dsSide) {
+        switch (gantrySetpoint) {
+          case LEFT:
+            return dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+          case RIGHT:
+            return !dsSide
+                ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+                : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+          case CENTER:
+            return GantryConstants.gantryLimitCenter;
+          default:
+            return GantryConstants.gantryLimitCenter / 2;
+        }
+      }
+
+      public GantrySetpoint getGantrySetpoint(boolean dSide) {
+        switch (gantrySetpoint) {
+          case LEFT:
+            return false ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case RIGHT:
+            return true ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;
+          case CENTER:
+            return GantrySetpoint.CENTER;
+          default:
+            return GantrySetpoint.CENTER;
+        }
+      }
+
+      public boolean isRight() {
+        return gantrySetpoint == GantrySetpoint.RIGHT;
+      }
+    }
+  }
+
+  public static class ReefDetectorConstants {
+    public static final int channel = new RobotSwitch<Integer>(15).get();
+    public static final double detectionThresh = 545;
+    public static final int averageLength = 20;
+    public static final double averagePercentage = 0.8;
+    public static final double waitTimeSeconds = 0.1;
+  }
+
+  // TODO replace with actual values
+  public static class WarningThresholdConstants {
+    public static final double maxVortexMotorCurrent = 90;
+    public static final double maxNeoMotorCurrent = 80;
+    public static final double maxNeo550MotorCurrent = 70;
+    public static final double maxMotorTemp = 60; // in degrees celcius
+    public static final double minBatteryVoltage = 10.5;
+  }
+
+  // TODO replace with actual values
+  public static class ClimberConstants {
+    public static final int climberLiftMotorID = new RobotSwitch<Integer>(15).get();
+    public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
+    public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
+
+    public static final Limits liftLimits = new Limits(-999999999999.0, 999999999.0);
+    public static final double winchClimbedPosition = 45;
+    public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
+    public static final ResolverVoltageInfo winchResolverInfo =
+        new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
+    public static final ResolverVoltageInfo liftResolverInfo =
+        new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
+
+    public static final double gearRatio = 5;
+    public static final double pulleyRadius = 1;
+
+    public static final int solenoidForwardChannel = 2;
+    public static final int solenoidReverseChannel = 3;
+
+    public static final int sensor1Channel = 2;
+    public static final int sensor2Channel = 3;
+  }
+
+  public static class GantryConstants {
+    public static final int gantrySparkID = new RobotSwitch<Integer>(17).get();
+    public static final double gantryGearRatio = 27.4;
+    public static final double pulleyRadius = Units.inchesToMeters(0.5);
+    // left -> right limit
+    public static final Limits gantryLimits = new Limits(0.01, 0.37);
+    public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
+    public static final double gantryPadding = 0.03;
+    public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
+    public static final double alignSpeed = 0.1;
+    public static final double gantryMaxVel = 2; // PLACEHOLDER
+    public static final double gantryMaxAccel = 2; // PLACEHOLDER
+    public static final double gantryMaxJerk = 2; // PLACEHOLDER
+    public static final TrapezoidProfile.Constraints constraints =
+        new TrapezoidProfile.Constraints(gantryMaxVel, gantryMaxAccel);
+    public static final TrapezoidProfile.Constraints velocityConstraints =
+        new TrapezoidProfile.Constraints(gantryMaxAccel, gantryMaxJerk);
+  }
+
+  public static class CoralOuttakeConstants {
+    public static final double gearRatio = 0;
+    public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
+    // if you dont update this i will find you // *gulp* // You understand what
+    // happens if you don't
+    public static final int coralDetectorChannel =
+        new RobotSwitch<Integer>(7).get(); // update this too
+    public static final double distanceRequired = 2;
+    public static final double passiveSpeed = 0.25;
+  }
+
+  public static class AlgaeConstants {
+    public static int motorLeftChannel = new RobotSwitch<Integer>(11).get();
+    public static int motorRightChannel = new RobotSwitch<Integer>(12).get();
+    public static int solenoidChannelForward = 0;
+    public static int solenoidChannelReverse = 1;
+    public static double passiveSpeed = 0.1;
+    public static double highSpeed = 0.7;
+    public static double gearRatio = 1;
+    public static double currentThresh = 45;
   }
 }

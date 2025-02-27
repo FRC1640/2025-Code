@@ -2,7 +2,7 @@ package frc.robot.sensors.gyro;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.sensors.odometry.RobotOdometry;
+import java.util.function.DoubleSupplier;
 
 public class GyroIOSim implements GyroIO {
 
@@ -10,7 +10,11 @@ public class GyroIOSim implements GyroIO {
 
   double offset;
 
-  public GyroIOSim() {}
+  private DoubleSupplier rotRate;
+
+  public GyroIOSim(DoubleSupplier rotRate) {
+    this.rotRate = rotRate;
+  }
 
   @Override
   public void resetGyro(GyroIOInputs inputs) {
@@ -19,11 +23,16 @@ public class GyroIOSim implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.angleRadiansRaw = RobotOdometry.instance.getPose("Normal").getRotation().getRadians();
+    inputs.isConnected = true;
+    inputs.isCalibrating = false;
+    inputs.angleRadiansRaw = inputs.angleRadiansRaw + rotRate.getAsDouble() * 0.02;
     angle = new Rotation2d(inputs.angleRadiansRaw);
 
     inputs.odometryYawTimestamps = new double[] {Timer.getFPGATimestamp()};
     inputs.odometryYawPositions = new Rotation2d[] {Rotation2d.fromRadians(inputs.angleRadiansRaw)};
+
+    inputs.pitch = new Rotation2d(0);
+    inputs.roll = new Rotation2d(0);
   }
 
   @Override

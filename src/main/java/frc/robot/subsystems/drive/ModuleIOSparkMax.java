@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,50 +12,60 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.sensors.odometry.SparkOdometryThread;
-import frc.robot.sensors.resolvers.ResolverVoltage;
+import frc.robot.sensors.resolvers.ResolverPWM;
+import frc.robot.util.spark.SparkConfigurer;
 import java.util.Queue;
 
 public class ModuleIOSparkMax implements ModuleIO {
+  private double velocitySetpoint = 0;
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
   private final Queue<Double> driveVelocityQueue;
 
   private final RelativeEncoder driveEncoder;
-  private final ResolverVoltage steeringEncoder;
+  private final ResolverPWM steeringEncoder;
+  // private final ResolverVoltage steeringEncoder;
 
   private final SparkFlex driveSpark;
   private final SparkMax steerSpark;
 
-  private final PIDController drivePID = RobotPIDConstants.constructPID(RobotPIDConstants.drivePID);
-  private final SimpleMotorFeedforward driveFF =
-      RobotPIDConstants.constructFF(RobotPIDConstants.driveFF);
-  private final PIDController steerPID = RobotPIDConstants.constructPID(RobotPIDConstants.steerPID);
+  private final PIDController drivePID;
+  private final SimpleMotorFeedforward driveFF;
+  private final PIDController steerPID;
 
   public ModuleIOSparkMax(ModuleInfo id) {
-    driveSpark = SparkConstants.driveFlex(id.driveChannel);
-    steerSpark = SparkConstants.getDefaultSparkMax(id.steerChannel);
+    drivePID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.drivePID, "drivePID" + id.id.toString());
+    driveFF =
+        RobotPIDConstants.constructFFSimpleMotor(
+            RobotPIDConstants.driveFF, "driveFF" + id.id.toString());
+    steerPID =
+        RobotPIDConstants.constructPID(RobotPIDConstants.steerPID, "steerPID" + id.id.toString());
+    driveSpark = SparkConstants.driveFlex(id.driveID);
+    steerSpark = SparkConfigurer.configSparkMax(SparkConstants.getDefaultMax(id.steerID, true));
     timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     drivePositionQueue =
         SparkOdometryThread.getInstance()
             .registerSignal(driveSpark, () -> driveSpark.getEncoder().getPosition());
 
     driveEncoder = driveSpark.getEncoder();
-    steeringEncoder =
-        new ResolverVoltage(
-            id.resolverChannel,
-            DriveConstants.initalSlope,
-            DriveConstants.finalSlope,
-            180.0,
-            90.0,
-            id.angleOffset);
+    steeringEncoder = new ResolverPWM(id.resolverChannel, id.angleOffset);
+    // steeringEncoder =
+    //     new ResolverVoltage(
+    //         id.resolverChannel,
+    //         DriveConstants.initalSlope,
+    //         DriveConstants.finalSlope,
+    //         180.0,
+    //         90.0,
+    //         id.angleOffset);
     driveVelocityQueue =
         SparkOdometryThread.getInstance()
             .registerSignal(driveSpark, () -> driveEncoder.getVelocity());
 
     turnPositionQueue =
         SparkOdometryThread.getInstance()
-            .registerSignal(steerSpark, () -> steeringEncoder.getDegrees());
+            .registerSignal(steerSpark, () -> steeringEncoder.getDegrees() % 360);
   }
 
   @Override
@@ -73,7 +84,6 @@ public class ModuleIOSparkMax implements ModuleIO {
         driveSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.driveCurrentAmps = driveSpark.getOutputCurrent();
     inputs.driveTempCelsius = driveSpark.getMotorTemperature();
-    inputs.steerAngleDegrees = steeringEncoder.getDegrees();
     inputs.steerAppliedVoltage =
         steerSpark.getAppliedOutput() * RobotController.getBatteryVoltage();
 
@@ -81,10 +91,10 @@ public class ModuleIOSparkMax implements ModuleIO {
     inputs.steerRadPerSec =
         steerSpark.getEncoder().getVelocity() * Math.PI * 2 / 60 / DriveConstants.steerGearRatio;
     inputs.steerTempCelsius = steerSpark.getMotorTemperature();
-    inputs.steerEncoderVoltage = steeringEncoder.getVoltage();
+    // inputs.steerEncoderRawValue = steeringEncoder.getFrequency();
     inputs.steerEncoderRelative =
         (360 - (steerSpark.getEncoder().getPosition() / DriveConstants.steerGearRatio * 360)) % 360;
-    inputs.steerAngleDegrees = steeringEncoder.getDegrees() % 360;
+    inputs.steerAngleDegrees = (steeringEncoder.getDegrees()) % 360;
 
     inputs.odometryTimestamps =
         timestampQueue.stream().mapToDouble((Double value) -> value).toArray();
@@ -120,7 +130,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     turnPositionQueue.clear();
     driveVelocityQueue.clear();
 
-    inputs.rawEncoderValue = steeringEncoder.getRawValue();
+    // inputs.rawEncoderValue = steeringEncoder.getRawValue();
   }
 
   @Override
@@ -128,6 +138,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     double pidSpeed = driveFF.calculate(velocity);
     pidSpeed += drivePID.calculate(inputs.driveVelocityMetersPerSecond, velocity);
     setDriveVoltage(pidSpeed);
+    velocitySetpoint = velocity;
   }
 
   @Override
@@ -139,11 +150,16 @@ public class ModuleIOSparkMax implements ModuleIO {
   public void setSteerPosition(Rotation2d angle, ModuleIOInputs inputs) {
     Rotation2d delta = angle.minus(Rotation2d.fromDegrees(inputs.steerAngleDegrees));
     double sin = Math.sin(delta.getRadians());
-    setSteerVoltage(steerPID.calculate(sin, 0) * 12);
+    setSteerVoltage(steerPID.calculate(sin, 0) * 6);
   }
 
   @Override
   public void setSteerVoltage(double voltage) {
-    steerSpark.setVoltage(voltage);
+    steerSpark.setVoltage(MathUtil.clamp(voltage, -12, 12));
+  }
+
+  @Override
+  public double velocitySetpoint() {
+    return velocitySetpoint;
   }
 }

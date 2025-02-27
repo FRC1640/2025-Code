@@ -13,16 +13,16 @@ public interface ModuleIO extends AutoCloseable {
     public double driveCurrentAmps;
     public double driveTempCelsius;
 
-    public boolean turnConnected = false;
+    public boolean steerConnected = false;
     public double steerRadPerSec;
     public double steerAngleDegrees;
     public double steerAppliedVoltage;
     public double steerCurrentAmps;
     public double steerTempCelsius;
 
-    public double steerEncoderVoltage;
+    public double steerEncoderRawValue;
     public double steerEncoderRelative;
-    public int rawEncoderValue;
+    // public int rawEncoderValue;
 
     public double[] odometryTimestamps = new double[] {};
     public double[] odometryDrivePositionsMeters = new double[] {};
@@ -42,4 +42,8 @@ public interface ModuleIO extends AutoCloseable {
 
   @Override
   default void close() {}
+
+  public default double velocitySetpoint() {
+    return 0.0;
+  }
 }

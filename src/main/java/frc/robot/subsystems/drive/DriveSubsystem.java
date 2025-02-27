@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -20,7 +21,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Robot;
@@ -28,13 +28,15 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
+import frc.robot.util.tools.ChassisSpeedHelper;
+import frc.robot.util.tools.RequirementHandler;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -78,7 +80,11 @@ public class DriveSubsystem extends SubsystemBase {
                 modules[2],
                 modules[3],
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(15)));
+                new SysIdRoutine.Config(
+                    Volts.per(Seconds).of(2),
+                    Volts.of(8),
+                    Seconds.of(15),
+                    (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
 
     RobotConfig config;
     try {
@@ -89,18 +95,18 @@ public class DriveSubsystem extends SubsystemBase {
       config = null;
     }
     AutoBuilder.configure(
-        () -> RobotOdometry.instance.getPose("Normal"),
+        () -> RobotOdometry.instance.getPose("Main"),
         (x) -> {
-          RobotOdometry.instance.setPose(x, "Normal");
           RobotOdometry.instance.resetGyro(x);
+          RobotOdometry.instance.setAllPose(x);
         },
         this::getChassisSpeeds,
-        (x) -> runVelocity(x, false, 0.0),
+        (x) -> PathplannerWeight.setSpeeds(x),
         new PPHolonomicDriveController(
-            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+            new PIDConstants(0.5, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-        this);
+        new RequirementHandler());
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -109,9 +115,9 @@ public class DriveSubsystem extends SubsystemBase {
         });
     PathPlannerLogging.setLogTargetPoseCallback(
         (targetPose) -> {
+          PathplannerWeight.setpoint = targetPose;
           Logger.recordOutput("Drive/Path/TrajectorySetpoint", targetPose);
         });
-
     setpointGenerator =
         new SwerveSetpointGenerator(
             config, // The robot configuration. This is the same config used for generating
@@ -149,6 +155,15 @@ public class DriveSubsystem extends SubsystemBase {
   @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/Measured")
   public ChassisSpeeds getChassisSpeeds() {
     return DriveConstants.kinematics.toChassisSpeeds(getActualSwerveStates());
+  }
+
+  public double chassisSpeedsMagnitude() {
+    return ChassisSpeedHelper.magnitude(getChassisSpeeds());
+  }
+
+  @AutoLogOutput(key = "Drive/SwerveChassisSpeeds/VelocityAngle")
+  public Rotation2d chassisSpeedsAngle() {
+    return ChassisSpeedHelper.angleOf(getChassisSpeeds()).rotateBy(gyro.getAngleRotation2d());
   }
 
   public Module[] getModules() {
@@ -196,14 +211,11 @@ public class DriveSubsystem extends SubsystemBase {
     Logger.recordOutput(
         "Drive/SwerveStates/DoubleCone",
         DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized));
+    // speedsOptimized = ChassisSpeeds.discretize(speedsOptimized, 0.02);
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredStateMetersPerSecond(previousSetpoint.moduleStates()[i]);
       // DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized)[i]);
     }
-  }
-
-  public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> runVelocity(speeds.get(), true, 2.5), this).finallyDo(() -> stop());
   }
 
   public static ChassisSpeeds inceptionMode(

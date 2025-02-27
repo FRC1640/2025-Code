@@ -37,7 +37,7 @@ public class CoralOuttakeCommandFactory {
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
         .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
 
-    new Trigger(() -> !intakeSubsystem.isCoralDetected() && !intakeSubsystem.hasCoral())
+    new Trigger(() -> !intakeSubsystem.isCoralDetected() && intakeSubsystem.hasCoral())
         .onTrue(
             (new InstantCommand(() -> runningBack = true)
                     .andThen(

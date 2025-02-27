@@ -355,6 +355,7 @@ public class RobotConstants {
     // happens if you don't
     public static final int coralDetectorChannel =
         new RobotSwitch<Integer>(7).get(); // update this too
+    public static final int hasCoralDetectorChannel = 6;
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 0.25;
   }

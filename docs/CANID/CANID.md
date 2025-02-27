@@ -21,11 +21,15 @@ This document provides a list of CAN IDs for all devices on the robot with a CAN
 - `15` - Climber elevator motor spark
 - `16` - Intake motor spark
 - `17` - Gantry motor spark
+- `22` - Pneumatics Hub
 
 ## CAN IDs in [Robot.java](./../../src/main/java/frc/robot/Robot.java)
 
 - `21` - Power Distribution Hub
-- `22` - Pneumatics Hub
+
+
+
+
 
 ---
 _Last updated: February 25, 2025_

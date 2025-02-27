@@ -50,6 +50,10 @@ public class RobotConstants {
             .addMotorAlias(CoralOuttakeConstants.intakeSparkID, "Coral Outtake");
   }
 
+  public class PneumaticsConstants {
+    public static final int pneumaticsHubID = 22;
+  }
+
   public class AprilTagPositionSettings {
     public static final AprilTagSetting fieldPositionType = AprilTagSetting.WPILibWelded;
     public static final String WPICalOutputJson = "ImportedLayout.json";

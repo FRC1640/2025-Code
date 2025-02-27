@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot.Mode;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
@@ -206,7 +207,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> 0.0, () -> 0.0)
+                    ? new ReefDetectorIOSim(() -> presetBoard.getTrough())
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -458,10 +459,18 @@ public class RobotContainer {
     driveController.b().whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 3));
     // operatorController.b().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 0.1));
     // rumble
-    new Trigger(() -> coralOuttakeSubsystem.hasCoral() /* driveController.getHID().getXButton() */)
+    new Trigger(
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    && Robot.getState()
+                        != RobotState.AUTONOMOUS /* driveController.getHID().getXButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0.4)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() /* driveController.getHID().getYButton() */)
+    new Trigger(
+            () ->
+                algaeIntakeSubsystem.hasAlgae()
+                    && Robot.getState()
+                        != RobotState.AUTONOMOUS /* driveController.getHID().getYButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
     // new Trigger(() -> coralPreset.isRight())
@@ -504,7 +513,9 @@ public class RobotContainer {
     operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
-    new Trigger(() -> (!coralOuttakeSubsystem.hasCoral())).onTrue(runLiftToSafe());
+    new Trigger(
+            () -> (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS))
+        .onTrue(runLiftToSafe());
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()
@@ -593,6 +604,19 @@ public class RobotContainer {
         () -> algaeMode);
   }
 
+  public Command autonAutoPlace(Supplier<CoralPreset> coralPreset) {
+    return new InstantCommand(
+            () -> {
+              presetActive =
+                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
+              gantryPresetActive = coralPreset.get();
+            })
+        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
+        .andThen(
+            autoScoringCommandFactory.gantryAlignCommand(
+                () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget())));
+  }
+
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
     return new InstantCommand(
         () -> {
@@ -644,8 +668,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("SetModeCoral", new InstantCommand(() -> algaeMode = false));
     NamedCommands.registerCommand("SetGantryRight", new InstantCommand(() -> gantryAuto = true));
     NamedCommands.registerCommand("SetGantryLeft", new InstantCommand(() -> gantryAuto = false));
-    NamedCommands.registerCommand(
-        "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
 
     NamedCommands.registerCommand(
         "SetupL4",
@@ -659,5 +681,8 @@ public class RobotContainer {
         "SetupL2",
         new InstantCommand(
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
+
+    NamedCommands.registerCommand(
+        "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
   }
 }

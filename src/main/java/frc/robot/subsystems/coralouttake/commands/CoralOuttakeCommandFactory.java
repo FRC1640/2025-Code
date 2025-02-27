@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.sensors.odometry.RobotOdometry;
@@ -26,8 +28,18 @@ public class CoralOuttakeCommandFactory {
         .finallyDo(() -> intakeSubsystem.setIntakeVoltage(0));
   }
 
+  public Command runBack() {
+    return (new InstantCommand(() -> runningBack = true)
+            .andThen(
+                setIntakeVoltage(() -> -1)
+                    .repeatedly()
+                    .until(() -> intakeSubsystem.isCoralDetected()))
+            .andThen(new InstantCommand(() -> runningBack = false)))
+        .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
+  }
+
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.hasCoral())
+    new Trigger(() -> !intakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -38,13 +50,6 @@ public class CoralOuttakeCommandFactory {
         .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
 
     new Trigger(() -> !intakeSubsystem.isCoralDetected() && intakeSubsystem.hasCoral())
-        .onTrue(
-            (new InstantCommand(() -> runningBack = true)
-                    .andThen(
-                        setIntakeVoltage(() -> -1)
-                            .repeatedly()
-                            .until(() -> intakeSubsystem.isCoralDetected()))
-                    .andThen(new InstantCommand(() -> runningBack = false)))
-                .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true))));
+        .onTrue(runBack());
   }
 }

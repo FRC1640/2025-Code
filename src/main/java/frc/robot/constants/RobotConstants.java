@@ -294,6 +294,7 @@ public class RobotConstants {
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
+    public static final double timeDerivative = 0.5;
   }
 
   // TODO replace with actual values

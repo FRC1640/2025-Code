@@ -1,6 +1,8 @@
 package frc.robot.sensors.gyro.imported;
 
+import com.studica.frc.AHRS.BoardYawAxis;
 import com.studica.frc.AHRS.NavXComType;
+import com.studica.frc.AHRS.NavXUpdateRate;
 import com.studica.frc.jni.AHRSJNI;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -53,69 +55,6 @@ public class AHRS implements NTSendable, AutoCloseable {
       return this.value;
     }
   };
-
-  /** Enum for the user to select which method to communcicate with a navx device */
-  public enum NavXComType {
-    kMXP_SPI(0),
-    kMXP_UART(1),
-    kUSB1(2),
-    kUSB2(3),
-    kI2C(4);
-
-    private int value;
-
-    private NavXComType(int value) {
-      this.value = value;
-    }
-
-    public int getValue() {
-      return this.value;
-    }
-  };
-
-  /**
-   * Enum for the user to select which custom update rate to run the NavX and NavX background thread
-   * at.
-   */
-  public enum NavXUpdateRate {
-    k4Hz(4),
-    k5Hz(5),
-    k8Hz(8),
-    k10Hz(10),
-    k20Hz(20),
-    k25Hz(25),
-    k40Hz(40),
-    k50Hz(50),
-    k100Hz(100),
-    k200Hz(200);
-
-    private int value;
-
-    private NavXUpdateRate(int value) {
-      this.value = value;
-    }
-
-    public int getValue() {
-      return this.value;
-    }
-  };
-
-  /**
-   * Indicates which sensor board axis is used as the "yaw" (gravity) axis.
-   *
-   * <p>This selection may be modified via the <a
-   * href=http://navx-mxp.kauailabs.com/installation/omnimount/>Omnimount</a> feature.
-   */
-  public static class BoardYawAxis {
-    public BoardAxis board_axis;
-    public boolean up;
-
-    public BoardYawAxis(int axis, boolean up) {
-      this.board_axis = BoardAxis.values()[axis];
-      this.up = up;
-    }
-  }
-  ;
 
   /**
    * Constructs the AHRS class using the selected communication. The update rate will be the

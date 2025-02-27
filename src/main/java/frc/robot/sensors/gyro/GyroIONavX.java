@@ -1,9 +1,9 @@
 package frc.robot.sensors.gyro;
 
-import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import com.studica.frc.AHRS.NavXUpdateRate;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.sensors.gyro.imported.AHRS;
 import frc.robot.sensors.odometry.SparkOdometryThread;
 import java.util.Queue;
 

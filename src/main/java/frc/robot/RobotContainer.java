@@ -620,8 +620,7 @@ public class RobotContainer {
             })
         .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
         .andThen(
-            autoScoringCommandFactory.gantryAlignCommand(
-                () -> gantryPresetActive, () -> AllianceManager.onDsSideReef(() -> getTarget())));
+            autoScoringCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -705,9 +704,7 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.isAtPreset(
                             algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && (gantrySubsystem.isAtPreset(
-                                coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
-                            || algaeMode))
+                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
             .alongWith(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",

@@ -33,10 +33,40 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4Left",
+      "name": "L4Right",
       "waypointRelativePos": 0.5907626208378082,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetModeCoral"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryRight"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

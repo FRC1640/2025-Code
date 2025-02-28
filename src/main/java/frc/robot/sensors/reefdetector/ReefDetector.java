@@ -1,6 +1,7 @@
 package frc.robot.sensors.reefdetector;
 
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import org.littletonrobotics.junction.Logger;
@@ -8,7 +9,7 @@ import org.littletonrobotics.junction.Logger;
 public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO reefDetectorIO;
   private ReefDetectorIOInputsAutoLogged inputs = new ReefDetectorIOInputsAutoLogged();
-  private double foundThresh = Double.MAX_VALUE;
+  private double foundThresh = ReefDetectorConstants.detectionThresh;
 
   public double getFoundThresh() {
     return foundThresh;
@@ -50,6 +51,6 @@ public class ReefDetector extends PeriodicBase {
   }
 
   public void reefFindReset() {
-    foundThresh = Double.MAX_VALUE;
+    foundThresh = ReefDetectorConstants.detectionThresh;
   }
 }

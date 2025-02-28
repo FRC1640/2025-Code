@@ -56,7 +56,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public boolean isCoralDetected() {
-    return inputs.coralDetected;
+    return inputs.coralDetectedHigh;
   }
 
   public double returnAppliedVoltage() {
@@ -76,6 +76,6 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    return RobotState.isAutonomous() ? inputs.coralDetected : hasCoral;
+
   }
 }

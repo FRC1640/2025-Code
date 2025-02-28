@@ -5,27 +5,7 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "EnableAprilTags"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HaveCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetModeCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 1"
+
           }
         },
         {
@@ -35,9 +15,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 2"
           }
         },
         {
@@ -47,9 +24,7 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 3"
+
           }
         },
         {
@@ -59,9 +34,7 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 4"
+
           }
         },
         {
@@ -71,33 +44,7 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceTrough"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 6"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L1 Spam Opposite 7"
+
           }
         },
         {

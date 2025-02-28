@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.util.tools.ChassisSpeedHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -53,9 +52,10 @@ public class FollowPath {
 
   public void restartPath() {
     stopPath();
-    idealStartingState =
-        new IdealStartingState(
-            ChassisSpeedHelper.magnitude(lastSpeeds), robotPose.get().getRotation());
+    // idealStartingState =
+    //     new IdealStartingState(
+    //         ChassisSpeedHelper.magnitude(lastSpeeds), robotPose.get().getRotation());
+    idealStartingState = null;
     startPath();
   }
 
@@ -122,8 +122,8 @@ public class FollowPath {
     Pose2d target = getFinalPosition();
     Pose2d robot = robotPose.get();
     boolean complete =
-        (target.getTranslation().getDistance(robot.getTranslation()) < 0.05
-            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 1);
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.15
+            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 2);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
     complete &=
         Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.005;

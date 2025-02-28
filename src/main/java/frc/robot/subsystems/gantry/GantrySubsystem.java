@@ -108,4 +108,20 @@ public class GantrySubsystem extends SubsystemBase {
   public void setLimitEnabled(boolean enable) {
     io.setLimitEnabled(enable);
   }
+
+  public void runGantryMotionProfile(double pos) {
+    io.setGantryPositionMotionProfile(pos, inputs);
+  }
+
+  public void resetGantryMotionProfile() {
+    io.resetGantryMotionProfile(inputs);
+  }
+
+  public void runGantryVelocityMotionProfile(double vel) {
+    io.setGantryVelocityMotionProfile(vel, inputs);
+  }
+
+  public void resetGantryVelocityMotionProfile() {
+    io.resetGantryVelocityMotionProfile(inputs);
+  }
 }

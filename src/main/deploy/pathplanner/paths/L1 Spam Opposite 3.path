@@ -3,29 +3,7 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4957386363636362,
-        "y": 7.245823863636363
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.7327950407434007,
-        "y": 7.166424486166904
-      },
-      "isLocked": false,
-      "linkedName": "CoralStationUp"
-    },
-    {
-      "anchor": {
-        "x": 3.839,
-        "y": 5.142
-      },
-      "prevControl": {
-        "x": 3.5199715909090905,
-        "y": 5.745085227272726
-      },
-      "nextControl": null,
-      "isLocked": false,
-      "linkedName": "UP-LEFT"
+
     }
   ],
   "rotationTargets": [],
@@ -48,7 +26,7 @@
   "folder": "L1 Spam Opposite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+
   },
   "useDefaultConstraints": true
 }

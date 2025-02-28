@@ -36,7 +36,44 @@
       "name": "L4LeftCoral",
       "waypointRelativePos": 0.5904761904761902,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryLeft"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -52,7 +89,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "L4 Scorer Processor",
+  "folder": "L4 Scorer Processor Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

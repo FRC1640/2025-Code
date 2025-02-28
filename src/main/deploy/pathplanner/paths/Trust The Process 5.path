@@ -61,7 +61,25 @@
       "name": "SetupSafe",
       "waypointRelativePos": 1.45238095238095,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupSafe"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

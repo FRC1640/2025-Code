@@ -1,4 +1,4 @@
-package frc.robot.util.tools.logging;
+package frc.robot.util.logging;
 
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;

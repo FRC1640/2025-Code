@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 1.342559586987497,
-        "y": 1.0530157016143142
+        "y": 1.053015701614314
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L1 Spam Processor",
+  "folder": "L1 Spam Processor Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 59.99999999999999

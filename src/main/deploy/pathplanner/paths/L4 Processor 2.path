@@ -20,8 +20,8 @@
         "y": 1.056
       },
       "prevControl": {
-        "x": 1.8891713492366093,
-        "y": 1.6166879254046056
+        "x": 1.8891713492366091,
+        "y": 1.6166879254046054
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L4 Scorer Processor",
+  "folder": "L4 Scorer Processor Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 59.99999999999999

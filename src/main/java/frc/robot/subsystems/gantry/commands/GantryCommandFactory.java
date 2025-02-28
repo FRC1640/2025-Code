@@ -20,7 +20,7 @@ public class GantryCommandFactory {
   public Command gantryPIDCommand(DoubleSupplier pos) {
     return new RunCommand(
             () -> gantrySubsystem.setCarriagePosition(pos.getAsDouble()), gantrySubsystem)
-        .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
+        // .until(() -> Math.abs(gantrySubsystem.getCarriagePosition() - pos.getAsDouble()) < 0.01)
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
@@ -63,24 +63,24 @@ public class GantryCommandFactory {
   public Command gantryDriftCommand() {
     return gantrySetVelocityCommand(
             () ->
-                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
                     ? GantryConstants.alignSpeed
                     : -GantryConstants.alignSpeed)
         .until(
             () ->
-                Math.abs(
-                        gantrySubsystem.getCarriagePosition()
-                            - GantryConstants.gantryLimits.low / 2)
+                Math.abs(gantrySubsystem.getCarriagePosition() - GantryConstants.gantryLimitCenter)
                     < GantryConstants.gantryPadding)
         .andThen(
             gantrySetVelocityCommand(
                     () ->
-                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimits.low / 2
+                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
                             ? -GantryConstants.alignSpeed
                             : GantryConstants.alignSpeed)
                 .until(
                     () ->
-                        Math.abs(gantrySubsystem.getCarriagePosition())
+                        Math.abs(
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimits.high)
                                 < GantryConstants.gantryPadding
                             || Math.abs(
                                     gantrySubsystem.getCarriagePosition()

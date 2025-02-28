@@ -42,29 +42,22 @@ public class LiftCommandFactory {
   }
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {
-    return new RunCommand(
-            () -> {
-              liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
-            },
-            liftSubsystem)
-        .finallyDo(
-            () -> {
-              liftSubsystem.setLiftVoltage(0);
-              liftSubsystem.resetLiftMotionProfile();
-            });
+    return new InstantCommand(() -> liftSubsystem.resetLiftMotionProfile())
+        .andThen(
+            new RunCommand(
+                    () -> {
+                      liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
+                    },
+                    liftSubsystem)
+                .finallyDo(
+                    () -> {
+                      liftSubsystem.setLiftVoltage(0);
+                      liftSubsystem.resetLiftMotionProfile();
+                    }));
   }
 
   public Command runLiftMotionProfile(double pos) {
-    return new RunCommand(
-            () -> {
-              liftSubsystem.runLiftMotionProfile(pos);
-            },
-            liftSubsystem)
-        .finallyDo(
-            () -> {
-              liftSubsystem.setLiftVoltage(0);
-              liftSubsystem.resetLiftMotionProfile();
-            });
+    return runLiftMotionProfile(() -> pos);
   }
 
   public boolean getLiftAtPreset(CoralPreset preset) {

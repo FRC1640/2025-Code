@@ -1,4 +1,4 @@
-package frc.robot.util.tools.logging;
+package frc.robot.util.logging;
 
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;

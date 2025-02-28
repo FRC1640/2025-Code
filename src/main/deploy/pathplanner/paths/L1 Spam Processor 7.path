@@ -50,7 +50,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "L1 Spam Processor",
+  "folder": "L1 Spam Processor Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 54.0

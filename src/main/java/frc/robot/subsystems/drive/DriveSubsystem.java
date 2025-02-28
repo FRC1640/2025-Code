@@ -80,7 +80,11 @@ public class DriveSubsystem extends SubsystemBase {
                 modules[2],
                 modules[3],
                 this,
-                new SysIdRoutine.Config(Volts.per(Seconds).of(2), Volts.of(8), Seconds.of(15)));
+                new SysIdRoutine.Config(
+                    Volts.per(Seconds).of(2),
+                    Volts.of(8),
+                    Seconds.of(15),
+                    (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
 
     RobotConfig config;
     try {
@@ -93,7 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Main"),
         (x) -> {
-          RobotOdometry.instance.setAllPose(x);
+          RobotOdometry.instance.setPose("Main", x);
           RobotOdometry.instance.resetGyro(x);
         },
         this::getChassisSpeeds,
@@ -207,6 +211,7 @@ public class DriveSubsystem extends SubsystemBase {
     Logger.recordOutput(
         "Drive/SwerveStates/DoubleCone",
         DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized));
+    // speedsOptimized = ChassisSpeeds.discretize(speedsOptimized, 0.02);
     for (int i = 0; i < 4; i++) {
       modules[i].setDesiredStateMetersPerSecond(previousSetpoint.moduleStates()[i]);
       // DriveConstants.kinematics.toSwerveModuleStates(speedsOptimized)[i]);

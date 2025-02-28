@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SetModeCoral"
+            "name": "HaveCoral"
           }
         },
         {
@@ -23,39 +23,84 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartSetup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "AutoReef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetModeAlgae"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L2LeftCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetModeAlgae"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetupL2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartSetup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
+              }
+            ]
           }
         },
         {
@@ -77,15 +122,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
+              }
+            ]
           }
         },
         {
@@ -107,15 +171,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "WaitForLift"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLift"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupSafe"
+                }
+              }
+            ]
           }
         },
         {

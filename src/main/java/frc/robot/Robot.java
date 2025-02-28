@@ -10,15 +10,17 @@ import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
+import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
+import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
-import frc.robot.util.tools.logging.LoggerManager;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -121,14 +123,13 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     FollowPathCommand.warmupCommand().schedule();
-    URCL.start();
   }
 
   @Override
   public void robotPeriodic() {
-    LoggerManager.updateLog();
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
+    LoggerManager.updateLog();
   }
 
   @Override
@@ -179,9 +180,17 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     state = RobotState.TEST;
-    CommandScheduler.getInstance().cancelAll();
-    Dashboard.getSysidCommand().schedule();
-    CommandScheduler.getInstance().getActiveButtonLoop().clear();
+    switch (TestConfig.tuningMode) {
+      case sysIDTesting:
+        CommandScheduler.getInstance().cancelAll();
+        Dashboard.getSysidCommand().schedule();
+        CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        break;
+      default:
+        LiveWindow.setEnabled(false);
+        CommandScheduler.getInstance().enable();
+        break;
+    }
   }
 
   @Override

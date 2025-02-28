@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2867673412884435,
-        "y": 1.7582448581874788
+        "x": 2.286767341288443,
+        "y": 1.7582448581874797
       },
       "isLocked": false,
       "linkedName": "CoralStationDown"
@@ -45,7 +45,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "L1 Spam Processor",
+  "folder": "L1 Spam Processor Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 54.0

@@ -20,8 +20,8 @@
         "y": 1.056
       },
       "prevControl": {
-        "x": 3.0413352272727274,
-        "y": 1.5769744318181824
+        "x": 3.041335227272727,
+        "y": 1.5769744318181833
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
     "rotation": 54.0
   },
   "reversed": false,
-  "folder": "L4 Processor Back",
+  "folder": "L4 Processor Side Back",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

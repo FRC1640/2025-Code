@@ -203,9 +203,9 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
 
-    public static final double liftMaxJerk = 1;
-    public static final double liftMaxSpeed = 4;
-    public static final double liftMaxAccel = 3;
+    public static final double liftMaxJerk = 0.01;
+    public static final double liftMaxSpeed = 0.04;
+    public static final double liftMaxAccel = 0.01;
 
     public static final TrapezoidProfile.Constraints trapConstraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);

@@ -208,7 +208,6 @@ public class SProfiledPIDController implements Sendable {
    * @param goal The desired goal position.
    */
   public void setGoal(double goal) {
-    m_profile.initialize(m_setpoint.position, m_setpoint.velocity, m_goal.position);
     m_goal = new SCurveProfile.State(goal, 0);
   }
 
@@ -414,6 +413,7 @@ public class SProfiledPIDController implements Sendable {
   public void reset(SCurveProfile.State measurement) {
     m_controller.reset();
     m_setpoint = measurement;
+    m_profile.initialize(m_setpoint.position, m_setpoint.velocity, m_goal.position);
   }
 
   /**

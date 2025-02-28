@@ -710,7 +710,7 @@ public class RobotContainer {
                             || algaeMode))
             .alongWith(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
-        "",
+        "AutoReef",
         getPlaceCommand().alongWith(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());

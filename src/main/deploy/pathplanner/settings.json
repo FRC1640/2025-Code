@@ -3,7 +3,8 @@
   "robotLength": 0.9271,
   "holonomicMode": true,
   "pathFolders": [
-    "L1 Spam Opposite"
+    "L1 Spam Opposite",
+    "L4 Mid"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

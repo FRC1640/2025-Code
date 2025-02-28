@@ -24,6 +24,7 @@ public class ReefDetector extends PeriodicBase {
   public void periodic() {
     reefDetectorIO.updateInputs(inputs);
     Logger.processInputs("ReefDetector", inputs);
+    Logger.recordOutput("Found threshold", foundThresh);
   }
 
   public boolean isConnected() {

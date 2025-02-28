@@ -220,10 +220,10 @@ public class RobotConstants {
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.08, GantrySetpoint.CENTER),
-      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
-      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.28, 0.485, GantrySetpoint.LEFT),
-      RightL3(0.28, 0.485, GantrySetpoint.RIGHT),
+      LeftL2(0.285, 0.298, 0.114, GantrySetpoint.LEFT),
+      RightL2(0.285, 0.298, 0.114, GantrySetpoint.RIGHT),
+      LeftL3(0.285, 0.485, GantrySetpoint.LEFT),
+      RightL3(0.285, 0.485, GantrySetpoint.RIGHT),
       LeftL4(0.569, GantrySetpoint.LEFT),
       RightL4(0.569, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
@@ -231,17 +231,27 @@ public class RobotConstants {
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
       private double liftAlgae;
+      public Double other;
 
       private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
         this.lift = lift;
         this.liftAlgae = liftAlgae;
         this.gantrySetpoint = setpoint;
+        other = null;
+      }
+
+      private CoralPreset(double lift, double liftAlgae, Double other, GantrySetpoint setpoint) {
+        this.lift = lift;
+        this.liftAlgae = liftAlgae;
+        this.gantrySetpoint = setpoint;
+        this.other = other;
       }
 
       private CoralPreset(double lift, GantrySetpoint setpoint) {
         this.lift = lift;
         this.liftAlgae = lift;
         this.gantrySetpoint = setpoint;
+        other = null;
       }
 
       public double getLift() {
@@ -290,7 +300,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 750;
+    public static final double detectionThresh = 560;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -354,9 +364,9 @@ public class RobotConstants {
     public static final int intakeSparkID = new RobotSwitch<Integer>(16).get();
     // if you dont update this i will find you // *gulp* // You understand what
     // happens if you don't
-    public static final int coralDetectorChannel =
-        new RobotSwitch<Integer>(7).get(); // update this too
-    public static final int hasCoralDetectorChannel = 6;
+    // public static final int coralDetectorChannel =
+    //     new RobotSwitch<Integer>(7).get(); // update this too
+    public static final int hasCoralDetectorChannel = 7;
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 0.25;
   }

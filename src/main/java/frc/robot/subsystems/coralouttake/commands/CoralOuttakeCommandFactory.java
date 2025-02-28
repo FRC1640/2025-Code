@@ -17,6 +17,7 @@ import java.util.function.DoubleSupplier;
 public class CoralOuttakeCommandFactory {
   CoralOuttakeSubsystem intakeSubsystem;
   public boolean runningBack = false;
+  public boolean outtaking = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -53,7 +54,19 @@ public class CoralOuttakeCommandFactory {
             () ->
                 !intakeSubsystem.isCoralDetected()
                     && intakeSubsystem.hasCoral()
+                    && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(runBack());
+  }
+
+  public Command outtake() {
+    return setIntakeVoltage(() -> 3)
+        .beforeStarting(
+            () -> {
+              if (intakeSubsystem.hasCoral()) {
+                outtaking = true;
+              }
+            })
+        .finallyDo(() -> outtaking = false);
   }
 }

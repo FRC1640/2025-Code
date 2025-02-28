@@ -82,7 +82,7 @@ public class SparkConstants {
 
   public static final SparkConfiguration getDefaultFlex(int id) {
     return new SparkConfiguration(
-        id, IdleMode.kCoast, false, 60, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
+        id, IdleMode.kCoast, false, 69, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
   }
 
   public static final SparkFlex driveFlex(int id) {

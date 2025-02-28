@@ -130,7 +130,7 @@ public class RobotConstants {
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
-    public static final double maxSpeed = 4.6;
+    public static final double maxSpeed = 4.145;
     public static final double maxNorm =
         DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);

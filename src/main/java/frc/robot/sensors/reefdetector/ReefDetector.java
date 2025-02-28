@@ -8,6 +8,11 @@ import org.littletonrobotics.junction.Logger;
 public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO reefDetectorIO;
   private ReefDetectorIOInputsAutoLogged inputs = new ReefDetectorIOInputsAutoLogged();
+  private double foundThresh = Double.MAX_VALUE;
+
+  public double getFoundThresh() {
+    return foundThresh;
+  }
 
   public ReefDetector(ReefDetectorIO reefDetectorIO) {
     this.reefDetectorIO = reefDetectorIO;
@@ -35,5 +40,15 @@ public class ReefDetector extends PeriodicBase {
 
   public double getDeltaX() {
     return inputs.deltaX;
+  }
+
+  public void reefFind() {
+    if (getDistanceToReef() < foundThresh) {
+      foundThresh = getDistanceToReef();
+    }
+  }
+
+  public void reefFindReset() {
+    foundThresh = Double.MAX_VALUE;
   }
 }

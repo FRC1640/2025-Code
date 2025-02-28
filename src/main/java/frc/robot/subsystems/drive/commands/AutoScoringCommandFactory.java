@@ -52,7 +52,7 @@ public class AutoScoringCommandFactory {
         .andThen(coralOuttakeCommandFactory.outtake().repeatedly())
         .until(() -> !coralOuttakeSubsystem.hasCoral())
         .andThen(
-            new WaitCommand(0.1)
+            new WaitCommand(0.3)
                 .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly()));
   }
 

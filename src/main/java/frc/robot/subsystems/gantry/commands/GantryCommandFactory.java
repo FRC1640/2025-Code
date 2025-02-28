@@ -97,7 +97,8 @@ public class GantryCommandFactory {
         .repeatedly()
         .andThen(
             gantrySetVelocityCommand(() -> 0)
-                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
+                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01))
+        .finallyDo(() -> reefDetector.reefFindReset());
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

@@ -220,8 +220,8 @@ public class RobotConstants {
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.08, GantrySetpoint.CENTER),
-      LeftL2(0.285, 0.298, 0.114, GantrySetpoint.LEFT),
-      RightL2(0.285, 0.298, 0.114, GantrySetpoint.RIGHT),
+      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.285, 0.485, GantrySetpoint.LEFT),
       RightL3(0.285, 0.485, GantrySetpoint.RIGHT),
       LeftL4(0.569, GantrySetpoint.LEFT),
@@ -231,27 +231,17 @@ public class RobotConstants {
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
       private double liftAlgae;
-      public Double other;
 
       private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
         this.lift = lift;
         this.liftAlgae = liftAlgae;
         this.gantrySetpoint = setpoint;
-        other = null;
-      }
-
-      private CoralPreset(double lift, double liftAlgae, Double other, GantrySetpoint setpoint) {
-        this.lift = lift;
-        this.liftAlgae = liftAlgae;
-        this.gantrySetpoint = setpoint;
-        this.other = other;
       }
 
       private CoralPreset(double lift, GantrySetpoint setpoint) {
         this.lift = lift;
         this.liftAlgae = lift;
         this.gantrySetpoint = setpoint;
-        other = null;
       }
 
       public double getLift() {

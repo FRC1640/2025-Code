@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -75,16 +76,20 @@ public class Dashboard {
     // 1. https://www.linkedin.com/pulse/howtousetheusbcameraontheorangepizero2-%E9%9B%AA-%E9%99%88
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
-        .withSize(5, 4)
-        .withPosition(1, 1);
+        .withSize(3, 3)
+        .withPosition(8, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(1, 1)
-        .withPosition(1, 0);
+        .withPosition(8, 0);
     teleopTab
         .addBoolean("Right Sensor", () -> climberSubsystem.getSensor2())
-        .withSize(1, 1)
-        .withPosition(5, 0);
+        .withSize(0, 1)
+        .withPosition(10, 0);
+    teleopTab
+        .addDouble("Match Timer", () -> Math.round(DriverStation.getMatchTime() * 10000) / 10000)
+        .withSize(2, 1)
+        .withPosition(0, 0);
   }
 
   private void sysidInit() {

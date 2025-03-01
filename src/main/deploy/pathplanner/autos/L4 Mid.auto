@@ -26,17 +26,11 @@
         {
           "type": "named",
           "data": {
-            "name": "EnableAprilTags"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "AutoReef"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {

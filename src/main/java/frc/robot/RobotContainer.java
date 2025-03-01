@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -621,6 +622,7 @@ public class RobotContainer {
   public Command autonAutoPlace(Supplier<CoralPreset> coralPreset) {
     return new InstantCommand(
             () -> {
+              this.coralPreset = coralPreset.get();
               presetActive =
                   algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
               gantryPresetActive = coralPreset.get();
@@ -701,7 +703,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "WaitForCoral",
         new WaitUntilCommand(() -> coralOuttakeSubsystem.hasCoral())
-            .alongWith(coralOuttakeCommandFactory.setIntakeVoltage(() -> 3)));
+            .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));
     NamedCommands.registerCommand("Safe", autonAutoPlace(() -> CoralPreset.Safe));
@@ -711,11 +713,13 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.isAtPreset(
                             algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
-            .alongWith(autonAutoPlace(() -> coralPreset)));
+                        && gantrySubsystem.isAtPreset(coralPreset, true))
+            .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",
-        getPlaceCommand().alongWith(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
+        new WaitCommand(1)
+            .andThen(getPlaceCommand())
+            .deadlineFor(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
     NamedCommands.registerCommand(

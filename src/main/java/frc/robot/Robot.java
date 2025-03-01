@@ -8,7 +8,6 @@ import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +27,7 @@ import java.net.UnknownHostException;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
@@ -83,8 +83,7 @@ public class Robot extends LoggedRobot {
     switch (getMode()) {
         // Running on a real robot, log to a USB stick
       case REAL:
-        @SuppressWarnings("unused")
-        PowerDistribution p = new PowerDistribution(1, ModuleType.kRev);
+        LoggedPowerDistribution.getInstance(21, ModuleType.kRev);
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
         break;

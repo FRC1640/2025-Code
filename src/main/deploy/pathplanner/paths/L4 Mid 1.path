@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.027130681818182,
-        "y": 7.515056818181818
+        "x": 8.047073863636363,
+        "y": 4.0549147727272725
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.494346590909091,
-        "y": 7.285710227272727
+        "x": 6.995343816461661,
+        "y": 3.979748208698314
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MidStart"
     },
     {
       "anchor": {
-        "x": 3.410284090909091,
-        "y": 6.507926136363635
+        "x": 5.8134375,
+        "y": 3.9053409090909086
       },
       "prevControl": {
-        "x": 3.7293749999999997,
-        "y": 7.215909090909089
-      },
-      "nextControl": {
-        "x": 3.160557651365082,
-        "y": 5.953845598625366
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.85,
-        "y": 5.14
-      },
-      "prevControl": {
-        "x": 3.549886363636363,
-        "y": 5.610482954545455
+        "x": 7.068380487110738,
+        "y": 3.9886607972265438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L4 place"
+      "linkedName": "ReefCenterRight_OffsetLeft"
     }
   ],
   "rotationTargets": [],
@@ -49,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4LeftCoral",
-      "waypointRelativePos": 0.9958762886597843,
+      "name": "L4Left",
+      "waypointRelativePos": 0.3866809881847456,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -63,13 +47,13 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryLeft"
+                      "name": "SetModeCoral"
                     }
                   },
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetModeCoral"
+                      "name": "SetGantryLeft"
                     }
                   },
                   {
@@ -84,7 +68,7 @@
             {
               "type": "named",
               "data": {
-                "name": "StartSetup"
+                "name": "RunToPreset"
               }
             }
           ]
@@ -101,14 +85,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -54.0
+    "velocity": 0,
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "L4",
+  "folder": "L4 Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

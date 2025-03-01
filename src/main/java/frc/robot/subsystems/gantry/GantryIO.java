@@ -23,6 +23,14 @@ public interface GantryIO extends AutoCloseable {
 
   public default void setGantryVelocity(double velocity, GantryIOInputs inputs) {}
 
+  public default void setGantryPositionMotionProfile(double pos, GantryIOInputs inputs) {}
+
+  public default void resetGantryMotionProfile(GantryIOInputs inputs) {}
+
+  public default void setGantryVelocityMotionProfile(double pos, GantryIOInputs inputs) {}
+
+  public default void resetGantryVelocityMotionProfile(GantryIOInputs inputs) {}
+
   public default double velocitySetpoint() {
     return 0.0;
   }

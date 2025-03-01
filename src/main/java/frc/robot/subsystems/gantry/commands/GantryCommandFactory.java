@@ -4,9 +4,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
+import frc.robot.constants.RobotConstants.LiftConstants.GantrySetpoint;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
@@ -61,37 +65,34 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommand() {
+  public Command gantryDriftCommand(Supplier<CoralPreset> coralPreset, BooleanSupplier dsSide) {
     return (gantrySetVelocityCommand(
                 () ->
-                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
+                    coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
+                            == GantrySetpoint.RIGHT
                         ? GantryConstants.alignSpeed
                         : -GantryConstants.alignSpeed)
             .alongWith(new RunCommand(() -> reefDetector.reefFind()))
             .until(
                 () ->
                     Math.abs(
-                            gantrySubsystem.getCarriagePosition()
-                                - GantryConstants.gantryLimitCenter)
+                            coralPreset.get().getGantry(dsSide.getAsBoolean())
+                                - gantrySubsystem.getCarriagePosition())
                         < GantryConstants.gantryPadding)
             .andThen(new InstantCommand(() -> threshSet = true))
             .andThen(
                 gantrySetVelocityCommand(
                         () ->
-                            gantrySubsystem.getCarriagePosition()
-                                    < GantryConstants.gantryLimitCenter
+                            coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
+                                    == GantrySetpoint.RIGHT
                                 ? -GantryConstants.alignSpeed
                                 : GantryConstants.alignSpeed)
                     .until(
                         () ->
                             Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.high)
-                                    < GantryConstants.gantryPadding
-                                || Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)))
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimitCenter)
+                                < GantryConstants.gantryPadding)))
         .andThen(new InstantCommand(() -> reefDetector.reefFindReset()))
         .andThen(new InstantCommand(() -> threshSet = false))
         .repeatedly()

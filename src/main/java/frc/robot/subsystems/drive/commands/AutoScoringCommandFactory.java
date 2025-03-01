@@ -3,7 +3,7 @@ package frc.robot.subsystems.drive.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
-import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.algae.commands.AlgaeCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
@@ -11,8 +11,6 @@ import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 public class AutoScoringCommandFactory {
   private GantryCommandFactory gantryCommandFactory;
@@ -40,9 +38,8 @@ public class AutoScoringCommandFactory {
     this.algaeSubsystem = algaeSubsystem;
   }
 
-  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
-    return gantryCommandFactory.gantryPIDCommand(
-        () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
+  public Command gantryAlignCommand() {
+    return gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimitCenter);
   }
 
   public Command autoPlace() {

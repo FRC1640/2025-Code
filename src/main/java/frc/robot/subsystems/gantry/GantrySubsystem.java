@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
@@ -101,8 +102,7 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
-    Logger.recordOutput("goto", preset.getGantry(dsSide));
-    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.04;
+    return Math.abs(getCarriagePosition() - GantryConstants.gantryLimitCenter) < 0.04;
   }
 
   public void setLimitEnabled(boolean enable) {

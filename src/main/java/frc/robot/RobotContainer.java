@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Robot.Mode;
 import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.AutoAlignConfig;
@@ -263,11 +262,9 @@ public class RobotContainer {
         new AutoScoringCommandFactory(
             gantryCommandFactory,
             liftCommandFactory,
-            liftSubsystem,
             coralOuttakeCommandFactory,
             coralOuttakeSubsystem,
-            algaeCommandFactory,
-            algaeIntakeSubsystem);
+            climberCommandFactory);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     generateNamedCommands();
     driveSubsystem = new DriveSubsystem(gyro);
@@ -581,17 +578,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return homing().andThen(dashboard.getAutoChooserCommand());
-  }
-
-  public Command homing() {
-    return new ConditionalCommand(
-        new InstantCommand(),
-        gantryCommandFactory
-            .gantryHomeCommand()
-            .alongWith(liftCommandFactory.liftHomeCommand())
-            .alongWith(climberCommandFactory.liftHomeCommand()),
-        () -> Robot.getMode() == Mode.SIM);
+    return autoScoringCommandFactory.homing().andThen(dashboard.getAutoChooserCommand());
   }
 
   public Pose2d getTarget() {

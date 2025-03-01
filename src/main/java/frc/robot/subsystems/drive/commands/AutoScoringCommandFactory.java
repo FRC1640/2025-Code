@@ -1,13 +1,15 @@
 package frc.robot.subsystems.drive.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.algae.AlgaeSubsystem;
-import frc.robot.subsystems.algae.commands.AlgaeCommandFactory;
+import frc.robot.Robot;
+import frc.robot.Robot.Mode;
+import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
-import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
 
 public class AutoScoringCommandFactory {
@@ -15,25 +17,18 @@ public class AutoScoringCommandFactory {
   private LiftCommandFactory liftCommandFactory;
   private CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private CoralOuttakeSubsystem coralOuttakeSubsystem;
-  private LiftSubsystem liftSubsystem;
-  private AlgaeCommandFactory algaeCommandFactory;
-  private AlgaeSubsystem algaeSubsystem;
+  private ClimberCommandFactory climberCommandFactory;
 
   public AutoScoringCommandFactory(
       GantryCommandFactory gantryCommandFactory,
       LiftCommandFactory liftCommandFactory,
-      LiftSubsystem liftSubsystem,
       CoralOuttakeCommandFactory coralOuttakeCommandFactory,
       CoralOuttakeSubsystem coralOuttakeSubsystem,
-      AlgaeCommandFactory algaeCommandFactory,
-      AlgaeSubsystem algaeSubsystem) {
+      ClimberCommandFactory climberCommandFactory) {
     this.gantryCommandFactory = gantryCommandFactory;
     this.liftCommandFactory = liftCommandFactory;
-    this.liftSubsystem = liftSubsystem;
     this.coralOuttakeCommandFactory = coralOuttakeCommandFactory;
     this.coralOuttakeSubsystem = coralOuttakeSubsystem;
-    this.algaeCommandFactory = algaeCommandFactory;
-    this.algaeSubsystem = algaeSubsystem;
   }
 
   public Command autoPlace() {
@@ -56,5 +51,15 @@ public class AutoScoringCommandFactory {
         .andThen(
             new WaitCommand(0.1)
                 .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly()));
+  }
+
+  public Command homing() {
+    return new ConditionalCommand(
+        new InstantCommand(),
+        gantryCommandFactory
+            .gantryHomeCommand()
+            .alongWith(liftCommandFactory.liftHomeCommand())
+            .alongWith(climberCommandFactory.liftHomeCommand()),
+        () -> Robot.getMode() == Mode.SIM);
   }
 }

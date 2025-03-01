@@ -11,15 +11,15 @@ import frc.robot.util.tools.MotorLim;
 
 public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   private final SparkMax intakeSpark;
-  private final DigitalInput coralDetector;
+  // private final DigitalInput coralDetector;
   private final DigitalInput hasCoralDetector;
 
   public CoralOuttakeIOSparkMax() {
     intakeSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(
+            SparkConstants.getDefaultMaxIntake(
                 CoralOuttakeConstants.intakeSparkID, false, IdleMode.kBrake));
-    coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
+    // coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
     hasCoralDetector = new DigitalInput(CoralOuttakeConstants.hasCoralDetectorChannel);
   }
 

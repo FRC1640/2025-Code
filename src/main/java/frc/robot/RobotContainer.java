@@ -130,7 +130,7 @@ public class RobotContainer {
   private final ClimberRoutines climberRoutines;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private final AlgaeCommandFactory algaeCommandFactory;
-
+  private final OrangePIInput orangePiInput;
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 

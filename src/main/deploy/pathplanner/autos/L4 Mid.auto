@@ -26,6 +26,12 @@
         {
           "type": "named",
           "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AutoReef"
           }
         },

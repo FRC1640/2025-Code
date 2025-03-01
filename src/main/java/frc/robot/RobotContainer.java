@@ -434,14 +434,15 @@ public class RobotContainer {
 
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
-    new Trigger(
-            () ->
-                RobotOdometry.instance
-                        .getPose("Main")
-                        .getTranslation()
-                        .getDistance(getTarget().getTranslation())
-                    > 2)
-        .onTrue(runLiftToSafe());
+    // new Trigger(
+    //         () ->
+    //             RobotOdometry.instance
+    //                         .getPose("Main")
+    //                         .getTranslation()
+    //                         .getDistance(getTarget().getTranslation())
+    //                     > 2
+    //                 && !coralOuttakeCommandFactory.outtaking)
+    //     .onTrue(runLiftToSafe());
 
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
@@ -459,7 +460,12 @@ public class RobotContainer {
         .povDown()
         .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
 
-    driveController.b().whileTrue(coralOuttakeCommandFactory.outtake());
+    driveController
+        .b()
+        .whileTrue(
+            coralOuttakeCommandFactory
+                .outtake()
+                .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
     // operatorController.b().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 0.1));
     // rumble
     new Trigger(
@@ -517,7 +523,9 @@ public class RobotContainer {
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(
-            () -> (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS))
+            () ->
+                (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
+                    && !coralOuttakeCommandFactory.outtaking)
         .onTrue(runLiftToSafe());
     // new Trigger(
     //         () ->
@@ -533,7 +541,7 @@ public class RobotContainer {
     operatorController
         .b()
         .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
-    operatorController.y().onTrue(runLiftToSafe());
+    operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
     driveController
         .rightTrigger()
@@ -587,10 +595,9 @@ public class RobotContainer {
   public Command homing() {
     return new ConditionalCommand(
         new InstantCommand(),
-        gantryCommandFactory
-            .gantryHomeCommand()
-            .alongWith(liftCommandFactory.liftHomeCommand())
-            .alongWith(climberCommandFactory.liftHomeCommand()),
+        gantryCommandFactory.gantryHomeCommand(),
+        // .alongWith(liftCommandFactory.liftHomeCommand())
+        // .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);
   }
 
@@ -606,8 +613,8 @@ public class RobotContainer {
 
   public Command getPlaceCommand() {
     return new ConditionalCommand(
-        autoScoringCommandFactory.algaeAutoPickup().repeatedly(),
-        autoScoringCommandFactory.autoPlace().repeatedly(),
+        autoScoringCommandFactory.algaeAutoPickup(),
+        autoScoringCommandFactory.autoPlace(),
         () -> algaeMode);
   }
 
@@ -619,7 +626,7 @@ public class RobotContainer {
               gantryPresetActive = coralPreset.get();
             })
         .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-        .andThen(
+        .alongWith(
             autoScoringCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
   }
 
@@ -635,7 +642,7 @@ public class RobotContainer {
                         gantryPresetActive = coralPreset.get();
                       })
                   .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
-                  .andThen(
+                  .alongWith(
                       autoScoringCommandFactory
                           .gantryAlignCommand(
                               () -> gantryPresetActive,

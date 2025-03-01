@@ -18,6 +18,7 @@ public class CoralOuttakeCommandFactory {
   CoralOuttakeSubsystem intakeSubsystem;
   public boolean runningBack = false;
   public boolean outtaking = false;
+  boolean setHasCoral = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -60,13 +61,13 @@ public class CoralOuttakeCommandFactory {
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> 3)
+    return setIntakeVoltage(() -> setHasCoral ? 4.5 : 2.5)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {
                 outtaking = true;
               }
             })
-        .finallyDo(() -> outtaking = false);
+        .beforeStarting(() -> setHasCoral = intakeSubsystem.hasCoral());
   }
 }

@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
+  private boolean threshSet = false;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -73,6 +74,7 @@ public class GantryCommandFactory {
                             gantrySubsystem.getCarriagePosition()
                                 - GantryConstants.gantryLimitCenter)
                         < GantryConstants.gantryPadding)
+            .andThen(new InstantCommand(() -> threshSet = true))
             .andThen(
                 gantrySetVelocityCommand(
                         () ->
@@ -89,16 +91,21 @@ public class GantryCommandFactory {
                                 || Math.abs(
                                         gantrySubsystem.getCarriagePosition()
                                             - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)
-                    .until(
-                        () ->
-                            reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 10))
-            .andThen(new InstantCommand(() -> reefDetector.reefFindReset())))
+                                    < GantryConstants.gantryPadding)))
+        .andThen(new InstantCommand(() -> reefDetector.reefFindReset()))
+        .andThen(new InstantCommand(() -> threshSet = false))
         .repeatedly()
+        .until(
+            () ->
+                reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 16 && threshSet)
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01))
-        .finallyDo(() -> reefDetector.reefFindReset());
+        .finallyDo(
+            () -> {
+              reefDetector.reefFindReset();
+              threshSet = false;
+            });
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

@@ -219,13 +219,13 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
-      Safe(0, 0.08, GantrySetpoint.CENTER),
-      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
-      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.285, 0.485, GantrySetpoint.LEFT),
-      RightL3(0.285, 0.485, GantrySetpoint.RIGHT),
-      LeftL4(0.571, GantrySetpoint.LEFT),
-      RightL4(0.571, GantrySetpoint.RIGHT),
+      Safe(0, 0.1, GantrySetpoint.CENTER),
+      LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
+      LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
+      LeftL4(0.566, GantrySetpoint.LEFT),
+      RightL4(0.566, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
@@ -290,7 +290,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 650;
+    public static final double detectionThresh = 550;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -339,7 +339,7 @@ public class RobotConstants {
     public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    public static final double alignSpeed = 0.1;
+    public static final double alignSpeed = 0.15;
     public static final double gantryMaxVel = 2; // PLACEHOLDER
     public static final double gantryMaxAccel = 2; // PLACEHOLDER
     public static final double gantryMaxJerk = 2; // PLACEHOLDER

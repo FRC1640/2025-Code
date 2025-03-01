@@ -6,11 +6,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.Robot.Mode;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.climber.commands.ClimberCommandFactory;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 public class AutoScoringCommandFactory {
   private GantryCommandFactory gantryCommandFactory;
@@ -18,6 +21,9 @@ public class AutoScoringCommandFactory {
   private CoralOuttakeCommandFactory coralOuttakeCommandFactory;
   private CoralOuttakeSubsystem coralOuttakeSubsystem;
   private ClimberCommandFactory climberCommandFactory;
+
+  private double presetActive;
+  private CoralPreset gantryPresetActive;
 
   public AutoScoringCommandFactory(
       GantryCommandFactory gantryCommandFactory,
@@ -29,6 +35,7 @@ public class AutoScoringCommandFactory {
     this.liftCommandFactory = liftCommandFactory;
     this.coralOuttakeCommandFactory = coralOuttakeCommandFactory;
     this.coralOuttakeSubsystem = coralOuttakeSubsystem;
+    this.climberCommandFactory = climberCommandFactory;
   }
 
   public Command autoPlace() {
@@ -61,5 +68,41 @@ public class AutoScoringCommandFactory {
             .alongWith(liftCommandFactory.liftHomeCommand())
             .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);
+  }
+
+  public Command runLiftToSafe(boolean algaeMode) {
+    return setupAutoPlace(() -> CoralPreset.Safe, algaeMode, () -> false);
+  }
+
+  public Command setupAutoPlace(
+      Supplier<CoralPreset> coralPreset, boolean algaeMode, BooleanSupplier dsSide) {
+    return new InstantCommand(
+        () -> {
+          (new InstantCommand(
+                      () -> {
+                        presetActive =
+                            algaeMode
+                                ? coralPreset.get().getLiftAlgae()
+                                : coralPreset.get().getLift();
+                        gantryPresetActive = coralPreset.get();
+                      })
+                  .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
+                  .andThen(
+                      gantryCommandFactory
+                          .gantryAlignCommand(() -> gantryPresetActive, dsSide)
+                          .asProxy()))
+              .schedule();
+        });
+  }
+
+  public Command autonAutoPlace(Supplier<CoralPreset> coralPreset, boolean algaeMode) {
+    return new InstantCommand(
+            () -> {
+              presetActive =
+                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
+              gantryPresetActive = coralPreset.get();
+            })
+        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
+        .andThen(gantryCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
   }
 }

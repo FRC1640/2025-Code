@@ -4,9 +4,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
@@ -129,6 +132,10 @@ public class GantryCommandFactory {
                       gantrySubsystem.setGantryVoltage(0);
                       gantrySubsystem.resetGantryVelocityMotionProfile();
                     }));
+  }
+
+  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
+    return gantryPIDCommand(() -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
   }
 
   public void constructTriggers() {}

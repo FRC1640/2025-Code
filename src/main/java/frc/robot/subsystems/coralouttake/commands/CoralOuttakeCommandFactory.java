@@ -3,6 +3,7 @@ package frc.robot.subsystems.coralouttake.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 import frc.robot.Robot.RobotState;
@@ -68,5 +69,16 @@ public class CoralOuttakeCommandFactory {
               }
             })
         .finallyDo(() -> outtaking = false);
+  }
+
+  public Command outtakeCoralCommand() {
+    return setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12);
+  }
+
+  public Command placeTrough() {
+    return setIntakeVoltage(() -> 12)
+        .repeatedly()
+        .until(() -> !intakeSubsystem.hasCoral())
+        .andThen(new WaitCommand(0.1).deadlineFor(setIntakeVoltage(() -> 12).repeatedly()));
   }
 }

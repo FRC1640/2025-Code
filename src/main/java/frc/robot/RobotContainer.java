@@ -496,7 +496,7 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().whileTrue(autoScoringCommandFactory.outtakeCoralCommand());
+    driveController.povUp().whileTrue(coralOuttakeCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
@@ -606,7 +606,7 @@ public class RobotContainer {
 
   public Command getPlaceCommand() {
     return new ConditionalCommand(
-        autoScoringCommandFactory.algaeAutoPickup().repeatedly(),
+        algaeCommandFactory.algaeAutoPickup().repeatedly(),
         autoScoringCommandFactory.autoPlace().repeatedly(),
         () -> algaeMode);
   }
@@ -619,8 +619,7 @@ public class RobotContainer {
               gantryPresetActive = coralPreset.get();
             })
         .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-        .andThen(
-            autoScoringCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
+        .andThen(gantryCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -636,7 +635,7 @@ public class RobotContainer {
                       })
                   .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
                   .andThen(
-                      autoScoringCommandFactory
+                      gantryCommandFactory
                           .gantryAlignCommand(
                               () -> gantryPresetActive,
                               () -> AllianceManager.onDsSideReef(() -> getTarget()))
@@ -710,7 +709,7 @@ public class RobotContainer {
         "AutoReef",
         getPlaceCommand().alongWith(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
 
-    NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
+    NamedCommands.registerCommand("PlaceTrough", coralOuttakeCommandFactory.placeTrough());
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
   }

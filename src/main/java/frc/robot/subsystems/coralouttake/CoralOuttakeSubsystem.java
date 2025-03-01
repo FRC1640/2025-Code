@@ -36,9 +36,9 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     }
 
     lastTime = System.currentTimeMillis();
-    Logger.recordOutput("CoralDetector/DetectionTime", time);
-    Logger.recordOutput("CoralDetector/DetectionTimeBool", isDetectingTimed());
-    Logger.recordOutput("CoralDetector/HasCoral", hasCoral);
+    Logger.recordOutput("Sensors/CoralDetector/DetectionTime", time);
+    Logger.recordOutput("Sensors/CoralDetector/DetectionTimeBool", isDetectingTimed());
+    Logger.recordOutput("Sensors/CoralDetector/HasCoral", hasCoral);
   }
 
   public void stop() {

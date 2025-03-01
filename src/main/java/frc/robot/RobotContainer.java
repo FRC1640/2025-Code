@@ -330,17 +330,17 @@ public class RobotContainer {
             new PeriodicBase() {
               @Override
               public void periodic() {
-                Logger.recordOutput("Sensors/AlgaeMode", algaeMode);
+                Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
                 Logger.recordOutput(
-                    "Sensors/AutoAlignDone", followPathNearest.isAutoalignComplete());
+                    "AutoAlignDone", followPathNearest.isAutoalignComplete());
                 Logger.recordOutput(
-                    "Sensors/LiftDone",
+                    "LiftDone",
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
-                    "Sensor/GantryDone",
+                    "Sensors/GantryDone",
                     gantrySubsystem.isAtPreset(
                             coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
                         || algaeMode);

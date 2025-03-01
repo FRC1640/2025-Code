@@ -216,6 +216,6 @@ public class AprilTagVision extends PeriodicBase {
       }
     }
     Logger.recordOutput(
-        "AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
+        "Sensors/AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
   }
 }

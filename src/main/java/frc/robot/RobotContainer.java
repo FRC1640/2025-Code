@@ -333,14 +333,13 @@ public class RobotContainer {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
-                Logger.recordOutput(
-                    "AutoAlignDone", followPathNearest.isAutoalignComplete());
+                Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
                 Logger.recordOutput(
                     "LiftDone",
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
-                    "Sensors/GantryDone",
+                    "GantryDone",
                     gantrySubsystem.isAtPreset(
                             coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
                         || algaeMode);

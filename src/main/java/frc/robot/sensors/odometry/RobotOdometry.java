@@ -242,7 +242,8 @@ public class RobotOdometry extends PeriodicBase {
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
     for (Pose2d pose : robotPoses) {
-      Logger.recordOutput("Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
+      Logger.recordOutput(
+          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
     }
     for (Pose2d pose : robotPosesAccepted) {
       Logger.recordOutput(
@@ -292,7 +293,8 @@ public class RobotOdometry extends PeriodicBase {
     if (Robot.getState() == RobotState.DISABLED
         || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
       Logger.recordOutput(
-          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig", visionUpdate);
+          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig",
+          visionUpdate);
       return;
     }
     if (!(isPoseValid(visionUpdate)

@@ -8,4 +8,4 @@ and the port is ```22```. The username and password should be the default
 Username: pi
 Password: raspberry
 ```
-Now in filezilla, keep clicking .. until you see the opt folder, click on it, click on photonvision, and then download all of photonvision_config into the src/main/deploy
+Now in filezilla, keep clicking .. until you see the opt folder, click on it, click on photonvision, and then download all of photonvision_config into the backups folder

@@ -12,7 +12,7 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.sensors.odometry.SparkOdometryThread;
-import frc.robot.sensors.resolvers.ResolverVoltage;
+import frc.robot.sensors.resolvers.ResolverPWM;
 import frc.robot.util.spark.SparkConfigurer;
 import java.util.Queue;
 
@@ -24,8 +24,8 @@ public class ModuleIOSparkMax implements ModuleIO {
   private final Queue<Double> driveVelocityQueue;
 
   private final RelativeEncoder driveEncoder;
-  // private final ResolverPWM steeringEncoder;
-  private final ResolverVoltage steeringEncoder;
+  private final ResolverPWM steeringEncoder;
+  // private final ResolverVoltage steeringEncoder;
 
   private final SparkFlex driveSpark;
   private final SparkMax steerSpark;
@@ -50,15 +50,15 @@ public class ModuleIOSparkMax implements ModuleIO {
             .registerSignal(driveSpark, () -> driveSpark.getEncoder().getPosition());
 
     driveEncoder = driveSpark.getEncoder();
-    // steeringEncoder = new ResolverPWM(id.resolverChannel, id.angleOffset);
-    steeringEncoder =
-        new ResolverVoltage(
-            id.resolverChannel,
-            DriveConstants.initalSlope,
-            DriveConstants.finalSlope,
-            180.0,
-            90.0,
-            id.angleOffset);
+    steeringEncoder = new ResolverPWM(id.resolverChannel, id.angleOffset);
+    // steeringEncoder =
+    //     new ResolverVoltage(
+    //         id.resolverChannel,
+    //         DriveConstants.initalSlope,
+    //         DriveConstants.finalSlope,
+    //         180.0,
+    //         90.0,
+    //         id.angleOffset);
     driveVelocityQueue =
         SparkOdometryThread.getInstance()
             .registerSignal(driveSpark, () -> driveEncoder.getVelocity());

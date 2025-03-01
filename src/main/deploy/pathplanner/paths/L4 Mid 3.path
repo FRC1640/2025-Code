@@ -3,60 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.496,
-        "y": 7.245823863636363
+        "x": 1.525653409090909,
+        "y": 7.265767045454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.496,
-        "y": 7.245823863636363
+        "x": 2.085961609593216,
+        "y": 6.685629094577719
       },
       "isLocked": false,
-      "linkedName": "CoralStationUp"
+      "linkedName": "TopSource"
     },
     {
       "anchor": {
-        "x": 3.194,
-        "y": 4.026
+        "x": 3.699460227272727,
+        "y": 5.091960227272727
       },
       "prevControl": {
-        "x": 2.194,
-        "y": 4.026
+        "x": 3.342156987970294,
+        "y": 5.417137937111863
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefTopLeft_OffsetLeft"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.4511410181392716,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4LeftCoral",
-      "waypointRelativePos": 0.6981740064446784,
+      "name": "L4Right",
+      "waypointRelativePos": 0.5907626208378082,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "SetupL4"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "SetGantryLeft"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -66,7 +49,19 @@
             {
               "type": "named",
               "data": {
-                "name": "StartSetup"
+                "name": "SetGantryRight"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
               }
             }
           ]
@@ -84,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L4",
+  "folder": "L4 Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

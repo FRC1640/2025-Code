@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.RobotConstants.ClimberConstants;
+import frc.robot.constants.RobotConstants.PneumaticsConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.misc.MotorLim;
@@ -32,6 +33,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     liftEncoder = liftSpark.getEncoder();
     doubleSolenoid =
         new DoubleSolenoid(
+            PneumaticsConstants.pneumaticsHubID,
             PneumaticsModuleType.REVPH,
             ClimberConstants.solenoidForwardChannel,
             ClimberConstants.solenoidReverseChannel);

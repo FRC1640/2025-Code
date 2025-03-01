@@ -14,7 +14,7 @@ public class DriveCommandFactory {
   }
 
   public Command runVelocityCommand(Supplier<ChassisSpeeds> speeds) {
-    return new RunCommand(() -> driveSubsystem.runVelocity(speeds.get(), true, 2.5), driveSubsystem)
+    return new RunCommand(() -> driveSubsystem.runVelocity(speeds.get(), true, 3), driveSubsystem)
         .finallyDo(() -> driveSubsystem.stop());
   }
 }

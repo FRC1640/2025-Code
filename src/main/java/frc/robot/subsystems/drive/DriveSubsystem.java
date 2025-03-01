@@ -97,13 +97,13 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Main"),
         (x) -> {
-          RobotOdometry.instance.setAllPose(x);
           RobotOdometry.instance.resetGyro(x);
+          RobotOdometry.instance.setAllPose(x);
         },
         this::getChassisSpeeds,
         (x) -> PathplannerWeight.setSpeeds(x),
         new PPHolonomicDriveController(
-            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+            new PIDConstants(0.5, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         new RequirementHandler());

@@ -3,20 +3,15 @@ package frc.robot.sensors.reefdetector;
 import java.util.function.Supplier;
 
 public class ReefDetectorIOSim implements ReefDetectorIO {
-  private Supplier<Double> distanceToReefSupplier;
-  private Supplier<Double> deltaXSupplier;
+  private Supplier<Boolean> isReef;
 
-  public ReefDetectorIOSim(
-      Supplier<Double> distanceToReefSupplier, Supplier<Double> deltaXSupplier) {
-    this.distanceToReefSupplier = distanceToReefSupplier;
-    this.deltaXSupplier = deltaXSupplier;
+  public ReefDetectorIOSim(Supplier<Boolean> isReef) {
+    this.isReef = isReef;
   }
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = true;
-    inputs.isDetecting = distanceToReefSupplier.get() < 250;
-    inputs.distanceToReef = distanceToReefSupplier.get();
-    inputs.deltaX = deltaXSupplier.get();
+    inputs.isDetecting = isReef.get();
   }
 }

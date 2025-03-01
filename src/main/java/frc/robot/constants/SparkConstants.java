@@ -57,6 +57,23 @@ public class SparkConstants {
         id, breakMode, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
   }
 
+  public static final SparkConfiguration getDefaultMaxIntake(
+      int id, boolean inverted, IdleMode breakMode) {
+    return new SparkConfiguration(
+        id,
+        breakMode,
+        inverted,
+        60,
+        8,
+        2,
+        StatusFrames.getDefault(),
+        new LimitSwitchConfig()
+            .reverseLimitSwitchEnabled(true)
+            .forwardLimitSwitchEnabled(false)
+            .reverseLimitSwitchType(Type.kNormallyOpen),
+        new SparkMaxConfig());
+  }
+
   public static final SparkConfiguration getDefaultMax(
       int id, boolean inverted, boolean follower, SparkMax followerOf) {
     return new SparkConfiguration(
@@ -65,7 +82,7 @@ public class SparkConstants {
 
   public static final SparkConfiguration getDefaultFlex(int id) {
     return new SparkConfiguration(
-        id, IdleMode.kCoast, false, 60, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
+        id, IdleMode.kCoast, false, 69, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
   }
 
   public static final SparkFlex driveFlex(int id) {

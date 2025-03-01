@@ -58,10 +58,10 @@ public class FieldConstants {
   public static final Translation2d reefCenterPosBlue = new Translation2d(4.47, 4);
 
   public static final Pose2d processorPositionRed =
-      new Pose2d(6.0, 0.6, Rotation2d.fromDegrees(270));
+      new Pose2d(11.55, 7.5, Rotation2d.fromDegrees(90));
 
   public static final Pose2d processorPositionBlue =
-      new Pose2d(11.55, 7.5, Rotation2d.fromDegrees(90));
+      new Pose2d(6.0, 0.6, Rotation2d.fromDegrees(270));
 
   // Based off of the 2025-reefscape.json
   public static final Pose2d[] coralStationPosBlue =

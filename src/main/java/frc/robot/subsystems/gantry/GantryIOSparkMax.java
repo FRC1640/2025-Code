@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -21,8 +22,17 @@ public class GantryIOSparkMax implements GantryIO {
       RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.gantryFF, "gantryFF");
   private final PIDController gantryPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryPID, "gantryPID");
+  private final ProfiledPIDController gantryPPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryProfiledPID, GantryConstants.constraints);
   private final PIDController gantryVelocityPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.gantryVelocityPID, "gantryVelocity");
+  private final ProfiledPIDController gantryVelocityPPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryVelocityProfiledPID, GantryConstants.velocityConstraints);
+  private final ProfiledPIDController gantryVelocityProfiledPID =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.gantryVelocityProfiledPID, GantryConstants.velocityConstraints);
   private boolean limits = false;
 
   public GantryIOSparkMax() {
@@ -90,5 +100,35 @@ public class GantryIOSparkMax implements GantryIO {
   @Override
   public void setLimitEnabled(boolean enable) {
     limits = enable;
+  }
+
+  @Override
+  public void setGantryPositionMotionProfile(double pos, GantryIOInputs inputs) {
+    gantryPPID.setGoal(pos);
+    setGantryVoltage(
+        MotorLim.clampVoltage(gantryPPID.calculate(inputs.encoderPosition))
+            + ff.calculate(gantryPPID.getSetpoint().velocity)
+            + gantryVelocityPID.calculate(
+                inputs.encoderVelocity, gantryPPID.getSetpoint().velocity),
+        inputs);
+  }
+
+  @Override
+  public void resetGantryMotionProfile(GantryIOInputs inputs) {
+    gantryPPID.reset(inputs.encoderPosition);
+  }
+
+  @Override
+  public void setGantryVelocityMotionProfile(double vel, GantryIOInputs inputs) {
+    gantryVelocityPPID.setGoal(vel);
+    setGantryVoltage(
+        MotorLim.clampVoltage(gantryVelocityPPID.calculate(inputs.encoderPosition))
+            + ff.calculate(gantryVelocityPPID.getSetpoint().velocity),
+        inputs);
+  }
+
+  @Override
+  public void resetGantryVelocityMotionProfile(GantryIOInputs inputs) {
+    gantryVelocityPPID.reset(inputs.encoderPosition);
   }
 }

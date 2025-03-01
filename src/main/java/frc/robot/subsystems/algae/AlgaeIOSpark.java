@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
+import frc.robot.constants.RobotConstants.PneumaticsConstants;
 import frc.robot.constants.SparkConstants;
 import frc.robot.util.spark.SparkConfigurer;
 
@@ -24,6 +25,7 @@ public class AlgaeIOSpark implements AlgaeIO {
             SparkConstants.getDefaultMax(AlgaeConstants.motorRightChannel, true));
     solenoid =
         new DoubleSolenoid(
+            PneumaticsConstants.pneumaticsHubID,
             PneumaticsModuleType.REVPH,
             AlgaeConstants.solenoidChannelForward,
             AlgaeConstants.solenoidChannelReverse);

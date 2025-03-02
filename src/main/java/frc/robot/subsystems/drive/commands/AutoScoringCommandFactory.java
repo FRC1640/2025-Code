@@ -46,7 +46,7 @@ public class AutoScoringCommandFactory {
   }
 
   public Command autoPlace(Supplier<CoralPreset> coralPreset, BooleanSupplier getDsSide) {
-    return (gantryCommandFactory.gantryDriftCommand(coralPreset, getDsSide))
+    return (gantryCommandFactory.gantryDriftCommandMinima(coralPreset, getDsSide))
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(1.5))
         .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false);

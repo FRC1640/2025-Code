@@ -83,9 +83,13 @@ public class Dashboard {
 
   private void teleopInit() {
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
-    // TODO add actual url
+    // TODO add actual urls for cameras
     // steps:
     // 1. https://www.linkedin.com/pulse/howtousetheusbcameraontheorangepizero2-%E9%9B%AA-%E9%99%88
+    teleopTab
+        .addCamera("Front Cam", "Park", "http://photonvision.local:5800")
+        .withSize(3, 3)
+        .withPosition(1, 4);
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
         .withSize(3, 3)

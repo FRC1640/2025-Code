@@ -24,9 +24,7 @@ public class LiftIOSim implements LiftIO {
 
   SProfiledPIDController sProfiledPIDController =
       RobotPIDConstants.constructSProfiledPIDController(
-          RobotPIDConstants.liftSProfiledPIDConstants,
-          LiftConstants.sCurveConstraints,
-          "LiftSPPID");
+          RobotPIDConstants.liftSProfiledPIDConstants, LiftConstants.sCurveConstraints, "LiftPPID");
   private boolean limits;
 
   public LiftIOSim(BooleanSupplier liftLimitSwitch) {

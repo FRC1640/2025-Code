@@ -30,9 +30,7 @@ public class LiftIOSpark implements LiftIO {
 
   SProfiledPIDController sProfiledPIDController =
       RobotPIDConstants.constructSProfiledPIDController(
-          RobotPIDConstants.liftSProfiledPIDConstants,
-          LiftConstants.sCurveConstraints,
-          "LiftSPPID");
+          RobotPIDConstants.liftSProfiledPIDConstants, LiftConstants.sCurveConstraints, "LiftPPID");
 
   PIDController velocityController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");

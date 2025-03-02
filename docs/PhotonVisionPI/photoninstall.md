@@ -15,7 +15,7 @@ Insert micro SD card into your computer, and flash using Balena Etcher, run as a
 - Select the SD card as the drive.
 - Click flash and wait for the sweet "successful flash" message.
 
-When complete insert the card into the SBC. Congrats. Your Done!
+When complete insert the card into the SBC. Congrats. You're Done!
 
 
 

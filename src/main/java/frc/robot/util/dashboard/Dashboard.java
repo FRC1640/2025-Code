@@ -110,7 +110,7 @@ public class Dashboard {
     teleopTab
         .addBoolean("Has Coral?", () -> coralSubsystem.hasCoral())
         .withSize(1, 1)
-        .withPosition(1, 2);
+        .withPosition(1, 1);
   }
 
   private void sysidInit() {

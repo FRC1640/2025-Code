@@ -65,7 +65,8 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommandMinima(Supplier<CoralPreset> coralPreset, BooleanSupplier dsSide) {
+  public Command gantryDriftCommandMinima(
+      Supplier<CoralPreset> coralPreset, BooleanSupplier dsSide) {
     return (gantrySetVelocityCommand(
                 () ->
                     coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())

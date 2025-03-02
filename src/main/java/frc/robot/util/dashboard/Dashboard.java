@@ -89,19 +89,19 @@ public class Dashboard {
     teleopTab
         .addCamera("Front Cam", "Park", "http://photonvision.local:5800")
         .withSize(3, 3)
-        .withPosition(4, 1);
+        .withPosition(2, 1);
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
         .withSize(3, 3)
-        .withPosition(7, 1);
+        .withPosition(5, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(1, 1)
-        .withPosition(7, 0);
+        .withPosition(5, 0);
     teleopTab
         .addBoolean("Right Sensor", () -> climberSubsystem.getSensor2())
         .withSize(0, 1)
-        .withPosition(9, 0);
+        .withPosition(7, 0);
     teleopTab.addDouble("Match Timer", time).withSize(2, 1).withPosition(0, 0);
     teleopTab
         .addBoolean("Has Algae?", () -> algaeSubsystem.hasAlgae())

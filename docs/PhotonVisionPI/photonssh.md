@@ -1,5 +1,5 @@
 # Photon Vision SSH
-First, download [FileZilla](https://filezilla-project.org/) & [PuTTy](https://www.putty.org/). After that, SSH into the Orange Pi. Usually, the ip is
+First, download [FileZilla](https://filezilla-project.org/) & [PuTTy](https://www.putty.org/). After that, SSH into the Orange Pi (or other SBC). Usually, the ip is
 ```
 10.16.40.63
 ```
@@ -31,5 +31,12 @@ Delete the hashtag and change it to
 PermitRootLogin yes
 ```
 Press ctrl O to write out, and enter to confirm. Then press ctrl X to exit.
-Now in filezilla, log in with the IP address of the device, ```root``` as the username, ```raspberry``` as the password, and ```22``` as the port.
-Click through until you see the opt folder, click on it, click on photonvision, and then replace all of photonvision_config with the equivlent from the backups folder.
+Finaly type:
+```
+sudo systemctl restart ssh
+```
+Now in filezilla, log in with the IP address of the device, ```root``` as the username, ```raspberry``` as the password, and ```22``` as the port. Then press ```Quick Connect```
+Click navigate to /opt/photonvision on the left side (in the SBC's file system). You should see a folder entitled ```photonvision_config```.
+Navigate to the robot code project, and open the backups folder. Here, you should also see a folder entitled ```photonvision_config```.
+Finaly, drag the folder ```photonvision_config``` folder from the robot code on to the SBC, to replace its ```photonvision_config``` folder.
+Confirm the files transfered by opening the ```photonvision_config``` folder on the SBC and confirming the sqlite file is more than one megabyte.

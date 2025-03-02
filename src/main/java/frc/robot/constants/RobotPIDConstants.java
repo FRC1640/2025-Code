@@ -6,10 +6,12 @@ import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.util.control.FeedForwardConstants;
 import frc.robot.util.logging.PIDTracking.PIDTrack;
-import frc.robot.util.logging.PIDTracking.SProfiledPIDTrack;
+import frc.robot.util.logging.PIDTracking.ProfiledPIDTrack;
 import frc.robot.util.logging.TrackedFeedForward.ElevatorFeedForwardTrack;
 import frc.robot.util.logging.TrackedFeedForward.FeedForwardTrack;
 import frc.robot.util.scurveprofiling.SCurveProfile;
@@ -60,7 +62,7 @@ public class RobotPIDConstants {
     SProfiledPIDController k =
         new SProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    SProfiledPIDTrack.pidsTrack.put("SPPID" + (SProfiledPIDTrack.pidsTrack.size()), k);
+    ProfiledPIDTrack.pidsTrack.put("SPPID" + (ProfiledPIDTrack.pidsTrack.size()), k);
     return k;
   }
 
@@ -69,7 +71,26 @@ public class RobotPIDConstants {
     SProfiledPIDController k =
         new SProfiledPIDController(
             pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
-    SProfiledPIDTrack.pidsTrack.put(name, k);
+    ProfiledPIDTrack.pidsTrack.put(name, k);
+
+    return k;
+  }
+
+  public static final ProfiledPIDController constructProfiledPIDController(
+      PIDConstants pidConstants, TrapezoidProfile.Constraints constraints) {
+    ProfiledPIDController k =
+        new ProfiledPIDController(
+            pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDTrack.pidsTrack.put("PPID" + (ProfiledPIDTrack.pidsTrack.size()), k);
+    return k;
+  }
+
+  public static final ProfiledPIDController constructProfiledPIDController(
+      PIDConstants pidConstants, TrapezoidProfile.Constraints constraints, String name) {
+    ProfiledPIDController k =
+        new ProfiledPIDController(
+            pidConstants.kP, pidConstants.kI, pidConstants.kD, constraints, 0.02);
+    ProfiledPIDTrack.pidsTrack.put(name, k);
 
     return k;
   }

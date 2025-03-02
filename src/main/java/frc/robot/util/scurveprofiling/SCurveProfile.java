@@ -1,6 +1,8 @@
 package frc.robot.util.scurveprofiling;
 
-public class SCurveProfile {
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
+public class SCurveProfile extends TrapezoidProfile {
   private Constraints m_constraints;
   private double m_targetPosition;
   private double m_startPosition;
@@ -20,43 +22,23 @@ public class SCurveProfile {
 
   enum ProfilePhase {
     ACCEL_JERK_UP,
-    ACCEL_CONSTANT,
     ACCEL_JERK_DOWN,
-    CRUISE,
     DECEL_JERK_DOWN,
-    DECEL_CONSTANT,
     DECEL_JERK_UP,
     FINISHED
   }
 
-  public static class Constraints {
-    public final double maxVelocity;
-    public final double maxAcceleration;
+  public static class Constraints extends TrapezoidProfile.Constraints {
     public final double maxJerk;
 
     public Constraints(double maxVelocity, double maxAcceleration, double maxJerk) {
-      this.maxVelocity = Math.abs(maxVelocity * 10.0);
-      this.maxAcceleration = Math.abs(maxAcceleration * 10.0);
+      super(maxVelocity, maxAcceleration);
       this.maxJerk = Math.abs(maxJerk * 10.0);
     }
   }
 
-  public static class State {
-    public double position;
-    public double velocity;
-
-    public State() {
-      this.position = 0;
-      this.velocity = 0;
-    }
-
-    public State(double position, double velocity) {
-      this.position = position;
-      this.velocity = velocity;
-    }
-  }
-
   public SCurveProfile(Constraints constraints) {
+    super(constraints);
     m_constraints = constraints;
   }
 
@@ -88,36 +70,23 @@ public class SCurveProfile {
         m_profileJerk = m_constraints.maxJerk;
         if (m_currentAcceleration >= m_constraints.maxAcceleration) {
           m_currentAcceleration = m_constraints.maxAcceleration;
-          m_currentPhase = ProfilePhase.ACCEL_CONSTANT;
-          System.out.println("ACCEL_CONSTANT");
+          m_currentPhase = ProfilePhase.ACCEL_JERK_DOWN;
+          System.out.println("ACCEL_JD");
         }
-      case ACCEL_CONSTANT:
-        m_profileJerk = 0;
-        m_currentPhase = ProfilePhase.ACCEL_JERK_DOWN;
-        System.out.println("ACCEL_JERK_DOWN");
       case ACCEL_JERK_DOWN:
         m_profileJerk = -m_constraints.maxJerk;
-        if (m_currentVelocity >= m_constraints.maxVelocity) {
+        if (m_currentAcceleration < 0) {
           m_currentVelocity = m_constraints.maxVelocity;
-          m_currentPhase = ProfilePhase.CRUISE;
-          System.out.println("CRUISE");
+          m_currentPhase = ProfilePhase.DECEL_JERK_DOWN;
+          System.out.println("DECEL_JD");
         }
-      case CRUISE:
-        m_profileJerk = 0;
-        m_currentAcceleration = 0;
-        m_currentPhase = ProfilePhase.DECEL_JERK_DOWN;
-        System.out.println("DECEL_JERK_DOWN");
       case DECEL_JERK_DOWN:
         m_profileJerk = -m_constraints.maxJerk;
         if (m_currentAcceleration <= -m_constraints.maxAcceleration) {
           m_currentAcceleration = -m_constraints.maxAcceleration;
-          m_currentPhase = ProfilePhase.DECEL_CONSTANT;
+          m_currentPhase = ProfilePhase.DECEL_JERK_UP;
           System.out.println("DECEL_CONSTANT");
         }
-      case DECEL_CONSTANT:
-        m_profileJerk = 0;
-        m_currentPhase = ProfilePhase.DECEL_JERK_UP;
-        System.out.println("DECEL_JERK_UP");
       case DECEL_JERK_UP:
         m_profileJerk = m_constraints.maxJerk;
         if (m_currentVelocity <= 0) {

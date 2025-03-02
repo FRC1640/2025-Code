@@ -6,7 +6,7 @@ import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 
@@ -14,7 +14,7 @@ import edu.wpi.first.util.sendable.SendableRegistry;
  * Implements a PID control loop whose setpoint is constrained by a trapezoid profile. Users should
  * call reset() when they first start running the controller to avoid unwanted behavior.
  */
-public class SProfiledPIDController implements Sendable {
+public class SProfiledPIDController extends ProfiledPIDController {
   private static int instances;
 
   private PIDController m_controller;
@@ -58,6 +58,7 @@ public class SProfiledPIDController implements Sendable {
   @SuppressWarnings("this-escape")
   public SProfiledPIDController(
       double Kp, double Ki, double Kd, SCurveProfile.Constraints constraints, double period) {
+    super(Kp, Ki, Kd, constraints, period);
     m_controller = new PIDController(Kp, Ki, Kd, period);
     m_constraints = constraints;
     m_profile = new SCurveProfile(m_constraints);

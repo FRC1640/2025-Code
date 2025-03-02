@@ -1,13 +1,16 @@
 package frc.robot.subsystems.gantry.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.LiftConstants.GantrySetpoint;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
+import frc.robot.util.tools.AllianceManager;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -148,6 +151,32 @@ public class GantryCommandFactory {
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
+  }
+
+  public Command gantryDriftCommandOdometry(
+      Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
+    // select reef positions
+    Pose2d[] reefPositions =
+        AllianceManager.chooseFromAlliance(
+            FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
+    // find target pole
+    Pose2d reefPos;
+    double lowestDistance = Double.MAX_VALUE;
+    for (Pose2d face : reefPositions) {
+      double dist = Math.abs(getPose.get().getTranslation().minus(face.getTranslation()).getNorm());
+      if (dist <= lowestDistance) {
+        lowestDistance = dist;
+        reefPos = face;
+      }
+    }
+
+    // calculate translation from center
+    double robotRotation = getPose.get().getRotation().getRadians();
+    double gantryLeft =
+        (polePos.getY() - getPose.get().getY()) * Math.cos(robotRotation)
+            - (polePos.getX() - getPose.get().getX()) * Math.sin(robotRotation);
+    // return command sequence
+    return runGantryMotionProfile(() -> GantryConstants.gantryLimitCenter - gantryLeft);
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

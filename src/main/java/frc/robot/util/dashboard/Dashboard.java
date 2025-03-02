@@ -89,7 +89,7 @@ public class Dashboard {
     teleopTab
         .addCamera("Front Cam", "Park", "http://photonvision.local:5800")
         .withSize(3, 3)
-        .withPosition(1, 4);
+        .withPosition(4, 1);
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
         .withSize(3, 3)

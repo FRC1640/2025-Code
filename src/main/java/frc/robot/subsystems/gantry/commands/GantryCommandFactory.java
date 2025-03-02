@@ -4,14 +4,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
+import frc.robot.constants.RobotConstants.LiftConstants.GantrySetpoint;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
   private boolean threshSet = false;
+  private boolean direction = false;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -61,37 +66,35 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommand() {
+  public Command gantryDriftCommandMinima(
+      Supplier<CoralPreset> coralPreset, BooleanSupplier dsSide) {
     return (gantrySetVelocityCommand(
                 () ->
-                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
-                        ? GantryConstants.alignSpeed
-                        : -GantryConstants.alignSpeed)
+                    coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
+                            == GantrySetpoint.RIGHT
+                        ? -GantryConstants.alignSpeed
+                        : GantryConstants.alignSpeed)
             .alongWith(new RunCommand(() -> reefDetector.reefFind()))
             .until(
                 () ->
                     Math.abs(
-                            gantrySubsystem.getCarriagePosition()
-                                - GantryConstants.gantryLimitCenter)
+                            coralPreset.get().getGantry(dsSide.getAsBoolean())
+                                - gantrySubsystem.getCarriagePosition())
                         < GantryConstants.gantryPadding)
             .andThen(new InstantCommand(() -> threshSet = true))
             .andThen(
                 gantrySetVelocityCommand(
                         () ->
-                            gantrySubsystem.getCarriagePosition()
-                                    < GantryConstants.gantryLimitCenter
-                                ? -GantryConstants.alignSpeed
-                                : GantryConstants.alignSpeed)
+                            coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
+                                    == GantrySetpoint.RIGHT
+                                ? GantryConstants.alignSpeed
+                                : -GantryConstants.alignSpeed)
                     .until(
                         () ->
                             Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.high)
-                                    < GantryConstants.gantryPadding
-                                || Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)))
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimitCenter)
+                                < GantryConstants.gantryPadding)))
         .andThen(new InstantCommand(() -> reefDetector.reefFindReset()))
         .andThen(new InstantCommand(() -> threshSet = false))
         .repeatedly()
@@ -105,6 +108,46 @@ public class GantryCommandFactory {
               reefDetector.reefFindReset();
               threshSet = false;
             });
+  }
+
+  public Command gantryDriftCommandThresh() {
+    return (gantrySetVelocityCommand(
+                () ->
+                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
+                        ? GantryConstants.alignSpeed
+                        : -GantryConstants.alignSpeed)
+            .andThen(
+                new InstantCommand(
+                    () ->
+                        direction =
+                            gantrySubsystem.getCarriagePosition()
+                                < GantryConstants.gantryLimitCenter))
+            .until(
+                () ->
+                    Math.abs(
+                            gantrySubsystem.getCarriagePosition()
+                                - GantryConstants.gantryLimitCenter)
+                        < GantryConstants.gantryPadding)
+            .andThen(
+                gantrySetVelocityCommand(
+                        () -> direction ? -GantryConstants.alignSpeed : GantryConstants.alignSpeed)
+                    .andThen(new InstantCommand(() -> direction = !direction))
+                    .until(
+                        () ->
+                            Math.abs(
+                                        gantrySubsystem.getCarriagePosition()
+                                            - GantryConstants.gantryLimits.high)
+                                    < GantryConstants.gantryPadding
+                                || Math.abs(
+                                        gantrySubsystem.getCarriagePosition()
+                                            - GantryConstants.gantryLimits.low)
+                                    < GantryConstants.gantryPadding)))
+        .repeatedly()
+        .until(() -> reefDetector.getDistanceToReef() < 500)
+        .andThen(gantrySetVelocityCommand(() -> direction ? 0.05 : -0.05).withTimeout(0.05))
+        .andThen(
+            gantrySetVelocityCommand(() -> 0)
+                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

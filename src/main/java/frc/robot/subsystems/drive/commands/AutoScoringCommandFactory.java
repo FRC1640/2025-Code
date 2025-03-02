@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
+import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.algae.commands.AlgaeCommandFactory;
@@ -40,13 +41,12 @@ public class AutoScoringCommandFactory {
     this.algaeSubsystem = algaeSubsystem;
   }
 
-  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
-    return gantryCommandFactory.gantryPIDCommand(
-        () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
+  public Command gantryAlignCommand() {
+    return gantryCommandFactory.gantryPIDCommand(() -> GantryConstants.gantryLimitCenter);
   }
 
-  public Command autoPlace() {
-    return (gantryCommandFactory.gantryDriftCommand())
+  public Command autoPlace(Supplier<CoralPreset> coralPreset, BooleanSupplier getDsSide) {
+    return (gantryCommandFactory.gantryDriftCommandMinima(coralPreset, getDsSide))
         .andThen(new WaitCommand(0.01))
         .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(1.5))
         .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false);

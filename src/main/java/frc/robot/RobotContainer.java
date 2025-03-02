@@ -616,7 +616,8 @@ public class RobotContainer {
   public Command getPlaceCommand() {
     return new ConditionalCommand(
         autoScoringCommandFactory.algaeAutoPickup(),
-        autoScoringCommandFactory.autoPlace(),
+        autoScoringCommandFactory.autoPlace(
+            () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget())),
         () -> algaeMode);
   }
 
@@ -629,8 +630,7 @@ public class RobotContainer {
               gantryPresetActive = coralPreset.get();
             })
         .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-        .alongWith(
-            autoScoringCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
+        .alongWith(autoScoringCommandFactory.gantryAlignCommand());
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -645,12 +645,7 @@ public class RobotContainer {
                         gantryPresetActive = coralPreset.get();
                       })
                   .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
-                  .alongWith(
-                      autoScoringCommandFactory
-                          .gantryAlignCommand(
-                              () -> gantryPresetActive,
-                              () -> AllianceManager.onDsSideReef(() -> getTarget()))
-                          .asProxy()))
+                  .alongWith(autoScoringCommandFactory.gantryAlignCommand().asProxy()))
               .schedule();
         });
   }

@@ -26,7 +26,8 @@ public class CoralOuttakeIOSim implements CoralOuttakeIO {
   public void updateInputs(CoralOuttakeIOInputs inputs) {
     intakeSim.setInputVoltage(appliedVoltage);
     intakeSim.update(.02);
-    inputs.coralDetected = coralDetect.getAsBoolean();
+    inputs.coralDetectedHigh = coralDetect.getAsBoolean();
+    inputs.hasCoral = coralDetect.getAsBoolean();
     inputs.appliedVoltage = appliedVoltage;
     inputs.outtakeVelocity = intakeSim.getAngularVelocityRadPerSec();
   }

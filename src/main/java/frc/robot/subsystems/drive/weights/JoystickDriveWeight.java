@@ -39,9 +39,9 @@ public class JoystickDriveWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    if (!enabled) {
-      return new ChassisSpeeds();
-    }
+    // if (!enabled) {
+    //   return new ChassisSpeeds();
+    // }
     if (!(RobotState.isTeleop() || RobotState.isTest())) {
       return new ChassisSpeeds();
     }

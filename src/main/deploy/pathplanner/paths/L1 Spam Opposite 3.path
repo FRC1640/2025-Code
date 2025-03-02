@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.85,
-        "y": 5.14
+        "x": 1.525653409090909,
+        "y": 7.265767045454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.784481332714126,
-        "y": 6.0736458776190485
+        "x": 2.525653409090908,
+        "y": 7.265767045454545
       },
       "isLocked": false,
-      "linkedName": "L4 place"
+      "linkedName": "TopSource"
     },
     {
       "anchor": {
-        "x": 1.496,
-        "y": 7.245823863636363
+        "x": 3.868977272727273,
+        "y": 5.151789772727272
       },
       "prevControl": {
-        "x": 2.4683997505029645,
-        "y": 6.4083542062879415
+        "x": 3.6595728714186273,
+        "y": 5.590539299167429
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefTopLeft"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L4",
+  "folder": "L1 Spam Opposite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

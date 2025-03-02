@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
+  private boolean threshSet = false;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -61,36 +62,80 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommand() {
-    return gantrySetVelocityCommand(
-            () ->
-                gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
-                    ? GantryConstants.alignSpeed
-                    : -GantryConstants.alignSpeed)
+    return (gantrySetVelocityCommand(
+                () ->
+                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
+                        ? GantryConstants.alignSpeed
+                        : -GantryConstants.alignSpeed)
+            .alongWith(new RunCommand(() -> reefDetector.reefFind()))
+            .until(
+                () ->
+                    Math.abs(
+                            gantrySubsystem.getCarriagePosition()
+                                - GantryConstants.gantryLimitCenter)
+                        < GantryConstants.gantryPadding)
+            .andThen(new InstantCommand(() -> threshSet = true))
+            .andThen(
+                gantrySetVelocityCommand(
+                        () ->
+                            gantrySubsystem.getCarriagePosition()
+                                    < GantryConstants.gantryLimitCenter
+                                ? -GantryConstants.alignSpeed
+                                : GantryConstants.alignSpeed)
+                    .until(
+                        () ->
+                            Math.abs(
+                                        gantrySubsystem.getCarriagePosition()
+                                            - GantryConstants.gantryLimits.high)
+                                    < GantryConstants.gantryPadding
+                                || Math.abs(
+                                        gantrySubsystem.getCarriagePosition()
+                                            - GantryConstants.gantryLimits.low)
+                                    < GantryConstants.gantryPadding)))
+        .andThen(new InstantCommand(() -> reefDetector.reefFindReset()))
+        .andThen(new InstantCommand(() -> threshSet = false))
+        .repeatedly()
         .until(
             () ->
-                Math.abs(gantrySubsystem.getCarriagePosition() - GantryConstants.gantryLimitCenter)
-                    < GantryConstants.gantryPadding)
-        .andThen(
-            gantrySetVelocityCommand(
-                    () ->
-                        gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
-                            ? -GantryConstants.alignSpeed
-                            : GantryConstants.alignSpeed)
-                .until(
-                    () ->
-                        Math.abs(
-                                    gantrySubsystem.getCarriagePosition()
-                                        - GantryConstants.gantryLimits.high)
-                                < GantryConstants.gantryPadding
-                            || Math.abs(
-                                    gantrySubsystem.getCarriagePosition()
-                                        - GantryConstants.gantryLimits.low)
-                                < GantryConstants.gantryPadding))
-        .repeatedly()
-        .until(() -> reefDetector.isDetecting())
+                reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 13 && threshSet)
         .andThen(
             gantrySetVelocityCommand(() -> 0)
-                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
+                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01))
+        .finallyDo(
+            () -> {
+              reefDetector.reefFindReset();
+              threshSet = false;
+            });
+  }
+
+  public Command runGantryMotionProfile(DoubleSupplier pos) {
+    return new InstantCommand(() -> gantrySubsystem.resetGantryMotionProfile())
+        .andThen(
+            new RunCommand(
+                    () -> {
+                      gantrySubsystem.runGantryMotionProfile(pos.getAsDouble());
+                    },
+                    gantrySubsystem)
+                .finallyDo(
+                    () -> {
+                      gantrySubsystem.setGantryVoltage(0);
+                      gantrySubsystem.resetGantryMotionProfile();
+                    }));
+  }
+
+  public Command runGantryVelocityMotionProfile(DoubleSupplier vel) {
+    return new InstantCommand(() -> gantrySubsystem.resetGantryVelocityMotionProfile())
+        .andThen(
+            new RunCommand(
+                    () -> {
+                      gantrySubsystem.runGantryVelocityMotionProfile(vel.getAsDouble());
+                    },
+                    gantrySubsystem)
+                .finallyDo(
+                    () -> {
+                      gantrySubsystem.setGantryVoltage(0);
+                      gantrySubsystem.resetGantryVelocityMotionProfile();
+                    }));
   }
 
   public void constructTriggers() {}

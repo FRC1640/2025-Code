@@ -101,10 +101,27 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
-    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
+    Logger.recordOutput("goto", preset.getGantry(dsSide));
+    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.04;
   }
 
   public void setLimitEnabled(boolean enable) {
     io.setLimitEnabled(enable);
+  }
+
+  public void runGantryMotionProfile(double pos) {
+    io.setGantryPositionMotionProfile(pos, inputs);
+  }
+
+  public void resetGantryMotionProfile() {
+    io.resetGantryMotionProfile(inputs);
+  }
+
+  public void runGantryVelocityMotionProfile(double vel) {
+    io.setGantryVelocityMotionProfile(vel, inputs);
+  }
+
+  public void resetGantryVelocityMotionProfile() {
+    io.resetGantryVelocityMotionProfile(inputs);
   }
 }

@@ -141,8 +141,8 @@ public class GantryCommandFactory {
                                             - GantryConstants.gantryLimits.low)
                                     < GantryConstants.gantryPadding)))
         .repeatedly()
-        .until(() -> reefDetector.getDistanceToReef() < 550)
-        .andThen(gantrySetVelocityCommand(() -> 0.05).withTimeout(0.02))
+        .until(() -> reefDetector.getDistanceToReef() < 500)
+        .andThen(gantrySetVelocityCommand(() -> direction ? 0.05 : -0.05).withTimeout(0.05))
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));

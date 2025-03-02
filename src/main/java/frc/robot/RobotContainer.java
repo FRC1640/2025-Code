@@ -528,6 +528,7 @@ public class RobotContainer {
                 (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
                     && !coralOuttakeCommandFactory.outtaking)
         .onTrue(runLiftToSafe());
+
     // new Trigger(
     //         () ->
     //             algaeIntakeSubsystem.hasAlgae()
@@ -697,7 +698,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",
-        new WaitUntilCommand(() -> coralOuttakeSubsystem.hasCoral())
+        new WaitUntilCommand(
+                () ->
+                    (!coralOuttakeSubsystem.isCoralDetected() && coralOuttakeSubsystem.hasCoral()))
             .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));

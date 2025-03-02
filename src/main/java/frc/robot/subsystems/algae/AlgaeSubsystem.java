@@ -32,7 +32,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
     lastTime = System.currentTimeMillis();
 
-    Logger.recordOutput("HasAlgae", hasAlgae());
+    Logger.recordOutput("Sensors/HasAlgae", hasAlgae());
   }
 
   public double getIntakeMotorLeftVoltage() {

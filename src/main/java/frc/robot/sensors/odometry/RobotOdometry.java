@@ -242,7 +242,8 @@ public class RobotOdometry extends PeriodicBase {
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
     for (Pose2d pose : robotPoses) {
-      Logger.recordOutput("AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
+      Logger.recordOutput(
+          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
     }
     for (Pose2d pose : robotPosesAccepted) {
       Logger.recordOutput(
@@ -250,7 +251,7 @@ public class RobotOdometry extends PeriodicBase {
     }
     for (Pose2d pose : robotPosesRejected) {
       Logger.recordOutput(
-          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejected", pose);
+          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejected", pose);
     }
   }
 
@@ -288,11 +289,12 @@ public class RobotOdometry extends PeriodicBase {
     }
     Pose2d visionUpdate = result.get().pose().toPose2d();
     Logger.recordOutput(
-        "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesTrig", visionUpdate);
+        "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesTrig", visionUpdate);
     if (Robot.getState() == RobotState.DISABLED
         || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
       Logger.recordOutput(
-          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig", visionUpdate);
+          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig",
+          visionUpdate);
       return;
     }
     if (!(isPoseValid(visionUpdate)

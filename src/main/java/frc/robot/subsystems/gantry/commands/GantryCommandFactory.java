@@ -96,8 +96,7 @@ public class GantryCommandFactory {
         .andThen(new InstantCommand(() -> threshSet = false))
         .repeatedly()
         .until(
-            () ->
-                reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 13 && threshSet)
+            () -> reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 6 && threshSet)
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01))

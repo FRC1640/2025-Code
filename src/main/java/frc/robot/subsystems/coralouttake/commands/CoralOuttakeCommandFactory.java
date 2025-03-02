@@ -19,6 +19,7 @@ public class CoralOuttakeCommandFactory {
   public boolean runningBack = false;
   public boolean outtaking = false;
   boolean setHasCoral = false;
+  boolean ranBack = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -41,7 +42,12 @@ public class CoralOuttakeCommandFactory {
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
+    new Trigger(
+            () ->
+                !(intakeSubsystem.hasCoral() && !intakeSubsystem.isCoralDetected())
+                    && !ranBack
+                    && Robot.getState() != RobotState.AUTONOMOUS)
+        .debounce(0.01)
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -49,7 +55,7 @@ public class CoralOuttakeCommandFactory {
                         RobotOdometry.instance.getPose("Main"),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
+        .whileTrue(outtake());
 
     new Trigger(
             () ->
@@ -57,11 +63,15 @@ public class CoralOuttakeCommandFactory {
                     && intakeSubsystem.hasCoral()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack());
+        .onTrue(runBack().finallyDo(() -> ranBack = true));
+
+    new Trigger(() -> !intakeSubsystem.hasCoral())
+        .debounce(0.05)
+        .onTrue(new InstantCommand(() -> ranBack = false));
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> setHasCoral ? 4.5 : 2.5)
+    return setIntakeVoltage(() -> setHasCoral ? 4.5 : 1)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {

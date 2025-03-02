@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.793494318181818,
-        "y": 4.064886363636362
+        "y": 4.03497159090909
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.624828568957216,
-        "y": 4.129249054313566
+        "y": 4.099334281586294
       },
       "isLocked": false,
       "linkedName": "ReefCenterRight_OffsetLeft"

@@ -70,8 +70,8 @@ public class GantryCommandFactory {
                 () ->
                     coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
                             == GantrySetpoint.RIGHT
-                        ? GantryConstants.alignSpeed
-                        : -GantryConstants.alignSpeed)
+                        ? -GantryConstants.alignSpeed
+                        : GantryConstants.alignSpeed)
             .alongWith(new RunCommand(() -> reefDetector.reefFind()))
             .until(
                 () ->
@@ -85,8 +85,8 @@ public class GantryCommandFactory {
                         () ->
                             coralPreset.get().getGantrySetpoint(dsSide.getAsBoolean())
                                     == GantrySetpoint.RIGHT
-                                ? -GantryConstants.alignSpeed
-                                : GantryConstants.alignSpeed)
+                                ? GantryConstants.alignSpeed
+                                : -GantryConstants.alignSpeed)
                     .until(
                         () ->
                             Math.abs(

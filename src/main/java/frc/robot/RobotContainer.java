@@ -615,7 +615,8 @@ public class RobotContainer {
   public Command getPlaceCommand() {
     return new ConditionalCommand(
         autoScoringCommandFactory.algaeAutoPickup(),
-        autoScoringCommandFactory.autoPlace(),
+        autoScoringCommandFactory.autoPlace(
+            () -> coralPreset, () -> AllianceManager.onDsSideReef(() -> getTarget())),
         () -> algaeMode);
   }
 

@@ -86,6 +86,9 @@ import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.periodic.PeriodicBase;
 import frc.robot.util.periodic.PeriodicScheduler;
+import frc.robot.util.pi.OrangePIInput;
+import frc.robot.util.pi.OrangePIInputReal;
+import frc.robot.util.pi.OrangePIInputSim;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import java.util.ArrayList;
@@ -187,6 +190,7 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
+        orangePiInput = new OrangePIInputReal();
         break;
       case SIM:
         gyro =
@@ -238,6 +242,7 @@ public class RobotContainer {
                 RobotConfigConstants.algaeIntakeEnabled
                     ? new AlgaeIOSim(() -> simBoard.getLl4())
                     : new AlgaeIO() {});
+        orangePiInput = new OrangePIInputSim();
         break;
       default:
         gyro = new Gyro(new GyroIO() {});
@@ -248,6 +253,7 @@ public class RobotContainer {
         climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
         winchSubsystem = new WinchSubsystem(new WinchIO() {});
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
+        orangePiInput = new OrangePIInput() {};
         break;
     }
 

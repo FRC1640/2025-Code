@@ -5,8 +5,7 @@ import paramiko
 import subprocess
 import ttkbootstrap as tb
 from networktables import NetworkTables
-
-username = "pi"
+from PIL import ImageTk, Image
 password = "raspberry"
 hostname = "10.16.40.63"
 NetworkTables.initialize(server='10.16.40.2') 
@@ -102,6 +101,12 @@ usernote.pack()
 
 passnote = tb.Label(frame_main, text=f"Password: {password}", font=("Arial", 10))
 passnote.pack()
+
+img = ImageTk.PhotoImage(Image.open("PiDiagnostics/resources/icon.png"))
+panel = Label(root, image = img)
+panel.pack(side = "bottom", fill = "both", expand = "yes")
+icon = tk.PhotoImage(file="PiDiagnostics/resources/icon.png")
+root.iconphoto(False, icon)
 
 update_diagnostics_labels()
 

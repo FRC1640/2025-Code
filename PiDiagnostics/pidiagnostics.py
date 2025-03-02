@@ -6,6 +6,7 @@ import subprocess
 import ttkbootstrap as tb
 from networktables import NetworkTables
 from PIL import ImageTk, Image
+username = "pi"
 password = "raspberry"
 hostname = "10.16.40.63"
 NetworkTables.initialize(server='10.16.40.2') 

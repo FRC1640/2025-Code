@@ -77,6 +77,11 @@ public class Dashboard {
     return autoChooser.getSelected();
   }
 
+  double time =
+      ((Timer.getFPGATimestamp() > 0)
+          ? (150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000)
+          : 0);
+
   private void teleopInit() {
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
     // TODO add actual url
@@ -94,15 +99,7 @@ public class Dashboard {
         .addBoolean("Right Sensor", () -> climberSubsystem.getSensor2())
         .withSize(0, 1)
         .withPosition(9, 0);
-    teleopTab
-        .addDouble(
-            "Match Timer",
-            () ->
-                ((Timer.getFPGATimestamp() > 0)
-                    ? (150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000)
-                    : 0))
-        .withSize(2, 1)
-        .withPosition(0, 0);
+    teleopTab.addDouble("Match Timer", () -> time).withSize(2, 1).withPosition(0, 0);
     teleopTab
         .addBoolean("Has Algae?", () -> algaeSubsystem.hasAlgae())
         .withSize(1, 1)

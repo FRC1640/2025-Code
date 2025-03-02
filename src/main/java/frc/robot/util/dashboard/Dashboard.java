@@ -1,7 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
+import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
@@ -32,18 +34,24 @@ public class Dashboard {
   public MAXMotorTab maxMotorTab = new MAXMotorTab();
   public FLEXMotorTab flexMotorTab = new FLEXMotorTab();
   private ClimberSubsystem climberSubsystem;
+  private AlgaeSubsystem algaeSubsystem;
+  private CoralOuttakeSubsystem coralSubsystem;
 
   public Dashboard(
       DriveSubsystem driveSubsystem,
       LiftSubsystem liftSubsystem,
       GantrySubsystem gantrySubsystem,
       ClimberSubsystem climberSubsystem,
+      AlgaeSubsystem algaeSubsystem,
+      CoralOuttakeSubsystem coralSubsystem,
       CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
     this.gantrySubsystem = gantrySubsystem;
     this.controller = controller;
     this.climberSubsystem = climberSubsystem;
+    this.algaeSubsystem = algaeSubsystem;
+    this.coralSubsystem = coralSubsystem;
     autoInit();
     teleopInit();
     if (TestConfig.tuningMode == TestingSetting.pidTuning) {
@@ -77,19 +85,32 @@ public class Dashboard {
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
         .withSize(3, 3)
-        .withPosition(8, 1);
+        .withPosition(7, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(1, 1)
-        .withPosition(8, 0);
+        .withPosition(7, 0);
     teleopTab
         .addBoolean("Right Sensor", () -> climberSubsystem.getSensor2())
         .withSize(0, 1)
-        .withPosition(10, 0);
+        .withPosition(9, 0);
     teleopTab
-        .addDouble("Match Timer", () -> Math.round(DriverStation.getMatchTime() * 10000) / 10000)
+        .addDouble(
+            "Match Timer",
+            () ->
+                ((Timer.getFPGATimestamp() > 0)
+                    ? (150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000)
+                    : 0))
         .withSize(2, 1)
         .withPosition(0, 0);
+    teleopTab
+        .addBoolean("Has Algae?", () -> algaeSubsystem.hasAlgae())
+        .withSize(1, 1)
+        .withPosition(0, 1);
+    teleopTab
+        .addBoolean("Has Coral?", () -> coralSubsystem.hasCoral())
+        .withSize(1, 1)
+        .withPosition(1, 2);
   }
 
   private void sysidInit() {

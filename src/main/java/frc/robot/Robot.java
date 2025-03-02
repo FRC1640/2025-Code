@@ -19,6 +19,7 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
+import frc.robot.util.pi.OrangePIDashboard;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -58,6 +59,7 @@ public class Robot extends LoggedRobot {
   }
 
   public Robot() {
+    OrangePIDashboard.applicationStart();
     CanBridge.runTCP();
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -86,6 +88,7 @@ public class Robot extends LoggedRobot {
         LoggedPowerDistribution.getInstance(21, ModuleType.kRev);
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
+
         break;
 
         // Running a physics simulator, log to local folder

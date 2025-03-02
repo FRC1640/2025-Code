@@ -37,8 +37,8 @@ def get_diagnostics():
         opi.putNumber('Disk Usage', float(diagnostics['disk_usage'][:-1]))
         client.close()
     except Exception as e:
-        print(f"Error: {e}")
-        diagnostics = {key: "Error" for key in commands.keys()}
+        print(f"Is pi not on, or ssh not enabled?: {e}")
+        diagnostics = {key: "goobersnort error" for key in commands.keys()}
     
     return diagnostics
 

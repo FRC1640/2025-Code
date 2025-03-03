@@ -12,15 +12,15 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
+import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
-import frc.robot.util.tools.Limits;
-import frc.robot.util.tools.RobotSwitch;
-import frc.robot.util.tools.RobotSwitchManager.RobotType;
-import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
+import frc.robot.util.misc.Limits;
+import frc.robot.util.robotswitch.RobotSwitch;
+import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {

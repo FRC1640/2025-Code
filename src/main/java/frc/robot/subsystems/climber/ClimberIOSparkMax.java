@@ -11,8 +11,8 @@ import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotConstants.PneumaticsConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
-import frc.robot.util.tools.MotorLim;
 
 public class ClimberIOSparkMax implements ClimberIO {
   private final RelativeEncoder liftEncoder;

@@ -3,8 +3,8 @@ package frc.robot.subsystems.drive.weights;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
-import frc.robot.util.tools.AutoAlignHelper;
-import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.helpers.AutoAlignHelper;
+import frc.robot.util.misc.DistanceManager;
 import java.util.function.Supplier;
 
 public class DriveToPointWeight implements DriveWeight {

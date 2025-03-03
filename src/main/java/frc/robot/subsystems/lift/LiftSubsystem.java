@@ -37,7 +37,7 @@ public class LiftSubsystem extends SubsystemBase {
                 this,
                 new SysIdRoutine.Config(
                     Volts.per(Seconds).of(0.5),
-                    Volts.of(3.5),
+                    Volts.of(2),
                     Seconds.of(100),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
   }
@@ -122,7 +122,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.02;
+    return Math.abs(getMotorPosition() - pos) < 0.004 && Math.abs(getLeaderMotorVelocity()) < 0.001;
   }
 
   public boolean isLimitSwitchPressed() {

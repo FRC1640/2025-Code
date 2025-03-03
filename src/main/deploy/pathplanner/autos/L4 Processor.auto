@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L4 Mid 1"
+                  "pathName": "L4 Processor 1"
                 }
               }
             ]
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L4 Mid 2"
+                  "pathName": "L4 Processor 2"
                 }
               },
               {
@@ -67,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L4 Mid 3"
+                  "pathName": "L4 Processor 3"
                 }
               },
               {

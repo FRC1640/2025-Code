@@ -4,7 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "L1 Spam Opposite",
-    "L4 Mid"
+    "L4 Mid",
+    "L4 Processor"
   ],
   "autoFolders": [],
   "defaultMaxVel": 1.0,

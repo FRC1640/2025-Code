@@ -121,7 +121,7 @@ public class SparkPIDConstants {
    * @param minOutput Minimum output of PID
    * @param maxOutput Maximum output of PID
    * @param velocityFF Velocity Feed Forward
-   * @param closedLoopSlot The closed loop slot <<<<<<< HEAD
+   * @param closedLoopSlot The closed loop slot
    */
   public SparkPIDConstants(
       double kP,

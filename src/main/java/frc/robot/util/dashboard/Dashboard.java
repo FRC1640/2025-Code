@@ -88,10 +88,10 @@ public class Dashboard {
         .withSize(3, 3)
         .withPosition(2, 1);
     teleopTab
-        .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
+        .addCamera("Rear Cam", "BackLL", "http://orangepi.local:1184/stream.mjpg")
         .withSize(4, 3)
         .withPosition(5, 1);
-    // TODO add actual back url
+    // TODO is this the correct back url??
 
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())

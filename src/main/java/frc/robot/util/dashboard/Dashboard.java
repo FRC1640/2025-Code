@@ -83,16 +83,15 @@ public class Dashboard {
 
   private void teleopInit() {
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
-    // TODO add actual urls for cameras
-    // Someonce can figure that out when we have all the cameras
     teleopTab
-        .addCamera("Front Cam", "Park", "http://photonvision.local:5800")
+        .addCamera("Front Cam", "Park", "http://orangepi.local:1182/stream.mjpg")
         .withSize(3, 3)
         .withPosition(2, 1);
     teleopTab
         .addCamera("Rear Cam", "BackLL", "http://photonvision.local:5800")
         .withSize(4, 3)
         .withPosition(5, 1);
+    // TODO add actual back url
 
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())

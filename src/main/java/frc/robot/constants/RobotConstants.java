@@ -27,13 +27,13 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 1;
-    public static final double robotLength = 1; // 0.927
+    public static final double robotWidth = 0.95;
+    public static final double robotLength = 0.95; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.none;
+    public static final TestingSetting tuningMode = TestingSetting.sysIDTesting;
   }
 
   public class MotorInfo {
@@ -109,9 +109,9 @@ public class RobotConstants {
   }
 
   public static class AutoAlignConfig {
-    public static final double maxDistanceFromTarget = 0.5;
+    public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 1, Math.PI, 4 * Math.PI);
+        new PathConstraints(2, 0.75, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -205,8 +205,8 @@ public class RobotConstants {
     public static final int liftFollowerMotorID = new RobotSwitch<Integer>(10).get();
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
-    public static final double liftMaxSpeed = 1.75;
-    public static final double liftMaxAccel = 1.2;
+    public static final double liftMaxSpeed = 2;
+    public static final double liftMaxAccel = 1;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -219,13 +219,13 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
-      Safe(0, 0.1, GantrySetpoint.CENTER),
+      Safe(0, 0.14, GantrySetpoint.CENTER),
       LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
       RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
       RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.56, GantrySetpoint.LEFT),
-      RightL4(0.56, GantrySetpoint.RIGHT),
+      LeftL4(0.568, GantrySetpoint.LEFT),
+      RightL4(0.568, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;

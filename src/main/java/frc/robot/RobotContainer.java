@@ -311,7 +311,7 @@ public class RobotContainer {
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
     // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -6 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -319,12 +319,13 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
+    // 4));
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 4));
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.elevatorApplyVoltageCommand(
+    //         () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -340,10 +341,7 @@ public class RobotContainer {
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
-                    "GantryDone",
-                    gantrySubsystem.isAtPreset(
-                            coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
-                        || algaeMode);
+                    "GantryDone", gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode);
               }
             });
   }
@@ -352,14 +350,14 @@ public class RobotContainer {
     if (algaeMode) {
       return pose;
     }
-    boolean alliance = AllianceManager.onDsSideReef(() -> getTarget());
+    boolean alliance = true;
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.05;
+        side = 0.1;
         break;
       case RIGHT:
-        side = -0.05;
+        side = -0.1;
         break;
       case CENTER:
         side = 0;
@@ -397,7 +395,7 @@ public class RobotContainer {
                             .getPose("Main")
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
-                        < 1.5
+                        < 2
                     && followPathNearest.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
@@ -411,9 +409,7 @@ public class RobotContainer {
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                    && (gantrySubsystem.isAtPreset(
-                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
-                    && !algaeIntakeSubsystem.hasAlgae()
+                    && (gantrySubsystem.isAtPreset(coralPreset, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
     new Trigger(
@@ -581,6 +577,12 @@ public class RobotContainer {
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
 
+    new Trigger(operatorController.leftTrigger())
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
+
+    new Trigger(operatorController.rightTrigger())
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+
     // climber rumble
     new Trigger(() -> climberRoutines.isReadyToClamp())
         .onTrue(
@@ -647,9 +649,7 @@ public class RobotContainer {
                   .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
                   .alongWith(
                       autoScoringCommandFactory
-                          .gantryAlignCommand(
-                              () -> gantryPresetActive,
-                              () -> AllianceManager.onDsSideReef(() -> getTarget()))
+                          .gantryAlignCommand(() -> gantryPresetActive, () -> true)
                           .asProxy()))
               .schedule();
         });

@@ -79,8 +79,9 @@ public class LiftIOSpark implements LiftIO {
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)
-                + velocityController.calculate(
-                    inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
+            // + velocityController.calculate(
+            //     inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
+            ),
         inputs);
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;
     lastTime = Timer.getFPGATimestamp();

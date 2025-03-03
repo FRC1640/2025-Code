@@ -10,6 +10,7 @@ public class ReefDetector extends PeriodicBase {
   private ReefDetectorIO reefDetectorIO;
   private ReefDetectorIOInputsAutoLogged inputs = new ReefDetectorIOInputsAutoLogged();
   private double foundThresh = ReefDetectorConstants.detectionThresh;
+  private double savedDistance = 0;
 
   public double getFoundThresh() {
     return foundThresh;
@@ -55,5 +56,17 @@ public class ReefDetector extends PeriodicBase {
 
   public void reefFindReset() {
     foundThresh = ReefDetectorConstants.detectionThresh;
+  }
+
+  public void saveDistance() {
+    savedDistance = inputs.distanceToReef;
+  }
+
+  public double getSavedDistance() {
+    return savedDistance;
+  }
+
+  public boolean furtherThanSaved() {
+    return inputs.distanceToReef > savedDistance;
   }
 }

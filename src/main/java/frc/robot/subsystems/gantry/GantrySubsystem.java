@@ -124,4 +124,8 @@ public class GantrySubsystem extends SubsystemBase {
   public void resetGantryVelocityMotionProfile() {
     io.resetGantryVelocityMotionProfile(inputs);
   }
+
+  public boolean isAtSetpoint(double setpoint) {
+    return Math.abs(getCarriagePosition() - setpoint) < 0.1; // TODO threshold
+  }
 }

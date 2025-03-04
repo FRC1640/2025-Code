@@ -123,7 +123,7 @@ hostname_entry = tb.Entry(frame_main)
 hostname_entry.insert(0, hostname)
 hostname_entry.pack()
 
-server_label = tb.Label(frame_main, text="Server IP:")
+server_label = tb.Label(frame_main, text="NT Server IP:")
 server_label.pack()
 server_entry = tb.Entry(frame_main)
 server_entry.insert(0, server_ip)

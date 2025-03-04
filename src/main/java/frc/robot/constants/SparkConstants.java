@@ -34,7 +34,7 @@ public class SparkConstants {
         id,
         IdleMode.kBrake,
         inverted,
-        60,
+        80,
         8,
         2,
         StatusFrames.getDefault(),

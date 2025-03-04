@@ -312,7 +312,7 @@ public class RobotContainer {
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
     // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -6 * operatorController.getRightY()));
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -320,13 +320,12 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    // winchSubsystem.setDefaultCommand(
-    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
-    // 4));
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
 
-    // climberSubsystem.setDefaultCommand(
-    //     climberCommandFactory.elevatorApplyVoltageCommand(
-    //         () -> -operatorController.getRightY() * 4));
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.elevatorApplyVoltageCommand(
+            () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -413,17 +412,17 @@ public class RobotContainer {
                     && (gantrySubsystem.isAtPreset(coralPreset, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
-    new Trigger(
-            () ->
-                followPathNearest.isAutoalignComplete()
-                    && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
-                    && algaeIntakeSubsystem.hasAlgae()
-                    && Robot.getState() != RobotState.AUTONOMOUS)
-        .whileTrue(
-            algaeCommandFactory
-                .processCommand()
-                .beforeStarting(() -> joystickDriveWeight.setEnabled(false))
-                .finallyDo(() -> joystickDriveWeight.setEnabled(true)));
+    // new Trigger(
+    //         () ->
+    //             followPathNearest.isAutoalignComplete()
+    //                 && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
+    //                 && algaeIntakeSubsystem.hasAlgae()
+    //                 && Robot.getState() != RobotState.AUTONOMOUS)
+    //     .whileTrue(
+    //         algaeCommandFactory
+    //             .processCommand()
+    //             .beforeStarting(() -> joystickDriveWeight.setEnabled(false))
+    //             .finallyDo(() -> joystickDriveWeight.setEnabled(true)));
     new Trigger(() -> presetBoard.povIsUpwards())
         .onTrue(new InstantCommand(() -> algaeMode = true));
 

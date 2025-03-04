@@ -75,13 +75,15 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
+    Logger.recordOutput(
+        "LiftFeedForward",
+        elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity));
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity)
-            // + velocityController.calculate(
-            //     inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
-            ),
+                + velocityController.calculate(
+                    inputs.leaderMotorVelocity, profiledPIDController.getSetpoint().velocity)),
         inputs);
     velocitySetpoint = profiledPIDController.getSetpoint().velocity;
     lastTime = Timer.getFPGATimestamp();

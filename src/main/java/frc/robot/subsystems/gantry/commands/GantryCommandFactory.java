@@ -127,9 +127,13 @@ public class GantryCommandFactory {
                                 - GantryConstants.gantryLimitCenter)
                         < GantryConstants.gantryPadding)
             .andThen(
-                gantrySetVelocityCommand(
-                        () -> direction ? -GantryConstants.alignSpeed : GantryConstants.alignSpeed)
-                    .andThen(new InstantCommand(() -> direction = !direction))
+                new InstantCommand(() -> direction = !direction)
+                    .andThen(
+                        gantrySetVelocityCommand(
+                            () ->
+                                direction
+                                    ? GantryConstants.alignSpeed
+                                    : -GantryConstants.alignSpeed))
                     .until(
                         () ->
                             Math.abs(

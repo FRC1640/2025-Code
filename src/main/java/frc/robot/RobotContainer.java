@@ -544,6 +544,11 @@ public class RobotContainer {
         .b()
         .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+    operatorController
+        .leftTrigger()
+        .onTrue(
+            gantryCommandFactory.gantryDriftCommandOdometry(
+                () -> coralPreset, () -> followPathNearest.getFinalPosition()));
 
     driveController
         .rightTrigger()

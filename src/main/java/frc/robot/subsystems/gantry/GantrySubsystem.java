@@ -128,4 +128,9 @@ public class GantrySubsystem extends SubsystemBase {
   public boolean isAtSetpoint(double setpoint) {
     return Math.abs(getCarriagePosition() - setpoint) < 0.1; // TODO threshold
   }
+
+  public boolean isAtLimits() {
+    return Math.abs(getCarriagePosition() - GantryConstants.gantryLimits.low) < 0.05
+        || Math.abs(getCarriagePosition() - GantryConstants.gantryLimits.high) < 0.05;
+  }
 }

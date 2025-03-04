@@ -6,6 +6,7 @@ package frc.robot;
 
 import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -16,6 +17,7 @@ import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
@@ -134,6 +136,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     DriveWeightCommand.removeAllWeights();
+    PathplannerWeight.setSpeeds(new ChassisSpeeds());
     state = RobotState.DISABLED;
   }
 

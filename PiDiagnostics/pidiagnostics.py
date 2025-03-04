@@ -90,6 +90,7 @@ def update_settings():
     server_ip = server_entry.get()
     NetworkTables.initialize(server=server_ip)
     status_label.config(text=f"Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
 
 root = tb.Window(themename="darkly")
 root.title("Orange Pi Diagnostics Monitor")

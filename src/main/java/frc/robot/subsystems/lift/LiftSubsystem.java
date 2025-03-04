@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -93,8 +94,8 @@ public class LiftSubsystem extends SubsystemBase {
     return inputs.followerTemperature;
   }
 
-  public void setLiftPosition(double pos) {
-    io.setLiftPosition(pos, inputs);
+  public void setLiftPosition(DoubleSupplier pos) {
+    io.setLiftPosition(pos.getAsDouble(), inputs);
   }
 
   public void setLiftVoltage(double voltage) {

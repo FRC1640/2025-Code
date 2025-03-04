@@ -47,6 +47,7 @@ public class LiftIOSpark implements LiftIO {
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
     liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
+    profiledPIDController.setTolerance(0.003);
   }
   /*
    * Set voltage of the motor
@@ -68,7 +69,9 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
-        MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
+        MotorLim.clampVoltage(
+            liftController.calculate(inputs.leaderMotorPosition, position)
+                + elevatorFeedforward.calculate(0)),
         inputs);
   }
 

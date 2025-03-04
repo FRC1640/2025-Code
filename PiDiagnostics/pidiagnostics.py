@@ -46,7 +46,7 @@ def get_diagnostics():
         client.close()
     except Exception as e:
         print(f"Goobersnort Error: {e}")
-        diagnostics = {key: "Gooberstorn Error" for key in commands.keys()}
+        diagnostics = {key: "Goobersnort Error" for key in commands.keys()}
     
     return diagnostics
 
@@ -89,7 +89,7 @@ def update_settings():
     hostname = hostname_entry.get()
     server_ip = server_entry.get()
     NetworkTables.initialize(server=server_ip)
-    status_label.config(text=f"Server: {server_ip}, Host: {hostname}")
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
     get_diagnostics()
 
 root = tb.Window(themename="darkly")

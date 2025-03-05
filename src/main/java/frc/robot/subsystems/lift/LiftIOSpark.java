@@ -166,4 +166,11 @@ public class LiftIOSpark implements LiftIO {
   public void setLimitEnabled(boolean enable) {
     limits = enable;
   }
+
+  @Override
+  public void testMethod() {
+    profiledPIDController =
+        RobotPIDConstants.constructProfiledPIDController(
+            RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+  }
 }

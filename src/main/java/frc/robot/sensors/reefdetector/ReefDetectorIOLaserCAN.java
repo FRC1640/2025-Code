@@ -3,7 +3,6 @@ package frc.robot.sensors.reefdetector;
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
-import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -11,8 +10,8 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
   private boolean isConnected;
   private boolean detect;
-  private TimeInterpolatableBuffer<Double> distanceBuffer =
-      TimeInterpolatableBuffer.createDoubleBuffer(10);
+  // private TimeInterpolatableBuffer<Double> distanceBuffer =
+  //     TimeInterpolatableBuffer.createDoubleBuffer(10);
 
   public ReefDetectorIOLaserCAN() {
     laserCan = new LaserCan(ReefDetectorConstants.channel);

@@ -41,6 +41,10 @@ public class LiftSubsystem extends SubsystemBase {
                     Volts.of(2),
                     Seconds.of(100),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
+
+    LogRunner.addLog(
+        new VelocityLogStorage(
+            () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
   }
 
   @Override
@@ -49,9 +53,6 @@ public class LiftSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.processInputs("Lift/", inputs);
-    LogRunner.addLog(
-        new VelocityLogStorage(
-            () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
   }
 
   public double getMotorPosition() {
@@ -117,6 +118,7 @@ public class LiftSubsystem extends SubsystemBase {
   public void resetLiftMotionProfile() {
     io.resetLiftMotionProfile(inputs);
     io.resetLiftPositionPid();
+    // testMethod();
   }
 
   public void resetEncoder() {
@@ -133,5 +135,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void setLimitEnabled(boolean enable) {
     io.setLimitEnabled(enable);
+  }
+
+  public void testMethod() {
+    io.testMethod();
   }
 }

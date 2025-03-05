@@ -9,7 +9,8 @@ public interface CoralOuttakeIO extends AutoCloseable {
     public double tempCelcius = 0;
     public double appliedVoltage = 0;
     public double outtakeVelocity = 0;
-    public boolean coralDetected = false;
+    public boolean coralDetectedHigh = false;
+    public boolean hasCoral = false;
   }
 
   public default void setIntakeVoltage(double voltage) {}

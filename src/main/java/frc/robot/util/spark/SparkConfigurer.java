@@ -84,13 +84,13 @@ public class SparkConfigurer {
                 != spark.configAccessor.encoder.getQuadratureMeasurementPeriod())
             || (config.getEncoderAverageDepth()
                 != spark.configAccessor.encoder.getQuadratureAverageDepth()));
-    if (config.getPID().isPresent()) {
-      flash =
-          (flash
-              || (config.getPID().get().kP != spark.configAccessor.closedLoop.getP())
-              || (config.getPID().get().kI != spark.configAccessor.closedLoop.getI())
-              || (config.getPID().get().kD != spark.configAccessor.closedLoop.getD()));
-    }
+    // if (config.getPID().isPresent()) {
+    //   flash =
+    //       (flash
+    //           || (config.getPID().get().kP != spark.configAccessor.closedLoop.getP())
+    //           || (config.getPID().get().kI != spark.configAccessor.closedLoop.getI())
+    //           || (config.getPID().get().kD != spark.configAccessor.closedLoop.getD()));
+    // }
     return flash;
   }
   /*

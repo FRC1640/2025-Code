@@ -15,7 +15,8 @@ public class LiftCommandFactory {
   }
 
   public Command liftSetPosPID(DoubleSupplier pos) {
-    return new RunCommand(() -> liftSubsystem.setLiftPosition(pos.getAsDouble()), liftSubsystem)
+    return new RunCommand(
+            () -> liftSubsystem.setLiftPosition(() -> pos.getAsDouble()), liftSubsystem)
         .finallyDo(() -> liftSubsystem.setLiftVoltage(0));
   }
 
@@ -49,6 +50,13 @@ public class LiftCommandFactory {
                       liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
                     },
                     liftSubsystem)
+                .until(() -> Math.abs(liftSubsystem.getMotorPosition() - pos.getAsDouble()) < 0.01)
+                .andThen(
+                    new RunCommand(
+                        () -> {
+                          liftSubsystem.setLiftPosition(() -> pos.getAsDouble());
+                        },
+                        liftSubsystem))
                 .finallyDo(
                     () -> {
                       liftSubsystem.setLiftVoltage(0);

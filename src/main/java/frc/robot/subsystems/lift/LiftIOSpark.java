@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
-import frc.robot.util.tools.MotorLim;
 import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSpark implements LiftIO {
@@ -47,6 +47,7 @@ public class LiftIOSpark implements LiftIO {
     leaderEncoder = leaderMotor.getEncoder();
     followerEncoder = followerMotor.getEncoder();
     liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
+    profiledPIDController.setTolerance(0.003);
   }
   /*
    * Set voltage of the motor
@@ -68,13 +69,18 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
     setLiftVoltage(
-        MotorLim.clampVoltage(liftController.calculate(inputs.leaderMotorPosition, position)),
+        MotorLim.clampVoltage(
+            liftController.calculate(inputs.leaderMotorPosition, position)
+                + elevatorFeedforward.calculate(0)),
         inputs);
   }
 
   @Override
   public void setLiftPositionMotionProfile(double position, LiftIOInputs inputs) {
     profiledPIDController.setGoal(position);
+    Logger.recordOutput(
+        "LiftFeedForward",
+        elevatorFeedforward.calculate(profiledPIDController.getSetpoint().velocity));
     setLiftVoltage(
         MotorLim.clampVoltage(
             profiledPIDController.calculate(inputs.leaderMotorPosition, position)

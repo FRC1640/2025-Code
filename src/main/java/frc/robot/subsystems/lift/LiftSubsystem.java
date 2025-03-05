@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -37,7 +38,7 @@ public class LiftSubsystem extends SubsystemBase {
                 this,
                 new SysIdRoutine.Config(
                     Volts.per(Seconds).of(0.5),
-                    Volts.of(3.5),
+                    Volts.of(2),
                     Seconds.of(100),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
   }
@@ -93,8 +94,8 @@ public class LiftSubsystem extends SubsystemBase {
     return inputs.followerTemperature;
   }
 
-  public void setLiftPosition(double pos) {
-    io.setLiftPosition(pos, inputs);
+  public void setLiftPosition(DoubleSupplier pos) {
+    io.setLiftPosition(pos.getAsDouble(), inputs);
   }
 
   public void setLiftVoltage(double voltage) {
@@ -122,7 +123,8 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.04;
+    return Math.abs(getMotorPosition() - pos) < 0.0085
+        && Math.abs(getLeaderMotorVelocity()) < 0.001;
   }
 
   public boolean isLimitSwitchPressed() {

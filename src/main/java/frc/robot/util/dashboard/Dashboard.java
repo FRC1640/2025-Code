@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
@@ -16,6 +15,7 @@ import frc.robot.subsystems.algae.AlgaeIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.sysid.CreateSysidCommand;
 import java.util.function.BooleanSupplier;
 

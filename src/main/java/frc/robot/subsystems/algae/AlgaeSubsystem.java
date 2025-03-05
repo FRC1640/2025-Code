@@ -23,7 +23,7 @@ public class AlgaeSubsystem extends SubsystemBase {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
-      if (releaseTime > 0.2) {
+      if (releaseTime > 1) {
         hasAlgae = false;
         releaseTime = 0;
       }
@@ -31,6 +31,8 @@ public class AlgaeSubsystem extends SubsystemBase {
       releaseTime = 0;
     }
     lastTime = System.currentTimeMillis();
+
+    Logger.recordOutput("Sensors/HasAlgae", hasAlgae());
   }
 
   public double getIntakeMotorLeftVoltage() {

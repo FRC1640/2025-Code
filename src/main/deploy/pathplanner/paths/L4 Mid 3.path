@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.525653409090909,
+        "y": 7.265767045454545
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3043704646460608,
+        "y": 6.500352792830418
+      },
+      "isLocked": false,
+      "linkedName": "TopSource"
+    },
+    {
+      "anchor": {
+        "x": 3.779232954545455,
+        "y": 5.141818181818182
+      },
+      "prevControl": {
+        "x": 3.3895946474925793,
+        "y": 5.529887276847415
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefTopLeft_OffsetLeft"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4Right",
+      "waypointRelativePos": 0.5907626208378082,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetModeCoral"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryRight"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Mid",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -55.0
+  },
+  "useDefaultConstraints": true
+}

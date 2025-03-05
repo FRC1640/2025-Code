@@ -46,25 +46,9 @@ public class AutoScoringCommandFactory {
   }
 
   public Command autoPlace() {
-    return gantryCommandFactory
-        .gantryDriftCommand()
-        .andThen(new WaitCommand(0.01))
-        .andThen(coralOuttakeCommandFactory.outtake().repeatedly())
-        .until(() -> !coralOuttakeSubsystem.hasCoral())
-        .andThen(
-            new WaitCommand(0.3)
-                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly()));
-  }
-
-  public Command autoPlaceWithOther() {
-    return gantryCommandFactory
-        .gantryDriftCommand()
-        .andThen(new WaitCommand(0.01))
-        .andThen(coralOuttakeCommandFactory.outtake().repeatedly())
-        .until(() -> !coralOuttakeSubsystem.hasCoral())
-        .andThen(
-            new WaitCommand(0.1)
-                .deadlineFor(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4).repeatedly()));
+    return (gantryCommandFactory.gantryDriftCommandThresh())
+        .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(1))
+        .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false);
   }
 
   public Command placeTrough() {

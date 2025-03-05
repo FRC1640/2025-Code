@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.047073863636363,
-        "y": 4.0549147727272725
+        "x": 7.219431818181818,
+        "y": 3.9053409090909086
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.995343816461661,
-        "y": 3.979748208698314
+        "x": 6.4578122454298335,
+        "y": 4.000178536427621
       },
       "isLocked": false,
       "linkedName": "MidStart"
     },
     {
       "anchor": {
-        "x": 5.8134375,
-        "y": 3.9053409090909086
+        "x": 5.8333806818181815,
+        "y": 4.064886363636362
       },
       "prevControl": {
-        "x": 7.068380487110738,
-        "y": 3.9886607972265438
+        "x": 7.125329450284319,
+        "y": 3.936510735108509
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4Left",
-      "waypointRelativePos": 0.3866809881847456,
+      "waypointRelativePos": 0.1241758241758282,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -53,7 +53,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryLeft"
+                      "name": "SetGantryRight"
                     }
                   },
                   {
@@ -77,8 +77,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -94,5 +94,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

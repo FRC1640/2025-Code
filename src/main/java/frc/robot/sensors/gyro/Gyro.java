@@ -19,6 +19,7 @@ public class Gyro {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Gyro", inputs);
+    Logger.recordOutput("gyroActual", getAngleRotation2d());
   }
 
   public void reset() {

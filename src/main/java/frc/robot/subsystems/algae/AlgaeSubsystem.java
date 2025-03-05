@@ -23,7 +23,7 @@ public class AlgaeSubsystem extends SubsystemBase {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
-      if (releaseTime > 0.2) {
+      if (releaseTime > 0.8) {
         hasAlgae = false;
         releaseTime = 0;
       }
@@ -32,7 +32,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
     lastTime = System.currentTimeMillis();
 
-    Logger.recordOutput("HasAlgae", hasAlgae());
+    Logger.recordOutput("Sensors/HasAlgae", hasAlgae());
   }
 
   public double getIntakeMotorLeftVoltage() {
@@ -75,6 +75,11 @@ public class AlgaeSubsystem extends SubsystemBase {
     return (inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
             || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh)
         || io.hasSimAlgae();
+  }
+
+  public boolean setHasAlgae(boolean has) {
+    hasAlgae = has;
+    return hasAlgae;
   }
 
   public boolean hasAlgae() {

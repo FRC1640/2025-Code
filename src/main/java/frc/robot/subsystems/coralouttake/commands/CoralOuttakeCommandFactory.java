@@ -10,14 +10,16 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
-import frc.robot.util.tools.AllianceManager;
-import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.misc.AllianceManager;
+import frc.robot.util.misc.DistanceManager;
 import java.util.function.DoubleSupplier;
 
 public class CoralOuttakeCommandFactory {
   CoralOuttakeSubsystem intakeSubsystem;
   public boolean runningBack = false;
   public boolean outtaking = false;
+  boolean setHasCoral = false;
+  boolean ranBack = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -40,7 +42,12 @@ public class CoralOuttakeCommandFactory {
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
+    new Trigger(
+            () ->
+                !(intakeSubsystem.hasCoral() && !intakeSubsystem.isCoralDetected())
+                    && !ranBack
+                    && Robot.getState() != RobotState.AUTONOMOUS)
+        .debounce(0.01)
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -48,7 +55,7 @@ public class CoralOuttakeCommandFactory {
                         RobotOdometry.instance.getPose("Main"),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
+        .whileTrue(outtake());
 
     new Trigger(
             () ->
@@ -56,17 +63,21 @@ public class CoralOuttakeCommandFactory {
                     && intakeSubsystem.hasCoral()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack());
+        .onTrue(runBack().finallyDo(() -> ranBack = true));
+
+    new Trigger(() -> !intakeSubsystem.hasCoral())
+        .debounce(0.05)
+        .onTrue(new InstantCommand(() -> ranBack = false));
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> 3)
+    return setIntakeVoltage(() -> setHasCoral ? 5.5 : 2)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {
                 outtaking = true;
               }
             })
-        .finallyDo(() -> outtaking = false);
+        .beforeStarting(() -> setHasCoral = intakeSubsystem.hasCoral());
   }
 }

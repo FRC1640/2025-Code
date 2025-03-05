@@ -5,9 +5,9 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher;
-import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
-import frc.robot.util.tools.WPICal.WPICALPosManager;
+import frc.robot.util.WPICal.AprilTagPositionSwitcher;
+import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
+import frc.robot.util.WPICal.WPICALPosManager;
 import org.photonvision.simulation.VisionSystemSim;
 
 public class FieldConstants {

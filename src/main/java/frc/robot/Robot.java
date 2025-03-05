@@ -19,7 +19,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
-import frc.robot.util.pi.OrangePILogger;
 import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -131,9 +130,6 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
     LoggerManager.updateLog();
-    if (Robot.getMode() == Mode.REAL) {
-      OrangePILogger.logPI();
-    }
   }
 
   @Override

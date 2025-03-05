@@ -86,6 +86,8 @@ import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.periodic.PeriodicBase;
 import frc.robot.util.periodic.PeriodicScheduler;
+import frc.robot.util.pi.CoProcessInput;
+import frc.robot.util.pi.OrangePILogger;
 import frc.robot.util.tools.AllianceManager;
 import frc.robot.util.tools.DistanceManager;
 import java.util.ArrayList;
@@ -188,6 +190,7 @@ public class RobotContainer {
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
         break;
       case SIM:
+        new CoProcessInput(new OrangePILogger());
         gyro =
             new Gyro(
                 RobotConfigConstants.gyroEnabled

@@ -62,6 +62,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
@@ -306,7 +307,7 @@ public class RobotContainer {
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
-    // DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
+    DriveWeightCommand.addPersistentWeight(new AntiTipWeight(gyro));
 
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
@@ -355,10 +356,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.1;
+        side = 0.06;
         break;
       case RIGHT:
-        side = -0.1;
+        side = -0.06;
         break;
       case CENTER:
         side = 0;

@@ -27,8 +27,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.92;
-    public static final double robotLength = 0.92; // 0.927
+    public static final double robotWidth = 0.85;
+    public static final double robotLength = 0.85; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -111,7 +111,7 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 0.75, Math.PI, 4 * Math.PI);
+        new PathConstraints(1.5, 2, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -206,7 +206,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 2;
+    public static final double liftMaxAccel = 3;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);

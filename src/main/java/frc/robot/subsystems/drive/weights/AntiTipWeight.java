@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class AntiTipWeight implements DriveWeight {
   private Gyro gyro;
+  private static boolean enabled;
 
   private PIDController pitchAntiTip =
       RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip);
@@ -22,8 +23,15 @@ public class AntiTipWeight implements DriveWeight {
     this.gyro = gyro;
   }
 
+  public static void setAntiTip(boolean enabled0) {
+    enabled = enabled0;
+  }
+
   @Override
   public ChassisSpeeds getSpeeds() {
+    if(!enabled) {
+      return new ChassisSpeeds();
+    }
     double xSpeed = 0;
     double ySpeed = 0;
     if (Math.abs(gyro.getPitch().getDegrees()) > DriveConstants.minTipDegrees) {

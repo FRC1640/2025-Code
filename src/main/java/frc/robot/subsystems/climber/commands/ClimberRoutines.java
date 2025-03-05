@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.winch.WinchSubsystem;
 import java.util.function.BooleanSupplier;
 
@@ -93,6 +94,7 @@ public class ClimberRoutines {
    */
   public Command initiatePart2() {
     return Commands.sequence(
+            new InstantCommand(() -> AntiTipWeight.setAntiTip(false)),
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
             windArm())
@@ -105,7 +107,8 @@ public class ClimberRoutines {
                     && withinTolerance(
                         climberSubsystem.getLiftMotorPosition(),
                         ClimberConstants.liftLimits.low,
-                        tolerance * 2));
+                        tolerance * 2))
+                        .finallyDo(() -> AntiTipWeight.setAntiTip(true));
   }
 
   /**

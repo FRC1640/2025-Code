@@ -278,7 +278,13 @@ public class RobotContainer {
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =
         new Dashboard(
-            driveSubsystem, liftSubsystem, gantrySubsystem, climberSubsystem, driveController);
+            driveSubsystem,
+            liftSubsystem,
+            gantrySubsystem,
+            climberSubsystem,
+            algaeIntakeSubsystem,
+            coralOuttakeSubsystem,
+            driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,

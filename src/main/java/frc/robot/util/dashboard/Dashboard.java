@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -8,6 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Robot;
+import frc.robot.Robot.Mode;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
@@ -79,7 +82,9 @@ public class Dashboard {
   }
 
   DoubleSupplier time =
-      () -> Math.max(150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000, 0);
+      Robot.getMode() == Mode.SIM
+          ? () -> Math.max(150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000, 0)
+          : () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
@@ -87,12 +92,10 @@ public class Dashboard {
         .addCamera("Front Cam", "Park", "http://orangepi.local:1182/stream.mjpg")
         .withSize(3, 3)
         .withPosition(2, 1);
-    teleopTab
-        .addCamera("Rear Cam", "BackLL", "http://orangepi.local:1184/stream.mjpg")
-        .withSize(4, 3)
-        .withPosition(5, 1);
-    // TODO is this the correct back url??
-
+    // teleopTab
+    //     .addCamera("Rear Cam", "BackLL", "WHAT IS THIS RAAAAA")
+    //     .withSize(4, 3)
+    //     .withPosition(5, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(2, 1)

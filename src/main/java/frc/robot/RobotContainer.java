@@ -558,7 +558,7 @@ public class RobotContainer {
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
     new Trigger(() -> motorBoard.getLl2())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -0.5));
     new Trigger(() -> motorBoard.getLl3())
         .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
     new Trigger(() -> motorBoard.getLl4())

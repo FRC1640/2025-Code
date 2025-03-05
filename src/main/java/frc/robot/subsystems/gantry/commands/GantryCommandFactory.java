@@ -17,6 +17,7 @@ import frc.robot.util.tools.AllianceManager;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
@@ -168,7 +169,7 @@ public class GantryCommandFactory {
       if (Math.abs(
               Math.abs(getPose.get().getRotation().getRadians() - face.getRotation().getRadians())
                   - Math.PI)
-          < 0.3) {
+          < 0.6) {
         reefPos = face;
         break;
       }
@@ -180,10 +181,18 @@ public class GantryCommandFactory {
     double deltaX = reefPos.getX() - getPose.get().getTranslation().getX();
     double gantryCenter =
         Math.cos(gyroRadians + Math.atan(deltaY / deltaX))
-            * Units.feetToMeters(
-                reefPos
-                    .getTranslation()
-                    .getDistance(getPose.get().getTranslation())); // TODO flip gyro sign?
+            * reefPos
+                .getTranslation()
+                .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?
+    Logger.recordOutput("A_DEBUG/gyroRadians", gyroRadians);
+    Logger.recordOutput("A_DEBUG/deltaY", deltaY);
+    Logger.recordOutput("A_DEBUG/deltaX", deltaX);
+    Logger.recordOutput("A_DEBUG/atan", Math.atan(deltaY / deltaX));
+    Logger.recordOutput(
+        "A_DEBUG/translation",
+        reefPos.getTranslation().getDistance(getPose.get().getTranslation()));
+    Logger.recordOutput("A_DEBUG/robotX", getPose.get().getTranslation().getX());
+    Logger.recordOutput("A_DEBUG/robotY", getPose.get().getTranslation().getY());
     double poleOffset =
         coralPreset.get().getGantrySetpoint(AllianceManager.onDsSideReef(getPose))
                 == GantrySetpoint.LEFT

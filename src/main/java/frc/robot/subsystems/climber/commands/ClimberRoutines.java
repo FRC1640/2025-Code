@@ -107,8 +107,7 @@ public class ClimberRoutines {
                     && withinTolerance(
                         climberSubsystem.getLiftMotorPosition(),
                         ClimberConstants.liftLimits.low,
-                        tolerance * 2))
-                        .finallyDo(() -> AntiTipWeight.setAntiTip(true));
+                        tolerance * 2));
   }
 
   /**

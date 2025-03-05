@@ -2,15 +2,12 @@ package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
-import frc.robot.Robot.Mode;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
@@ -81,10 +78,7 @@ public class Dashboard {
     return autoChooser.getSelected();
   }
 
-  DoubleSupplier time =
-      Robot.getMode() == Mode.SIM
-          ? () -> Math.max(150 - Math.round(Timer.getFPGATimestamp() * 10000) / 10000, 0)
-          : () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
+  DoubleSupplier time = () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");

@@ -362,10 +362,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.06;
+        side = 0.9;
         break;
       case RIGHT:
-        side = -0.06;
+        side = -0.9;
         break;
       case CENTER:
         side = 0;
@@ -548,22 +548,14 @@ public class RobotContainer {
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
-    driveController
-        .rightTrigger()
-        .and(() -> !algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
-        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
-
     operatorController
         .rightTrigger()
         .and(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.processCommand()));
+                .andThen(algaeCommandFactory.processCommand()))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
     // motor board
     new Trigger(() -> motorBoard.getLl2())
         .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
@@ -586,12 +578,6 @@ public class RobotContainer {
     operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-
-    new Trigger(operatorController.leftTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
-
-    new Trigger(operatorController.rightTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
 
     // climber rumble
     new Trigger(() -> climberRoutines.isReadyToClamp())

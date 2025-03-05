@@ -548,7 +548,7 @@ public class RobotContainer {
         .leftTrigger()
         .onTrue(
             gantryCommandFactory.gantryDriftCommandOdometry(
-                () -> coralPreset, () -> followPathNearest.getFinalPosition()));
+                () -> coralPreset, () -> RobotOdometry.instance.getPose("Main")));
 
     driveController
         .rightTrigger()

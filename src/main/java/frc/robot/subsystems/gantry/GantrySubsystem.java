@@ -130,7 +130,11 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtLimits() {
-    return Math.abs(getCarriagePosition() - GantryConstants.gantryLimits.low) < 0.05
-        || Math.abs(getCarriagePosition() - GantryConstants.gantryLimits.high) < 0.05;
+    return posAtLimits(getCarriagePosition());
+  }
+
+  public boolean posAtLimits(double pos) {
+    return Math.abs(pos - GantryConstants.gantryLimits.low) < 0.05
+        || Math.abs(pos - GantryConstants.gantryLimits.high) < 0.05;
   }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
@@ -156,7 +157,7 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommandOdometry(
-      Supplier<CoralPreset> coralPreset, Supplier<Pose2d> goalPose) {
+      Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(
@@ -164,34 +165,37 @@ public class GantryCommandFactory {
     // find target face
     Pose2d reefPos = reefPositions[0];
     for (Pose2d face : reefPositions) {
-      if (Math.abs(goalPose.get().getRotation().getRadians() - face.getRotation().getRadians())
-          == Math.PI) {
+      if (Math.abs(
+              Math.abs(getPose.get().getRotation().getRadians() - face.getRotation().getRadians())
+                  - Math.PI)
+          < 0.3) {
         reefPos = face;
         break;
       }
     }
     // calculate gantry offset
-    double gyroRadians = goalPose.get().getRotation().getRadians();
-    double deltaY = reefPos.getY() - goalPose.get().getTranslation().getY();
-    double deltaX = reefPos.getX() - goalPose.get().getTranslation().getX();
+    double gyroRadians = getPose.get().getRotation().getRadians();
+    double deltaY = reefPos.getY() - getPose.get().getTranslation().getY();
+    double deltaX = reefPos.getX() - getPose.get().getTranslation().getX();
     double gantryCenter =
         Math.cos(gyroRadians + Math.atan(deltaY / deltaX))
             * reefPos
                 .getTranslation()
-                .getDistance(goalPose.get().getTranslation()); // TODO flip gyro sign?
+                .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?
     double poleOffset =
-        coralPreset.get().getGantrySetpoint(AllianceManager.onDsSideReef(goalPose))
+        coralPreset.get().getGantrySetpoint(AllianceManager.onDsSideReef(getPose))
                 == GantrySetpoint.LEFT
-            ? -Units.inchesToMeters(13)
-            : Units.inchesToMeters(13);
+            ? -Units.inchesToMeters(13 / 2)
+            : Units.inchesToMeters(13 / 2);
     double setpoint = GantryConstants.gantryLimitCenter + gantryCenter + poleOffset;
     // return command sequence
-    return runGantryMotionProfileUntil(() -> setpoint)
+    return new PrintCommand("" + setpoint)
+        .andThen(runGantryMotionProfileUntil(() -> setpoint))
         .andThen(() -> System.out.println("at setpoint")) // TODO limits
         .andThen(
             (runGantryMotionProfileUntil(() -> setpoint + 0.01)
                     .beforeStarting(() -> reefDetector.saveDistance()))
-                .alongWith(new RunCommand(() -> System.out.println("going"))))
+                .deadlineFor(new RunCommand(() -> System.out.println("going"))))
         .andThen(() -> System.out.println("right of setpoint"))
         .andThen(
             new ConditionalCommand(
@@ -204,7 +208,7 @@ public class GantryCommandFactory {
                             runGantryMotionProfileUntil(() -> setpoint)
                                 .andThen(() -> System.out.println("returned to setpoint twice")),
                             gantryDriftCommandMinima(
-                                    coralPreset, () -> AllianceManager.onDsSideReef(goalPose))
+                                    coralPreset, () -> AllianceManager.onDsSideReef(getPose))
                                 .beforeStarting(
                                     () ->
                                         System.out.println(
@@ -231,7 +235,9 @@ public class GantryCommandFactory {
   public Command runGantryMotionProfileUntil(DoubleSupplier pos) {
     return runGantryMotionProfile(pos)
         .until(
-            () -> gantrySubsystem.isAtSetpoint(pos.getAsDouble()) || gantrySubsystem.isAtLimits());
+            () ->
+                gantrySubsystem.isAtSetpoint(pos.getAsDouble())
+                    || (gantrySubsystem.posAtLimits(pos.getAsDouble())));
   }
 
   public Command runGantryVelocityMotionProfile(DoubleSupplier vel) {

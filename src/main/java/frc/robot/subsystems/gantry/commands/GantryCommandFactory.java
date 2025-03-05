@@ -173,15 +173,17 @@ public class GantryCommandFactory {
         break;
       }
     }
+    System.out.println(reefPos);
     // calculate gantry offset
     double gyroRadians = getPose.get().getRotation().getRadians();
     double deltaY = reefPos.getY() - getPose.get().getTranslation().getY();
     double deltaX = reefPos.getX() - getPose.get().getTranslation().getX();
     double gantryCenter =
         Math.cos(gyroRadians + Math.atan(deltaY / deltaX))
-            * reefPos
-                .getTranslation()
-                .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?
+            * Units.feetToMeters(
+                reefPos
+                    .getTranslation()
+                    .getDistance(getPose.get().getTranslation())); // TODO flip gyro sign?
     double poleOffset =
         coralPreset.get().getGantrySetpoint(AllianceManager.onDsSideReef(getPose))
                 == GantrySetpoint.LEFT
@@ -189,7 +191,7 @@ public class GantryCommandFactory {
             : Units.inchesToMeters(13 / 2);
     double setpoint = GantryConstants.gantryLimitCenter + gantryCenter + poleOffset;
     // return command sequence
-    return new PrintCommand("" + setpoint)
+    return new PrintCommand("" + setpoint + ", gantry center: " + gantryCenter)
         .andThen(runGantryMotionProfileUntil(() -> setpoint))
         .andThen(() -> System.out.println("at setpoint")) // TODO limits
         .andThen(

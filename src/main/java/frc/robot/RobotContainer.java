@@ -540,7 +540,8 @@ public class RobotContainer {
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
-    driveController
+    driveController // running this on prime just slammed the gantry to the right really hard--
+        // BEWARE
         .rightTrigger()
         .and(() -> !algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
@@ -579,11 +580,12 @@ public class RobotContainer {
     operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
     operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
 
-    new Trigger(operatorController.leftTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
+    // both of these are mapped over other controls. vestigial from testing?
+    // new Trigger(operatorController.leftTrigger())
+    //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
 
-    new Trigger(operatorController.rightTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+    // new Trigger(operatorController.rightTrigger())
+    //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
 
     // climber rumble
     new Trigger(() -> climberRoutines.isReadyToClamp())

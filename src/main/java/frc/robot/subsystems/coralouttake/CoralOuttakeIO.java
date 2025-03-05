@@ -16,6 +16,10 @@ public interface CoralOuttakeIO extends AutoCloseable {
 
   public default void updateInputs(CoralOuttakeIOInputs inputs) {}
 
+  public static boolean coralDetected(){
+    return coralDetected();
+  }
+
   @Override
   default void close() {}
 }

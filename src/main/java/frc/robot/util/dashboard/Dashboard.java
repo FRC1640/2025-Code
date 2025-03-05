@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.coralouttake.CoralOuttakeIO;
+import frc.robot.subsystems.algae.AlgaeIO;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
@@ -73,7 +75,7 @@ public class Dashboard {
             "Time Left in Match:", () -> Math.round(DriverStation.getMatchTime() * 10000) / 10000)
         .withSize(5, 3)
         .withPosition(0, 0);
-    mainTab.addBoolean("Coral in Bay?", () -> test1).withSize(5, 3).withPosition(0, 3);
+    mainTab.addBoolean("Coral in Bay?", () -> CoralOuttakeIO.coralDetected()).withSize(5, 3).withPosition(0, 3);
     mainTab.addBoolean("Algae in Bay?", () -> test2).withSize(5, 3).withPosition(0, 6);
     mainTab
         .addCamera("Photon Vision", "Peak Vision", "http://localhost:1182/stream.mjpg")

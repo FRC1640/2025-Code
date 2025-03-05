@@ -594,6 +594,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return homing().andThen(dashboard.getAutoChooserCommand());
+    // return new InstantCommand();
   }
 
   public Command homing() {
@@ -623,16 +624,10 @@ public class RobotContainer {
   }
 
   public Command autonAutoPlace(Supplier<CoralPreset> coralPreset) {
-    return new InstantCommand(
-            () -> {
-              this.coralPreset = coralPreset.get();
-              presetActive =
-                  algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift();
-              gantryPresetActive = coralPreset.get();
-            })
-        .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive))
-        .alongWith(
-            autoScoringCommandFactory.gantryAlignCommand(() -> gantryPresetActive, () -> true));
+    return liftCommandFactory
+        .runLiftMotionProfile(
+            () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
+        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> true));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -722,7 +717,9 @@ public class RobotContainer {
         "AutoReef",
         new WaitCommand(1)
             .andThen(getPlaceCommand())
-            .deadlineFor(liftCommandFactory.runLiftMotionProfile(() -> presetActive)));
+            .deadlineFor(
+                liftCommandFactory.runLiftMotionProfile(
+                    () -> algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())));
 
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
     NamedCommands.registerCommand(

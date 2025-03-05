@@ -55,6 +55,14 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     Logger.recordOutput("LIFTINPUT", voltage);
+    Logger.recordOutput(
+        "liftinputclamped",
+        MotorLim.clampVoltage(
+            MotorLim.applyLimits(
+                inputs.leaderMotorPosition,
+                voltage,
+                limits ? LiftConstants.liftLimits.low : -99999,
+                LiftConstants.liftLimits.high)));
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
@@ -68,11 +76,17 @@ public class LiftIOSpark implements LiftIO {
    */
   @Override
   public void setLiftPosition(double position, LiftIOInputs inputs) {
+    Logger.recordOutput("pos", position);
     setLiftVoltage(
         MotorLim.clampVoltage(
             liftController.calculate(inputs.leaderMotorPosition, position)
                 + elevatorFeedforward.calculate(0)),
         inputs);
+  }
+
+  @Override
+  public void resetLiftPositionPid() {
+    liftController.reset();
   }
 
   @Override

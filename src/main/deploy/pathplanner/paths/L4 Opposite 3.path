@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.119715909090909,
-        "y": 2.110454545454544
+        "x": 1.525653409090909,
+        "y": 7.265767045454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.15247159090909,
-        "y": 1.9808238636363624
+        "x": 1.7786787710107954,
+        "y": 7.107940088502909
       },
       "isLocked": false,
-      "linkedName": "ProcessorStart"
+      "linkedName": "TopSource"
     },
     {
       "anchor": {
-        "x": 5.245056818181819,
-        "y": 2.948068181818182
+        "x": 3.779232954545455,
+        "y": 5.141818181818182
       },
       "prevControl": {
-        "x": 5.992926136363637,
-        "y": 2.090511363636364
+        "x": 3.2538889722996975,
+        "y": 5.566378617651337
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefLowerRight"
+      "linkedName": "ReefTopLeft_OffsetLeft"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L4Left",
-      "waypointRelativePos": 0.7197802197802234,
+      "waypointRelativePos": 0.65241844769404,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L4 Processor",
+  "folder": "L4 Opposite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 144.46232220802548
+    "rotation": -55.0
   },
   "useDefaultConstraints": true
 }

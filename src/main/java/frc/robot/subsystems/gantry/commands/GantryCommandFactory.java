@@ -146,10 +146,7 @@ public class GantryCommandFactory {
                                     < GantryConstants.gantryPadding)))
         .repeatedly()
         .until(() -> reefDetector.getDistanceToReef() < 500)
-        .andThen(gantrySetVelocityCommand(() -> direction ? 0.05 : -0.05).withTimeout(0.05))
-        .andThen(
-            gantrySetVelocityCommand(() -> 0)
-                .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01));
+        .andThen(new InstantCommand(() -> gantrySubsystem.setGantryVoltage(0)));
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

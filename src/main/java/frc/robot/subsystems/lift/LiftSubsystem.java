@@ -116,6 +116,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void resetLiftMotionProfile() {
     io.resetLiftMotionProfile(inputs);
+    io.resetLiftPositionPid();
   }
 
   public void resetEncoder() {
@@ -123,8 +124,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.0085
-        && Math.abs(getLeaderMotorVelocity()) < 0.001;
+    return Math.abs(getMotorPosition() - pos) < 0.005;
   }
 
   public boolean isLimitSwitchPressed() {

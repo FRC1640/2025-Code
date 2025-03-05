@@ -3,12 +3,14 @@ package frc.robot.subsystems.lift.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class LiftCommandFactory {
   LiftSubsystem liftSubsystem;
+  int r1 = 0;
+  int r2 = 0;
 
   public LiftCommandFactory(LiftSubsystem liftSubsystem) {
     this.liftSubsystem = liftSubsystem;
@@ -43,22 +45,24 @@ public class LiftCommandFactory {
   }
 
   public Command runLiftMotionProfile(DoubleSupplier pos) {
-    return new InstantCommand(() -> liftSubsystem.resetLiftMotionProfile())
+    return new InstantCommand(
+            () -> {
+              r1++;
+              Logger.recordOutput("resetStart", r1);
+              liftSubsystem.resetLiftMotionProfile();
+            })
         .andThen(
             new RunCommand(
                     () -> {
                       liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
                     },
                     liftSubsystem)
-                .until(() -> Math.abs(liftSubsystem.getMotorPosition() - pos.getAsDouble()) < 0.01)
-                .andThen(
-                    new RunCommand(
-                        () -> {
-                          liftSubsystem.setLiftPosition(() -> pos.getAsDouble());
-                        },
-                        liftSubsystem))
+                .until(() -> Math.abs(liftSubsystem.getMotorPosition() - pos.getAsDouble()) < 0.03)
+                .andThen(liftSetPosPID(pos))
                 .finallyDo(
                     () -> {
+                      r2++;
+                      Logger.recordOutput("resetEnd", r2);
                       liftSubsystem.setLiftVoltage(0);
                       liftSubsystem.resetLiftMotionProfile();
                     }));
@@ -66,9 +70,5 @@ public class LiftCommandFactory {
 
   public Command runLiftMotionProfile(double pos) {
     return runLiftMotionProfile(() -> pos);
-  }
-
-  public boolean getLiftAtPreset(CoralPreset preset) {
-    return liftSubsystem.getMotorPosition() - preset.getLift() < 0.1;
   }
 }

@@ -1,4 +1,4 @@
-package frc.robot.util.tools.WPICal;
+package frc.robot.util.WPICal;
 
 import frc.robot.constants.RobotConstants.AprilTagPositionSettings;
 import java.util.HashMap;

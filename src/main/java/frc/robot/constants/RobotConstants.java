@@ -12,28 +12,28 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.constants.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
+import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
-import frc.robot.util.tools.Limits;
-import frc.robot.util.tools.RobotSwitch;
-import frc.robot.util.tools.RobotSwitchManager.RobotType;
-import frc.robot.util.tools.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
+import frc.robot.util.misc.Limits;
+import frc.robot.util.robotswitch.RobotSwitch;
+import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 import org.photonvision.simulation.SimCameraProperties;
 
 public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 1;
-    public static final double robotLength = 1; // 0.927
+    public static final double robotWidth = 0.85;
+    public static final double robotLength = 0.85; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.motorTest;
+    public static final TestingSetting tuningMode = TestingSetting.sysIDTesting;
   }
 
   public class MotorInfo {
@@ -109,9 +109,9 @@ public class RobotConstants {
   }
 
   public static class AutoAlignConfig {
-    public static final double maxDistanceFromTarget = 0.5;
+    public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(1, 0.3, Math.PI, 4 * Math.PI);
+        new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -130,11 +130,11 @@ public class RobotConstants {
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
-    public static final double maxSpeed = 4.145;
+    public static final double maxSpeed = 4.5;
     public static final double maxNorm =
         DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
-    public static final double wheelRadius = Units.inchesToMeters(1.8892);
+    public static final double wheelRadius = Units.inchesToMeters(2);
 
     public static final double accelLimit = 20;
     public static final double deaccelLimit = 11;
@@ -206,7 +206,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 2;
+    public static final double liftMaxAccel = 1.75;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -219,13 +219,13 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
-      Safe(0, 0.08, GantrySetpoint.CENTER),
-      LeftL2(0.114, 0.298, GantrySetpoint.LEFT),
-      RightL2(0.114, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.285, 0.485, GantrySetpoint.LEFT),
-      RightL3(0.285, 0.485, GantrySetpoint.RIGHT),
-      LeftL4(0.571, GantrySetpoint.LEFT),
-      RightL4(0.571, GantrySetpoint.RIGHT),
+      Safe(0, 0.14, GantrySetpoint.CENTER),
+      LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
+      LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
+      LeftL4(0.568, GantrySetpoint.LEFT),
+      RightL4(0.568, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
@@ -290,7 +290,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 650;
+    public static final double detectionThresh = 525;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -339,7 +339,7 @@ public class RobotConstants {
     public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    public static final double alignSpeed = 0.1;
+    public static final double alignSpeed = 0.25;
     public static final double gantryMaxVel = 2; // PLACEHOLDER
     public static final double gantryMaxAccel = 2; // PLACEHOLDER
     public static final double gantryMaxJerk = 2; // PLACEHOLDER

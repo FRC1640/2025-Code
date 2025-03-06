@@ -174,8 +174,8 @@ public class ClimberRoutines {
   public Command windArm() {
     return climberCommandFactory
         .setWinchPosPID(() -> ClimberConstants.winchClimbedPosition)
-        .repeatedly()
-        .until(winchIsClimbed);
+        .repeatedly();
+    // .until(winchIsClimbed);
   }
 
   public boolean isReadyToClamp() {

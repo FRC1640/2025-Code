@@ -6,6 +6,7 @@ package frc.robot;
 
 import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -16,14 +17,16 @@ import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
+import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
-import frc.robot.util.tools.RobotSwitchManager.RobotType;
+import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -35,6 +38,8 @@ import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
+
+  Collection<Runnable> r;
 
   private final RobotContainer m_robotContainer;
 
@@ -134,6 +139,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     DriveWeightCommand.removeAllWeights();
+    PathplannerWeight.setSpeeds(new ChassisSpeeds());
     state = RobotState.DISABLED;
   }
 

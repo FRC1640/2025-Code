@@ -1,0 +1,98 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.2,
+        "y": 6.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.474403409090908,
+        "y": 6.4680397727272725
+      },
+      "isLocked": false,
+      "linkedName": "OppositeStart"
+    },
+    {
+      "anchor": {
+        "x": 5.1054545454545455,
+        "y": 5.191676136363636
+      },
+      "prevControl": {
+        "x": 5.234078484311427,
+        "y": 5.4060493677917725
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefTopRight"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4Left",
+      "waypointRelativePos": 0.4386951631046104,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryRight"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Opposite",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -134.3
+  },
+  "useDefaultConstraints": false
+}

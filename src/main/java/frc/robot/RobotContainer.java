@@ -604,8 +604,7 @@ public class RobotContainer {
     operatorController.povUp().toggleOnTrue(climberRoutines.setupClimb());
     new Trigger(operatorController.povDown() /*.and(() -> climberRoutines.isReadyToClamp()) */)
         .onTrue(climberRoutines.activateClimb());
-    
-    
+
     InstantCommand cancelCommand = new InstantCommand();
     cancelCommand.addRequirements(winchSubsystem, climberSubsystem);
     operatorController.povRight().whileTrue(cancelCommand);

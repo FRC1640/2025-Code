@@ -91,6 +91,7 @@ public class Dashboard {
     //         "http://orangepi.local:1182/stream.mjpg")
     //     .withSize(3, 3)
     //     .withPosition(2, 1);
+    // doesn't work, code crashes.
     teleopTab
         .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
         .withSize(4, 3)

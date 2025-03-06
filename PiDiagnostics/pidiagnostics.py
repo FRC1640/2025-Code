@@ -23,7 +23,7 @@ commands = {
     "memory_usage": "free -m | awk 'NR==2{printf \"%.2f\", $3*100/$2 }'",
     "disk_usage": "df -h | awk '$NF==\"/\"{printf \"%s\", $5}'"
 }
-
+runningThreads = []
 def get_diagnostics():
     diagnostics = {}
     try:
@@ -64,7 +64,7 @@ def update():
 
         root.after(1000, update)
     
-    threading.Thread(target=threaded_update, daemon=True).start()
+    runningThreads.append(threading.Thread(target=threaded_update, daemon=True).start())
 
 def execute_ssh_command(command):
     try:
@@ -85,6 +85,7 @@ def open_ssh_terminal():
     subprocess.Popen(['start', 'cmd', '/k', ssh_command], shell=True)
 
 def update_settings():
+    runningThreads.clear()
     global hostname, server_ip
     hostname = hostname_entry.get()
     server_ip = server_entry.get()
@@ -93,6 +94,7 @@ def update_settings():
     get_diagnostics()
     update()
 def update_settingsPrime():
+    runningThreads.clear()
     global hostname, server_ip
     hostname = "10.16.40.52"
     server_ip = "10.16.40.2"

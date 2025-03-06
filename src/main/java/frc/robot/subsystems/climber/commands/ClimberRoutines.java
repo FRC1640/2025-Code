@@ -66,25 +66,15 @@ public class ClimberRoutines {
   }
 
   /**
-   * Ensures lift is down, no coral is in outtake, shuts anti-tip off, within last 15 seconds.
-   * Should not take any time to execute under normal conditions
-   *
-   * @return
-   */
-  public Command initiatePart0() {
-    // TODO implement
-    return new InstantCommand();
-  }
-
-  /**
    * Lowers lift and sets arm to vertical position, then umclamps
    *
    * @return
    */
   public Command setupClimb() {
-    return initiatePart0().alongWith(climberCommandFactory.setClampState(() -> false)
+    return climberCommandFactory
+        .setClampState(() -> false)
         .andThen(lowerLift().alongWith(unwindArm()))
-        );
+        .repeatedly();
   }
 
   /**
@@ -112,39 +102,14 @@ public class ClimberRoutines {
   }
 
   /**
-   * resets to starting position by first returning to part 1 (safe position), then raising the lift
-   * and unwinding the winch
-   *
-   * @return
-   */
-  public Command resetClimber() {
-    return setupClimb().andThen(raiseLift().alongWith(resetArm()));
-  }
-
-  /**
    * Lowers lift to lowest position
    *
    * @return
    */
   public Command lowerLift() {
-    return climberCommandFactory
-        .setElevatorPosPID(() -> ClimberConstants.liftLimits.low)
-        .repeatedly();
-        // .until(liftIsLow)
+    return climberCommandFactory.setElevatorPosPID(() -> ClimberConstants.liftLimits.low);
+    // .until(liftIsLow)
   }
-
-  /**
-   * Raises lift to highest position
-   *
-   * @return
-   */
-  public Command raiseLift() {
-    return climberCommandFactory
-        .setElevatorPosPID(() -> ClimberConstants.liftLimits.high)
-        .repeatedly()
-        .until(liftIsHigh);
-  }
-
   /**
    * Unwinds climber arm to vertical position
    *
@@ -154,21 +119,8 @@ public class ClimberRoutines {
     return climberCommandFactory
         .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
         .repeatedly();
-        // .until(winchIsHigh);
+    // .until(winchIsHigh);
   }
-
-  /**
-   * Unwinds climber arm to max position
-   *
-   * @return
-   */
-  public Command resetArm() {
-    return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchLimits.low)
-        .repeatedly()
-        .until(winchIsLow);
-  }
-
   /**
    * Winds arm to min position
    *

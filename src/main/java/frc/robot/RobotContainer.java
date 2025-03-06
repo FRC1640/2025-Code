@@ -601,12 +601,14 @@ public class RobotContainer {
         .whileTrue(new InstantCommand(() -> algaeIntakeSubsystem.setHasAlgae(false)));
 
     // climber button bindings:
-    operatorController.povUp().toggleOnTrue(climberRoutines.setupClimb());
+    operatorController.povUp().onTrue(climberRoutines.setupClimb());
     new Trigger(operatorController.povDown() /*.and(() -> climberRoutines.isReadyToClamp()) */)
         .onTrue(climberRoutines.activateClimb());
 
-    InstantCommand cancelCommand = new InstantCommand();
-    cancelCommand.addRequirements(winchSubsystem, climberSubsystem);
+    Command cancelCommand =
+        (climberCommandFactory
+            .setClampState(() -> false)
+            .alongWith(new InstantCommand(() -> autoRampPos = false)));
     operatorController.povRight().whileTrue(cancelCommand);
     operatorController.povLeft().whileTrue(cancelCommand);
     new Trigger(operatorController.leftTrigger())

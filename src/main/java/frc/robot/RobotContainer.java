@@ -150,53 +150,51 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
                 CameraConstants.frontCameraRight));
-        reefDetector =
-            new ReefDetector(
-                RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOLaserCAN()
-                    : new ReefDetectorIO() {});
-        gantrySubsystem =
-            new GantrySubsystem(
-                RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSparkMax()
-                    : new GantryIO() {});
+        reefDetector = new ReefDetector(
+            RobotConfigConstants.reefDetectorEnabled
+                ? new ReefDetectorIOLaserCAN()
+                : new ReefDetectorIO() {
+                });
+        gantrySubsystem = new GantrySubsystem(
+            RobotConfigConstants.gantrySubsystemEnabled
+                ? new GantryIOSparkMax()
+                : new GantryIO() {
+                });
 
-        liftSubsystem =
-            new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSpark() : new LiftIO() {});
+        liftSubsystem = new LiftSubsystem(
+            RobotConfigConstants.liftSubsystemEnabled ? new LiftIOSpark() : new LiftIO() {
+            });
 
-        coralOuttakeSubsystem =
-            new CoralOuttakeSubsystem(
-                RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSparkMax()
-                    : new CoralOuttakeIO() {});
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(
+            RobotConfigConstants.coralOuttakeSubsystemEnabled
+                ? new CoralOuttakeIOSparkMax()
+                : new CoralOuttakeIO() {
+                });
 
-        climberSubsystem =
-            new ClimberSubsystem(
-                RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSparkMax()
-                    : new ClimberIO() {});
+        climberSubsystem = new ClimberSubsystem(
+            RobotConfigConstants.climberSubsystemEnabled
+                ? new ClimberIOSparkMax()
+                : new ClimberIO() {
+                });
 
-        winchSubsystem =
-            new WinchSubsystem(
-                RobotConfigConstants.climberSubsystemEnabled
-                    ? new WinchIOSparkMax()
-                    : new WinchIO() {});
+        winchSubsystem = new WinchSubsystem(
+            RobotConfigConstants.climberSubsystemEnabled
+                ? new WinchIOSparkMax()
+                : new WinchIO() {
+                });
 
-        algaeIntakeSubsystem =
-            new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
+        algaeIntakeSubsystem = new AlgaeSubsystem(
+            RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {
+            });
         break;
       case SIM:
-        gyro =
-            new Gyro(
-                RobotConfigConstants.gyroEnabled
-                    ? new GyroIOSim(
-                        () ->
-                            DriveConstants.kinematics.toChassisSpeeds(
-                                    driveSubsystem.getActualSwerveStates())
-                                .omegaRadiansPerSecond)
-                    : new GyroIO() {});
+        gyro = new Gyro(
+            RobotConfigConstants.gyroEnabled
+                ? new GyroIOSim(
+                    () -> DriveConstants.kinematics.toChassisSpeeds(
+                        driveSubsystem.getActualSwerveStates()).omegaRadiansPerSecond)
+                : new GyroIO() {
+                });
 
         aprilTagVisions.add(
             new AprilTagVision(
@@ -204,49 +202,57 @@ public class RobotContainer {
                     CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
                 CameraConstants.frontCameraLeft));
-        reefDetector =
-            new ReefDetector(
-                RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> presetBoard.getTrough())
-                    : new ReefDetectorIO() {});
-        gantrySubsystem =
-            new GantrySubsystem(
-                RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(() -> simBoard.getLl2())
-                    : new GantryIO() {});
-        liftSubsystem =
-            new LiftSubsystem(
-                RobotConfigConstants.liftSubsystemEnabled
-                    ? new LiftIOSim(() -> simBoard.getLl3())
-                    : new LiftIO() {});
-        coralOuttakeSubsystem =
-            new CoralOuttakeSubsystem(
-                RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
-                    : new CoralOuttakeIO() {});
-        climberSubsystem =
-            new ClimberSubsystem(
-                RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim(() -> simBoard.getRl4())
-                    : new ClimberIO() {});
-        winchSubsystem =
-            new WinchSubsystem(
-                RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {});
-        algaeIntakeSubsystem =
-            new AlgaeSubsystem(
-                RobotConfigConstants.algaeIntakeEnabled
-                    ? new AlgaeIOSim(() -> simBoard.getLl4())
-                    : new AlgaeIO() {});
+        reefDetector = new ReefDetector(
+            RobotConfigConstants.reefDetectorEnabled
+                ? new ReefDetectorIOSim(() -> presetBoard.getTrough())
+                : new ReefDetectorIO() {
+                });
+        gantrySubsystem = new GantrySubsystem(
+            RobotConfigConstants.gantrySubsystemEnabled
+                ? new GantryIOSim(() -> simBoard.getLl2())
+                : new GantryIO() {
+                });
+        liftSubsystem = new LiftSubsystem(
+            RobotConfigConstants.liftSubsystemEnabled
+                ? new LiftIOSim(() -> simBoard.getLl3())
+                : new LiftIO() {
+                });
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(
+            RobotConfigConstants.coralOuttakeSubsystemEnabled
+                ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
+                : new CoralOuttakeIO() {
+                });
+        climberSubsystem = new ClimberSubsystem(
+            RobotConfigConstants.climberSubsystemEnabled
+                ? new ClimberIOSim(() -> simBoard.getRl4())
+                : new ClimberIO() {
+                });
+        winchSubsystem = new WinchSubsystem(
+            RobotConfigConstants.climberSubsystemEnabled ? new WinchIOSim() : new WinchIO() {
+            });
+        algaeIntakeSubsystem = new AlgaeSubsystem(
+            RobotConfigConstants.algaeIntakeEnabled
+                ? new AlgaeIOSim(() -> simBoard.getLl4())
+                : new AlgaeIO() {
+                });
         break;
       default:
-        gyro = new Gyro(new GyroIO() {});
-        reefDetector = new ReefDetector(new ReefDetectorIO() {});
-        gantrySubsystem = new GantrySubsystem(new GantryIO() {});
-        liftSubsystem = new LiftSubsystem(new LiftIO() {});
-        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {});
-        climberSubsystem = new ClimberSubsystem(new ClimberIO() {});
-        winchSubsystem = new WinchSubsystem(new WinchIO() {});
-        algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
+        gyro = new Gyro(new GyroIO() {
+        });
+        reefDetector = new ReefDetector(new ReefDetectorIO() {
+        });
+        gantrySubsystem = new GantrySubsystem(new GantryIO() {
+        });
+        liftSubsystem = new LiftSubsystem(new LiftIO() {
+        });
+        coralOuttakeSubsystem = new CoralOuttakeSubsystem(new CoralOuttakeIO() {
+        });
+        climberSubsystem = new ClimberSubsystem(new ClimberIO() {
+        });
+        winchSubsystem = new WinchSubsystem(new WinchIO() {
+        });
+        algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {
+        });
         break;
     }
 
@@ -258,46 +264,41 @@ public class RobotContainer {
     algaeCommandFactory = new AlgaeCommandFactory(algaeIntakeSubsystem);
     logRunner = new LogRunner();
 
-    autoScoringCommandFactory =
-        new AutoScoringCommandFactory(
-            gantryCommandFactory,
-            liftCommandFactory,
-            coralOuttakeCommandFactory,
-            coralOuttakeSubsystem,
-            climberCommandFactory);
+    autoScoringCommandFactory = new AutoScoringCommandFactory(
+        gantryCommandFactory,
+        liftCommandFactory,
+        coralOuttakeCommandFactory,
+        coralOuttakeSubsystem,
+        climberCommandFactory);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     generateNamedCommands();
     driveSubsystem = new DriveSubsystem(gyro);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard =
-        new Dashboard(
-            driveSubsystem, liftSubsystem, gantrySubsystem, climberSubsystem, driveController);
+    dashboard = new Dashboard(
+        driveSubsystem, liftSubsystem, gantrySubsystem, climberSubsystem, driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
         "Low battery voltage.",
         AlertType.kWarning);
     // weights
-    joystickDriveWeight =
-        new JoystickDriveWeight(
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
-            () -> -driveController.getRightX(),
-            driveController.rightBumper(),
-            driveController.leftTrigger());
-    followPathNearest =
-        new FollowPathNearest(
-            () -> RobotOdometry.instance.getPose("Main"),
-            gyro,
-            () -> chooseAlignPos(),
-            AutoAlignConfig.pathConstraints,
-            (x) ->
-                coralAdjust(
-                    DistanceManager.addRotatedDim(
-                        x, (algaeMode ? 0 : RobotDimensions.robotLength / 2), x.getRotation()),
-                    () -> coralPreset),
-            driveSubsystem);
+    joystickDriveWeight = new JoystickDriveWeight(
+        () -> -driveController.getLeftY(),
+        () -> -driveController.getLeftX(),
+        () -> -driveController.getRightX(),
+        driveController.rightBumper(),
+        driveController.leftTrigger());
+    followPathNearest = new FollowPathNearest(
+        () -> RobotOdometry.instance.getPose("Main"),
+        gyro,
+        () -> chooseAlignPos(),
+        AutoAlignConfig.pathConstraints,
+        (x) -> coralAdjust(
+            DistanceManager.addRotatedDim(
+                x, (algaeMode ? 0 : RobotDimensions.robotLength / 2), x.getRotation()),
+            () -> coralPreset),
+        driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
@@ -307,7 +308,8 @@ public class RobotContainer {
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
     // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -2 * operatorController.getRightY()));
+    // liftCommandFactory.liftApplyVoltageCommand(() -> -2 *
+    // operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -338,7 +340,7 @@ public class RobotContainer {
                 Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(
-                            coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
+                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget()))
                         || algaeMode);
               }
             });
@@ -386,107 +388,145 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // lift/gantry presets for autoalign
+
+    // miscellaneous
+    followPathNearest.generateTrigger(
+        () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
+    driveController
+        .povDown()
+        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    driveController.start().onTrue(gyro.resetGyroCommand());
+    // -------
+
+    // auto scoring
     new Trigger(
-            () ->
-                RobotOdometry.instance
-                            .getPose("Main")
-                            .getTranslation()
-                            .getDistance(getTarget().getTranslation())
-                        < 1.5
-                    && followPathNearest.isEnabled()
-                    && Robot.getState() != RobotState.AUTONOMOUS)
+        () -> RobotOdometry.instance
+            .getPose("Main")
+            .getTranslation()
+            .getDistance(getTarget().getTranslation()) < 1.5
+            && followPathNearest.isEnabled()
+            && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(
             autoScoringCommandFactory.setupAutoPlace(
                 () -> coralPreset,
                 algaeMode,
                 () -> AllianceManager.onDsSideReef(() -> getTarget())));
-    // coral place routine for autoalign
-    // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
-    //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathNearest.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(
-            () ->
-                followPathNearest.isAutoalignComplete()
-                    && liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                    && (gantrySubsystem.isAtPreset(
-                        coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
-                    && !algaeIntakeSubsystem.hasAlgae()
-                    && Robot.getState() != RobotState.AUTONOMOUS)
+        () -> followPathNearest.isAutoalignComplete()
+            && liftSubsystem.isAtPreset(
+                algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
+            && (gantrySubsystem.isAtPreset(
+                coralPreset, AllianceManager.onDsSideReef(() -> getTarget())))
+            && !algaeIntakeSubsystem.hasAlgae()
+            && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
     new Trigger(
-            () ->
-                followPathNearest.isAutoalignComplete()
-                    && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
-                    && algaeIntakeSubsystem.hasAlgae()
-                    && Robot.getState() != RobotState.AUTONOMOUS)
+        () -> followPathNearest.isAutoalignComplete()
+            && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
+            && algaeIntakeSubsystem.hasAlgae()
+            && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(
             algaeCommandFactory
                 .processCommand()
                 .beforeStarting(() -> joystickDriveWeight.setEnabled(false))
                 .finallyDo(() -> joystickDriveWeight.setEnabled(true)));
-    new Trigger(() -> presetBoard.povIsUpwards())
-        .onTrue(new InstantCommand(() -> algaeMode = true));
-
-    new Trigger(() -> presetBoard.povIsDownwards())
-        .onTrue(new InstantCommand(() -> algaeMode = false));
-
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
-        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
     new Trigger(
-            () ->
-                RobotOdometry.instance
-                        .getPose("Main")
-                        .getTranslation()
-                        .getDistance(getTarget().getTranslation())
-                    > 2)
+        () -> RobotOdometry.instance
+            .getPose("Main")
+            .getTranslation()
+            .getDistance(getTarget().getTranslation()) > 2)
         .onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
-
+    new Trigger(
+        () -> RobotOdometry.instance
+            .getPose("Main")
+            .getTranslation()
+            .getDistance(getTarget().getTranslation()) > 2)
+        .onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
             () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                DistanceManager.getNearestPosition(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
-                    .getRotation()
-                    .plus(Rotation2d.fromDegrees(180))),
+            () -> DistanceManager.getNearestPosition(
+                RobotOdometry.instance.getPose("Main"),
+                AllianceManager.chooseFromAlliance(
+                    FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
+                .getRotation()
+                .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
-
-    driveController
-        .povDown()
-        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
-
-    driveController.b().whileTrue(coralOuttakeCommandFactory.outtake());
-    // operatorController.b().whileTrue(liftCommandFactory.runLiftMotionProfile(() -> 0.1));
-    // rumble
+    operatorController.x().whileTrue(getAutoPlaceCommand());
+    operatorController
+        .a()
+        .onTrue(
+            autoScoringCommandFactory.setupAutoPlace(
+                () -> coralPreset,
+                algaeMode,
+                () -> AllianceManager.onDsSideReef(() -> getTarget())));
+    operatorController.y().onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
     new Trigger(
-            () ->
-                coralOuttakeSubsystem.hasCoral()
-                    && Robot.getState()
-                        == RobotState.TELEOP /* driveController.getHID().getXButton() */)
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0.4)))
-        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
+        () -> (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS))
+        .onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
+    // -------
+
+    // algae intake
+    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
+        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
     new Trigger(
-            () ->
-                algaeIntakeSubsystem.hasAlgae()
-                    && Robot.getState()
-                        == RobotState.TELEOP /* driveController.getHID().getYButton() */)
+        () -> algaeIntakeSubsystem.hasAlgae()
+            && Robot.getState() == RobotState.TELEOP /* driveController.getHID().getYButton() */)
         .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
         .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
-    // new Trigger(() -> coralPreset.isRight())
+    driveController
+        .rightTrigger()
+        .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
+        .onTrue(
+            autoScoringCommandFactory.setupAutoPlace(
+                () -> CoralPreset.Pickup,
+                algaeMode,
+                () -> AllianceManager.onDsSideReef(() -> getTarget())));
+    operatorController
+        .rightTrigger()
+        .and(() -> algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.processCommand()));
+    // -------
 
-    // reset gyro
-    driveController.start().onTrue(gyro.resetGyroCommand());
+    // coral
+    driveController.b().whileTrue(coralOuttakeCommandFactory.outtake());
+    new Trigger(
+        () -> coralOuttakeSubsystem.hasCoral()
+            && Robot.getState() == RobotState.TELEOP /* driveController.getHID().getXButton() */)
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0.4)))
+        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kLeftRumble, 0)));
+    coralOuttakeCommandFactory.constructTriggers();
+    driveController.povUp().whileTrue(coralOuttakeCommandFactory.outtakeCoralCommand());
+    // -------
 
-    // gantry button bindings:
-    operatorController.x().whileTrue(getAutoPlaceCommand());
-    // operatorController
-    //     .x()
-    //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    // lift
+    operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+    // -------
+
+    // climbing
+    operatorController
+        .b()
+        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    new Trigger(() -> climberRoutines.isReadyToClamp())
+        .onTrue(
+            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 1)))
+        .onFalse(
+            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
+    mapPIDtoCommand();
+    operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
+    operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
+    operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
+    operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
+    // -------
+
+    // gantry
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
@@ -495,10 +535,28 @@ public class RobotContainer {
         .whileTrue(
             gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
-    // intake button bindings:
-    coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().whileTrue(coralOuttakeCommandFactory.outtakeCoralCommand());
+    // -------
+
+    // motor board
+    new Trigger(() -> motorBoard.getLl2())
+        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
+    new Trigger(() -> motorBoard.getLl3())
+        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+    new Trigger(() -> motorBoard.getLl4())
+        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
+    new Trigger(() -> motorBoard.getRl4())
+        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
+    new Trigger(() -> motorBoard.getRl3())
+        .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -1));
+    new Trigger(() -> motorBoard.getTrough())
+        .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+    // -------
+
     // preset board
+    new Trigger(() -> presetBoard.povIsUpwards())
+        .onTrue(new InstantCommand(() -> algaeMode = true));
+    new Trigger(() -> presetBoard.povIsDownwards())
+        .onTrue(new InstantCommand(() -> algaeMode = false));
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
     new Trigger(() -> presetBoard.getRl2())
@@ -513,82 +571,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
     new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
-    // lift/gantry manual controls
-    operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
-    operatorController
-        .a()
-        .onTrue(
-            autoScoringCommandFactory.setupAutoPlace(
-                () -> coralPreset,
-                algaeMode,
-                () -> AllianceManager.onDsSideReef(() -> getTarget())));
-
-    new Trigger(
-            () -> (!coralOuttakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS))
-        .onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
-    // new Trigger(
-    //         () ->
-    //             algaeIntakeSubsystem.hasAlgae()
-    //                 && RobotOdometry.instance
-    //                         .getPose("Main")
-    //                         .getTranslation()
-    //                         .getDistance(getTarget().getTranslation())
-    //                     > 0.3)
-    //     .onTrue(runLiftToSafe());
-    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() ->
-    // 0).repeatedly());
-    operatorController
-        .b()
-        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
-    operatorController.y().onTrue(autoScoringCommandFactory.runLiftToSafe(algaeMode));
-
-    driveController
-        .rightTrigger()
-        .and(() -> !algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
-        .onTrue(
-            autoScoringCommandFactory.setupAutoPlace(
-                () -> CoralPreset.Pickup,
-                algaeMode,
-                () -> AllianceManager.onDsSideReef(() -> getTarget())));
-
-    operatorController
-        .rightTrigger()
-        .and(() -> algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.processCommand()));
-    // motor board
-    new Trigger(() -> motorBoard.getLl2())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
-    new Trigger(() -> motorBoard.getLl3())
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
-    new Trigger(() -> motorBoard.getLl4())
-        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
-    new Trigger(() -> motorBoard.getRl4())
-        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
-    new Trigger(() -> motorBoard.getRl3())
-        .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -1));
-    new Trigger(() -> motorBoard.getTrough())
-        .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
-
-    // climber button bindings:
-    operatorController.povUp().toggleOnTrue(climberRoutines.initiatePart1());
-    operatorController.povDown().toggleOnTrue(climberRoutines.initiatePart2());
-    operatorController.povLeft().toggleOnTrue(climberRoutines.resetClimber());
-    operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-
-    // climber rumble
-    new Trigger(() -> climberRoutines.isReadyToClamp())
-        .onTrue(
-            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 1)))
-        .onFalse(
-            new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
-    mapPIDtoCommand();
+    // -------
   }
 
   public Command getAutonomousCommand() {
@@ -602,8 +585,8 @@ public class RobotContainer {
   private Pose2d[] chooseAlignPos() {
     return algaeIntakeSubsystem.hasAlgae()
         ? new Pose2d[] {
-          AllianceManager.chooseFromAlliance(
-              FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed)
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.processorPositionBlue, FieldConstants.processorPositionRed)
         }
         : AllianceManager.chooseFromAlliance(
             FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
@@ -668,10 +651,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "WaitForPreset",
         new WaitUntilCommand(
-                () ->
-                    liftSubsystem.isAtPreset(
-                            algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
+            () -> liftSubsystem.isAtPreset(
+                algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
+                && (gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode))
             .alongWith(autoScoringCommandFactory.autonAutoPlace(() -> coralPreset, algaeMode)));
     NamedCommands.registerCommand(
         "AutoReef",

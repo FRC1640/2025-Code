@@ -82,9 +82,9 @@ public class ClimberRoutines {
    * @return
    */
   public Command setupClimb() {
-    return initiatePart0()
+    return initiatePart0().alongWith(climberCommandFactory.setClampState(() -> false)
         .andThen(lowerLift().alongWith(unwindArm()))
-        .andThen(climberCommandFactory.setClampState(() -> false));
+        );
   }
 
   /**
@@ -129,8 +129,8 @@ public class ClimberRoutines {
   public Command lowerLift() {
     return climberCommandFactory
         .setElevatorPosPID(() -> ClimberConstants.liftLimits.low)
-        .repeatedly()
-        .until(liftIsLow);
+        .repeatedly();
+        // .until(liftIsLow)
   }
 
   /**
@@ -153,8 +153,8 @@ public class ClimberRoutines {
   public Command unwindArm() {
     return climberCommandFactory
         .setWinchPosPID(() -> ClimberConstants.winchLimits.high)
-        .repeatedly()
-        .until(winchIsHigh);
+        .repeatedly();
+        // .until(winchIsHigh);
   }
 
   /**

@@ -585,13 +585,12 @@ public class RobotContainer {
     operatorController.povUp().toggleOnTrue(climberRoutines.setupClimb());
     new Trigger(operatorController.povDown() /*.and(() -> climberRoutines.isReadyToClamp()) */)
         .onTrue(climberRoutines.activateClimb());
-    InstantCommand resetClimberTemp = new InstantCommand();
-    resetClimberTemp.addRequirements(winchSubsystem, climberSubsystem);
-    operatorController
-        .povLeft()
-        .toggleOnTrue(climberRoutines.resetClimber().andThen(resetClimberTemp));
-    operatorController.povRight().whileTrue(climberCommandFactory.liftHomeCommand());
-
+    
+    
+    InstantCommand cancelCommand = new InstantCommand();
+    cancelCommand.addRequirements(winchSubsystem, climberSubsystem);
+    operatorController.povRight().whileTrue(cancelCommand);
+    operatorController.povLeft().whileTrue(cancelCommand);
     new Trigger(operatorController.leftTrigger())
         .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
 

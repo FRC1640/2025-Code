@@ -112,6 +112,13 @@ public class RobotPIDConstants {
   public static final FeedForwardConstants liftFF =
       new FeedForwardConstants(0.78393, 5, 0, 0.81616); // kv 5.2952
 
+  public static final PIDConstants algaeVelocityPID = new PIDConstants(2, 0, 0); // PLACEHOLDER
+  public static final FeedForwardConstants algaeFF =
+      new FeedForwardConstants(0, 0, 0); // PLACEHOLDER
+  public static final PIDConstants coralVelocityPID = new PIDConstants(0, 0, 0); // PLACEHOLDER
+  public static final FeedForwardConstants coralFF =
+      new FeedForwardConstants(0, 0, 0); // PLACEHOLDER
+
   public static final SparkPIDConstants pidConstantSpark =
       new SparkPIDConstants(0, 0, 0, -10, 10, ClosedLoopSlot.kSlot0);
   public static final FeedForwardConstants gantryFF =

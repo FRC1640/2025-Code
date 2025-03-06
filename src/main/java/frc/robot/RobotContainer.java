@@ -145,6 +145,8 @@ public class RobotContainer {
   private boolean algaeMode = false;
   private boolean gantryAuto = false;
 
+  private boolean autoRampPos = false;
+
   public RobotContainer() {
 
     switch (Robot.getMode()) {
@@ -321,6 +323,12 @@ public class RobotContainer {
     liftSubsystem.setDefaultCommand(
         liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
+
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
+
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
             .setSolenoidState(() -> false)
@@ -362,10 +370,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.06;
+        side = 0.09;
         break;
       case RIGHT:
-        side = -0.06;
+        side = -0.09;
         break;
       case CENTER:
         side = 0;
@@ -449,6 +457,8 @@ public class RobotContainer {
     //                 && !coralOuttakeCommandFactory.outtaking)
     //     .onTrue(runLiftToSafe());
 
+    driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
+
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -485,8 +495,10 @@ public class RobotContainer {
                 algaeIntakeSubsystem.hasAlgae()
                     && Robot.getState()
                         == RobotState.TELEOP /* driveController.getHID().getYButton() */)
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
-        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
+        .onTrue(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kRightRumble, 0.2)))
+        .onFalse(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kRightRumble, 0)));
     // new Trigger(() -> coralPreset.isRight())
 
     // reset gyro
@@ -524,7 +536,11 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
-    operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+    operatorController
+        .start()
+        .whileTrue(
+            new InstantCommand(() -> liftSubsystem.resetEncoder())
+                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(
@@ -542,7 +558,10 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
+    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+
+    // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
+    // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     // operatorController
     //     .b()
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
@@ -554,7 +573,7 @@ public class RobotContainer {
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5)))
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
         .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
 
     operatorController
@@ -607,7 +626,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return homing().andThen(dashboard.getAutoChooserCommand());
+    return homing()
+        .andThen(new InstantCommand(() -> autoRampPos = true))
+        .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }
 

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.util.alerts.AlertsManager;
@@ -17,8 +18,8 @@ public class Module {
   PivotId id;
   ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
 
-  SlewRateLimiter accelLimiter = new SlewRateLimiter(999999);
-  SlewRateLimiter deaccelLimiter = new SlewRateLimiter(999999);
+  SlewRateLimiter accelLimiter = new SlewRateLimiter(DriveConstants.accelLimit);
+  SlewRateLimiter deaccelLimiter = new SlewRateLimiter(DriveConstants.deaccelLimit);
 
   public Module(ModuleIO io, PivotId id) {
     this.io = io;

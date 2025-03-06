@@ -70,12 +70,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.elevatorMotorPosition =
-        liftEncoder.getPosition()
-            / ClimberConstants.gearRatio
-            * ClimberConstants.pulleyRadius
-            * 2
-            * Math.PI;
+    inputs.elevatorMotorPosition = liftEncoder.getPosition();
     inputs.elevatorMotorCurrent = liftSpark.getOutputCurrent();
     inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
     inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();

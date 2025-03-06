@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.075539772727272,
-        "y": 5.171732954545454
+        "x": 5.1054545454545455,
+        "y": 5.191676136363636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.783522727272728,
-        "y": 6.577727272727272
+        "x": 5.813437500000001,
+        "y": 6.5976704545454545
       },
       "isLocked": false,
       "linkedName": "ReefTopRight"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

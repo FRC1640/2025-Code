@@ -111,7 +111,7 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints pathConstraints =
-        new PathConstraints(1.5, 2, Math.PI, 4 * Math.PI);
+        new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -130,11 +130,11 @@ public class RobotConstants {
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
-    public static final double maxSpeed = 4.145;
+    public static final double maxSpeed = 4.5;
     public static final double maxNorm =
         DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
-    public static final double wheelRadius = Units.inchesToMeters(1.8892);
+    public static final double wheelRadius = Units.inchesToMeters(2);
 
     public static final double accelLimit = 20;
     public static final double deaccelLimit = 11;
@@ -166,12 +166,12 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(29.5 / 2),
-                    -Units.inchesToMeters(29.5 / 2 - 8),
-                    Units.inchesToMeters(10.5)),
+                    Units.inchesToMeters(13.95),
+                    Units.inchesToMeters(11.9),
+                    Units.inchesToMeters(12.125)),
                 new Rotation3d()),
             1,
-            "Dodds",
+            "Sommar",
             "Front Left");
 
     public static final CameraConstant frontCameraRight =
@@ -179,12 +179,12 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(7.575),
-                    -Units.inchesToMeters(13.325),
-                    Units.inchesToMeters(14.1875)),
+                    Units.inchesToMeters(13.95),
+                    -Units.inchesToMeters(11.9),
+                    Units.inchesToMeters(12.125)),
                 new Rotation3d(Math.toRadians(0), Math.toRadians(-2), Math.toRadians(-2.5))),
             1,
-            "Park",
+            "Markward",
             "Front Right");
 
     public static final CameraConstant backCamera =
@@ -206,7 +206,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 3;
+    public static final double liftMaxAccel = 1.75;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -290,7 +290,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 525;
+    public static final double detectionThresh = 540;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -320,7 +320,7 @@ public class RobotConstants {
     public static final ResolverVoltageInfo liftResolverInfo =
         new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
 
-    public static final double gearRatio = 5;
+    public static final double gearRatio = 1;
     public static final double pulleyRadius = 1;
 
     public static final int solenoidForwardChannel = 2;
@@ -336,7 +336,7 @@ public class RobotConstants {
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.37);
-    public static final double gantryLimitCenter = (gantryLimits.low + gantryLimits.high) / 2;
+    public static final double gantryLimitCenter = 0.175;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.25;
@@ -356,7 +356,7 @@ public class RobotConstants {
     // happens if you don't
     // public static final int coralDetectorChannel =
     //     new RobotSwitch<Integer>(7).get(); // update this too
-    public static final int hasCoralDetectorChannel = 7;
+    public static final int hasCoralDetectorChannel = 4; // 7 deux
     public static final double distanceRequired = 2;
     public static final double passiveSpeed = 0.25;
   }

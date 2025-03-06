@@ -21,8 +21,7 @@ public class AlgaeCommandFactory {
         .finallyDo(() -> algaeSubsystem.setVoltage(0, 0));
   }
 
-  public Command gantrySetVelocityCommand(
-      DoubleSupplier velocityLeft, DoubleSupplier velocityRight) {
+  public Command setVelocityCommand(DoubleSupplier velocityLeft, DoubleSupplier velocityRight) {
     return new RunCommand(
             () ->
                 algaeSubsystem.setVelocity(velocityLeft.getAsDouble(), velocityRight.getAsDouble()))

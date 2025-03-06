@@ -31,6 +31,12 @@ public class CoralOuttakeCommandFactory {
         .finallyDo(() -> intakeSubsystem.setIntakeVoltage(0));
   }
 
+  public Command setVelocityCommand(DoubleSupplier velocity) {
+    return new RunCommand(
+            () -> intakeSubsystem.setIntakeVelocity(velocity.getAsDouble()), intakeSubsystem)
+        .finallyDo(() -> intakeSubsystem.setIntakeVoltage(0));
+  }
+
   public Command runBack() {
     return (new InstantCommand(() -> runningBack = true)
             .andThen(

@@ -378,7 +378,7 @@ public class RobotContainer {
         pose, side, pose.getRotation().plus(Rotation2d.fromDegrees(90)));
   }
 
-  public void mapPIDtoCommand() { // ZOE DO NOT FORGET TO ADD THE NEW VELOCITY PIDS OR ELSE
+  public void mapPIDtoCommand() {
     PIDCommandRegistry.attachPIDCommand(
         "gantryPID", (x) -> gantryCommandFactory.gantryPIDCommand(() -> x));
     PIDCommandRegistry.attachPIDCommand(
@@ -393,6 +393,10 @@ public class RobotContainer {
         "GantryPPID", (x) -> gantryCommandFactory.runGantryMotionProfile(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "GantryVelPPID", (x) -> gantryCommandFactory.runGantryVelocityMotionProfile(() -> x));
+    PIDCommandRegistry.attachPIDCommand(
+        "AlgaeVelPID", (x) -> algaeCommandFactory.setVelocityCommand(() -> x, () -> x));
+    PIDCommandRegistry.attachPIDCommand(
+        "CoralVelPID", (x) -> coralOuttakeCommandFactory.setVelocityCommand(() -> x));
   }
 
   private void configureBindings() {

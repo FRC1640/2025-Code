@@ -145,6 +145,8 @@ public class RobotContainer {
   private boolean algaeMode = false;
   private boolean gantryAuto = false;
 
+  private boolean autoRampPos = false;
+
   public RobotContainer() {
 
     switch (Robot.getMode()) {
@@ -318,12 +320,14 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    // liftSubsystem.setDefaultCommand(
-    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+    liftSubsystem.setDefaultCommand(
+        liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
-    winchSubsystem.setDefaultCommand(climberCommandFactory.setWinchPosPID(() -> 72.3));
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
 
-    climberSubsystem.setDefaultCommand(climberCommandFactory.setElevatorPosPID(() -> 0));
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -453,6 +457,8 @@ public class RobotContainer {
     //                 && !coralOuttakeCommandFactory.outtaking)
     //     .onTrue(runLiftToSafe());
 
+    driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
+
     DriveWeightCommand.createWeightTrigger(
         new RotateToAngleWeight(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -552,7 +558,7 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
+    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
@@ -610,7 +616,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return homing().andThen(dashboard.getAutoChooserCommand());
+    return homing()
+        .andThen(new InstantCommand(() -> autoRampPos = true))
+        .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }
 

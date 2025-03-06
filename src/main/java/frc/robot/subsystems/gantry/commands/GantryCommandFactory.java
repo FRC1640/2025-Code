@@ -159,6 +159,41 @@ public class GantryCommandFactory {
 
   public Command gantryDriftCommandOdometry(
       Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
+
+    return new PrintCommand(
+            ""
+                + getSetpointOdometry(coralPreset, getPose)
+                + ", gantry center: "
+                + getSetpointOdometry(coralPreset, getPose))
+        .andThen(runGantryMotionProfileUntil(() -> getSetpointOdometry(coralPreset, getPose)))
+        .andThen(() -> System.out.println("at setpoint")) // TODO limits
+        .andThen(
+            (runGantryMotionProfileUntil(() -> getSetpointOdometry(coralPreset, getPose) + 0.01)
+                    .beforeStarting(() -> reefDetector.saveDistance()))
+                .deadlineFor(new RunCommand(() -> System.out.println("going"))))
+        .andThen(() -> System.out.println("right of setpoint"))
+        .andThen(
+            new ConditionalCommand(
+                runGantryMotionProfileUntil(() -> getSetpointOdometry(coralPreset, getPose))
+                    .andThen(() -> System.out.println("returned to setpoint once")),
+                runGantryMotionProfileUntil(() -> getSetpointOdometry(coralPreset, getPose) - 0.01)
+                    .andThen(() -> System.out.println("left of setpoint"))
+                    .andThen(
+                        new ConditionalCommand(
+                            runGantryMotionProfileUntil(
+                                    () -> getSetpointOdometry(coralPreset, getPose))
+                                .andThen(() -> System.out.println("returned to setpoint twice")),
+                            gantryDriftCommandMinima(
+                                    coralPreset, () -> AllianceManager.onDsSideReef(getPose))
+                                .beforeStarting(
+                                    () ->
+                                        System.out.println(
+                                            "failure and drifting")), // TODO retry good?
+                            () -> reefDetector.furtherThanSaved())),
+                () -> reefDetector.furtherThanSaved()));
+  }
+
+  private double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(
@@ -199,33 +234,7 @@ public class GantryCommandFactory {
             ? -Units.inchesToMeters(13 / 2)
             : Units.inchesToMeters(13 / 2);
     double setpoint = GantryConstants.gantryLimitCenter + gantryCenter + poleOffset;
-    // return command sequence
-    return new PrintCommand("" + setpoint + ", gantry center: " + gantryCenter)
-        .andThen(runGantryMotionProfileUntil(() -> setpoint))
-        .andThen(() -> System.out.println("at setpoint")) // TODO limits
-        .andThen(
-            (runGantryMotionProfileUntil(() -> setpoint + 0.01)
-                    .beforeStarting(() -> reefDetector.saveDistance()))
-                .deadlineFor(new RunCommand(() -> System.out.println("going"))))
-        .andThen(() -> System.out.println("right of setpoint"))
-        .andThen(
-            new ConditionalCommand(
-                runGantryMotionProfileUntil(() -> setpoint)
-                    .andThen(() -> System.out.println("returned to setpoint once")),
-                runGantryMotionProfileUntil(() -> setpoint - 0.01)
-                    .andThen(() -> System.out.println("left of setpoint"))
-                    .andThen(
-                        new ConditionalCommand(
-                            runGantryMotionProfileUntil(() -> setpoint)
-                                .andThen(() -> System.out.println("returned to setpoint twice")),
-                            gantryDriftCommandMinima(
-                                    coralPreset, () -> AllianceManager.onDsSideReef(getPose))
-                                .beforeStarting(
-                                    () ->
-                                        System.out.println(
-                                            "failure and drifting")), // TODO retry good?
-                            () -> reefDetector.furtherThanSaved())),
-                () -> reefDetector.furtherThanSaved()));
+    return setpoint;
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {

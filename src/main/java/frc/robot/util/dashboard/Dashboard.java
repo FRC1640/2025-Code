@@ -84,13 +84,13 @@ public class Dashboard {
   private void teleopInit() {
     CameraServer.startAutomaticCapture();
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
-    teleopTab
-        .addCamera(
-            "Front Cam",
-            "orangepi.local_Port_1181_Input_MJPEG_Server",
-            "http://orangepi.local:1182/stream.mjpg")
-        .withSize(3, 3)
-        .withPosition(2, 1);
+    // teleopTab
+    //     .addCamera(
+    //         "Front Cam",
+    //         "orangepi.local_Port_1181_Input_MJPEG_Server",
+    //         "http://orangepi.local:1182/stream.mjpg")
+    //     .withSize(3, 3)
+    //     .withPosition(2, 1);
     teleopTab
         .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
         .withSize(4, 3)

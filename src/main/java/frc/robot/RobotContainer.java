@@ -321,7 +321,7 @@ public class RobotContainer {
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
-    winchSubsystem.setDefaultCommand(climberCommandFactory.setWinchPosPID(() -> 70.3));
+    winchSubsystem.setDefaultCommand(climberCommandFactory.setWinchPosPID(() -> 72.3));
 
     climberSubsystem.setDefaultCommand(climberCommandFactory.setElevatorPosPID(() -> 0));
 
@@ -366,10 +366,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.9;
+        side = 0.09;
         break;
       case RIGHT:
-        side = -0.9;
+        side = -0.09;
         break;
       case CENTER:
         side = 0;
@@ -489,8 +489,10 @@ public class RobotContainer {
                 algaeIntakeSubsystem.hasAlgae()
                     && Robot.getState()
                         == RobotState.TELEOP /* driveController.getHID().getYButton() */)
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0.2)))
-        .onFalse(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 0)));
+        .onTrue(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kRightRumble, 0.2)))
+        .onFalse(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kRightRumble, 0)));
     // new Trigger(() -> coralPreset.isRight())
 
     // reset gyro
@@ -559,14 +561,22 @@ public class RobotContainer {
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
+    driveController
+        .rightTrigger()
+        .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+
     operatorController
         .rightTrigger()
         .and(() -> algaeIntakeSubsystem.hasAlgae())
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.processCommand()))
-        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+                .andThen(algaeCommandFactory.processCommand()));
     // motor board
     new Trigger(() -> motorBoard.getLl2())
         .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));

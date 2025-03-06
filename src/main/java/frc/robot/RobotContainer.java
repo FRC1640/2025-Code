@@ -318,8 +318,8 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -327,13 +327,12 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    // winchSubsystem.setDefaultCommand(
-    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
-    // 4));
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
 
-    // climberSubsystem.setDefaultCommand(
-    //     climberCommandFactory.elevatorApplyVoltageCommand(
-    //         () -> -operatorController.getRightY() * 4));
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.elevatorApplyVoltageCommand(
+            () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -524,7 +523,11 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.getTrough())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
     // lift/gantry manual controls
-    operatorController.start().whileTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+    operatorController
+        .start()
+        .whileTrue(
+            new InstantCommand(() -> liftSubsystem.resetEncoder())
+                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
     operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(
@@ -542,7 +545,10 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
+    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() ->
+    // 0).repeatedly());
+
+    operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
     // operatorController
     //     .b()
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));

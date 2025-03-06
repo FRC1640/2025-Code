@@ -320,7 +320,7 @@ public class RobotConstants {
     public static final ResolverVoltageInfo liftResolverInfo =
         new ResolverVoltageInfo(7, 0, 5, 0, 100, null);
 
-    public static final double gearRatio = 5;
+    public static final double gearRatio = 1;
     public static final double pulleyRadius = 1;
 
     public static final int solenoidForwardChannel = 2;

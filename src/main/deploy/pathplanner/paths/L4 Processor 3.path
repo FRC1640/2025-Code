@@ -36,7 +36,44 @@
       "name": "L4Left",
       "waypointRelativePos": 0.605494505494502,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryRight"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

@@ -11,7 +11,7 @@ from PIL import ImageTk, Image
 
 username = "pi"
 password = "raspberry"
-hostname = "10.16.40.63"
+hostname = "10.16.40.52"
 server_ip = "10.16.40.2"
 
 NetworkTables.initialize(server=server_ip) 
@@ -54,7 +54,7 @@ def update():
     def threaded_update():
         diagnostics = get_diagnostics()
         if diagnostics["temperature"] != "Goobersnort Error" and float(diagnostics["temperature"][:-2]) >= 85:
-            temperature_label.config(text=f"CPU Temperature: Unplug immediately its a bit toasty")
+            temperature_label.config(text=f"CPU Temperature: Extremely Hot (85+)")
         else:
             temperature_label.config(text=f"CPU Temperature: {diagnostics['temperature']}")
 
@@ -91,10 +91,26 @@ def update_settings():
     NetworkTables.initialize(server=server_ip)
     status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
     get_diagnostics()
-
+    update()
+def update_settingsPrime():
+    global hostname, server_ip
+    hostname = "10.16.40.52"
+    server_ip = "10.16.40.2"
+    NetworkTables.initialize(server=server_ip)
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
+    update()
+def update_settingsDuex():
+    global hostname, server_ip
+    hostname = "10.16.40.63"
+    server_ip = "10.16.40.2"
+    NetworkTables.initialize(server=server_ip)
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
+    update()
 root = tb.Window(themename="darkly")
 root.title("Orange Pi Diagnostics Monitor")
-root.geometry("480x600")
+root.geometry("480x700")
 
 frame_main = ttk.Frame(root, padding=15)
 frame_main.pack(fill="both", expand=True)
@@ -132,6 +148,12 @@ server_entry.pack()
 update_button = tb.Button(frame_main, text="Update Settings", command=update_settings, bootstyle="success")
 update_button.pack(pady=5)
 
+pi_preset_label = tb.Label(frame_main, text = "Pi Setting Presets")
+pi_preset_label.pack()
+primePI = tb.Button(frame_main, text="Prime Orange PI", command=update_settingsPrime)
+primePI.pack(pady=2)
+duexPI = tb.Button(frame_main, text="Duex Orange PI", command=update_settingsDuex)
+duexPI.pack(pady=2)
 status_label = tb.Label(frame_main, text="")
 status_label.pack()
 

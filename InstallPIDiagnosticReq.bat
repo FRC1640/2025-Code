@@ -19,9 +19,5 @@ if %errorlevel% neq 0 (
 
 echo Installing dependencies...
 pip install -r PiDiagnostics/requirements.txt
-
-echo Running Diagnostic Dashboard...
-python PiDiagnostics/pidiagnostics.py
-
 endlocal
 pause

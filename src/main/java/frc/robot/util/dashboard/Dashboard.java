@@ -92,10 +92,10 @@ public class Dashboard {
     //     .withSize(3, 3)
     //     .withPosition(2, 1);
     // doesn't work, code crashes.
-    teleopTab
-        .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
-        .withSize(4, 3)
-        .withPosition(5, 1);
+    // teleopTab
+    //     .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
+    //     .withSize(4, 3)
+    //     .withPosition(5, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(2, 1)

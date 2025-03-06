@@ -92,8 +92,6 @@ import frc.robot.util.periodic.PeriodicBase;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.pi.CoProcessInput;
 import frc.robot.util.pi.OrangePILogger;
-import frc.robot.util.misc.AllianceManager;
-import frc.robot.util.misc.DistanceManager;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;

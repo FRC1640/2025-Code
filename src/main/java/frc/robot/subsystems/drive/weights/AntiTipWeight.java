@@ -29,7 +29,7 @@ public class AntiTipWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    if(!enabled) {
+    if (!enabled) {
       return new ChassisSpeeds();
     }
     double xSpeed = 0;

@@ -81,7 +81,7 @@ public class ClimberRoutines {
    *
    * @return
    */
-  public Command initiatePart1() {
+  public Command setupClimb() {
     return initiatePart0()
         .andThen(lowerLift().alongWith(unwindArm()))
         .andThen(climberCommandFactory.setClampState(() -> false));
@@ -92,7 +92,7 @@ public class ClimberRoutines {
    *
    * @return
    */
-  public Command initiatePart2() {
+  public Command activateClimb() {
     return Commands.sequence(
             new InstantCommand(() -> AntiTipWeight.setAntiTip(false)),
             climberCommandFactory.setClampState(() -> true),
@@ -107,7 +107,8 @@ public class ClimberRoutines {
                     && withinTolerance(
                         climberSubsystem.getLiftMotorPosition(),
                         ClimberConstants.liftLimits.low,
-                        tolerance * 2)).finallyDo(() -> AntiTipWeight.setAntiTip(true));
+                        tolerance * 2))
+        .finallyDo(() -> AntiTipWeight.setAntiTip(true));
   }
 
   /**
@@ -117,7 +118,7 @@ public class ClimberRoutines {
    * @return
    */
   public Command resetClimber() {
-    return initiatePart1().andThen(raiseLift().alongWith(resetArm()));
+    return setupClimb().andThen(raiseLift().alongWith(resetArm()));
   }
 
   /**

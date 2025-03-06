@@ -219,13 +219,13 @@ public class RobotConstants {
 
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
-      Safe(0, 0.14, GantrySetpoint.CENTER),
+      Safe(0, 0.1, GantrySetpoint.CENTER),
       LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
       RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
       RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.568, GantrySetpoint.LEFT),
-      RightL4(0.568, GantrySetpoint.RIGHT),
+      LeftL4(0.566, GantrySetpoint.LEFT),
+      RightL4(0.566, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
@@ -312,7 +312,7 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(-999999999999.0, 999999999.0);
+    public static final Limits liftLimits = new Limits(-174.874, 99999999.9);
     public static final double winchClimbedPosition = 45;
     public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =

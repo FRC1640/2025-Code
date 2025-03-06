@@ -320,14 +320,14 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
-    liftSubsystem.setDefaultCommand(
-        liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
+    // liftSubsystem.setDefaultCommand(
+    //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -335,13 +335,12 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    // winchSubsystem.setDefaultCommand(
-    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
-    // 4));
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
 
-    // climberSubsystem.setDefaultCommand(
-    //     climberCommandFactory.elevatorApplyVoltageCommand(
-    //         () -> -operatorController.getRightY() * 4));
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.elevatorApplyVoltageCommand(
+            () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -447,6 +446,7 @@ public class RobotContainer {
 
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
+
     // new Trigger(
     //         () ->
     //             RobotOdometry.instance
@@ -558,14 +558,19 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
-    // operatorController
-    //     .b()
-    //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    operatorController
+        .b()
+        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+
+    driveController
+        .y()
+        .onTrue(
+            new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
 
     driveController
         .rightTrigger()
@@ -611,11 +616,11 @@ public class RobotContainer {
             .alongWith(new InstantCommand(() -> autoRampPos = false)));
     operatorController.povRight().whileTrue(cancelCommand);
     operatorController.povLeft().whileTrue(cancelCommand);
-    new Trigger(operatorController.leftTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
+    // new Trigger(operatorController.leftTrigger())
+    //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
 
-    new Trigger(operatorController.rightTrigger())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
+    // new Trigger(operatorController.rightTrigger())
+    //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 1));
 
     // climber rumble
     new Trigger(() -> climberRoutines.isReadyToClamp())

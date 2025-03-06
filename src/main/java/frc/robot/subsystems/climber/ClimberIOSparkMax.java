@@ -24,7 +24,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final DoubleSolenoid doubleSolenoid;
   // inductance sensors that pull low when metal is detected
   // private final DigitalInput sensor1Input, sensor2Input;
-  private boolean limits = false;
+  private boolean limits = true;
 
   public ClimberIOSparkMax() {
     liftSpark =

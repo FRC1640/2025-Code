@@ -13,6 +13,10 @@ public class AntiTipWeight implements DriveWeight {
   private Gyro gyro;
   private static boolean enabled = true;
 
+  public static boolean getEnabled() {
+    return enabled;
+  }
+
   private PIDController pitchAntiTip =
       RobotPIDConstants.constructPID(RobotPIDConstants.driveAntiTip);
   private PIDController rollAntiTip =

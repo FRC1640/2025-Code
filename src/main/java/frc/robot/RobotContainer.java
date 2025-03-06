@@ -321,18 +321,23 @@ public class RobotContainer {
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
+    winchSubsystem.setDefaultCommand(climberCommandFactory.setWinchPosPID(() -> 70.3));
+
+    climberSubsystem.setDefaultCommand(climberCommandFactory.setElevatorPosPID(() -> 0));
+
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
             .setSolenoidState(() -> false)
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
+    // 4));
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 4));
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.elevatorApplyVoltageCommand(
+    //         () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -545,10 +550,10 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() ->
-    // 0).repeatedly());
+    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0).repeatedly());
 
-    operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
+    // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
+    // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     // operatorController
     //     .b()
     //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));

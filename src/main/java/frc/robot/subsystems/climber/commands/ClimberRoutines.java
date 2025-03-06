@@ -84,7 +84,7 @@ public class ClimberRoutines {
    */
   public Command activateClimb() {
     return Commands.sequence(
-            new InstantCommand(() -> AntiTipWeight.setAntiTip(false)),
+            new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)),
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
             windArm())
@@ -98,7 +98,7 @@ public class ClimberRoutines {
                         climberSubsystem.getLiftMotorPosition(),
                         ClimberConstants.liftLimits.low,
                         tolerance * 2))
-        .finallyDo(() -> AntiTipWeight.setAntiTip(true));
+        .finallyDo(() -> AntiTipWeight.setAntiTipEnabled(true));
   }
 
   /**

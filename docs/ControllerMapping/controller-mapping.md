@@ -60,13 +60,15 @@ Back Button: Sets gantry to home
 
 Start Button: Lift Home
 
+Right Trigger: Algae Process
+
 Operator POV Up: Part 1 of climber, unwinds arm, lowers lift, and sets the clamp state to false
 
 Operator POV Down: Part 2 of climber, sets clamp state to true, winds arm, does the winch
 
-Operator POV Left: Resets the climber position
+Operator POV Left: Cancel command (default command is pid to climber default position)
 
-Operator POV Right: sets climber lift to home
+Operator POV Right: Unclamps lift
 
 ## **FightSticks Controller**
 ### Preset Board

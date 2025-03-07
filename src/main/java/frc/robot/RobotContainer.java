@@ -574,12 +574,12 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController
-        .b()
+        .povRight()
         .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 

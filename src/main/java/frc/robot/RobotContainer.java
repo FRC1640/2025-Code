@@ -333,10 +333,10 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
+        climberCommandFactory.setWinchPosPID(() -> 343.1).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
-        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
+        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -347,6 +347,10 @@ public class RobotContainer {
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
     // 4));
+
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.elevatorApplyVoltageCommand(
+    //         () -> -operatorController.getRightY() * 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -363,6 +367,8 @@ public class RobotContainer {
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
                 Logger.recordOutput(
                     "GantryDone", gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode);
+
+                Logger.recordOutput("autoramppos", autoRampPos);
               }
             });
   }
@@ -442,7 +448,7 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(operatorController.getLeftY()) > 0.03)
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
-                () -> -operatorController.getRightY() * 4));
+                () -> -operatorController.getLeftY() * 4));
     // new Trigger(
     //         () ->
     //             followPathNearest.isAutoalignComplete()
@@ -487,9 +493,9 @@ public class RobotContainer {
                     .plus(Rotation2d.fromDegrees(180))),
         driveController.leftBumper());
 
-    driveController
-        .povDown()
-        .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
+    // driveController
+    //     .povDown()
+    //     .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));
 
     driveController
         .b()
@@ -535,7 +541,7 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().whileTrue(autoScoringCommandFactory.outtakeCoralCommand());
+    driveController.povUp().onTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
@@ -574,13 +580,11 @@ public class RobotContainer {
     //                         .getDistance(getTarget().getTranslation())
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
-    operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+    // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
-    // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 70.3));
+    // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
-    operatorController
-        .povRight()
-        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
     driveController
@@ -622,7 +626,10 @@ public class RobotContainer {
         .whileTrue(new InstantCommand(() -> algaeIntakeSubsystem.setHasAlgae(false)));
 
     // climber button bindings:
-    operatorController.povUp().onTrue(climberRoutines.setupClimb());
+    operatorController
+        .povUp()
+        .whileTrue(
+            climberRoutines.setupClimb().alongWith(new InstantCommand(() -> autoRampPos = false)));
     new Trigger(operatorController.povDown() /*.and(() -> climberRoutines.isReadyToClamp()) */)
         .onTrue(climberRoutines.activateClimb());
 
@@ -630,7 +637,7 @@ public class RobotContainer {
         (climberCommandFactory
             .setClampState(() -> false)
             .alongWith(new InstantCommand(() -> autoRampPos = false)));
-    operatorController.povLeft().whileTrue(cancelCommand);
+    operatorController.povLeft().whileTrue(climberCommandFactory.setClampState(() -> true));
     // new Trigger(operatorController.leftTrigger())
     //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));
 
@@ -683,7 +690,8 @@ public class RobotContainer {
     return liftCommandFactory
         .runLiftMotionProfile(
             () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
-        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> true));
+        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> true))
+        .alongWith(climberCommandFactory.setClampState(() -> false));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -702,6 +710,7 @@ public class RobotContainer {
                       autoScoringCommandFactory
                           .gantryAlignCommand(() -> gantryPresetActive, () -> true)
                           .asProxy()))
+              .alongWith(climberCommandFactory.setClampState(() -> false))
               .schedule();
         });
   }

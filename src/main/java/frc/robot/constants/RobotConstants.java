@@ -27,8 +27,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.85;
-    public static final double robotLength = 0.85; // 0.927
+    public static final double robotWidth = 0.7;
+    public static final double robotLength = 0.7; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 

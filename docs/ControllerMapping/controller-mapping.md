@@ -46,7 +46,7 @@ Button Y: Runs Lift to safe
 
 Button A: Confirm Coral Preset Board Position
 
-Button X: Clamp Climber
+Button X: Get Auto Place Command
 
 Button B: Sets lift voltage to 0
 
@@ -54,7 +54,7 @@ Left Bumper: Move Gantry Left
 
 Right Bumper: Move Gantry Right
 
-Right Joystick Y: Lift Up/Down
+Right Joystick Y: Climber Elevator Up/Down
 
 Back Button: Sets gantry to home
 
@@ -68,7 +68,7 @@ Operator POV Down: Part 2 of climber, sets clamp state to true, winds arm, does 
 
 Operator POV Left: Cancel command (default command is pid to climber default position)
 
-Operator POV Right: Unclamps lift
+Operator POV Right: Unhooks the Lift
 
 ## **FightSticks Controller**
 ### Preset Board

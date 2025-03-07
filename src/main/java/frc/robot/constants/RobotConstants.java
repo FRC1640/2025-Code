@@ -369,6 +369,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 45;
+    public static double currentThresh = 50;
   }
 }

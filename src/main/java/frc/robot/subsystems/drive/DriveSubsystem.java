@@ -53,10 +53,14 @@ public class DriveSubsystem extends SubsystemBase {
     this.gyro = gyro;
     switch (Robot.getMode()) { // create modules
       case REAL:
-        modules[0] = new Module(new ModuleIOSparkMax(DriveConstants.FL), PivotId.FL);
-        modules[1] = new Module(new ModuleIOSparkMax(DriveConstants.FR), PivotId.FR);
-        modules[2] = new Module(new ModuleIOSparkMax(DriveConstants.BL), PivotId.BL);
-        modules[3] = new Module(new ModuleIOSparkMax(DriveConstants.BR), PivotId.BR);
+        // modules[0] = new Module(new ModuleIOSparkMax(DriveConstants.FL), PivotId.FL);
+        // modules[1] = new Module(new ModuleIOSparkMax(DriveConstants.FR), PivotId.FR);
+        // modules[2] = new Module(new ModuleIOSparkMax(DriveConstants.BL), PivotId.BL);
+        // modules[3] = new Module(new ModuleIOSparkMax(DriveConstants.BR), PivotId.BR);
+        modules[0] = new Module(new ModuleIO() {}, PivotId.FL);
+        modules[1] = new Module(new ModuleIO() {}, PivotId.FR);
+        modules[2] = new Module(new ModuleIO() {}, PivotId.BL);
+        modules[3] = new Module(new ModuleIO() {}, PivotId.BR);
         break;
 
       case SIM:

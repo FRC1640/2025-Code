@@ -2,6 +2,7 @@ package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -82,20 +83,13 @@ public class Dashboard {
   DoubleSupplier time = () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
-    CameraServer.startAutomaticCapture();
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
-    // teleopTab
-    //     .addCamera(
-    //         "Front Cam",
-    //         "orangepi.local_Port_1181_Input_MJPEG_Server",
-    //         "http://orangepi.local:1182/stream.mjpg")
-    //     .withSize(3, 3)
-    //     .withPosition(2, 1);
+    CameraServer.startAutomaticCapture();
+    HttpCamera frontCam = new HttpCamera("Front Cam", "http://10.16.40.63:1182/stream.mjpg");
+    HttpCamera rearCam = new HttpCamera("RearCam", "http://10.16.40.63:1181/stream.mjpg");
+    teleopTab.add(frontCam).withSize(3, 3).withPosition(2, 1);
     // doesn't work, code crashes.
-    // teleopTab
-    //     .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
-    //     .withSize(4, 3)
-    //     .withPosition(5, 1);
+    teleopTab.add(rearCam).withSize(4, 3).withPosition(5, 1);
     teleopTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(2, 1)

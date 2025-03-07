@@ -15,6 +15,8 @@ public interface CoralOuttakeIO extends AutoCloseable {
 
   public default void setIntakeVoltage(double voltage) {}
 
+  public default void setIntakeVelocity(double velocity, CoralOuttakeIOInputs inputs) {}
+
   public default void updateInputs(CoralOuttakeIOInputs inputs) {}
 
   @Override

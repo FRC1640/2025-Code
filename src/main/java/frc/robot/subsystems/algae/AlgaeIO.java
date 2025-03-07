@@ -24,6 +24,8 @@ public interface AlgaeIO {
 
   public default void setSolenoid(boolean set) {}
 
+  public default void setVelocity(double leftVel, double rightVel, AlgaeIOInputs inputs) {}
+
   public default boolean hasSimAlgae() {
     return false;
   }

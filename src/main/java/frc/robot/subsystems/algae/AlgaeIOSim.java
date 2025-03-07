@@ -1,5 +1,7 @@
 package frc.robot.subsystems.algae;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -7,6 +9,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
+import frc.robot.constants.RobotPIDConstants;
 import java.util.function.BooleanSupplier;
 
 public class AlgaeIOSim implements AlgaeIO {
@@ -14,6 +17,10 @@ public class AlgaeIOSim implements AlgaeIO {
   private final DCMotorSim motorRightSim;
   private final DoubleSolenoidSim solenoidSim;
   private final BooleanSupplier hasSimAlgae;
+  private final SimpleMotorFeedforward ff =
+      RobotPIDConstants.constructFFSimpleMotor(RobotPIDConstants.algaeFF, "algaeFF");
+  private final PIDController algaeVelocityPID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.algaeVelocityPID, "algaeVelocityPID");
 
   public AlgaeIOSim(BooleanSupplier hasSimAlgae) {
     this.hasSimAlgae = hasSimAlgae;
@@ -41,6 +48,15 @@ public class AlgaeIOSim implements AlgaeIO {
   public void setVoltage(double left, double right) {
     motorLeftSim.setInputVoltage(left);
     motorRightSim.setInputVoltage(right);
+  }
+
+  @Override
+  public void setVelocity(double leftVel, double rightVel, AlgaeIOInputs inputs) {
+    setVoltage(
+        (ff.calculate(leftVel)
+            + algaeVelocityPID.calculate(inputs.intakeMotorLeftVelocity, leftVel)),
+        (ff.calculate(rightVel)
+            + algaeVelocityPID.calculate(inputs.intakeMotorRightVelocity, rightVel)));
   }
 
   @Override

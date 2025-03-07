@@ -65,6 +65,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     io.setIntakeVoltage(voltage);
   }
 
+  public void setIntakeVelocity(double velocity) {
+    io.setIntakeVelocity(velocity, inputs);
+  }
+
   public double getVelocity() {
     return inputs.outtakeVelocity;
   }

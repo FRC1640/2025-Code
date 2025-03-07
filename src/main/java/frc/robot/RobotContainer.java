@@ -412,6 +412,10 @@ public class RobotContainer {
         "GantryPPID", (x) -> gantryCommandFactory.runGantryMotionProfile(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "GantryVelPPID", (x) -> gantryCommandFactory.runGantryVelocityMotionProfile(() -> x));
+    PIDCommandRegistry.attachPIDCommand(
+        "AlgaeVelPID", (x) -> algaeCommandFactory.setVelocityCommand(() -> x, () -> x));
+    PIDCommandRegistry.attachPIDCommand(
+        "CoralVelPID", (x) -> coralOuttakeCommandFactory.setVelocityCommand(() -> x));
   }
 
   private void configureBindings() {

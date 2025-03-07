@@ -71,6 +71,10 @@ public class AlgaeSubsystem extends SubsystemBase {
     io.setVoltage(left, right);
   }
 
+  public void setVelocity(double leftVel, double rightVel) {
+    io.setVelocity(leftVel, rightVel, inputs);
+  }
+
   public boolean algaeCurrentHit() {
     return (inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
             || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh)

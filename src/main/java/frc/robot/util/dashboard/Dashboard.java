@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -81,13 +82,18 @@ public class Dashboard {
   DoubleSupplier time = () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
+    CameraServer.startAutomaticCapture();
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
-    teleopTab
-        .addCamera("Front Cam", "Park", "http://orangepi.local:1182/stream.mjpg")
-        .withSize(3, 3)
-        .withPosition(2, 1);
     // teleopTab
-    //     .addCamera("Rear Cam", "BackLL", "WHAT IS THIS RAAAAA")
+    //     .addCamera(
+    //         "Front Cam",
+    //         "orangepi.local_Port_1181_Input_MJPEG_Server",
+    //         "http://orangepi.local:1182/stream.mjpg")
+    //     .withSize(3, 3)
+    //     .withPosition(2, 1);
+    // doesn't work, code crashes.
+    // teleopTab
+    //     .addCamera("Rear Cam", "http://10.16.40.2:1181/?action=stream")
     //     .withSize(4, 3)
     //     .withPosition(5, 1);
     teleopTab

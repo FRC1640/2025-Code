@@ -2,6 +2,7 @@ package frc.robot.util.spark;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -256,6 +257,50 @@ public class SparkConfiguration {
     seed.encoder
         .quadratureAverageDepth(encoderAverageDepth)
         .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    if (pid != null) {
+      seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
+    }
+    if (limitSwitch != null) {
+      seed.limitSwitch.apply(limitSwitch);
+    }
+    inner = seed;
+    inner.disableFollowerMode();
+  }
+
+  public SparkConfiguration(
+      int id,
+      IdleMode idleMode,
+      boolean inverted,
+      int currentLimit,
+      int encoderMeasurementPeriod,
+      int encoderAverageDepth,
+      StatusFrames statusFrames,
+      SparkPIDConstants pid,
+      LimitSwitchConfig limitSwitch,
+      SparkMaxConfig seed,
+      boolean useAbsolute) {
+    encoderMeasurementPeriod /= 2; // seems like this is doubled somehow
+    this.id = id;
+    this.idleMode = idleMode;
+    this.inverted = inverted;
+    this.currentLimit = currentLimit;
+    this.encoderMeasurementPeriod = encoderMeasurementPeriod;
+    this.encoderAverageDepth = encoderAverageDepth;
+    this.statusFrames = statusFrames;
+    this.pid = pid;
+    this.limitSwitch = limitSwitch;
+    seed.idleMode(idleMode).inverted(inverted).smartCurrentLimit(currentLimit);
+    // seed.absoluteEncoder.averageDepth(encoderAverageDepth);
+    // seed.alternateEncoder
+    //     .averageDepth(encoderAverageDepth)
+    //     .measurementPeriod(encoderMeasurementPeriod);
+    if (useAbsolute) {
+      seed.absoluteEncoder.apply(new AbsoluteEncoderConfig());
+    } else {
+      seed.encoder
+          .quadratureAverageDepth(encoderAverageDepth)
+          .quadratureMeasurementPeriod(encoderMeasurementPeriod);
+    }
     if (pid != null) {
       seed.closedLoop.p(pid.kP).i(pid.kI).d(pid.kD);
     }

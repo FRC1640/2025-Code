@@ -169,7 +169,7 @@ public class RobotConstants {
                     Units.inchesToMeters(13.95),
                     Units.inchesToMeters(11.9),
                     Units.inchesToMeters(12.125)),
-                new Rotation3d()),
+                new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
             1,
             "Sommar",
             "Front Left");
@@ -182,7 +182,7 @@ public class RobotConstants {
                     Units.inchesToMeters(13.95),
                     -Units.inchesToMeters(11.9),
                     Units.inchesToMeters(12.125)),
-                new Rotation3d(Math.toRadians(0), Math.toRadians(-2), Math.toRadians(-2.5))),
+                new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
             1,
             "Markward",
             "Front Right");

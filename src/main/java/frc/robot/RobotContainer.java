@@ -147,6 +147,8 @@ public class RobotContainer {
 
   private boolean autoRampPos = false;
 
+  boolean homed = false;
+
   public RobotContainer() {
 
     switch (Robot.getMode()) {
@@ -156,6 +158,11 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
                 CameraConstants.frontCameraRight));
+
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+                CameraConstants.frontCameraLeft));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -323,11 +330,13 @@ public class RobotContainer {
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
-    // winchSubsystem.setDefaultCommand(
-    //     climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
+    new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
-    // climberSubsystem.setDefaultCommand(
-    //     climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
+    winchSubsystem.setDefaultCommand(
+        climberCommandFactory.setWinchPosPID(() -> 72.3).onlyIf(() -> autoRampPos));
+
+    climberSubsystem.setDefaultCommand(
+        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos));
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -335,12 +344,9 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() * 4));
-
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.elevatorApplyVoltageCommand(
-            () -> -operatorController.getRightY() * 4));
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
+    // 4));
     configureBindings();
     PeriodicScheduler.getInstance()
         .addPeriodic(
@@ -427,6 +433,16 @@ public class RobotContainer {
                     && (gantrySubsystem.isAtPreset(coralPreset, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
+
+    new Trigger(() -> Math.abs(operatorController.getRightY()) > 0.03)
+        .whileTrue(
+            climberCommandFactory.elevatorApplyVoltageCommand(
+                () -> -operatorController.getRightY() * 4));
+
+    new Trigger(() -> Math.abs(operatorController.getLeftY()) > 0.03)
+        .whileTrue(
+            climberCommandFactory.winchApplyVoltageCommand(
+                () -> -operatorController.getRightY() * 4));
     // new Trigger(
     //         () ->
     //             followPathNearest.isAutoalignComplete()
@@ -641,7 +657,7 @@ public class RobotContainer {
   public Command homing() {
     return new ConditionalCommand(
         new InstantCommand(),
-        gantryCommandFactory.gantryHomeCommand(),
+        gantryCommandFactory.gantryHomeCommand().alongWith(new InstantCommand(() -> homed = true)),
         // .alongWith(liftCommandFactory.liftHomeCommand())
         // .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);

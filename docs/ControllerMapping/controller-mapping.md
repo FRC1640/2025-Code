@@ -24,11 +24,15 @@ Right X Axis Joystick: Rotates Robot
 
 Left Joystick: Controls robot movement (X axis for left/right, Y axis for forward/backward)
 
-Start Button: Sets the robot's movement direction based on its current orientation
+Start Button: Sets the robot's movement direction based on its current orientation (gyro reset)
+
+Back Button: Turns off the lift auto pid
 
 Button A: Align with the reef
 
 Button B: Runs intake voltage at 3 volts
+
+Button Y: Toggles anti tip
 
 Left Bumper: Align with nearest reef
 
@@ -38,7 +42,7 @@ Right Bumper: Slow Mode
 
 Right Trigger: Shoots algae grabber
 
-POVUp: Outtakes coral
+POV Up: Outtakes coral
 ### Operator Controller
 Port: 1
 

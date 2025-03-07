@@ -42,13 +42,17 @@ POVUp: Outtakes coral
 ### Operator Controller
 Port: 1
 
+Start: Reset Lift and Climber encoder
+
+Back: Gantry Home Command
+
 Button Y: Runs Lift to safe
 
 Button A: Confirm Coral Preset Board Position
 
-Button X: Get Auto Place Command
+Button X: Auto Place Command
 
-Button B: Sets lift voltage to 0
+Button B: Toggles Climber Clamp State
 
 Left Bumper: Move Gantry Left
 
@@ -56,9 +60,13 @@ Right Bumper: Move Gantry Right
 
 Right Joystick Y: Climber Elevator Up/Down
 
+Left Joystick Y: Winch Voltage Command
+
 Back Button: Sets gantry to home
 
 Start Button: Lift Home
+
+Left Trigger: Sets "HasAlgae" to false
 
 Right Trigger: Algae Process
 
@@ -70,6 +78,8 @@ Operator POV Left: Cancel command (default command is pid to climber default pos
 
 Operator POV Right: Unhooks the Lift
 
+RUMBLE:
+If Algae is intaked
 ## **FightSticks Controller**
 ### Preset Board
 Port: 2

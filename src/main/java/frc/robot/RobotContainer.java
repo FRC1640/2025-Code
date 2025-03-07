@@ -630,7 +630,6 @@ public class RobotContainer {
         (climberCommandFactory
             .setClampState(() -> false)
             .alongWith(new InstantCommand(() -> autoRampPos = false)));
-    operatorController.povRight().whileTrue(cancelCommand);
     operatorController.povLeft().whileTrue(cancelCommand);
     // new Trigger(operatorController.leftTrigger())
     //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> -1));

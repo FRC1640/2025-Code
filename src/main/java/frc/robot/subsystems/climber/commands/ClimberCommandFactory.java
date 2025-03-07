@@ -44,9 +44,7 @@ public class ClimberCommandFactory {
 
   public Command setClampState(BooleanSupplier isClamped) {
     return new InstantCommand(
-        () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()),
-        climberSubsystem,
-        winchSubsystem);
+        () -> climberSubsystem.setSolenoidState(isClamped.getAsBoolean()), climberSubsystem);
   }
 
   public Command liftHomeCommand() {

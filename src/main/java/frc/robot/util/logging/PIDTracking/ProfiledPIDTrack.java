@@ -47,8 +47,6 @@ public class ProfiledPIDTrack {
       Logger.recordOutput(
           "PIDTrack/" + idName + "/constants/maxVelocity",
           pidsTrack.get(idName).getConstraints().maxVelocity);
-      Logger.recordOutput(
-          "PIDTrack/" + idName + "/SetpointPos", pidsTrack.get(idName).getSetpoint().position);
     }
   }
 }

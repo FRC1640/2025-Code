@@ -39,4 +39,11 @@ public class AlgaeCommandFactory {
         .repeatedly()
         .until(() -> !algaeSubsystem.hasAlgae());
   }
+
+  public Command algaeAutoPickup() {
+    return setSolenoidState(() -> true)
+        .andThen(setMotorVoltages(() -> 4, () -> 4))
+        .repeatedly()
+        .until(() -> algaeSubsystem.hasAlgae());
+  }
 }

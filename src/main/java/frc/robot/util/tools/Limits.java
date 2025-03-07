@@ -1,4 +1,4 @@
-package frc.robot.util.misc;
+package frc.robot.util.tools;
 
 public class Limits {
   public final Double low;

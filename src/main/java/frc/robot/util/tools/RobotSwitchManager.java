@@ -1,4 +1,4 @@
-package frc.robot.util.robotswitch;
+package frc.robot.util.tools;
 
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 

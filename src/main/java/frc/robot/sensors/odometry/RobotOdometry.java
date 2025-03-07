@@ -14,11 +14,13 @@ import frc.robot.Robot.RobotState;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.periodic.PeriodicBase;
+import frc.robot.util.tools.RobotSwitchManager.RobotType;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -48,7 +50,11 @@ public class RobotOdometry extends PeriodicBase {
       visionMap.put(aprilTagVision.getDisplayName(), aprilTagVision);
     }
     SparkOdometryThread.getInstance().start();
-    OdometryStorage main = branchEstimator("Main", cameras, VisionUpdateMode.PHOTONVISION);
+    OdometryStorage main =
+        branchEstimator(
+            "Main",
+            RobotConfigConstants.robotType == RobotType.Sim ? new AprilTagVision[0] : cameras,
+            VisionUpdateMode.PHOTONVISION);
     OdometryStorage mainTrig = branchEstimator("MainTrig", cameras, VisionUpdateMode.TRIG);
     mainTrig.setTrustedRotation(main);
   }
@@ -236,8 +242,7 @@ public class RobotOdometry extends PeriodicBase {
           visionUpdate, poseObservation.timestamp(), VecBuilder.fill(xy, xy, rot));
     }
     for (Pose2d pose : robotPoses) {
-      Logger.recordOutput(
-          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
+      Logger.recordOutput("AprilTagVision/" + vision.getDisplayName() + "/RobotPoses", pose);
     }
     for (Pose2d pose : robotPosesAccepted) {
       Logger.recordOutput(
@@ -245,7 +250,7 @@ public class RobotOdometry extends PeriodicBase {
     }
     for (Pose2d pose : robotPosesRejected) {
       Logger.recordOutput(
-          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejected", pose);
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejected", pose);
     }
   }
 
@@ -283,12 +288,11 @@ public class RobotOdometry extends PeriodicBase {
     }
     Pose2d visionUpdate = result.get().pose().toPose2d();
     Logger.recordOutput(
-        "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesTrig", visionUpdate);
+        "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesTrig", visionUpdate);
     if (Robot.getState() == RobotState.DISABLED
         || (Robot.getState() == RobotState.AUTONOMOUS && !useAutoApriltags)) {
       Logger.recordOutput(
-          "Sensors/AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig",
-          visionUpdate);
+          "AprilTagVision/" + vision.getDisplayName() + "/RobotPosesRejectedTrig", visionUpdate);
       return;
     }
     if (!(isPoseValid(visionUpdate)

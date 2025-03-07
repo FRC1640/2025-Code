@@ -4,15 +4,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class GantryCommandFactory {
   GantrySubsystem gantrySubsystem;
   private ReefDetector reefDetector;
-  private boolean threshSet = false;
-  private boolean direction = false;
 
   public GantryCommandFactory(GantrySubsystem gantrySubsystem, ReefDetector reefDetector) {
     this.gantrySubsystem = gantrySubsystem;
@@ -62,7 +63,7 @@ public class GantryCommandFactory {
         .finallyDo(() -> gantrySubsystem.setGantryVoltage(0));
   }
 
-  public Command gantryDriftCommandMinima() {
+  public Command gantryDriftCommand() {
     return (gantrySetVelocityCommand(
                 () ->
                     gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
@@ -75,7 +76,6 @@ public class GantryCommandFactory {
                             gantrySubsystem.getCarriagePosition()
                                 - GantryConstants.gantryLimitCenter)
                         < GantryConstants.gantryPadding)
-            .andThen(new InstantCommand(() -> threshSet = true))
             .andThen(
                 gantrySetVelocityCommand(
                         () ->
@@ -92,61 +92,16 @@ public class GantryCommandFactory {
                                 || Math.abs(
                                         gantrySubsystem.getCarriagePosition()
                                             - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)))
-        .andThen(new InstantCommand(() -> reefDetector.reefFindReset()))
-        .andThen(new InstantCommand(() -> threshSet = false))
+                                    < GantryConstants.gantryPadding)
+                    .until(
+                        () ->
+                            reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 10))
+            .andThen(new InstantCommand(() -> reefDetector.reefFindReset())))
         .repeatedly()
-        .until(
-            () -> reefDetector.getDistanceToReef() < reefDetector.getFoundThresh() + 6 && threshSet)
         .andThen(
             gantrySetVelocityCommand(() -> 0)
                 .until(() -> Math.abs(gantrySubsystem.getGantryVelocity()) < 0.01))
-        .finallyDo(
-            () -> {
-              reefDetector.reefFindReset();
-              threshSet = false;
-            });
-  }
-
-  public Command gantryDriftCommandThresh() {
-    return (gantrySetVelocityCommand(
-                () ->
-                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
-                        ? GantryConstants.alignSpeed
-                        : -GantryConstants.alignSpeed)
-            .andThen(
-                new InstantCommand(
-                    () ->
-                        direction =
-                            gantrySubsystem.getCarriagePosition()
-                                < GantryConstants.gantryLimitCenter))
-            .until(
-                () ->
-                    Math.abs(
-                            gantrySubsystem.getCarriagePosition()
-                                - GantryConstants.gantryLimitCenter)
-                        < GantryConstants.gantryPadding)
-            .andThen(
-                new InstantCommand(() -> direction = !direction)
-                    .andThen(
-                        gantrySetVelocityCommand(
-                            () ->
-                                direction
-                                    ? GantryConstants.alignSpeed
-                                    : -GantryConstants.alignSpeed))
-                    .until(
-                        () ->
-                            Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.high)
-                                    < GantryConstants.gantryPadding
-                                || Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)))
-        .repeatedly()
-        .until(() -> reefDetector.getDistanceToReef() < 500)
-        .andThen(new InstantCommand(() -> gantrySubsystem.setGantryVoltage(0)));
+        .finallyDo(() -> reefDetector.reefFindReset());
   }
 
   public Command runGantryMotionProfile(DoubleSupplier pos) {
@@ -177,6 +132,10 @@ public class GantryCommandFactory {
                       gantrySubsystem.setGantryVoltage(0);
                       gantrySubsystem.resetGantryVelocityMotionProfile();
                     }));
+  }
+
+  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
+    return gantryPIDCommand(() -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
   }
 
   public void constructTriggers() {}

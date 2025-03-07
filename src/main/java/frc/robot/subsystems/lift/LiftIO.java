@@ -43,13 +43,9 @@ public interface LiftIO extends AutoCloseable {
 
   public default void resetEncoder() {}
 
-  public default void resetLiftPositionPid() {}
-
   public default double velocitySetpoint() {
     return 0.0;
   }
-
-  public default void testMethod() {}
 
   public default void setLimitEnabled(boolean enable) {}
 }

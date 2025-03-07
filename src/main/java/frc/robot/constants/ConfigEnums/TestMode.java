@@ -1,4 +1,4 @@
-package frc.robot.util.ConfigEnums;
+package frc.robot.constants.ConfigEnums;
 
 public class TestMode {
   public enum TestingSetting {

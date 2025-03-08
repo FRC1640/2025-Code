@@ -20,8 +20,7 @@ public class WinchIOSparkMax implements WinchIO {
             SparkConstants.getDefaultMax(ClimberConstants.climberWinch1MotorID, false, true));
     winchFollowerSpark =
         SparkConfigurer.configSparkMax(
-            SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false),
-            winchLeaderSpark);
+            SparkConstants.getDefaultMax(ClimberConstants.climberWinch2MotorID, false));
 
     winchPID.enableContinuousInput(0, 360);
   }
@@ -30,10 +29,10 @@ public class WinchIOSparkMax implements WinchIO {
    */
   @Override
   public void setClimberWinchVoltage(double voltage, WinchIOInputs inputs) {
-    winchLeaderSpark.setVoltage(
+    winchFollowerSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition,
+                inputs.winchFollowerMotorPosition,
                 voltage,
                 ClimberConstants.winchLimits.low,
                 ClimberConstants.winchLimits.high)));

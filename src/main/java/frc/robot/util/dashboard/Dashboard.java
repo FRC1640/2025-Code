@@ -1,6 +1,8 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -81,7 +83,6 @@ public class Dashboard {
   DoubleSupplier time = () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
-    // CameraServer.startAutomaticCapture();
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
     // HttpCamera httpCamera = new HttpCamera("FrontCamera", "http://10.16.40.52:1182/stream.mjpg");
     // httpCamera.setResolution(1280 / 5, 720 / 5);

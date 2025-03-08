@@ -1,8 +1,6 @@
 package frc.robot.util.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;

@@ -337,7 +337,7 @@ public class RobotConstants {
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.37);
     public static final double gantryLimitCenter =
-        (gantryLimits.high + gantryLimits.low) / 2 - 0.02;
+        (gantryLimits.high + gantryLimits.low) / 2 - 0.01;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;

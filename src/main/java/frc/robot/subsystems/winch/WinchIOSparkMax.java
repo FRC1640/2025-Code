@@ -29,7 +29,7 @@ public class WinchIOSparkMax implements WinchIO {
    */
   @Override
   public void setClimberWinchVoltage(double voltage, WinchIOInputs inputs) {
-    winchFollowerSpark.setVoltage(
+    winchLeaderSpark.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.winchLeaderMotorPosition,

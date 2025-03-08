@@ -93,7 +93,7 @@ public class Dashboard {
     // teleopTab.add(camera);
 
     teleopTab
-        .addCamera("BackCamera", "USB Camera 0", "10.16.40.2:1182")
+        .addCamera("BackCamera", "Back Cam", "http://10.16.40.52:1186/stream.mjpg")
         .withSize(4, 3)
         .withPosition(5, 1);
     teleopTab

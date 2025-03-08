@@ -206,7 +206,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 1.3;
+    public static final double liftMaxAccel = 1;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -339,7 +339,7 @@ public class RobotConstants {
     public static final double gantryLimitCenter = (gantryLimits.high + gantryLimits.low) / 2;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    public static final double alignSpeed = 0.25;
+    public static final double alignSpeed = 0.2;
     public static final double gantryMaxVel = 2; // PLACEHOLDER
     public static final double gantryMaxAccel = 2; // PLACEHOLDER
     public static final double gantryMaxJerk = 2; // PLACEHOLDER

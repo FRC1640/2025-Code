@@ -220,10 +220,10 @@ public class RobotConstants {
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
-      RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
-      RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
+      LeftL2(0.115, 0.298, GantrySetpoint.LEFT),
+      RightL2(0.115, 0.298, GantrySetpoint.RIGHT),
+      LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
       LeftL4(0.56, GantrySetpoint.LEFT),
       RightL4(0.56, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);

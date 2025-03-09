@@ -224,8 +224,8 @@ public class RobotConstants {
       RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
       LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
       RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.553, GantrySetpoint.LEFT),
-      RightL4(0.553, GantrySetpoint.RIGHT),
+      LeftL4(0.56, GantrySetpoint.LEFT),
+      RightL4(0.56, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
@@ -290,7 +290,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 590;
+    public static final double detectionThresh = 620;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;

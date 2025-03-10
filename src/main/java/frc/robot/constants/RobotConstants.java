@@ -206,7 +206,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 1.75;
+    public static final double liftMaxAccel = 1;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -220,12 +220,12 @@ public class RobotConstants {
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.112, 0.298, GantrySetpoint.LEFT),
-      RightL2(0.112, 0.298, GantrySetpoint.RIGHT),
-      LeftL3(0.285, 0.486, GantrySetpoint.LEFT),
-      RightL3(0.285, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.566, GantrySetpoint.LEFT),
-      RightL4(0.566, GantrySetpoint.RIGHT),
+      LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
+      RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
+      LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
+      LeftL4(0.56, GantrySetpoint.LEFT),
+      RightL4(0.56, GantrySetpoint.RIGHT),
       Trough(0, GantrySetpoint.RIGHT);
 
       public final double lift;
@@ -290,7 +290,7 @@ public class RobotConstants {
 
   public static class ReefDetectorConstants {
     public static final int channel = new RobotSwitch<Integer>(15).get();
-    public static final double detectionThresh = 540;
+    public static final double detectionThresh = 700;
     public static final int averageLength = 20;
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
@@ -335,11 +335,12 @@ public class RobotConstants {
     public static final double gantryGearRatio = 27.4;
     public static final double pulleyRadius = Units.inchesToMeters(0.5);
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.01, 0.37);
-    public static final double gantryLimitCenter = 0.175;
+    public static final Limits gantryLimits = new Limits(0.01, 0.36);
+    public static final double gantryLimitCenter =
+        (gantryLimits.high + gantryLimits.low) / 2 - 0.01;
     public static final double gantryPadding = 0.03;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
-    public static final double alignSpeed = 0.25;
+    public static final double alignSpeed = 0.2;
     public static final double gantryMaxVel = 2; // PLACEHOLDER
     public static final double gantryMaxAccel = 2; // PLACEHOLDER
     public static final double gantryMaxJerk = 2; // PLACEHOLDER
@@ -369,6 +370,6 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 45;
+    public static double currentThresh = 50;
   }
 }

@@ -81,7 +81,6 @@ public class Dashboard {
   DoubleSupplier time = () -> (Math.round(DriverStation.getMatchTime() * 10000) / 10000);
 
   private void teleopInit() {
-    // CameraServer.startAutomaticCapture();
     ShuffleboardTab teleopTab = Shuffleboard.getTab("TELEOP");
     // HttpCamera httpCamera = new HttpCamera("FrontCamera", "http://10.16.40.52:1182/stream.mjpg");
     // httpCamera.setResolution(1280 / 5, 720 / 5);
@@ -93,7 +92,7 @@ public class Dashboard {
     // teleopTab.add(camera);
 
     teleopTab
-        .addCamera("BackCamera", "USB Camera 0", "10.16.40.2:1182")
+        .addCamera("BackCamera", "USB Camera 0", "http://10.16.40.52:1186/stream.mjpg")
         .withSize(4, 3)
         .withPosition(5, 1);
     teleopTab

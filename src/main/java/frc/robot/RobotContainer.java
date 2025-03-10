@@ -332,11 +332,11 @@ public class RobotContainer {
 
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
-    winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 343.1).onlyIf(() -> autoRampPos).repeatedly());
+    // winchSubsystem.setDefaultCommand(
+    //     climberCommandFactory.setWinchPosPID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
 
-    climberSubsystem.setDefaultCommand(
-        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
+    // climberSubsystem.setDefaultCommand(
+    //     climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -663,7 +663,10 @@ public class RobotContainer {
   public Command homing() {
     return new ConditionalCommand(
         new InstantCommand(),
-        gantryCommandFactory.gantryHomeCommand().alongWith(new InstantCommand(() -> homed = true)),
+        (gantryCommandFactory
+                .gantryHomeCommand()
+                .onlyIf(() -> !gantrySubsystem.isLimitSwitchPressed()))
+            .alongWith(new InstantCommand(() -> homed = true)),
         // .alongWith(liftCommandFactory.liftHomeCommand())
         // .alongWith(climberCommandFactory.liftHomeCommand()),
         () -> Robot.getMode() == Mode.SIM);

@@ -422,7 +422,7 @@ public class RobotContainer {
                             .getPose("Main")
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
-                        < 2
+                        < 1
                     && followPathNearest.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
@@ -469,15 +469,15 @@ public class RobotContainer {
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
-    // new Trigger(
-    //         () ->
-    //             RobotOdometry.instance
-    //                         .getPose("Main")
-    //                         .getTranslation()
-    //                         .getDistance(getTarget().getTranslation())
-    //                     > 2
-    //                 && !coralOuttakeCommandFactory.outtaking)
-    //     .onTrue(runLiftToSafe());
+    new Trigger(
+            () ->
+                RobotOdometry.instance
+                            .getPose("Main")
+                            .getTranslation()
+                            .getDistance(getTarget().getTranslation())
+                        > 1.5
+                    && !coralOuttakeCommandFactory.outtaking)
+        .onTrue(runLiftToSafe());
 
     driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
 
@@ -673,7 +673,12 @@ public class RobotContainer {
   }
 
   public Pose2d getTarget() {
-    return followPathNearest.getFinalPosition();
+    Pose2d[] array = chooseAlignPos();
+    Pose2d x = DistanceManager.getNearestPosition(RobotOdometry.instance.getPose("Main"), array);
+    return coralAdjust(
+        DistanceManager.addRotatedDim(
+            x, (algaeMode ? 0 : RobotDimensions.robotLength / 2), x.getRotation()),
+        () -> coralPreset);
   }
 
   public Command getAutoPlaceCommand() {

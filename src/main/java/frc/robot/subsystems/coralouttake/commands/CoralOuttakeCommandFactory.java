@@ -61,7 +61,8 @@ public class CoralOuttakeCommandFactory {
                 intakeSubsystem.isCoralDetected()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack().finallyDo(() -> ranBack = true));
+        .onTrue(runBack().finallyDo(() -> ranBack = true))
+        .debounce(0.05);
 
     new Trigger(() -> !intakeSubsystem.hasCoral())
         .debounce(0.05)

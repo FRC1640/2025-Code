@@ -33,10 +33,8 @@ public class CoralOuttakeCommandFactory {
 
   public Command runBack() {
     return (new InstantCommand(() -> runningBack = true)
-            .andThen(
-                setIntakeVoltage(() -> -0.75)
-                    .repeatedly()
-                    .until(() -> intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> 3).until(() -> !intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> -0.75).until(() -> intakeSubsystem.isCoralDetected()))
             .andThen(new InstantCommand(() -> runningBack = false)))
         .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
@@ -44,7 +42,7 @@ public class CoralOuttakeCommandFactory {
   public void constructTriggers() {
     new Trigger(
             () ->
-                !(intakeSubsystem.hasCoral() && !intakeSubsystem.isCoralDetected())
+                !intakeSubsystem.isCoralDetected()
                     && !ranBack
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .debounce(0.01)
@@ -59,8 +57,7 @@ public class CoralOuttakeCommandFactory {
 
     new Trigger(
             () ->
-                !intakeSubsystem.isCoralDetected()
-                    && intakeSubsystem.hasCoral()
+                intakeSubsystem.isCoralDetected()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(runBack().finallyDo(() -> ranBack = true));

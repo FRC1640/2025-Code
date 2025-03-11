@@ -90,6 +90,8 @@ import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
 import frc.robot.util.periodic.PeriodicBase;
 import frc.robot.util.periodic.PeriodicScheduler;
+import frc.robot.util.pi.CoProcessInput;
+import frc.robot.util.pi.OrangePILogger;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -133,7 +135,6 @@ public class RobotContainer {
   private final ClimberRoutines climberRoutines;
   private final AutoScoringCommandFactory autoScoringCommandFactory;
   private final AlgaeCommandFactory algaeCommandFactory;
-
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 
@@ -153,6 +154,7 @@ public class RobotContainer {
 
     switch (Robot.getMode()) {
       case REAL:
+        new CoProcessInput(new OrangePILogger());
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
@@ -262,7 +264,6 @@ public class RobotContainer {
         algaeIntakeSubsystem = new AlgaeSubsystem(new AlgaeIO() {});
         break;
     }
-
     gantryCommandFactory = new GantryCommandFactory(gantrySubsystem, reefDetector);
     liftCommandFactory = new LiftCommandFactory(liftSubsystem);
     coralOuttakeCommandFactory = new CoralOuttakeCommandFactory(coralOuttakeSubsystem);

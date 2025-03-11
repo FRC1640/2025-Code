@@ -92,6 +92,7 @@ public class Robot extends LoggedRobot {
         LoggedPowerDistribution.getInstance(21, ModuleType.kRev);
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
+
         break;
 
         // Running a physics simulator, log to local folder

@@ -47,7 +47,12 @@ public class AutoScoringCommandFactory {
 
   public Command autoPlace() {
     return (gantryCommandFactory.gantryDriftCommandThresh())
-        .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(0.6))
+        .andThen(
+            coralOuttakeCommandFactory
+                .outtake()
+                .repeatedly()
+                .until(() -> !coralOuttakeSubsystem.hasCoral()))
+        .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(0.5))
         .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false);
   }
 

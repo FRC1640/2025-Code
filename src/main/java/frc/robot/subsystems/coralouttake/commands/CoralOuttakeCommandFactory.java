@@ -19,7 +19,7 @@ public class CoralOuttakeCommandFactory {
   public boolean runningBack = false;
   public boolean outtaking = false;
   boolean setHasCoral = false;
-  boolean ranBack = false;
+  public boolean ranBack = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;

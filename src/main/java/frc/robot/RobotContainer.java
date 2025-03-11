@@ -704,23 +704,25 @@ public class RobotContainer {
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
     return new InstantCommand(
-        () -> {
-          (new InstantCommand(
-                      () -> {
-                        presetActive =
-                            algaeMode
-                                ? coralPreset.get().getLiftAlgae()
-                                : coralPreset.get().getLift();
-                        gantryPresetActive = coralPreset.get();
-                      })
-                  .andThen(liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
-                  .alongWith(
-                      autoScoringCommandFactory
-                          .gantryAlignCommand(() -> gantryPresetActive, () -> true)
-                          .asProxy()))
-              .alongWith(climberCommandFactory.setClampState(() -> false))
-              .schedule();
-        });
+            () -> {
+              (new InstantCommand(
+                          () -> {
+                            presetActive =
+                                algaeMode
+                                    ? coralPreset.get().getLiftAlgae()
+                                    : coralPreset.get().getLift();
+                            gantryPresetActive = coralPreset.get();
+                          })
+                      .andThen(
+                          liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
+                      .alongWith(
+                          autoScoringCommandFactory
+                              .gantryAlignCommand(() -> gantryPresetActive, () -> true)
+                              .asProxy()))
+                  .alongWith(climberCommandFactory.setClampState(() -> false))
+                  .schedule();
+            })
+        .onlyIf(() -> (!coralOuttakeSubsystem.hasCoral() || coralOuttakeCommandFactory.ranBack));
   }
 
   public Pose2d[] chooseAlignPos() {
@@ -771,9 +773,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",
-        new WaitUntilCommand(
-                () ->
-                    (!coralOuttakeSubsystem.isCoralDetected() && coralOuttakeSubsystem.hasCoral()))
+        new WaitUntilCommand(() -> (coralOuttakeSubsystem.isCoralDetected()))
             .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));

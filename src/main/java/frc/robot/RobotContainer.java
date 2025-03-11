@@ -154,6 +154,7 @@ public class RobotContainer {
 
     switch (Robot.getMode()) {
       case REAL:
+        new CoProcessInput(new OrangePILogger());
         gyro = new Gyro(new GyroIONavX());
         aprilTagVisions.add(
             new AprilTagVision(
@@ -202,7 +203,6 @@ public class RobotContainer {
                 RobotConfigConstants.algaeIntakeEnabled ? new AlgaeIOSpark() : new AlgaeIO() {});
         break;
       case SIM:
-        new CoProcessInput(new OrangePILogger());
         gyro =
             new Gyro(
                 RobotConfigConstants.gyroEnabled

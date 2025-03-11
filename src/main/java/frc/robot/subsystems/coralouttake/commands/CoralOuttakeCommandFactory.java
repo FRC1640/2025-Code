@@ -44,6 +44,7 @@ public class CoralOuttakeCommandFactory {
             () ->
                 !intakeSubsystem.isCoralDetected()
                     && !ranBack
+                    && !intakeSubsystem.hasCoral()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .debounce(0.01)
         .and(

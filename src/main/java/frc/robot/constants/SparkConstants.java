@@ -52,6 +52,22 @@ public class SparkConstants {
   }
 
   public static final SparkConfiguration getDefaultMax(
+      int id, boolean inverted, boolean useAbsolute) {
+    return new SparkConfiguration(
+        id,
+        IdleMode.kCoast,
+        inverted,
+        60,
+        8,
+        2,
+        StatusFrames.getDefault(),
+        null,
+        new LimitSwitchConfig(),
+        new SparkMaxConfig(),
+        useAbsolute);
+  }
+
+  public static final SparkConfiguration getDefaultMax(
       int id, boolean inverted, IdleMode breakMode) {
     return new SparkConfiguration(
         id, breakMode, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());

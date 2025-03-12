@@ -48,7 +48,7 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public double getPhotonXyStdDev(PoseObservation observation) {
-    double xyStdDev = 0.1 * getPhotonDistFactor(observation);
+    double xyStdDev = 0.25 * getPhotonDistFactor(observation);
     Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevPhoton", xyStdDev);
     return xyStdDev;
   }
@@ -76,7 +76,7 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public double getTrigXyStdDev(PoseObservation observation) {
-    double xy = 0.01 * getTrigDistFactor(observation);
+    double xy = 0.25 * getTrigDistFactor(observation);
     Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevTrig", xy);
     return xy;
   }

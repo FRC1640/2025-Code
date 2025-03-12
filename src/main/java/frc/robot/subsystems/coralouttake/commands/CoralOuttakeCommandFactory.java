@@ -19,7 +19,7 @@ public class CoralOuttakeCommandFactory {
   public boolean runningBack = false;
   public boolean outtaking = false;
   boolean setHasCoral = false;
-  boolean ranBack = false;
+  public boolean ranBack = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -33,10 +33,8 @@ public class CoralOuttakeCommandFactory {
 
   public Command runBack() {
     return (new InstantCommand(() -> runningBack = true)
-            .andThen(
-                setIntakeVoltage(() -> -1)
-                    .repeatedly()
-                    .until(() -> intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> 2).until(() -> !intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> -0.75).until(() -> intakeSubsystem.isCoralDetected()))
             .andThen(new InstantCommand(() -> runningBack = false)))
         .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
@@ -44,8 +42,9 @@ public class CoralOuttakeCommandFactory {
   public void constructTriggers() {
     new Trigger(
             () ->
-                !(intakeSubsystem.hasCoral() && !intakeSubsystem.isCoralDetected())
+                !intakeSubsystem.isCoralDetected()
                     && !ranBack
+                    && !intakeSubsystem.hasCoral()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .debounce(0.01)
         .and(
@@ -59,11 +58,11 @@ public class CoralOuttakeCommandFactory {
 
     new Trigger(
             () ->
-                !intakeSubsystem.isCoralDetected()
-                    && intakeSubsystem.hasCoral()
+                intakeSubsystem.isCoralDetected()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack().finallyDo(() -> ranBack = true));
+        .onTrue(runBack().finallyDo(() -> ranBack = true))
+        .debounce(0.05);
 
     new Trigger(() -> !intakeSubsystem.hasCoral())
         .debounce(0.05)
@@ -71,7 +70,7 @@ public class CoralOuttakeCommandFactory {
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> setHasCoral ? 5.5 : 2)
+    return setIntakeVoltage(() -> setHasCoral ? 3 : 2)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {

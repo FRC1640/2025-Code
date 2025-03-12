@@ -24,7 +24,7 @@ public class ClimberIOSparkMax implements ClimberIO {
   private final DoubleSolenoid doubleSolenoid;
   // inductance sensors that pull low when metal is detected
   // private final DigitalInput sensor1Input, sensor2Input;
-  private boolean limits = false;
+  private boolean limits = true;
 
   public ClimberIOSparkMax() {
     liftSpark =
@@ -70,12 +70,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.elevatorMotorPosition =
-        liftEncoder.getPosition()
-            / ClimberConstants.gearRatio
-            * ClimberConstants.pulleyRadius
-            * 2
-            * Math.PI;
+    inputs.elevatorMotorPosition = liftEncoder.getPosition();
     inputs.elevatorMotorCurrent = liftSpark.getOutputCurrent();
     inputs.elevatorMotorVoltage = liftSpark.getAppliedOutput();
     inputs.elevatorMotorTemperature = liftSpark.getMotorTemperature();

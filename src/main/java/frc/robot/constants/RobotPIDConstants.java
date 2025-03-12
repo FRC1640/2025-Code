@@ -103,14 +103,14 @@ public class RobotPIDConstants {
   public static final PIDConstants rotateToAnglePIDRadians = new PIDConstants(0.5, 0.001, 0.0001);
   public static final PIDConstants angleFollowPath = new PIDConstants(1, 0, 0);
 
-  public static final PIDConstants gantryPID = new PIDConstants(60, 1, 0);
+  public static final PIDConstants gantryPID = new PIDConstants(80, 1, 0);
   public static final PIDConstants gantryProfiledPID = new PIDConstants(2, 0, 0); // PLACEHOLDER
-  public static final PIDConstants liftPID = new PIDConstants(80, 30, 0);
+  public static final PIDConstants liftPID = new PIDConstants(45, 100, 0);
   public static final PIDConstants liftProfiledPIDConstants =
-      new PIDConstants(50, 0, 0); // new PIDConstants(27.25, 0.010569);
+      new PIDConstants(45, 0, 0); // new PIDConstants(27.25, 0.010569);
   public static final PIDConstants liftVelocityPID = new PIDConstants(0, 0, 0);
   public static final FeedForwardConstants liftFF =
-      new FeedForwardConstants(0.78393, 5, 0, 0.81616); // kv 5.2952
+      new FeedForwardConstants(0.78393, 3.3, 0, 0.81616); // kv 5.2952
 
   public static final SparkPIDConstants pidConstantSpark =
       new SparkPIDConstants(0, 0, 0, -10, 10, ClosedLoopSlot.kSlot0);
@@ -119,8 +119,8 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1);
   public static final PIDConstants gantryVelocityProfiledPID =
       new PIDConstants(2, 0, 0); // PLACEHOLDER
-  public static final PIDConstants climberLiftPID = new PIDConstants(0.3546, 0, 0);
-  public static final PIDConstants climberWinchPID = new PIDConstants(0.3546, 0, 0);
+  public static final PIDConstants climberLiftPID = new PIDConstants(0.6, 0, 0);
+  public static final PIDConstants climberWinchPID = new PIDConstants(0.25, 0, 0);
 
-  public static final PIDConstants driveAntiTip = new PIDConstants(2, 0, 0);
+  public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
 }

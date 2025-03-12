@@ -6,6 +6,7 @@ package frc.robot;
 
 import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -91,6 +92,7 @@ public class Robot extends LoggedRobot {
         LoggedPowerDistribution.getInstance(21, ModuleType.kRev);
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
+
         break;
 
         // Running a physics simulator, log to local folder
@@ -126,6 +128,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+    CameraServer.startAutomaticCapture();
     FollowPathCommand.warmupCommand().schedule();
   }
 

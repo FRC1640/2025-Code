@@ -57,7 +57,7 @@ public class LiftCommandFactory {
                       liftSubsystem.runLiftMotionProfile(pos.getAsDouble());
                     },
                     liftSubsystem)
-                .until(() -> Math.abs(liftSubsystem.getMotorPosition() - pos.getAsDouble()) < 0.03)
+                .until(() -> Math.abs(liftSubsystem.getMotorPosition() - pos.getAsDouble()) < 0.004)
                 .andThen(liftSetPosPID(pos))
                 .finallyDo(
                     () -> {

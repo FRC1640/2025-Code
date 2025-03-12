@@ -364,7 +364,8 @@ public class RobotContainer {
                 Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
                 Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
-                    "GantryDone", gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode);
+                    "GantryDone",
+                    gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
                 Logger.recordOutput("autoramppos", autoRampPos);
               }
@@ -433,7 +434,7 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
-                    && (gantrySubsystem.isAtPreset(coralPreset, true))
+                    && (gantrySubsystem.isAtPreset(gantryPresetActive, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
 

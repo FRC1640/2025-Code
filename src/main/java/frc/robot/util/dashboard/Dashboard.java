@@ -34,10 +34,10 @@ public class Dashboard {
   public PPIDTab ppidTab = new PPIDTab();
   public MAXMotorTab maxMotorTab = new MAXMotorTab();
   public FLEXMotorTab flexMotorTab = new FLEXMotorTab();
-  public PitTab pitTab = new PitTab();
   private ClimberSubsystem climberSubsystem;
   private AlgaeSubsystem algaeSubsystem;
   private CoralOuttakeSubsystem coralSubsystem;
+  public PitTab pitTab = new PitTab(climberSubsystem, coralSubsystem, algaeSubsystem);
 
   public Dashboard(
       DriveSubsystem driveSubsystem,

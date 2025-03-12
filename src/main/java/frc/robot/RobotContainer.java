@@ -362,10 +362,7 @@ public class RobotContainer {
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
                 Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
-                Logger.recordOutput(
-                    "LiftDone",
-                    liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()));
+                Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
                     "GantryDone", gantrySubsystem.isAtPreset(coralPreset, true) || algaeMode);
 
@@ -435,8 +432,7 @@ public class RobotContainer {
     new Trigger(
             () ->
                 followPathNearest.isAutoalignComplete()
-                    && liftSubsystem.isAtPreset(
-                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
+                    && liftSubsystem.isAtPreset(presetActive)
                     && (gantrySubsystem.isAtPreset(coralPreset, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
@@ -545,19 +541,61 @@ public class RobotContainer {
     driveController.povUp().onTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL2));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.LeftL2;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getRl2())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL2));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.RightL2;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getLl3())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL3));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.LeftL3;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getRl3())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL3));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.RightL3;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getLl4())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.LeftL4));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.LeftL4;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getRl4())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.RightL4));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.RightL4;
+                  algaeMode = false;
+                }));
     new Trigger(() -> presetBoard.getTrough())
-        .onTrue(new InstantCommand(() -> coralPreset = CoralPreset.Trough));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.LeftL3;
+                  algaeMode = true;
+                }));
+    new Trigger(() -> presetBoard.getShare())
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.LeftL2;
+                  algaeMode = true;
+                }));
     // lift/gantry manual controls
     operatorController
         .start()

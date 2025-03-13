@@ -29,6 +29,7 @@ import frc.robot.constants.RobotConstants.GantryConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.RobotDimensions;
+import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.constants.RobotConstants.WarningThresholdConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVisionIOPhotonvision;
@@ -81,6 +82,8 @@ import frc.robot.subsystems.winch.WinchIO;
 import frc.robot.subsystems.winch.WinchIOSim;
 import frc.robot.subsystems.winch.WinchIOSparkMax;
 import frc.robot.subsystems.winch.WinchSubsystem;
+import frc.robot.util.ConfigEnums.TestMode;
+import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
@@ -116,8 +119,9 @@ public class RobotContainer {
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard testBoard = new PresetBoard(4);
+  private final PresetBoard testBoard = (TestConfig.testingMode != TestingSetting.pit ? new PresetBoard(4) : new PresetBoard(6));
   private final PresetBoard motorBoard = new PresetBoard(5);
+  private final XboxController pitController = (TestConfig.testingMode == TestingSetting.pit ? new XboxController(4) : new XboxController(6));
 
   private final AlertsManager alertsManager;
 
@@ -333,7 +337,7 @@ public class RobotContainer {
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
-
+    
     winchSubsystem.setDefaultCommand(
         climberCommandFactory.setWinchPosPID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
 

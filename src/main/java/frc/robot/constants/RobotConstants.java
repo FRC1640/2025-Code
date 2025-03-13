@@ -33,7 +33,7 @@ public class RobotConstants {
   }
 
   public class TestConfig {
-    public static final TestingSetting tuningMode = TestingSetting.pit;
+    public static final TestingSetting testingMode = TestingSetting.pit;
   }
 
   public class MotorInfo {

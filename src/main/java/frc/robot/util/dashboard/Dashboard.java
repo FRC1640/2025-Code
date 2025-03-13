@@ -59,19 +59,26 @@ public class Dashboard {
     this.coralSubsystem = coralSubsystem;
     autoInit();
     teleopInit();
-    if (TestConfig.tuningMode == TestingSetting.pidTuning) {
+    if (TestConfig.testingMode == TestingSetting.pidTuning) {
       pidTab.init();
       ppidTab.init();
     }
-    if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
+    if (TestConfig.testingMode == TestingSetting.sysIDTesting) {
       sysidInit();
     }
-    if (TestConfig.tuningMode == TestingSetting.motorTest) {
+    if (TestConfig.testingMode == TestingSetting.motorTest) {
       maxMotorTab.init();
       flexMotorTab.init();
     }
-    if (TestConfig.tuningMode == TestingSetting.pit) {
-      pitTab = new PitTab(gantrySubsystem, liftSubsystem, coralSubsystem, climberSubsystem, algaeSubsystem, winchSubsystem);
+    if (TestConfig.testingMode == TestingSetting.pit) {
+      pitTab =
+          new PitTab(
+              gantrySubsystem,
+              liftSubsystem,
+              coralSubsystem,
+              climberSubsystem,
+              algaeSubsystem,
+              winchSubsystem);
       pitTab.init();
     }
   }

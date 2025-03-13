@@ -188,7 +188,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     state = RobotState.TEST;
-    switch (TestConfig.tuningMode) {
+    switch (TestConfig.testingMode) {
       case sysIDTesting:
         CommandScheduler.getInstance().cancelAll();
         Dashboard.getSysidCommand().schedule();

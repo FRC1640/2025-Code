@@ -809,8 +809,9 @@ public class RobotContainer {
             () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
 
     NamedCommands.registerCommand(
-        "HoldAlgae", algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5)); // passive hold... right?
-    NamedCommands.registerCommand("SpitAlgae", algaeCommandFactory.setMotorVoltages(() -> 5,() -> 5));
+        "HoldAlgae", algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
+    NamedCommands.registerCommand(
+        "SpitAlgae", algaeCommandFactory.setMotorVoltages(() -> 5, () -> 5));
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",

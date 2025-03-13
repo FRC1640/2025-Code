@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.461248374512352,
+        "y": 3.119505851755526
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.676137841352405,
+        "y": 2.1983094928478533
+      },
+      "isLocked": false,
+      "linkedName": "spit"
+    },
+    {
+      "anchor": {
+        "x": 5.135,
+        "y": 2.905
+      },
+      "prevControl": {
+        "x": 5.58745123537061,
+        "y": 1.6330299089726918
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7799467613132269,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L3Algae",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeAlgae"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL3"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Algae Mid",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -14.999999999999998
+  },
+  "useDefaultConstraints": true
+}

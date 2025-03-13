@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.0,
+        "y": 4.026
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.746212121212121,
+        "y": 7.2109848484848476
+      },
+      "isLocked": false,
+      "linkedName": "Algae back 2"
+    },
+    {
+      "anchor": {
+        "x": 5.135,
+        "y": 5.147
+      },
+      "prevControl": {
+        "x": 4.916883314157825,
+        "y": 5.024831627017358
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Algae Back 3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4406504065040635,
+      "rotationDegrees": -119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "AlgaeUp",
+      "waypointRelativePos": 0.25952380952380955,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeAlgae"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL3"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Algae Chucker Back Faces",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

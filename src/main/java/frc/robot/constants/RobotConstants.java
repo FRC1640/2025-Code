@@ -12,6 +12,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Robot;
+import frc.robot.Robot.RobotState;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
@@ -60,7 +62,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Sim;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -255,11 +257,11 @@ public class RobotConstants {
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:
-            return dsSide
+            return (Robot.getState() == RobotState.AUTONOMOUS || !dsSide)
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case RIGHT:
-            return !dsSide
+            return (Robot.getState() == RobotState.AUTONOMOUS || !dsSide)
                 ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
                 : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
           case CENTER:

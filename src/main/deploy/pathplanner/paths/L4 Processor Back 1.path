@@ -1,0 +1,103 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.027,
+        "y": 0.464
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.840511363636364,
+        "y": 0.7593039772727264
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.135,
+        "y": 2.905
+      },
+      "prevControl": {
+        "x": 6.757153787759628,
+        "y": 1.4732363701544813
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "L4 Red back 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5719360568383685,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4RightCoral",
+      "waypointRelativePos": 0.6119047619047613,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryRight"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Processor Side Back",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

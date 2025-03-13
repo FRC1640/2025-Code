@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.613636363636363,
+        "y": 6.068560606060605
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.657575757575757,
+        "y": 5.566287878787878
+      },
+      "isLocked": false,
+      "linkedName": "Algae Back 4"
+    },
+    {
+      "anchor": {
+        "x": 5.135,
+        "y": 2.905
+      },
+      "prevControl": {
+        "x": 6.815151515151515,
+        "y": 1.0261363636363625
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Algae Back 5"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "AlgaeUp",
+      "waypointRelativePos": 0.39285714285714257,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeAlgae"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL3"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSetup"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Algae Chucker Back Faces",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

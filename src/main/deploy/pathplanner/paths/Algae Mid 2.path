@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.868977272727273,
-        "y": 5.151789772727272
+        "x": 5.833,
+        "y": 4.065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.772102272727273,
-        "y": 5.989403409090909
+        "x": 6.833159947984394,
+        "y": 4.1139791937581265
       },
       "isLocked": false,
-      "linkedName": "ReefTopLeft"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.455852272727273,
-        "y": 7.185994318181818
+        "x": 7.461248374512352,
+        "y": 3.119505851755526
       },
       "prevControl": {
-        "x": 2.2236647727272736,
-        "y": 6.188835227272726
+        "x": 7.251885565669701,
+        "y": 3.538231469440832
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "TopSource"
+      "linkedName": "spit"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Safe",
+      "waypointRelativePos": 0.41235955056179624,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-
+    "rotation": -14.999999999999998
   },
   "reversed": false,
-  "folder": "L1 Spam Opposite",
+  "folder": "Algae Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

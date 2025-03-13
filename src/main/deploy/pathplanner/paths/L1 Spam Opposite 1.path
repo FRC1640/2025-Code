@@ -41,14 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+
     "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "L1 Spam Opposite",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -90.0
+
   },
   "useDefaultConstraints": true
 }

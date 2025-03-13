@@ -48,7 +48,7 @@
   "folder": "L1 Spam Opposite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -55.0
+
   },
   "useDefaultConstraints": true
 }

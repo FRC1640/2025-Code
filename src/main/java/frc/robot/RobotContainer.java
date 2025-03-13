@@ -294,6 +294,7 @@ public class RobotContainer {
             climberSubsystem,
             algaeIntakeSubsystem,
             coralOuttakeSubsystem,
+            winchSubsystem,
             driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(

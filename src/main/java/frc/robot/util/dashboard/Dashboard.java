@@ -15,6 +15,7 @@ import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.sysid.CreateSysidCommand;
 import java.util.function.BooleanSupplier;
@@ -34,10 +35,11 @@ public class Dashboard {
   public PPIDTab ppidTab = new PPIDTab();
   public MAXMotorTab maxMotorTab = new MAXMotorTab();
   public FLEXMotorTab flexMotorTab = new FLEXMotorTab();
+  public PitTab pitTab;
+
   private ClimberSubsystem climberSubsystem;
   private AlgaeSubsystem algaeSubsystem;
   private CoralOuttakeSubsystem coralSubsystem;
-  public PitTab pitTab = new PitTab(climberSubsystem, coralSubsystem, algaeSubsystem);
 
   public Dashboard(
       DriveSubsystem driveSubsystem,
@@ -46,6 +48,7 @@ public class Dashboard {
       ClimberSubsystem climberSubsystem,
       AlgaeSubsystem algaeSubsystem,
       CoralOuttakeSubsystem coralSubsystem,
+      WinchSubsystem winchSubsystem,
       CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
@@ -68,6 +71,7 @@ public class Dashboard {
       flexMotorTab.init();
     }
     if (TestConfig.tuningMode == TestingSetting.pit) {
+      pitTab = new PitTab(gantrySubsystem, liftSubsystem, coralSubsystem, climberSubsystem, algaeSubsystem, winchSubsystem);
       pitTab.init();
     }
   }

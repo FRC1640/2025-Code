@@ -458,11 +458,19 @@ public class RobotContainer {
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
                 () -> -operatorController.getRightY() * 4));
+    new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
+        .whileTrue(
+            climberCommandFactory.elevatorApplyVoltageCommand(
+                () -> -pitController.getRightY() * 4));
 
     new Trigger(() -> Math.abs(operatorController.getLeftY()) > 0.03)
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 () -> -operatorController.getLeftY() * 4));
+
+    new Trigger(() -> (pitController.povUp() || pitController.povDown()))
+        .whileTrue(
+            climberCommandFactory.winchApplyVoltageCommand((pitController.povUp() ? () -> -.5 : () -> .5)));
     // new Trigger(
     //         () ->
     //             followPathNearest.isAutoalignComplete()

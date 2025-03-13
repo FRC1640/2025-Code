@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L1 Spam Opposite 1"
+                  "pathName": "L4 Processor 1"
                 }
               }
             ]
@@ -20,17 +26,29 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForPreset"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L1 Spam Opposite 2"
+                  "pathName": "L4 Processor 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
                 }
               }
             ]
@@ -47,60 +65,16 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RunBackCoral"
+                  "pathName": "L4 Processor 3"
                 }
               },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L1 Spam Opposite 3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PlaceTrough"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L1 Spam Opposite 4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "RunBackCoral"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L1 Spam Opposite 5"
-                }
               }
             ]
           }
@@ -108,7 +82,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         }
       ]

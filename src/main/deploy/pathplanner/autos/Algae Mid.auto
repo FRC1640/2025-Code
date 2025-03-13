@@ -36,6 +36,50 @@
           }
         },
         {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetModeAlgae"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetupL2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPreset"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForPreset"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoReef"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -48,7 +92,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
+                  "name": "HoldAlgae"
                 }
               }
             ]
@@ -57,26 +101,13 @@
         {
           "type": "named",
           "data": {
-            "name": "WaitForCoral"
+            "name": "SpitAlgae"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L4 Mid 3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunBackCoral"
-                }
-              }
-            ]
+            "pathName": "Algae Mid 3"
           }
         },
         {

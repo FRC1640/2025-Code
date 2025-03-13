@@ -101,8 +101,8 @@ public class GantrySubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(CoralPreset preset, boolean dsSide) {
-    boolean match = Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.01;
-    return match;
+    Logger.recordOutput("goto", preset.getGantry(dsSide));
+    return Math.abs(getCarriagePosition() - preset.getGantry(dsSide)) < 0.04;
   }
 
   public void setLimitEnabled(boolean enable) {

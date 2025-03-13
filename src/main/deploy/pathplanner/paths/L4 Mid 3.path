@@ -1,0 +1,105 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.455852272727273,
+        "y": 7.185994318181818
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.234569328282425,
+        "y": 6.42058006555769
+      },
+      "isLocked": false,
+      "linkedName": "TopSource"
+    },
+    {
+      "anchor": {
+        "x": 3.799176136363636,
+        "y": 5.0819886363636355
+      },
+      "prevControl": {
+        "x": 3.4095378293107603,
+        "y": 5.470057731392869
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefTopLeft_OffsetLeft"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6456692913385753,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4Right",
+      "waypointRelativePos": 0.5907626208378082,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetModeCoral"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryRight"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Mid",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -55.0
+  },
+  "useDefaultConstraints": true
+}

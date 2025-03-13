@@ -29,10 +29,10 @@ import frc.robot.constants.RobotConstants.PivotId;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
+import frc.robot.util.helpers.ChassisSpeedHelper;
+import frc.robot.util.misc.RequirementHandler;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
-import frc.robot.util.tools.ChassisSpeedHelper;
-import frc.robot.util.tools.RequirementHandler;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
@@ -47,6 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveSetpointGenerator setpointGenerator;
   private SwerveSetpoint previousSetpoint;
   public static final Lock odometryLock = new ReentrantLock();
+  Rotation2d totalRot = new Rotation2d();
 
   public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
@@ -103,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeeds,
         (x) -> PathplannerWeight.setSpeeds(x),
         new PPHolonomicDriveController(
-            new PIDConstants(0.5, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+            new PIDConstants(3, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         new RequirementHandler());
@@ -135,6 +136,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
     gyro.periodic();
     odometryLock.unlock();
+    totalRot =
+        totalRot.plus(Rotation2d.fromRadians(getChassisSpeeds().omegaRadiansPerSecond * 0.02));
+    Logger.recordOutput("totalRot", totalRot);
   }
 
   public void stop() {

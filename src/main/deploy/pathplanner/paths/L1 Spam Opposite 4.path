@@ -3,7 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-
+        "x": 3.868977272727273,
+        "y": 5.151789772727272
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.772102272727273,
+        "y": 5.989403409090909
+      },
+      "isLocked": false,
+      "linkedName": "ReefTopLeft"
+    },
+    {
+      "anchor": {
+        "x": 1.455852272727273,
+        "y": 7.185994318181818
+      },
+      "prevControl": {
+        "x": 2.2236647727272736,
+        "y": 6.188835227272726
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "TopSource"
     }
   ],
   "rotationTargets": [],
@@ -11,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

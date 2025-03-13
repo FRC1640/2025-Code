@@ -58,13 +58,18 @@ public class DriveWeightCommand {
         iterator.remove();
       }
     }
+
+    double weightSum = 0;
     // iterate over remaining weights and add speeds
     for (DriveWeight driveWeight : weights) {
       speeds = speeds.plus(driveWeight.getSpeeds().times(driveWeight.getWeight()));
+      weightSum += driveWeight.getWeight();
     }
     for (DriveWeight driveWeight : persistentWeights) {
       speeds = speeds.plus(driveWeight.getSpeeds().times(driveWeight.getWeight()));
+      weightSum += driveWeight.getWeight();
     }
+    speeds.div(weightSum);
     return decreaseSpeeds(speeds);
   }
 

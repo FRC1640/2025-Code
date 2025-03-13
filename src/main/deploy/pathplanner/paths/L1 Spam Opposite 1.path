@@ -3,13 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-
+        "x": 8.067017045454547,
+        "y": 7.515056818181818
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.690937500000002,
+        "y": 7.22588068181818
+      },
+      "isLocked": false,
+      "linkedName": "Opposite Start"
+    },
+    {
+      "anchor": {
+        "x": 5.045624999999999,
+        "y": 5.13184659090909
+      },
+      "prevControl": {
+        "x": 5.663863636363636,
+        "y": 6.029289772727272
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefTopRight"
+    }
+  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -34,7 +34,7 @@ public class SparkConstants {
         id,
         IdleMode.kBrake,
         inverted,
-        60,
+        80,
         8,
         2,
         StatusFrames.getDefault(),
@@ -49,6 +49,22 @@ public class SparkConstants {
   public static final SparkConfiguration getDefaultMax(int id, boolean inverted) {
     return new SparkConfiguration(
         id, IdleMode.kCoast, inverted, 60, 8, 2, StatusFrames.getDefault(), new SparkMaxConfig());
+  }
+
+  public static final SparkConfiguration getDefaultMax(
+      int id, boolean inverted, boolean useAbsolute) {
+    return new SparkConfiguration(
+        id,
+        IdleMode.kCoast,
+        inverted,
+        60,
+        8,
+        2,
+        StatusFrames.getDefault(),
+        null,
+        new LimitSwitchConfig(),
+        new SparkMaxConfig(),
+        useAbsolute);
   }
 
   public static final SparkConfiguration getDefaultMax(
@@ -82,7 +98,7 @@ public class SparkConstants {
 
   public static final SparkConfiguration getDefaultFlex(int id) {
     return new SparkConfiguration(
-        id, IdleMode.kCoast, false, 60, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
+        id, IdleMode.kCoast, false, 45, 8, 2, StatusFrames.getDefault(), new SparkFlexConfig());
   }
 
   public static final SparkFlex driveFlex(int id) {
@@ -91,7 +107,7 @@ public class SparkConstants {
             id,
             getDefaultFlex(id).getIdleMode(),
             true,
-            60,
+            45,
             8,
             2,
             new StatusFrames(

@@ -1,22 +1,29 @@
+import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 import paramiko
 import subprocess
+import threading
 import ttkbootstrap as tb
 from networktables import NetworkTables
+from PIL import ImageTk, Image
 
 username = "pi"
 password = "raspberry"
-hostname = "10.16.40.63"
-NetworkTables.initialize(server='10.16.40.2') 
+hostname = "10.16.40.52"
+server_ip = "10.16.40.2"
+
+NetworkTables.initialize(server=server_ip) 
 opi = NetworkTables.getTable('Orange PI Diagnostics')
+
 commands = {
     "temperature": "cat /sys/class/thermal/thermal_zone0/temp",
     "cpu_usage": "top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}'",
     "memory_usage": "free -m | awk 'NR==2{printf \"%.2f\", $3*100/$2 }'",
     "disk_usage": "df -h | awk '$NF==\"/\"{printf \"%s\", $5}'"
 }
+runningThreads = []
 def get_diagnostics():
     diagnostics = {}
     try:
@@ -31,28 +38,33 @@ def get_diagnostics():
                 diagnostics[key] = f"{int(output) / 1000:.2f}°C"
             else:
                 diagnostics[key] = output
+
         opi.putNumber('CPU Temp', float(diagnostics['temperature'][:-2]))
         opi.putNumber('CPU Usage', float(diagnostics['cpu_usage']))
         opi.putNumber('Memory Usage', float(diagnostics['memory_usage']))
         opi.putNumber('Disk Usage', float(diagnostics['disk_usage'][:-1]))
         client.close()
     except Exception as e:
-        print(f"Is pi not on, or ssh not enabled?: {e}")
-        diagnostics = {key: "goobersnort error" for key in commands.keys()}
+        print(f"Goobersnort Error: {e}")
+        diagnostics = {key: "Goobersnort Error" for key in commands.keys()}
     
     return diagnostics
 
-def update_diagnostics_labels():
-    diagnostics = get_diagnostics()
-    temperature_label.config(text=f"CPU Temperature: {diagnostics['temperature']}")
-    cpu_usage_label.config(text=f"CPU Usage: {diagnostics['cpu_usage']}%")
-    memory_usage_label.config(text=f"Memory Usage: {diagnostics['memory_usage']}%")
-    disk_usage_label.config(text=f"Disk Usage: {diagnostics['disk_usage']}")
-    temp_value = float(diagnostics['temperature'][:-2])  
-    if temp_value > 85:
-        warning_label.config(text="It's quite toasty in here !", foreground="red")
-    root.after(2000, update_diagnostics_labels)
+def update():
+    def threaded_update():
+        diagnostics = get_diagnostics()
+        if diagnostics["temperature"] != "Goobersnort Error" and float(diagnostics["temperature"][:-2]) >= 85:
+            temperature_label.config(text=f"CPU Temperature: Extremely Hot (85+)")
+        else:
+            temperature_label.config(text=f"CPU Temperature: {diagnostics['temperature']}")
 
+        cpu_usage_label.config(text=f"CPU Usage: {diagnostics['cpu_usage']}%")
+        memory_usage_label.config(text=f"Memory Usage: {diagnostics['memory_usage']}%")
+        disk_usage_label.config(text=f"Disk Usage: {diagnostics['disk_usage']}")
+
+        root.after(1000, update)
+    
+    runningThreads.append(threading.Thread(target=threaded_update, daemon=True).start())
 
 def execute_ssh_command(command):
     try:
@@ -72,9 +84,35 @@ def open_ssh_terminal():
     ssh_command = f"ssh {username}@{hostname}"
     subprocess.Popen(['start', 'cmd', '/k', ssh_command], shell=True)
 
+def update_settings():
+    runningThreads.clear()
+    global hostname, server_ip
+    hostname = hostname_entry.get()
+    server_ip = server_entry.get()
+    NetworkTables.initialize(server=server_ip)
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
+    update()
+def update_settingsPrime():
+    runningThreads.clear()
+    global hostname, server_ip
+    hostname = "10.16.40.52"
+    server_ip = "10.16.40.2"
+    NetworkTables.initialize(server=server_ip)
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
+    update()
+def update_settingsDuex():
+    global hostname, server_ip
+    hostname = "10.16.40.63"
+    server_ip = "10.16.40.2"
+    NetworkTables.initialize(server=server_ip)
+    status_label.config(text=f"NT Server: {server_ip}, Host: {hostname}")
+    get_diagnostics()
+    update()
 root = tb.Window(themename="darkly")
 root.title("Orange Pi Diagnostics Monitor")
-root.geometry("480x550")
+root.geometry("480x700")
 
 frame_main = ttk.Frame(root, padding=15)
 frame_main.pack(fill="both", expand=True)
@@ -94,18 +132,44 @@ memory_usage_label.pack(pady=5)
 disk_usage_label = tb.Label(frame_main, text="Fetching disk usage...", font=("Arial", 12))
 disk_usage_label.pack(pady=5)
 
-warning_label = tb.Label(frame_main, text="", font=("Arial", 14, "bold"))
-warning_label.pack(pady=5)
-
 ssh_button = tb.Button(frame_main, text="Open SSH Terminal", command=open_ssh_terminal, bootstyle="primary")
 ssh_button.pack(pady=10)
 
-usernote = tb.Label(frame_main, text=f"Username: {username}", font=("Arial", 10))
-usernote.pack()
+hostname_label = tb.Label(frame_main, text="Host IP:")
+hostname_label.pack()
+hostname_entry = tb.Entry(frame_main)
+hostname_entry.insert(0, hostname)
+hostname_entry.pack()
 
-passnote = tb.Label(frame_main, text=f"Password: {password}", font=("Arial", 10))
-passnote.pack()
+server_label = tb.Label(frame_main, text="NT Server IP:")
+server_label.pack()
+server_entry = tb.Entry(frame_main)
+server_entry.insert(0, server_ip)
+server_entry.pack()
 
-update_diagnostics_labels()
+update_button = tb.Button(frame_main, text="Update Settings", command=update_settings, bootstyle="success")
+update_button.pack(pady=5)
+
+pi_preset_label = tb.Label(frame_main, text = "Pi Setting Presets")
+pi_preset_label.pack()
+primePI = tb.Button(frame_main, text="Prime Orange PI", command=update_settingsPrime)
+primePI.pack(pady=2)
+duexPI = tb.Button(frame_main, text="Duex Orange PI", command=update_settingsDuex)
+duexPI.pack(pady=2)
+status_label = tb.Label(frame_main, text="")
+status_label.pack()
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+icon_path = os.path.join(script_dir, "resources", "icon.png")
+if os.path.exists(icon_path):
+    img = ImageTk.PhotoImage(Image.open(icon_path))
+    panel = tk.Label(root, image=img)
+    panel.pack(side="bottom", fill="both", expand="yes")
+    icon = tk.PhotoImage(file=icon_path)
+    root.iconphoto(False, icon)
+else:
+    print("Warning: Icon file not found.")
+
+update()
 
 root.mainloop()

@@ -306,13 +306,24 @@ public class RobotContainer {
         "Low battery voltage.",
         AlertType.kWarning);
     // weights
-    joystickDriveWeight =
-        new JoystickDriveWeight(
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
-            () -> -driveController.getRightX(),
-            driveController.rightBumper(),
-            driveController.leftTrigger());
+    // Will change later if we don't reset robot code before the match
+    // Otherwise we wouldn't have a drive controller during the match
+    if(TestConfig.testingMode != TestingSetting.pit)
+      joystickDriveWeight =
+          new JoystickDriveWeight(
+              () -> -driveController.getLeftY(),
+              () -> -driveController.getLeftX(),
+              () -> -driveController.getRightX(),
+              driveController.rightBumper(),
+              driveController.leftTrigger());
+    else
+      joystickDriveWeight =
+          new JoystickDriveWeight(
+              () -> -pitController.getLeftY(),
+              () -> -pitController.getLeftX(),
+              () -> 0,
+              () -> true,
+              () -> false);
     followPathNearest =
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),

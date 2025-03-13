@@ -65,6 +65,9 @@ public class PitTab {
         .addBoolean("Has Coral?", () -> coralOuttakeSubsystem.hasCoral())
         .withSize(1, 1)
         .withPosition(8, 1);
-
+    pitTab
+        .addString("Control Scheme", () -> "LStick Drive; RStick Climber Lift; POV Up/Down Winch")
+        .withSize(4, 1)
+        .withPosition(0, 0);
   }
 }

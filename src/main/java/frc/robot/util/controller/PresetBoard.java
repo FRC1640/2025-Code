@@ -36,7 +36,7 @@ public class PresetBoard extends GenericHID {
   }
 
   public boolean getShare() {
-    return super.getRawButton(Button.kShare);
+    return super.getRawAxis(Axis.kRTAxis) == 1;
   }
 
   public boolean getLl2() {

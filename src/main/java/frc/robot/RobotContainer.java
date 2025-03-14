@@ -474,15 +474,15 @@ public class RobotContainer {
     new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
         .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
-    new Trigger(
-            () ->
-                RobotOdometry.instance
-                            .getPose("Main")
-                            .getTranslation()
-                            .getDistance(getTarget().getTranslation())
-                        > 1.5
-                    && !coralOuttakeCommandFactory.outtaking)
-        .onTrue(runLiftToSafe());
+    // new Trigger(
+    //         () ->
+    //             RobotOdometry.instance
+    //                         .getPose("Main")
+    //                         .getTranslation()
+    //                         .getDistance(getTarget().getTranslation())
+    //                     > 1.5
+    //                 && !coralOuttakeCommandFactory.outtaking)
+    //     .onTrue(runLiftToSafe());
 
     driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
 

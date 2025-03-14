@@ -74,7 +74,7 @@ public class PitTab {
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
-            .withSize(2, 3)
+            .withSize(2, 4)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
     instructLayout.add("Instruct1", "L Stick: Drive");
@@ -88,7 +88,7 @@ public class PitTab {
     ShuffleboardLayout instructLayoutCoral =
         pitTab
             .getLayout("Lift-Coral Bindings", BuiltInLayouts.kList)
-            .withSize(2, 3)
+            .withSize(2, 4)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(2, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");

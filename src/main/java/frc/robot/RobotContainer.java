@@ -114,17 +114,12 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandXboxController pitController = new CommandXboxController(4);
 
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard testBoard =
-      (TestConfig.testingMode != TestingSetting.pit ? new PresetBoard(4) : new PresetBoard(6));
   private final PresetBoard motorBoard = new PresetBoard(5);
-  private final CommandXboxController pitController =
-      (TestConfig.testingMode == TestingSetting.pit
-          ? new CommandXboxController(4)
-          : new CommandXboxController(6));
 
   private final AlertsManager alertsManager;
 
@@ -730,10 +725,16 @@ public class RobotContainer {
     operatorController
         .rightBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
-    operatorController
-        .leftBumper()
-        .whileTrue(
-            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
+    pitController
+            .rightTrigger()
+            .and(() -> !algaeIntakeSubsystem.hasAlgae())
+            .whileTrue(
+                algaeCommandFactory
+                    .setSolenoidState(() -> true)
+                    .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
+            .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+    pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
+
   }
 
   public Command getAutonomousCommand() {

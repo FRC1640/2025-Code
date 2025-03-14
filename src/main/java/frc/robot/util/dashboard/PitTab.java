@@ -68,7 +68,7 @@ public class PitTab {
         .withSize(1, 1)
         .withPosition(8, 1);
     pitTab
-        .addString("Control Scheme", () -> "LStick Drive; RStick Climber Lift; POV Up/Down Winch")
+        .addString("PIT Controller", () -> "Switch your controller to Port 4")
         .withSize(4, 1)
         .withPosition(0, 0);
     ShuffleboardLayout instructLayout =
@@ -77,10 +77,13 @@ public class PitTab {
             .withSize(2, 2)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
-    instructLayout.add("Instruct1", "L Stick Drive;");
-    instructLayout.add("Instruct2", "R Stick Climber Lift");
-    instructLayout.add("Instruct3", "POV Up/Down Winch");
-    instructLayout.add("Instruct4", "L/R Bumpers Gantry");
+    instructLayout.add("Instruct1", "L Stick: Drive;");
+    instructLayout.add("Instruct2", "R Stick: Climber Lift");
+    instructLayout.add("Instruct3", "POV Up/Down: Winch");
+    instructLayout.add("Instruct4", "L/R Bumpers: Gantry");
+    instructLayout.add("Instruct5", "Use Preset board for Lift");
+    instructLayout.add("Instruct6", "Right Trigger: Algae Intake");
+    instructLayout.add("Instruct7", "Back Button: Gantry Home");
 
   }
 }

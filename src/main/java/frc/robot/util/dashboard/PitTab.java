@@ -80,10 +80,11 @@ public class PitTab {
     instructLayout.add("Instruct1", "L Stick: Drive");
     instructLayout.add("Instruct2", "R Stick: Climber Lift");
     instructLayout.add("Instruct3", "POV Up/Down: Winch");
-    instructLayout.add("Instruct4", "Start: Zero Lift Encoders");
-    instructLayout.add("Instruct5", "L/R Bumpers: Gantry");
-    instructLayout.add("Instruct6", "Back Button: Gantry Home");
-    instructLayout.add("Instruct7", "Right Trigger: Algae Intake");
+    instructLayout.add("Instruct4", "**POV Right: Clamp Climber**");
+    instructLayout.add("Instruct5", "Start: Zero Lift Encoders");
+    instructLayout.add("Instruct6", "L/R Bumpers: Gantry");
+    instructLayout.add("Instruct7", "Back Button: Gantry Home");
+    instructLayout.add("Instruct8", "Right Trigger: Algae Intake");
     ShuffleboardLayout instructLayoutCoral =
         pitTab
             .getLayout("Lift-Coral Bindings", BuiltInLayouts.kList)

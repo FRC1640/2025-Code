@@ -722,8 +722,11 @@ public class RobotContainer {
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
                 () -> -pitController.getRightY() * 4));
-    operatorController
+    pitController
         .rightBumper()
+        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
+    pitController
+        .leftBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
     pitController
             .rightTrigger()

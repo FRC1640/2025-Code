@@ -74,7 +74,7 @@ public class PitTab {
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
-            .withSize(2, 2)
+            .withSize(3, 4)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
     instructLayout.add("Instruct1", "L Stick: Drive;");
@@ -84,6 +84,7 @@ public class PitTab {
     instructLayout.add("Instruct5", "Use Preset board for Lift");
     instructLayout.add("Instruct6", "Right Trigger: Algae Intake");
     instructLayout.add("Instruct7", "Back Button: Gantry Home");
+    instructLayout.add("Instruct8", "Start Button: Zero Lift Encoders");
 
   }
 }

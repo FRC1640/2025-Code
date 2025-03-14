@@ -737,6 +737,11 @@ public class RobotContainer {
                     .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
             .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
     pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
+    pitController
+        .start()
+        .whileTrue(
+            new InstantCommand(() -> liftSubsystem.resetEncoder())
+                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
 
   }
 

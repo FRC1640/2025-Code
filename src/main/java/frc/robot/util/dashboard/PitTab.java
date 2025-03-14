@@ -68,23 +68,34 @@ public class PitTab {
         .withSize(1, 1)
         .withPosition(8, 1);
     pitTab
-        .addString("PIT Controller", () -> "Switch your controller to Port 4")
+        .addString("PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
         .withSize(4, 1)
         .withPosition(0, 0);
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
-            .withSize(3, 4)
+            .withSize(2, 3)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
-    instructLayout.add("Instruct1", "L Stick: Drive;");
+    instructLayout.add("Instruct1", "L Stick: Drive");
     instructLayout.add("Instruct2", "R Stick: Climber Lift");
     instructLayout.add("Instruct3", "POV Up/Down: Winch");
-    instructLayout.add("Instruct4", "L/R Bumpers: Gantry");
-    instructLayout.add("Instruct5", "Use Preset board for Lift");
-    instructLayout.add("Instruct6", "Right Trigger: Algae Intake");
-    instructLayout.add("Instruct7", "Back Button: Gantry Home");
-    instructLayout.add("Instruct8", "Start Button: Zero Lift Encoders");
+    instructLayout.add("Instruct4", "Start: Zero Lift Encoders");
+    instructLayout.add("Instruct5", "L/R Bumpers: Gantry");
+    instructLayout.add("Instruct6", "Back Button: Gantry Home");
+    instructLayout.add("Instruct7", "Right Trigger: Algae Intake");
+    ShuffleboardLayout instructLayoutCoral =
+        pitTab
+            .getLayout("Lift-Coral Bindings", BuiltInLayouts.kList)
+            .withSize(2, 3)
+            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withPosition(2, 1);
+    instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
+    instructLayoutCoral.add("Instruct2", "Use Preset board for Lift");
+    instructLayoutCoral.add("Instruct3", "**x intake coral**");
+    instructLayoutCoral.add("Instruct4", "B: Outtake Coral");
+    instructLayoutCoral.add("Instruct5", "**y safe pos**");
+    instructLayoutCoral.add("Instruct6", "**a coral place**");
 
   }
 }

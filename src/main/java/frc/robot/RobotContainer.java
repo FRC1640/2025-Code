@@ -742,7 +742,12 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(() -> liftSubsystem.resetEncoder())
                 .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
-
+    pitController
+        .b()
+        .whileTrue(
+            coralOuttakeCommandFactory
+                .outtake()
+                .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
   }
 
   public Command getAutonomousCommand() {

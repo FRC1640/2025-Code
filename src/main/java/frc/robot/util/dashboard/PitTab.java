@@ -2,15 +2,17 @@ package frc.robot.util.dashboard;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.algae.AlgaeSubsystem;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.winch.WinchSubsystem;
+import java.util.Map;
 
 public class PitTab {
   public static ShuffleboardTab pitTab;
@@ -69,5 +71,16 @@ public class PitTab {
         .addString("Control Scheme", () -> "LStick Drive; RStick Climber Lift; POV Up/Down Winch")
         .withSize(4, 1)
         .withPosition(0, 0);
+    ShuffleboardLayout instructLayout =
+        pitTab
+            .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
+            .withSize(2, 2)
+            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withPosition(0, 1);
+    instructLayout.add("Instruct1", "L Stick Drive;");
+    instructLayout.add("Instruct2", "R Stick Climber Lift");
+    instructLayout.add("Instruct3", "POV Up/Down Winch");
+    instructLayout.add("Instruct4", "L/R Bumpers Gantry");
+
   }
 }

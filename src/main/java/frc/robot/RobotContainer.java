@@ -82,7 +82,6 @@ import frc.robot.subsystems.winch.WinchIO;
 import frc.robot.subsystems.winch.WinchIOSim;
 import frc.robot.subsystems.winch.WinchIOSparkMax;
 import frc.robot.subsystems.winch.WinchSubsystem;
-import frc.robot.util.ConfigEnums.TestMode;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
@@ -119,9 +118,13 @@ public class RobotContainer {
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard testBoard = (TestConfig.testingMode != TestingSetting.pit ? new PresetBoard(4) : new PresetBoard(6));
+  private final PresetBoard testBoard =
+      (TestConfig.testingMode != TestingSetting.pit ? new PresetBoard(4) : new PresetBoard(6));
   private final PresetBoard motorBoard = new PresetBoard(5);
-  private final XboxController pitController = (TestConfig.testingMode == TestingSetting.pit ? new XboxController(4) : new XboxController(6));
+  private final CommandXboxController pitController =
+      (TestConfig.testingMode == TestingSetting.pit
+          ? new CommandXboxController(4)
+          : new CommandXboxController(6));
 
   private final AlertsManager alertsManager;
 
@@ -308,22 +311,14 @@ public class RobotContainer {
     // weights
     // Will change later if we don't reset robot code before the match
     // Otherwise we wouldn't have a drive controller during the match
-    if(TestConfig.testingMode != TestingSetting.pit)
-      joystickDriveWeight =
-          new JoystickDriveWeight(
-              () -> -driveController.getLeftY(),
-              () -> -driveController.getLeftX(),
-              () -> -driveController.getRightX(),
-              driveController.rightBumper(),
-              driveController.leftTrigger());
-    else
-      joystickDriveWeight =
-          new JoystickDriveWeight(
-              () -> -pitController.getLeftY(),
-              () -> -pitController.getLeftX(),
-              () -> 0,
-              () -> true,
-              () -> false);
+    joystickDriveWeight =
+        new JoystickDriveWeight(
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
+            driveController.rightBumper(),
+            driveController.leftTrigger());
+
     followPathNearest =
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
@@ -348,7 +343,7 @@ public class RobotContainer {
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
-    
+
     winchSubsystem.setDefaultCommand(
         climberCommandFactory.setWinchPosPID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
 
@@ -458,19 +453,12 @@ public class RobotContainer {
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
                 () -> -operatorController.getRightY() * 4));
-    new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
-        .whileTrue(
-            climberCommandFactory.elevatorApplyVoltageCommand(
-                () -> -pitController.getRightY() * 4));
 
     new Trigger(() -> Math.abs(operatorController.getLeftY()) > 0.03)
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 () -> -operatorController.getLeftY() * 4));
 
-    new Trigger(() -> (pitController.povUp() || pitController.povDown()))
-        .whileTrue(
-            climberCommandFactory.winchApplyVoltageCommand((pitController.povUp() ? () -> -.5 : () -> .5)));
     // new Trigger(
     //         () ->
     //             followPathNearest.isAutoalignComplete()
@@ -715,6 +703,37 @@ public class RobotContainer {
         .onFalse(
             new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
     mapPIDtoCommand();
+    if (TestConfig.testingMode == TestingSetting.pit) {
+      configurePitBindings();
+    } else {
+      // put in TESTBOARD triggers here
+    }
+  }
+
+  private void configurePitBindings() {
+    JoystickDriveWeight weight =
+        new JoystickDriveWeight(
+            () -> -pitController.getLeftY(),
+            () -> -pitController.getLeftX(),
+            () -> 0,
+            () -> true,
+            () -> false);
+    new Trigger(
+            () -> (pitController.getHID().getPOV() == 0 || pitController.getHID().getPOV() == 180))
+        .whileTrue(
+            climberCommandFactory.winchApplyVoltageCommand(
+                (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
+    new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
+        .whileTrue(
+            climberCommandFactory.elevatorApplyVoltageCommand(
+                () -> -pitController.getRightY() * 4));
+    operatorController
+        .rightBumper()
+        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
+    operatorController
+        .leftBumper()
+        .whileTrue(
+            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
   }
 
   public Command getAutonomousCommand() {

@@ -189,7 +189,7 @@ public class GantryCommandFactory {
                     }));
   }
 
-  public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
+  public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) { // TODO face 
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(

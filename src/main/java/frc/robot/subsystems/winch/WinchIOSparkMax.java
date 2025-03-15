@@ -82,8 +82,18 @@ public class WinchIOSparkMax implements WinchIO {
    */
   @Override
   public void setClimberWinchAngle(double angle, WinchIOInputs inputs) {
-    setClimberWinchVoltage(
-        MotorLim.clampVoltage(winchAnglePID.calculate(inputs.winchAngle, angle)), inputs);
+    setClimberWinch1Voltage(
+        MotorLim.clampVoltage(
+            winchAnglePID.calculate(inputs.winchAngle, angle)
+                + winchPID.calculate(inputs.winch1MotorPosition, inputs.winch2MotorPosition)
+                    * ClimberConstants.positionSyncPIDMultiplier),
+        inputs);
+    setClimberWinch2Voltage(
+        MotorLim.clampVoltage(
+            winchAnglePID.calculate(inputs.winchAngle, angle)
+                + winchPID.calculate(inputs.winch2MotorPosition, inputs.winch1MotorPosition)
+                    * ClimberConstants.positionSyncPIDMultiplier),
+        inputs);
   }
 
   @Override

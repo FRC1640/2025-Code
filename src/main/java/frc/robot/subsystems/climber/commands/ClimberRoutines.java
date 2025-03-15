@@ -31,7 +31,7 @@ public class ClimberRoutines {
       winchIsLow =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.low),
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchLimits.low),
       liftIsHigh =
           () ->
               withinTolerance(
@@ -39,11 +39,11 @@ public class ClimberRoutines {
       winchIsClimbed =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchClimbedAngle),
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchClimbedAngle),
       winchIsHigh =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.high);
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchLimits.high);
 
   public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
     this.climberCommandFactory = climberCommandFactory;
@@ -107,7 +107,7 @@ public class ClimberRoutines {
         .onlyIf(
             () ->
                 withinTolerance(
-                        winchSubsystem.getWinchLeaderMotorPosition(),
+                        winchSubsystem.getWinch1MotorPosition(),
                         ClimberConstants.winchLimits.high,
                         tolerance * 2)
                     && withinTolerance(
@@ -130,7 +130,7 @@ public class ClimberRoutines {
   public boolean isReadyToClamp() {
     return climberSubsystem.getSolenoidState() == false
         && withinTolerance(
-            winchSubsystem.getWinchLeaderMotorPosition(),
+            winchSubsystem.getWinch1MotorPosition(),
             ClimberConstants.winchLimits.high,
             tolerance * 2)
         && withinTolerance(

@@ -737,7 +737,6 @@ public class RobotContainer {
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
         .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
-    pitController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
     pitController
         .start()
         .whileTrue(
@@ -751,6 +750,7 @@ public class RobotContainer {
                 .outtake()
                 .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
     pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+    pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
   }
 
   public Command getAutonomousCommand() {

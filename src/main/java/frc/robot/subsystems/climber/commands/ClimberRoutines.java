@@ -73,6 +73,7 @@ public class ClimberRoutines {
   public Command setupClimb() {
     return climberCommandFactory
         .setClampState(() -> false)
+        .andThen(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)))
         .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(unwindArm())))
         .repeatedly();
   }

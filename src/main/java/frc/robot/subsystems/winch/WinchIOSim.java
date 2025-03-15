@@ -59,6 +59,7 @@ public class WinchIOSim implements WinchIO {
   public void updateInputs(WinchIOInputs inputs) {
     winch1Sim.update(.02);
     winch2Sim.update(.02);
+    inputs.winchAngle = 0;
     inputs.winchLeaderMotorPosition = winch1Sim.getAngularPositionRotations();
     inputs.winchFollowerMotorPosition = winch2Sim.getAngularPositionRotations();
     inputs.winchLeaderMotorVelocity = winch1Sim.getAngularVelocityRadPerSec();

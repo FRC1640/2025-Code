@@ -31,6 +31,11 @@ public interface WinchIO extends AutoCloseable {
    */
   public default void setClimberWinchPosition(double position, WinchIOInputs inputs) {}
   /*
+   * Sets the angle of the winch motors using a PID
+   * angle counts up clockwise starting at 0 degrees = due west
+   */
+  public default void setClimberWinchAngle(double angle, WinchIOInputs inputs) {}
+  /*
    * Set voltage of the motor
    */
   public default void setClimberWinchVoltage(double voltage, WinchIOInputs inputs) {}

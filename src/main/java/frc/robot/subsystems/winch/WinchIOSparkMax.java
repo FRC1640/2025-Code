@@ -15,6 +15,8 @@ public class WinchIOSparkMax implements WinchIO {
   private final ResolverPWM absoluteEncoder;
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "winchPID");
+  private final PIDController winchAnglePID =
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchAnglePID, "winchAnglePID");
 
   public WinchIOSparkMax() {
     winchLeaderSpark =
@@ -26,7 +28,9 @@ public class WinchIOSparkMax implements WinchIO {
             winchLeaderSpark);
 
     winchPID.enableContinuousInput(0, 360);
-    absoluteEncoder = new ResolverPWM(6, 0);
+    absoluteEncoder =
+        new ResolverPWM(
+            ClimberConstants.absoluteEncoderChannel, ClimberConstants.absoluteEncoderOffset);
   }
   /*
    * Set voltage of the winch motors
@@ -51,9 +55,19 @@ public class WinchIOSparkMax implements WinchIO {
         inputs);
   }
 
+  /*
+   * Sets the angle of the winch motors using a PID
+   * angle counts up clockwise starting at 0 degrees = due west
+   */
+  @Override
+  public void setClimberWinchAngle(double angle, WinchIOInputs inputs) {
+    setClimberWinchVoltage(
+        MotorLim.clampVoltage(winchAnglePID.calculate(inputs.winchAngle, angle)), inputs);
+  }
+
   @Override
   public void updateInputs(WinchIOInputs inputs) {
-    inputs.winchAngle = 360 - (winchLeaderSpark.getAbsoluteEncoder().getPosition() * 360) % 360;
+    inputs.winchAngle = (absoluteEncoder.getDegrees()) % 360;
     inputs.winchLeaderMotorPosition = winchLeaderSpark.getEncoder().getPosition();
     inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
     inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();

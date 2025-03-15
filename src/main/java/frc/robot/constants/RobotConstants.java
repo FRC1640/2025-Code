@@ -331,6 +331,7 @@ public class RobotConstants {
     public static final int sensor2Channel = 3;
 
     public static final int absoluteEncoderChannel = 6;
+    public static final double absoluteEncoderOffset = 0;
   }
 
   public static class GantryConstants {

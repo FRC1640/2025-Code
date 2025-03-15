@@ -72,18 +72,25 @@ public class ClimberRoutines {
   public Command setupClimb() {
     return climberCommandFactory
         .setClampState(() -> false)
-        .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(unwindArm())))
+        .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(PIDWinchAngleTo(84.3))))
         .repeatedly();
   }
 
   public Command newSetupClimb() {
-    // return climberCommandFactory.setClampState(() -> false))
-    return new InstantCommand();
+    return climberCommandFactory
+        .setClampState(() -> false)
+        .andThen(lowerLift().alongWith(new WaitCommand(1.0).andThen(PIDWinchAngleTo(84.3))))
+        .repeatedly();
+  }
+
+  // PID Winch motor to given angle
+  public Command PIDWinchAngleTo(double angle) {
+    return climberCommandFactory.setWinchAnglePID(() -> angle).repeatedly();
   }
 
   // PID Winch motor to given string length (not angle)
   public Command PIDWinchTo(double position) {
-    return climberCommandFactory.setWinchAnglePID(() -> 84.3).repeatedly();
+    return climberCommandFactory.setWinchPosPID(() -> position).repeatedly();
   }
 
   /**
@@ -96,7 +103,7 @@ public class ClimberRoutines {
             new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)),
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
-            windArm())
+            PIDWinchAngleTo(ClimberConstants.winchClimbedAngle))
         .onlyIf(
             () ->
                 withinTolerance(
@@ -118,26 +125,6 @@ public class ClimberRoutines {
   public Command lowerLift() {
     return climberCommandFactory.setElevatorPosPID(() -> ClimberConstants.liftLimits.low);
     // .until(liftIsLow)
-  }
-  /**
-   * Unwinds climber arm to vertical position
-   *
-   * @return
-   */
-  public Command unwindArm() {
-    return climberCommandFactory.setWinchAnglePID(() -> 84.3).repeatedly();
-    // .until(winchIsHigh);
-  }
-  /**
-   * Winds arm to min position
-   *
-   * @return
-   */
-  public Command windArm() {
-    return climberCommandFactory
-        .setWinchAnglePID(() -> ClimberConstants.winchClimbedAngle)
-        .repeatedly();
-    // .until(winchIsClimbed);
   }
 
   public boolean isReadyToClamp() {

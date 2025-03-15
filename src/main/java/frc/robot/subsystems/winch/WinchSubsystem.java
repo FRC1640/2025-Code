@@ -78,8 +78,16 @@ public class WinchSubsystem extends SubsystemBase {
     return ((inputs.winchLeaderMotorTemperature + inputs.winchFollowerMotorTemperature) / 2.0);
   }
 
+  public double getAbsoluteEncoderValue() {
+    return inputs.winchAngle;
+  }
+
   public void setClimberWinchPosition(double pos) {
     winchIO.setClimberWinchPosition(pos, inputs);
+  }
+
+  public void setClimberWinchAngle(double angle) {
+    winchIO.setClimberWinchAngle(angle, inputs);
   }
 
   public void setClimberWinchVoltage(double voltage) {

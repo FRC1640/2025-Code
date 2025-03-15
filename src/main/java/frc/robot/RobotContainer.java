@@ -283,7 +283,12 @@ public class RobotContainer {
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     generateNamedCommands();
-    driveSubsystem = new DriveSubsystem(gyro);
+    driveSubsystem =
+        new DriveSubsystem(
+            gyro,
+            () -> liftSubsystem.driveAccelLimit(),
+            () -> liftSubsystem.driveDeaccelLimit(),
+            () -> liftSubsystem.driveMaxSpeed());
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =
@@ -428,8 +433,8 @@ public class RobotContainer {
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathNearest.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
+    // followPathNearest.generateTrigger( !!!testing
+    //     () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(
             () ->
                 followPathNearest.isAutoalignComplete()
@@ -603,7 +608,15 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(() -> liftSubsystem.resetEncoder())
                 .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
-    operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
+    driveController.a().onTrue(setupAutoPlace(() -> coralPreset)); // !!!testing
+    driveController
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.RightL4;
+                  algaeMode = false;
+                }));
 
     new Trigger(
             () ->

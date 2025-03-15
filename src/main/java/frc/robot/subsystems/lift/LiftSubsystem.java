@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
@@ -139,5 +140,19 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void testMethod() {
     io.testMethod();
+  }
+
+  public double driveAccelLimit() {
+    return getLeaderMotorPosition() > 1.2 ? DriveConstants.accelLimitUp : DriveConstants.accelLimit;
+  }
+
+  public double driveDeaccelLimit() {
+    return getLeaderMotorPosition() > 1.2
+        ? DriveConstants.deaccelLimitUp
+        : DriveConstants.deaccelLimit;
+  }
+
+  public double driveMaxSpeed() {
+    return getLeaderMotorPosition() > 1.2 ? DriveConstants.maxSpeedUp : DriveConstants.maxSpeed;
   }
 }

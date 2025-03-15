@@ -334,7 +334,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchAnglePID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
@@ -404,7 +404,7 @@ public class RobotContainer {
     PIDCommandRegistry.attachPIDCommand(
         "climberLiftPID", (x) -> climberCommandFactory.setElevatorPosPID(() -> x));
     PIDCommandRegistry.attachPIDCommand(
-        "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
+        "winchPID", (x) -> climberCommandFactory.setWinchAnglePID(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(

@@ -5,12 +5,14 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.constants.RobotConstants.ClimberConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.sensors.resolvers.ResolverPWM;
 import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
 
 public class WinchIOSparkMax implements WinchIO {
   private final SparkMax winchLeaderSpark;
   private final SparkMax winchFollowerSpark;
+  private final ResolverPWM absoluteEncoder;
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "winchPID");
 
@@ -24,6 +26,7 @@ public class WinchIOSparkMax implements WinchIO {
             winchLeaderSpark);
 
     winchPID.enableContinuousInput(0, 360);
+    absoluteEncoder = new ResolverPWM(6, 0);
   }
   /*
    * Set voltage of the winch motors
@@ -50,8 +53,8 @@ public class WinchIOSparkMax implements WinchIO {
 
   @Override
   public void updateInputs(WinchIOInputs inputs) {
-    inputs.winchLeaderMotorPosition =
-        360 - (winchLeaderSpark.getAbsoluteEncoder().getPosition() * 360) % 360;
+    inputs.winchAngle = 360 - (winchLeaderSpark.getAbsoluteEncoder().getPosition() * 360) % 360;
+    inputs.winchLeaderMotorPosition = winchLeaderSpark.getEncoder().getPosition();
     inputs.winchLeaderMotorCurrent = winchLeaderSpark.getOutputCurrent();
     inputs.winchFollowerMotorCurrent = winchFollowerSpark.getOutputCurrent();
     inputs.winchLeaderMotorVoltage = winchLeaderSpark.getAppliedOutput();

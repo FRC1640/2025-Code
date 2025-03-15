@@ -39,8 +39,7 @@ public class ClimberRoutines {
       winchIsClimbed =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(),
-                  ClimberConstants.winchClimbedPosition),
+                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchClimbedAngle),
       winchIsHigh =
           () ->
               withinTolerance(
@@ -66,7 +65,7 @@ public class ClimberRoutines {
   }
 
   /**
-   * Lowers lift and sets arm to vertical position, then umclamps
+   * Lowers lift and sets arm to vertical position, then unclamps
    *
    * @return
    */
@@ -75,6 +74,16 @@ public class ClimberRoutines {
         .setClampState(() -> false)
         .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(unwindArm())))
         .repeatedly();
+  }
+
+  public Command newSetupClimb() {
+    // return climberCommandFactory.setClampState(() -> false))
+    return new InstantCommand();
+  }
+
+  // PID Winch motor to given string length (not angle)
+  public Command PIDWinchTo(double position) {
+    return climberCommandFactory.setWinchAnglePID(() -> 84.3).repeatedly();
   }
 
   /**
@@ -116,7 +125,7 @@ public class ClimberRoutines {
    * @return
    */
   public Command unwindArm() {
-    return climberCommandFactory.setWinchPosPID(() -> 84.3).repeatedly();
+    return climberCommandFactory.setWinchAnglePID(() -> 84.3).repeatedly();
     // .until(winchIsHigh);
   }
   /**
@@ -126,7 +135,7 @@ public class ClimberRoutines {
    */
   public Command windArm() {
     return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchClimbedPosition)
+        .setWinchAnglePID(() -> ClimberConstants.winchClimbedAngle)
         .repeatedly();
     // .until(winchIsClimbed);
   }
@@ -142,4 +151,12 @@ public class ClimberRoutines {
         && climberSubsystem.getSensor1()
         && climberSubsystem.getSensor2();
   }
+
+  /*
+   * start at same time( lower winch a bit, lower climber all the way)
+   * when climber position reaches mostly down, release winch a bit
+   * .
+   * and then PID winch to angle
+   * .
+   */
 }

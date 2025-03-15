@@ -30,11 +30,19 @@ public class ClimberCommandFactory {
         .finallyDo(() -> climberSubsystem.setClimberElevatorVoltage(0));
   }
 
-  public Command setWinchPosPID(DoubleSupplier pos) {
+  public Command setWinchAnglePID(DoubleSupplier pos) {
     return new RunCommand(
             () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), winchSubsystem)
         .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
+
+  /*
+   * public Command setWinchPosPID(DoubleSupplier pos) {
+    return new RunCommand(
+            () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), winchSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
+  }
+   */
 
   public Command winchApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(

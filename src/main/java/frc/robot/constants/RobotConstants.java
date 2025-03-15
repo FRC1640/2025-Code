@@ -313,7 +313,8 @@ public class RobotConstants {
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
     public static final Limits liftLimits = new Limits(-174.874, 99999999.9);
-    public static final double winchClimbedPosition = 45;
+    public static final double winchClimbedAngle = 45;
+    public static final double winchClimbedPosition = 30;
     public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =
         new ResolverVoltageInfo(6, 0, 5, 0, 100, null);
@@ -328,6 +329,8 @@ public class RobotConstants {
 
     public static final int sensor1Channel = 2;
     public static final int sensor2Channel = 3;
+
+    public static final int absoluteEncoderChannel = 6;
   }
 
   public static class GantryConstants {

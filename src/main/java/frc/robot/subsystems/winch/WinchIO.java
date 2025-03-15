@@ -16,6 +16,7 @@ public interface WinchIO extends AutoCloseable {
     public double winchFollowerMotorVoltage = 0.0;
     public double winchLeaderMotorTemperature = 0.0;
     public double winchFollowerMotorTemperature = 0.0;
+    public double winchAngle = 0.0;
   }
 
   /*

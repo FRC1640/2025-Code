@@ -99,10 +99,9 @@ public class PitTab {
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
     instructLayoutCoral.add("Instruct2", "Start: Enable Climber PID");
     instructLayoutCoral.add("Instruct3", "Use Preset board for Lift");
-    instructLayoutCoral.add("Instruct4", "**X: intake coral**");
-    instructLayoutCoral.add("Instruct5", "B: Outtake Coral");
-    instructLayoutCoral.add("Instruct6", "**Y: safe pos**");
-    instructLayoutCoral.add("Instruct7", "**A: coral place**");
+    instructLayoutCoral.add("Instruct4", "B: Outtake Coral");
+    instructLayoutCoral.add("Instruct5", "Y: Safe pos");
+    instructLayoutCoral.add("Instruct6", "A: Confirm preset");
 
     ShuffleboardLayout canID =
         pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(2, 1);

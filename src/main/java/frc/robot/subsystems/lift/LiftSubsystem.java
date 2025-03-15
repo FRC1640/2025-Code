@@ -143,16 +143,16 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public double driveAccelLimit() {
-    return getLeaderMotorPosition() > 1.2 ? DriveConstants.accelLimitUp : DriveConstants.accelLimit;
+    return getLeaderMotorPosition() > .12 ? DriveConstants.accelLimitUp : DriveConstants.accelLimit;
   }
 
   public double driveDeaccelLimit() {
-    return getLeaderMotorPosition() > 1.2
+    return getLeaderMotorPosition() > .12
         ? DriveConstants.deaccelLimitUp
         : DriveConstants.deaccelLimit;
   }
 
   public double driveMaxSpeed() {
-    return getLeaderMotorPosition() > 1.2 ? DriveConstants.maxSpeedUp : DriveConstants.maxSpeed;
+    return getLeaderMotorPosition() > .12 ? DriveConstants.maxSpeedUp : DriveConstants.maxSpeed;
   }
 }

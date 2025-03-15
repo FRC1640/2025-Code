@@ -20,12 +20,14 @@ public class Module {
   private DoubleSupplier deaccelLimit;
   ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
 
-  SlewRateLimiter accelLimiter = new SlewRateLimiter(accelLimit.getAsDouble());
-  SlewRateLimiter deaccelLimiter = new SlewRateLimiter(deaccelLimit.getAsDouble());
+  SlewRateLimiter accelLimiter;
+  SlewRateLimiter deaccelLimiter;
 
   public Module(ModuleIO io, PivotId id, DoubleSupplier accelLimit, DoubleSupplier deaccelLimit) {
     this.accelLimit = accelLimit;
     this.deaccelLimit = deaccelLimit;
+    accelLimiter = new SlewRateLimiter(accelLimit.getAsDouble());
+    deaccelLimiter = new SlewRateLimiter(deaccelLimit.getAsDouble());
     this.io = io;
     this.id = id;
     AlertsManager.addAlert(
@@ -55,6 +57,7 @@ public class Module {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Modules/" + id, inputs);
+    Logger.recordOutput("accelLimit", accelLimit);
   }
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {

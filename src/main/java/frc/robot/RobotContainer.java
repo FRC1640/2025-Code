@@ -710,16 +710,25 @@ public class RobotContainer {
   }
 
   private void configurePitBindings() {
-    new Trigger(() -> (pitController.getHID().getPOV() == 0))
+    new Trigger(
+            () ->
+                (pitController.getHID().getPOV() == 0)
+                    && ((Robot.getState() == RobotState.TEST) ? true : false))
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
-    new Trigger(() -> (pitController.getHID().getPOV() == 180))
+    new Trigger(
+            () ->
+                (pitController.getHID().getPOV() == 180)
+                    && ((Robot.getState() == RobotState.TEST) ? true : false))
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 (pitController.getHID().getPOV() == 180 ? () -> .5 : () -> -.5)));
 
-    new Trigger(() -> pitController.getHID().getPOV() == 270)
+    new Trigger(
+            () ->
+                pitController.getHID().getPOV() == 270
+                    && ((Robot.getState() == RobotState.TEST) ? true : false))
         .whileTrue(new InstantCommand(() -> autoRampPos = false));
     new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
         .whileTrue(
@@ -727,14 +736,17 @@ public class RobotContainer {
                 () -> -pitController.getRightY() * 4));
     pitController
         .rightBumper()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
     pitController
         .leftBumper()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(
             gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
     pitController
         .rightTrigger()
         .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(
             algaeCommandFactory
                 .setSolenoidState(() -> true)
@@ -742,23 +754,39 @@ public class RobotContainer {
         .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
     pitController
         .start()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(
             new InstantCommand(() -> liftSubsystem.resetEncoder())
                 .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder()))
                 .alongWith(new InstantCommand(() -> autoRampPos = true)));
     pitController
         .b()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(
             coralOuttakeCommandFactory
                 .outtake()
                 .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
-    pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
-    pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
+    pitController
+        .y()
+        .and(() -> !coralOuttakeCommandFactory.outtaking)
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
+        .onTrue(runLiftToSafe());
+    pitController
+        .back()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
+        .whileTrue(gantryCommandFactory.gantryHomeCommand());
     pitController
         .povRight()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
-    pitController.a().onTrue(setupAutoPlace(() -> coralPreset));
-    pitController.x().onTrue(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)));
+    pitController
+        .a()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
+        .onTrue(setupAutoPlace(() -> coralPreset));
+    pitController
+        .x()
+        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
+        .onTrue(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)));
   }
 
   public Command getAutonomousCommand() {

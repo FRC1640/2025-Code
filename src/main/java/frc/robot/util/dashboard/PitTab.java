@@ -68,7 +68,8 @@ public class PitTab {
         .withSize(1, 1)
         .withPosition(8, 1);
     pitTab
-        .addString("PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
+        .addString(
+            "PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
         .withSize(4, 1)
         .withPosition(0, 0);
     ShuffleboardLayout instructLayout =
@@ -86,7 +87,7 @@ public class PitTab {
     instructLayout.add("Instruct7", "Back Button: Gantry Home");
     instructLayout.add("Instruct8", "Right Trigger: Algae Intake");
     instructLayout.add("Instruct9", "Start: Reset Lift/Coral Encoders");
-    instructLayout.add("Instruct10", "POV Left: Reset Lift/Coral Encoders");
+    instructLayout.add("Instruct10", "POV Left: Enable/Disable PID");
 
     ShuffleboardLayout instructLayoutCoral =
         pitTab
@@ -102,10 +103,7 @@ public class PitTab {
     instructLayoutCoral.add("Instruct6", "**A: coral place**");
 
     ShuffleboardLayout canID =
-        pitTab
-            .getLayout("Can IDs", BuiltInLayouts.kList)
-            .withSize(2, 2)
-            .withPosition(0, 1);
+        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(0, 1);
     canID.add("Front Left Drive", "1");
     canID.add("Front Left Steering", "2");
     canID.add("Front Right Drive", "3");

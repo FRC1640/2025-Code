@@ -16,8 +16,9 @@ public class AlgaeCommandFactory {
 
   public Command setMotorVoltages(DoubleSupplier leftVoltage, DoubleSupplier rightVoltage) {
     return new RunCommand(
-            () -> algaeSubsystem.setVoltage(leftVoltage.getAsDouble(), rightVoltage.getAsDouble()),
-            algaeSubsystem)
+            () -> {
+              algaeSubsystem.setVoltage(leftVoltage.getAsDouble(), rightVoltage.getAsDouble());
+            })
         .finallyDo(() -> algaeSubsystem.setVoltage(0, 0));
   }
 
@@ -35,8 +36,10 @@ public class AlgaeCommandFactory {
   }
 
   public Command processCommand() {
-    return setMotorVoltages(() -> -5, () -> -5)
-        .repeatedly()
-        .until(() -> !algaeSubsystem.hasAlgae());
+    return new InstantCommand(() -> algaeSubsystem.initialize(), algaeSubsystem)
+        .andThen(
+            setMotorVoltages(() -> -5, () -> -5)
+                .repeatedly()
+                .until(() -> !algaeSubsystem.hasAlgae()));
   }
 }

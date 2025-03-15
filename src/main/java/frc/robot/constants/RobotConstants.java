@@ -371,5 +371,6 @@ public class RobotConstants {
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
     public static double currentThresh = 50;
+    public static double timeToStartup = 0.08;
   }
 }

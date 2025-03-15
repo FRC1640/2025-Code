@@ -58,6 +58,7 @@ public class Module {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Modules/" + id, inputs);
     Logger.recordOutput("accelLimit", accelLimit);
+    Logger.recordOutput("deaccelLimit", deaccelLimit);
   }
 
   public void setDesiredStateMetersPerSecond(SwerveModuleState state) {

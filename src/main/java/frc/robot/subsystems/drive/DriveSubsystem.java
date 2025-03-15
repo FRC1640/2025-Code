@@ -159,6 +159,8 @@ public class DriveSubsystem extends SubsystemBase {
     totalRot =
         totalRot.plus(Rotation2d.fromRadians(getChassisSpeeds().omegaRadiansPerSecond * 0.02));
     Logger.recordOutput("totalRot", totalRot);
+    Logger.recordOutput("maxSpeed", maxSpeed);
+    Logger.recordOutput("maxSpeedGet", maxSpeed.getAsDouble());
   }
 
   public void stop() {

@@ -70,12 +70,12 @@ public class PitTab {
     pitTab
         .addString(
             "PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
-        .withSize(4, 1)
+        .withSize(7, 1)
         .withPosition(0, 0);
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
-            .withSize(2, 2)
+            .withSize(3, 3)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
     instructLayout.add("Instruct1", "L Stick: Drive");
@@ -93,9 +93,9 @@ public class PitTab {
     ShuffleboardLayout instructLayoutCoral =
         pitTab
             .getLayout("IMPORTANT BINDINGS", BuiltInLayouts.kList)
-            .withSize(2, 2)
+            .withSize(2, 3)
             .withProperties(Map.of("Label position", "HIDDEN"))
-            .withPosition(4, 1);
+            .withPosition(5, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
     instructLayoutCoral.add("Instruct2", "Start: Enable Climber PID");
     instructLayoutCoral.add("Instruct3", "Use Preset board for Lift");
@@ -104,7 +104,7 @@ public class PitTab {
     instructLayoutCoral.add("Instruct6", "A: Confirm preset");
 
     ShuffleboardLayout canID =
-        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(2, 1);
+        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 3).withPosition(3, 1);
     canID.add("Front Left Drive", "1");
     canID.add("Front Left Steering", "2");
     canID.add("Front Right Drive", "3");

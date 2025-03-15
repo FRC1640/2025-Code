@@ -75,7 +75,7 @@ public class PitTab {
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
-            .withSize(2, 4)
+            .withSize(2, 2)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(0, 1);
     instructLayout.add("Instruct1", "L Stick: Drive");
@@ -92,7 +92,7 @@ public class PitTab {
     ShuffleboardLayout instructLayoutCoral =
         pitTab
             .getLayout("IMPORTANT BINDINGS", BuiltInLayouts.kList)
-            .withSize(2, 4)
+            .withSize(2, 2)
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(4, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
@@ -103,7 +103,7 @@ public class PitTab {
     instructLayoutCoral.add("Instruct6", "**A: coral place**");
 
     ShuffleboardLayout canID =
-        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(0, 1);
+        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(2, 1);
     canID.add("Front Left Drive", "1");
     canID.add("Front Left Steering", "2");
     canID.add("Front Right Drive", "3");

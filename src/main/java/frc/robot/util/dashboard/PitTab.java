@@ -72,6 +72,11 @@ public class PitTab {
             "PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
         .withSize(7, 1)
         .withPosition(0, 0);
+    pitTab
+        .addString(
+            "IMPORTANT", () -> "To Make This Work, Make sure to be in TEST Mode, not Teleoperated")
+        .withSize(7, 1)
+        .withPosition(0, 4);
     ShuffleboardLayout instructLayout =
         pitTab
             .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
@@ -83,12 +88,12 @@ public class PitTab {
     instructLayout.add("Instruct3", "POV Up/Down: Winch");
     instructLayout.add("Instruct4", "POV Right: Clamp Climber");
     instructLayout.add("Instruct5", "Start: Zero Lift Encoders");
-    instructLayout.add("Instruct6", "Start: Enable Climber PID");
+    instructLayout.add("Instruct6", "& Start: Enable Climber PID");
     instructLayout.add("Instruct7", "L/R Bumpers: Gantry");
     instructLayout.add("Instruct8", "Back Button: Gantry Home");
     instructLayout.add("Instruct9", "Right Trigger: Algae Intake");
-    instructLayout.add("Instruct10", "Start: Reset Lift/Coral Encoders");
     instructLayout.add("Instruct11", "POV Left: Disable Climber PID");
+    instructLayout.add("Instruct12", "X: Disable Antitip");
 
     ShuffleboardLayout instructLayoutCoral =
         pitTab
@@ -97,11 +102,12 @@ public class PitTab {
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(5, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
-    instructLayoutCoral.add("Instruct2", "Start: Enable Climber PID");
+    instructLayoutCoral.add("Instruct2", "& Start: Enable Climber PID");
     instructLayoutCoral.add("Instruct3", "Use Preset board for Lift");
     instructLayoutCoral.add("Instruct4", "B: Outtake Coral");
     instructLayoutCoral.add("Instruct5", "Y: Safe pos");
     instructLayoutCoral.add("Instruct6", "A: Confirm preset");
+    instructLayoutCoral.add("Instruct7", "X: Disable Antitip");
 
     ShuffleboardLayout canID =
         pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 3).withPosition(3, 1);

@@ -308,8 +308,12 @@ public class RobotContainer {
     // Otherwise we wouldn't have a drive controller during the match
     joystickDriveWeight =
         new JoystickDriveWeight(
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
+            () ->
+                -driveController.getLeftY()
+                    - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftY() : 0),
+            () ->
+                -driveController.getLeftX()
+                    - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftX() : 0),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger());
@@ -458,7 +462,8 @@ public class RobotContainer {
     //         () ->
     //             followPathNearest.isAutoalignComplete()
     //                 && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
-    //                 && algae.povRight().onTrue(climberCommandFactory.setClampState(() -> false));Subsystem.hasAlgae()
+    //                 && algae.povRight().onTrue(climberCommandFactory.setClampState(() ->
+    // false));Subsystem.hasAlgae()
     //                 && Robot.getState() != RobotState.AUTONOMOUS)
     //     .whileTrue(
     //         algaeCommandFactory
@@ -705,18 +710,15 @@ public class RobotContainer {
   }
 
   private void configurePitBindings() {
-    JoystickDriveWeight weight =
-        new JoystickDriveWeight(
-            () -> -pitController.getLeftY(),
-            () -> -pitController.getLeftX(),
-            () -> 0,
-            () -> true,
-            () -> false);
-    new Trigger(
-            () -> (pitController.getHID().getPOV() == 0 || pitController.getHID().getPOV() == 180))
+    new Trigger(() -> (pitController.getHID().getPOV() == 0))
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
+    new Trigger(() -> (pitController.getHID().getPOV() == 180))
+        .whileTrue(
+            climberCommandFactory.winchApplyVoltageCommand(
+                (pitController.getHID().getPOV() == 180 ? () -> .5 : () -> -.5)));
+
     new Trigger(() -> pitController.getHID().getPOV() == 270)
         .whileTrue(new InstantCommand(() -> autoRampPos = false));
     new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
@@ -728,7 +730,8 @@ public class RobotContainer {
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
     pitController
         .leftBumper()
-        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
+        .whileTrue(
+            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
     pitController
         .rightTrigger()
         .and(() -> !algaeIntakeSubsystem.hasAlgae())
@@ -751,9 +754,11 @@ public class RobotContainer {
                 .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
     pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
     pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
-    pitController.povRight().onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    pitController
+        .povRight()
+        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     pitController.a().onTrue(setupAutoPlace(() -> coralPreset));
-
+    pitController.x().onTrue(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)));
   }
 
   public Command getAutonomousCommand() {

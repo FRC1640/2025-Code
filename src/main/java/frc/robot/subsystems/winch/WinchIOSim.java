@@ -35,14 +35,14 @@ public class WinchIOSim implements WinchIO {
     winch1Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchLeaderMotorPosition,
+                inputs.winch1MotorPosition,
                 voltage,
                 ClimberConstants.winchLimits.low,
                 ClimberConstants.winchLimits.high)));
     winch2Sim.setInputVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
-                inputs.winchFollowerMotorPosition,
+                inputs.winch2MotorPosition,
                 voltage,
                 ClimberConstants.winchLimits.low,
                 ClimberConstants.winchLimits.high)));
@@ -51,8 +51,7 @@ public class WinchIOSim implements WinchIO {
   @Override
   public void setClimberWinchPosition(double position, WinchIOInputs inputs) {
     setClimberWinchVoltage(
-        MotorLim.clampVoltage(winchPID.calculate(inputs.winchLeaderMotorPosition, position)),
-        inputs);
+        MotorLim.clampVoltage(winchPID.calculate(inputs.winch1MotorPosition, position)), inputs);
   }
 
   @Override
@@ -60,13 +59,13 @@ public class WinchIOSim implements WinchIO {
     winch1Sim.update(.02);
     winch2Sim.update(.02);
     inputs.winchAngle = 0;
-    inputs.winchLeaderMotorPosition = winch1Sim.getAngularPositionRotations();
-    inputs.winchFollowerMotorPosition = winch2Sim.getAngularPositionRotations();
-    inputs.winchLeaderMotorVelocity = winch1Sim.getAngularVelocityRadPerSec();
-    inputs.winchFollowerMotorVelocity = winch2Sim.getAngularVelocityRadPerSec();
-    inputs.winchLeaderMotorCurrent = winch1Sim.getCurrentDrawAmps();
-    inputs.winchFollowerMotorCurrent = winch2Sim.getCurrentDrawAmps();
-    inputs.winchLeaderMotorVoltage = winch1Sim.getInputVoltage();
-    inputs.winchFollowerMotorVoltage = winch2Sim.getInputVoltage();
+    inputs.winch1MotorPosition = winch1Sim.getAngularPositionRotations();
+    inputs.winch2MotorPosition = winch2Sim.getAngularPositionRotations();
+    inputs.winch1MotorVelocity = winch1Sim.getAngularVelocityRadPerSec();
+    inputs.winch2MotorVelocity = winch2Sim.getAngularVelocityRadPerSec();
+    inputs.winch1MotorCurrent = winch1Sim.getCurrentDrawAmps();
+    inputs.winch2MotorCurrent = winch2Sim.getCurrentDrawAmps();
+    inputs.winch1MotorVoltage = winch1Sim.getInputVoltage();
+    inputs.winch2MotorVoltage = winch2Sim.getInputVoltage();
   }
 }

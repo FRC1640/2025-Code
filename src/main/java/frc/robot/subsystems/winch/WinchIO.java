@@ -6,16 +6,16 @@ public interface WinchIO extends AutoCloseable {
 
   @AutoLog
   public static class WinchIOInputs {
-    public double winchLeaderMotorPosition = 0.0;
-    public double winchFollowerMotorPosition = 0.0;
-    public double winchLeaderMotorVelocity = 0.0;
-    public double winchFollowerMotorVelocity = 0.0;
-    public double winchLeaderMotorCurrent = 0.0;
-    public double winchFollowerMotorCurrent = 0.0;
-    public double winchLeaderMotorVoltage = 0.0;
-    public double winchFollowerMotorVoltage = 0.0;
-    public double winchLeaderMotorTemperature = 0.0;
-    public double winchFollowerMotorTemperature = 0.0;
+    public double winch1MotorPosition = 0.0;
+    public double winch2MotorPosition = 0.0;
+    public double winch1MotorVelocity = 0.0;
+    public double winch2MotorVelocity = 0.0;
+    public double winch1MotorCurrent = 0.0;
+    public double winch2MotorCurrent = 0.0;
+    public double winch1MotorVoltage = 0.0;
+    public double winch2MotorVoltage = 0.0;
+    public double winch1MotorTemperature = 0.0;
+    public double winch2MotorTemperature = 0.0;
     public double winchAngle = 0.0;
   }
 
@@ -36,7 +36,15 @@ public interface WinchIO extends AutoCloseable {
    */
   public default void setClimberWinchAngle(double angle, WinchIOInputs inputs) {}
   /*
-   * Set voltage of the motor
+   * Set voltage of both motors
    */
   public default void setClimberWinchVoltage(double voltage, WinchIOInputs inputs) {}
+  /*
+   * Set voltage of motor 1
+   */
+  public default void setClimberWinch1Voltage(double voltage, WinchIOInputs inputs) {}
+  /*
+   * Set voltage of motor 2
+   */
+  public default void setClimberWinch2Voltage(double voltage, WinchIOInputs inputs) {}
 }

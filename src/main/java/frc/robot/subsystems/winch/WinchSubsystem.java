@@ -18,64 +18,64 @@ public class WinchSubsystem extends SubsystemBase {
     Logger.processInputs("Winch/", inputs);
   }
 
-  public double getWinchLeaderMotorPosition() {
-    return inputs.winchLeaderMotorPosition;
+  public double getWinch1MotorPosition() {
+    return inputs.winch1MotorPosition;
   }
 
-  public double getWinchFollowerMotorPosition() {
-    return inputs.winchFollowerMotorPosition;
+  public double getWinch2MotorPosition() {
+    return inputs.winch2MotorPosition;
   }
 
   public double getWinchMotorPosition() {
-    return ((inputs.winchLeaderMotorPosition + inputs.winchFollowerMotorPosition) / 2.0);
+    return ((inputs.winch1MotorPosition + inputs.winch2MotorPosition) / 2.0);
   }
 
-  public double getWinchLeaderMotorVelocity() {
-    return inputs.winchLeaderMotorVelocity;
+  public double getWinch1MotorVelocity() {
+    return inputs.winch1MotorVelocity;
   }
 
-  public double getWinchFollowerMotorVelocity() {
-    return inputs.winchFollowerMotorVelocity;
+  public double getWinch2MotorVelocity() {
+    return inputs.winch2MotorVelocity;
   }
 
   public double getWinchMotorVelocity() {
-    return ((inputs.winchLeaderMotorVelocity + inputs.winchFollowerMotorVelocity) / 2.0);
+    return ((inputs.winch1MotorVelocity + inputs.winch2MotorVelocity) / 2.0);
   }
 
-  public double getWinchLeaderMotorCurrent() {
-    return inputs.winchLeaderMotorCurrent;
+  public double getWinch1MotorCurrent() {
+    return inputs.winch1MotorCurrent;
   }
 
-  public double getWinchFollowerMotorCurrent() {
-    return inputs.winchFollowerMotorCurrent;
+  public double getWinch2MotorCurrent() {
+    return inputs.winch2MotorCurrent;
   }
 
   public double getWinchMotorCurrent() {
-    return ((inputs.winchLeaderMotorCurrent + inputs.winchFollowerMotorCurrent) / 2.0);
+    return ((inputs.winch1MotorCurrent + inputs.winch2MotorCurrent) / 2.0);
   }
 
-  public double getWinchLeaderMotorVoltage() {
-    return inputs.winchLeaderMotorVoltage;
+  public double getWinch1MotorVoltage() {
+    return inputs.winch1MotorVoltage;
   }
 
-  public double getWinchFollowerMotorVoltage() {
-    return inputs.winchFollowerMotorVoltage;
+  public double getWinch2MotorVoltage() {
+    return inputs.winch2MotorVoltage;
   }
 
   public double getWinchMotorVoltage() {
-    return ((inputs.winchLeaderMotorVoltage + inputs.winchFollowerMotorVoltage) / 2.0);
+    return ((inputs.winch1MotorVoltage + inputs.winch2MotorVoltage) / 2.0);
   }
 
-  public double getWinchLeaderMotorTemperature() {
-    return inputs.winchLeaderMotorTemperature;
+  public double getWinch1MotorTemperature() {
+    return inputs.winch1MotorTemperature;
   }
 
-  public double getWinchFollowerMotorTemperature() {
-    return inputs.winchFollowerMotorTemperature;
+  public double getWinch2MotorTemperature() {
+    return inputs.winch2MotorTemperature;
   }
 
   public double getWinchMotorTemperature() {
-    return ((inputs.winchLeaderMotorTemperature + inputs.winchFollowerMotorTemperature) / 2.0);
+    return ((inputs.winch1MotorTemperature + inputs.winch2MotorTemperature) / 2.0);
   }
 
   public double getAbsoluteEncoderValue() {
@@ -92,5 +92,13 @@ public class WinchSubsystem extends SubsystemBase {
 
   public void setClimberWinchVoltage(double voltage) {
     winchIO.setClimberWinchVoltage(voltage, inputs);
+  }
+
+  public void setClimberWinch1Voltage(double voltage) {
+    winchIO.setClimberWinch1Voltage(voltage, inputs);
+  }
+
+  public void setClimberWinch2Voltage(double voltage) {
+    winchIO.setClimberWinch2Voltage(voltage, inputs);
   }
 }

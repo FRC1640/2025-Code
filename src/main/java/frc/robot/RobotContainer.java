@@ -729,13 +729,13 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
     pitController
-            .rightTrigger()
-            .and(() -> !algaeIntakeSubsystem.hasAlgae())
-            .whileTrue(
-                algaeCommandFactory
-                    .setSolenoidState(() -> true)
-                    .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
-            .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+        .rightTrigger()
+        .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
     pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     pitController
         .start()

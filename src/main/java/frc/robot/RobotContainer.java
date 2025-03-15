@@ -617,6 +617,14 @@ public class RobotContainer {
                   coralPreset = CoralPreset.RightL4;
                   algaeMode = false;
                 }));
+    driveController
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  coralPreset = CoralPreset.Safe;
+                  algaeMode = false;
+                }));
 
     new Trigger(
             () ->
@@ -640,10 +648,11 @@ public class RobotContainer {
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
-    driveController
-        .y()
-        .onTrue(
-            new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
+    // driveController !!!testing
+    //     .y()
+    //     .onTrue(
+    //         new InstantCommand(() ->
+    // AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
 
     driveController
         .rightTrigger()

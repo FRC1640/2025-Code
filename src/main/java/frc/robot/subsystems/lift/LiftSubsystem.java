@@ -153,6 +153,13 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public double driveMaxSpeed() {
-    return getLeaderMotorPosition() > .12 ? DriveConstants.maxSpeedUp : DriveConstants.maxSpeed;
+    double n = DriveConstants.maxSpeed;
+    if (getLeaderMotorPosition() > .12) {
+      n = DriveConstants.maxSpeedUp;
+    } else if (getLeaderMotorPosition() <= .12) {
+      n = DriveConstants.maxSpeed;
+    }
+    return n;
+    // return getLeaderMotorPosition() > .12 ? DriveConstants.maxSpeedUp : DriveConstants.maxSpeed;
   }
 }

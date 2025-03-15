@@ -12,10 +12,8 @@ import frc.robot.constants.RobotConstants.LiftConstants.GantrySetpoint;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.util.misc.AllianceManager;
-
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class GantryCommandFactory {
@@ -189,20 +187,20 @@ public class GantryCommandFactory {
                     }));
   }
 
-  public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) { // TODO face 
+  public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(
             FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
     // find target face
     Pose2d reefPos = reefPositions[0];
+    double closest = Double.MAX_VALUE;
     for (Pose2d face : reefPositions) {
-      if (Math.abs(
-              Math.abs(getPose.get().getRotation().getRadians() - face.getRotation().getRadians())
-                  - Math.PI)
-          < 0.6) {
+      double distance = face.getTranslation()
+          .minus(getPose.get().getTranslation()).getNorm();
+      if (distance < closest) {
+        closest = distance;
         reefPos = face;
-        break;
       }
     }
     System.out.println(reefPos);

@@ -83,11 +83,12 @@ public class PitTab {
     instructLayout.add("Instruct3", "POV Up/Down: Winch");
     instructLayout.add("Instruct4", "**POV Right: Clamp Climber**");
     instructLayout.add("Instruct5", "Start: Zero Lift Encoders");
-    instructLayout.add("Instruct6", "L/R Bumpers: Gantry");
-    instructLayout.add("Instruct7", "Back Button: Gantry Home");
-    instructLayout.add("Instruct8", "Right Trigger: Algae Intake");
-    instructLayout.add("Instruct9", "Start: Reset Lift/Coral Encoders");
-    instructLayout.add("Instruct10", "POV Left: Enable/Disable PID");
+    instructLayout.add("Instruct6", "Start: Enable Climber PID");
+    instructLayout.add("Instruct7", "L/R Bumpers: Gantry");
+    instructLayout.add("Instruct8", "Back Button: Gantry Home");
+    instructLayout.add("Instruct9", "Right Trigger: Algae Intake");
+    instructLayout.add("Instruct10", "Start: Reset Lift/Coral Encoders");
+    instructLayout.add("Instruct11", "POV Left: Disable Climber PID");
 
     ShuffleboardLayout instructLayoutCoral =
         pitTab
@@ -96,11 +97,12 @@ public class PitTab {
             .withProperties(Map.of("Label position", "HIDDEN"))
             .withPosition(4, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
-    instructLayoutCoral.add("Instruct2", "Use Preset board for Lift");
-    instructLayoutCoral.add("Instruct3", "**X: intake coral**");
-    instructLayoutCoral.add("Instruct4", "B: Outtake Coral");
-    instructLayoutCoral.add("Instruct5", "**Y: safe pos**");
-    instructLayoutCoral.add("Instruct6", "**A: coral place**");
+    instructLayoutCoral.add("Instruct2", "Start: Enable Climber PID");
+    instructLayoutCoral.add("Instruct3", "Use Preset board for Lift");
+    instructLayoutCoral.add("Instruct4", "**X: intake coral**");
+    instructLayoutCoral.add("Instruct5", "B: Outtake Coral");
+    instructLayoutCoral.add("Instruct6", "**Y: safe pos**");
+    instructLayoutCoral.add("Instruct7", "**A: coral place**");
 
     ShuffleboardLayout canID =
         pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(2, 1);

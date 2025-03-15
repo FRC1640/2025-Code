@@ -718,7 +718,7 @@ public class RobotContainer {
             climberCommandFactory.winchApplyVoltageCommand(
                 (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
     new Trigger(() -> pitController.getHID().getPOV() == 270)
-        .whileTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
+        .whileTrue(new InstantCommand(() -> autoRampPos = false));
     new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
@@ -742,7 +742,8 @@ public class RobotContainer {
         .start()
         .whileTrue(
             new InstantCommand(() -> liftSubsystem.resetEncoder())
-                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
+                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder()))
+                .alongWith(new InstantCommand(() -> autoRampPos = true)));
     pitController
         .b()
         .whileTrue(

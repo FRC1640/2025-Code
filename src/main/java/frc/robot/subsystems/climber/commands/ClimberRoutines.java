@@ -31,7 +31,7 @@ public class ClimberRoutines {
       winchIsLow =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.low),
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchLimits.low),
       liftIsHigh =
           () ->
               withinTolerance(
@@ -39,12 +39,11 @@ public class ClimberRoutines {
       winchIsClimbed =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(),
-                  ClimberConstants.winchClimbedPosition),
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchClimbedAngle),
       winchIsHigh =
           () ->
               withinTolerance(
-                  winchSubsystem.getWinchLeaderMotorPosition(), ClimberConstants.winchLimits.high);
+                  winchSubsystem.getWinch1MotorPosition(), ClimberConstants.winchLimits.high);
 
   public ClimberRoutines(ClimberCommandFactory climberCommandFactory) {
     this.climberCommandFactory = climberCommandFactory;
@@ -66,15 +65,32 @@ public class ClimberRoutines {
   }
 
   /**
-   * Lowers lift and sets arm to vertical position, then umclamps
+   * Lowers lift and sets arm to vertical position, then unclamps
    *
    * @return
    */
   public Command setupClimb() {
     return climberCommandFactory
         .setClampState(() -> false)
-        .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(unwindArm())))
+        .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(PIDWinchAngleTo(84.3))))
         .repeatedly();
+  }
+
+  public Command newSetupClimb() {
+    return climberCommandFactory
+        .setClampState(() -> false)
+        .andThen(lowerLift().alongWith(new WaitCommand(1.0).andThen(PIDWinchAngleTo(84.3))))
+        .repeatedly();
+  }
+
+  // PID Winch motor to given angle
+  public Command PIDWinchAngleTo(double angle) {
+    return climberCommandFactory.setWinchAnglePID(() -> angle).repeatedly();
+  }
+
+  // PID Winch motor to given string length (not angle)
+  public Command PIDWinchTo(double position) {
+    return climberCommandFactory.setWinchPosPID(() -> position).repeatedly();
   }
 
   /**
@@ -87,11 +103,11 @@ public class ClimberRoutines {
             new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)),
             climberCommandFactory.setClampState(() -> true),
             new WaitCommand(afterClampDelay),
-            windArm())
+            PIDWinchAngleTo(ClimberConstants.winchClimbedAngle))
         .onlyIf(
             () ->
                 withinTolerance(
-                        winchSubsystem.getWinchLeaderMotorPosition(),
+                        winchSubsystem.getWinch1MotorPosition(),
                         ClimberConstants.winchLimits.high,
                         tolerance * 2)
                     && withinTolerance(
@@ -110,31 +126,11 @@ public class ClimberRoutines {
     return climberCommandFactory.setElevatorPosPID(() -> ClimberConstants.liftLimits.low);
     // .until(liftIsLow)
   }
-  /**
-   * Unwinds climber arm to vertical position
-   *
-   * @return
-   */
-  public Command unwindArm() {
-    return climberCommandFactory.setWinchPosPID(() -> 84.3).repeatedly();
-    // .until(winchIsHigh);
-  }
-  /**
-   * Winds arm to min position
-   *
-   * @return
-   */
-  public Command windArm() {
-    return climberCommandFactory
-        .setWinchPosPID(() -> ClimberConstants.winchClimbedPosition)
-        .repeatedly();
-    // .until(winchIsClimbed);
-  }
 
   public boolean isReadyToClamp() {
     return climberSubsystem.getSolenoidState() == false
         && withinTolerance(
-            winchSubsystem.getWinchLeaderMotorPosition(),
+            winchSubsystem.getWinch1MotorPosition(),
             ClimberConstants.winchLimits.high,
             tolerance * 2)
         && withinTolerance(
@@ -142,4 +138,12 @@ public class ClimberRoutines {
         && climberSubsystem.getSensor1()
         && climberSubsystem.getSensor2();
   }
+
+  /*
+   * start at same time( lower winch a bit, lower climber all the way)
+   * when climber position reaches mostly down, release winch a bit
+   * .
+   * and then PID winch to angle
+   * .
+   */
 }

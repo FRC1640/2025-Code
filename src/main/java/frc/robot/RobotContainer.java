@@ -458,7 +458,7 @@ public class RobotContainer {
     //         () ->
     //             followPathNearest.isAutoalignComplete()
     //                 && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
-    //                 && algaeIntakeSubsystem.hasAlgae()
+    //                 && algae.povRight().onTrue(climberCommandFactory.setClampState(() -> false));Subsystem.hasAlgae()
     //                 && Robot.getState() != RobotState.AUTONOMOUS)
     //     .whileTrue(
     //         algaeCommandFactory

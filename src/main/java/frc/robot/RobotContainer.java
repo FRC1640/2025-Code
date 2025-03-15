@@ -748,6 +748,7 @@ public class RobotContainer {
             coralOuttakeCommandFactory
                 .outtake()
                 .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
+    pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
   }
 
   public Command getAutonomousCommand() {

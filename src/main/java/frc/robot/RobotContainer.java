@@ -334,7 +334,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 343).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 343.15).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());

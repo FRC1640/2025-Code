@@ -81,7 +81,7 @@ public class PitTab {
     instructLayout.add("Instruct1", "L Stick: Drive");
     instructLayout.add("Instruct2", "R Stick: Climber Lift");
     instructLayout.add("Instruct3", "POV Up/Down: Winch");
-    instructLayout.add("Instruct4", "**POV Right: Clamp Climber**");
+    instructLayout.add("Instruct4", "POV Right: Clamp Climber");
     instructLayout.add("Instruct5", "Start: Zero Lift Encoders");
     instructLayout.add("Instruct6", "Start: Enable Climber PID");
     instructLayout.add("Instruct7", "L/R Bumpers: Gantry");

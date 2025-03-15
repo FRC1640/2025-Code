@@ -628,7 +628,6 @@ public class RobotContainer {
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
     // operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
-
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
@@ -718,6 +717,8 @@ public class RobotContainer {
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
                 (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
+    new Trigger(() -> pitController.getHID().getPOV() == 270)
+        .whileTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
     new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
@@ -729,14 +730,14 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
     pitController
-            .rightTrigger()
-            .and(() -> !algaeIntakeSubsystem.hasAlgae())
-            .whileTrue(
-                algaeCommandFactory
-                    .setSolenoidState(() -> true)
-                    .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
-            .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
-    pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
+        .rightTrigger()
+        .and(() -> !algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
+        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+    pitController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
     pitController
         .start()
         .whileTrue(

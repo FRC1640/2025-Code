@@ -752,6 +752,8 @@ public class RobotContainer {
     pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
     pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     pitController.povRight().onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    pitController.a().onTrue(setupAutoPlace(() -> coralPreset));
+
   }
 
   public Command getAutonomousCommand() {

@@ -85,26 +85,27 @@ public class PitTab {
     instructLayout.add("Instruct6", "L/R Bumpers: Gantry");
     instructLayout.add("Instruct7", "Back Button: Gantry Home");
     instructLayout.add("Instruct8", "Right Trigger: Algae Intake");
-    instructLayout.add("Instruct8", "Start: Toggle Auto Ramp Pos/PID");
+    instructLayout.add("Instruct9", "Start: Reset Lift/Coral Encoders");
+    instructLayout.add("Instruct10", "POV Left: Reset Lift/Coral Encoders");
 
     ShuffleboardLayout instructLayoutCoral =
         pitTab
-            .getLayout("Lift-Coral Bindings", BuiltInLayouts.kList)
+            .getLayout("IMPORTANT BINDINGS", BuiltInLayouts.kList)
             .withSize(2, 4)
             .withProperties(Map.of("Label position", "HIDDEN"))
-            .withPosition(2, 1);
+            .withPosition(4, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
     instructLayoutCoral.add("Instruct2", "Use Preset board for Lift");
-    instructLayoutCoral.add("Instruct3", "**x intake coral**");
+    instructLayoutCoral.add("Instruct3", "**X: intake coral**");
     instructLayoutCoral.add("Instruct4", "B: Outtake Coral");
-    instructLayoutCoral.add("Instruct5", "**y safe pos**");
-    instructLayoutCoral.add("Instruct6", "**a coral place**");
+    instructLayoutCoral.add("Instruct5", "**Y: safe pos**");
+    instructLayoutCoral.add("Instruct6", "**A: coral place**");
 
     ShuffleboardLayout canID =
         pitTab
-            .getLayout("Pit Control Bindings", BuiltInLayouts.kList)
+            .getLayout("Can IDs", BuiltInLayouts.kList)
             .withSize(2, 2)
-            .withPosition(2, 1);
+            .withPosition(0, 1);
     canID.add("Front Left Drive", "1");
     canID.add("Front Left Steering", "2");
     canID.add("Front Right Drive", "3");

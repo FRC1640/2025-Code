@@ -15,6 +15,7 @@ import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.subsystems.lift.LiftSubsystem;
+import frc.robot.subsystems.winch.WinchSubsystem;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.sysid.CreateSysidCommand;
 import java.util.function.BooleanSupplier;
@@ -34,6 +35,8 @@ public class Dashboard {
   public PPIDTab ppidTab = new PPIDTab();
   public MAXMotorTab maxMotorTab = new MAXMotorTab();
   public FLEXMotorTab flexMotorTab = new FLEXMotorTab();
+  public PitTab pitTab;
+
   private ClimberSubsystem climberSubsystem;
   private AlgaeSubsystem algaeSubsystem;
   private CoralOuttakeSubsystem coralSubsystem;
@@ -45,6 +48,7 @@ public class Dashboard {
       ClimberSubsystem climberSubsystem,
       AlgaeSubsystem algaeSubsystem,
       CoralOuttakeSubsystem coralSubsystem,
+      WinchSubsystem winchSubsystem,
       CommandXboxController controller) {
     this.driveSubsystem = driveSubsystem;
     this.liftSubsystem = liftSubsystem;
@@ -55,16 +59,27 @@ public class Dashboard {
     this.coralSubsystem = coralSubsystem;
     autoInit();
     teleopInit();
-    if (TestConfig.tuningMode == TestingSetting.pidTuning) {
+    if (TestConfig.testingMode == TestingSetting.pidTuning) {
       pidTab.init();
       ppidTab.init();
     }
-    if (TestConfig.tuningMode == TestingSetting.sysIDTesting) {
+    if (TestConfig.testingMode == TestingSetting.sysIDTesting) {
       sysidInit();
     }
-    if (TestConfig.tuningMode == TestingSetting.motorTest) {
+    if (TestConfig.testingMode == TestingSetting.motorTest) {
       maxMotorTab.init();
       flexMotorTab.init();
+    }
+    if (TestConfig.testingMode == TestingSetting.pit) {
+      pitTab =
+          new PitTab(
+              gantrySubsystem,
+              liftSubsystem,
+              coralSubsystem,
+              climberSubsystem,
+              algaeSubsystem,
+              winchSubsystem);
+      pitTab.init();
     }
   }
 

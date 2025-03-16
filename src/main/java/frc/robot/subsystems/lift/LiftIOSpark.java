@@ -14,9 +14,6 @@ import frc.robot.constants.SparkConstants;
 import frc.robot.util.misc.EMA;
 import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
-
-import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSpark implements LiftIO {
@@ -61,10 +58,9 @@ public class LiftIOSpark implements LiftIO {
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
     double clampedVoltage;
-    if(EMACurrent.get() < LiftConstants.currentThresh){
+    if (EMACurrent.get() < LiftConstants.currentThresh) {
       clampedVoltage = voltage;
-    } 
-    else{ 
+    } else {
       clampedVoltage = 0;
     }
 
@@ -187,8 +183,9 @@ public class LiftIOSpark implements LiftIO {
         RobotPIDConstants.constructProfiledPIDController(
             RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
   }
+
   @Override
-  public void updateEMA(double data){
+  public void updateEMA(double data) {
     EMACurrent.update(data);
   }
 }

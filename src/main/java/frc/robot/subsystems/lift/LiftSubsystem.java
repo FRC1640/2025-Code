@@ -6,10 +6,8 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
-import frc.robot.util.misc.EMA;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -25,6 +23,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
+
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
     LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);

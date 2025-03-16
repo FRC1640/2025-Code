@@ -1,6 +1,5 @@
 package frc.robot.subsystems.algae;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
 import org.littletonrobotics.junction.Logger;
@@ -11,7 +10,6 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
-  private double initialTime;
   private double EMACurrent;
   private double EMAMultiplier =
       AlgaeConstants.EMASmoothingFactor / (1 + AlgaeConstants.EMAPeriods);
@@ -33,9 +31,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     Logger.recordOutput("Algae/EMACurrent", EMACurrent);
 
-    if (algaeCurrentHit()
-        && !hasAlgae
-        && Timer.getFPGATimestamp() - initialTime > AlgaeConstants.timeToStartup) {
+    if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
@@ -49,10 +45,6 @@ public class AlgaeSubsystem extends SubsystemBase {
     lastTime = System.currentTimeMillis();
 
     Logger.recordOutput("Sensors/HasAlgae", hasAlgae());
-  }
-
-  public void initialize() {
-    initialTime = Timer.getFPGATimestamp();
   }
 
   public double getIntakeMotorLeftVoltage() {

@@ -36,10 +36,8 @@ public class AlgaeCommandFactory {
   }
 
   public Command processCommand() {
-    return new InstantCommand(() -> algaeSubsystem.initialize(), algaeSubsystem)
-        .andThen(
-            setMotorVoltages(() -> -5, () -> -5)
-                .repeatedly()
-                .until(() -> !algaeSubsystem.hasAlgae()));
+    return setMotorVoltages(() -> -5, () -> -5)
+        .repeatedly()
+        .until(() -> !algaeSubsystem.hasAlgae());
   }
 }

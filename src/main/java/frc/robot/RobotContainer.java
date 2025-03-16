@@ -374,6 +374,8 @@ public class RobotContainer {
                 Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
                 Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
+                    "LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
+                Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
@@ -919,12 +921,11 @@ public class RobotContainer {
         new WaitUntilCommand(
                 () ->
                     liftSubsystem.isAtPreset(
-                            algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && gantrySubsystem.isAtPreset(coralPreset, true))
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
             .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(1)
+        new WaitCommand(0)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

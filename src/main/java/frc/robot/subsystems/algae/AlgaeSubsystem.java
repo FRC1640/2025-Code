@@ -2,6 +2,7 @@ package frc.robot.subsystems.algae;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
+import frc.robot.util.misc.EMA;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeSubsystem extends SubsystemBase {
@@ -10,9 +11,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
-  private double EMACurrent;
-  private double EMAMultiplier =
-      AlgaeConstants.EMASmoothingFactor / (1 + AlgaeConstants.EMAPeriods);
+  private EMA EMACurrent = new EMA(AlgaeConstants.EMASmoothingFactor, AlgaeConstants.EMAPeriods);
   // bwaahaha not rolling average. its actually an Exponential Moving Average
 
   public AlgaeSubsystem(AlgaeIO io) {
@@ -25,11 +24,9 @@ public class AlgaeSubsystem extends SubsystemBase {
     Logger.processInputs("Algae", inputs);
 
     // Update the EMACurrent
-    EMACurrent =
-        (EMAMultiplier * ((inputs.intakeMotorLeftCurrent + inputs.intakeMotorRightCurrent) / 2))
-            + (EMAMultiplier * EMACurrent);
+    EMACurrent.update((inputs.intakeMotorLeftCurrent + inputs.intakeMotorRightCurrent) / 2);
 
-    Logger.recordOutput("Algae/EMACurrent", EMACurrent);
+    Logger.recordOutput("Algae/EMACurrent", EMACurrent.get());
 
     if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
@@ -84,7 +81,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public boolean algaeCurrentHit() {
-    return EMACurrent > AlgaeConstants.currentThresh || io.hasSimAlgae();
+    return EMACurrent.get() > AlgaeConstants.currentThresh || io.hasSimAlgae();
   }
 
   public boolean setHasAlgae(boolean has) {

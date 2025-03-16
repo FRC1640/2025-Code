@@ -224,13 +224,13 @@ public class RobotConstants {
     public enum CoralPreset {
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
-      RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
-      LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
-      RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.563, GantrySetpoint.LEFT),
-      RightL4(0.563, GantrySetpoint.RIGHT),
-      Trough(0, GantrySetpoint.RIGHT);
+      LeftL2(0.115, 0.3, GantrySetpoint.CENTER),
+      RightL2(0.115, 0.3, GantrySetpoint.CENTER),
+      LeftL3(0.289, 0.486, GantrySetpoint.CENTER),
+      RightL3(0.289, 0.486, GantrySetpoint.CENTER),
+      LeftL4(0.563, GantrySetpoint.CENTER),
+      RightL4(0.563, GantrySetpoint.CENTER),
+      Trough(0, GantrySetpoint.CENTER);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective

@@ -635,7 +635,7 @@ public class RobotContainer {
     //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
-    new Trigger(() -> (liftSubsystem.getEmaCurrent() > LiftConstants.currentThresh))
+    new Trigger(() -> liftSubsystem.getIsLimited())
         .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));

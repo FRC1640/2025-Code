@@ -58,6 +58,7 @@ public class LiftSubsystem extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
     Logger.recordOutput("Lift/EMACurrent", emaCurrent.get());
+    Logger.recordOutput("Lift/isLimited", getEmaCurrent() > LiftConstants.currentThresh);
     Logger.processInputs("Lift/", inputs);
   }
 
@@ -149,5 +150,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   public double getEmaCurrent() {
     return emaCurrent.get();
+  }
+
+  public boolean getIsLimited() {
+    return getEmaCurrent() > LiftConstants.currentThresh;
   }
 }

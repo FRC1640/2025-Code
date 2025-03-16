@@ -371,7 +371,7 @@ public class RobotConstants {
     public static int motorRightChannel = new RobotSwitch<Integer>(12).get();
     public static int solenoidChannelForward = 0;
     public static int solenoidChannelReverse = 1;
-    public static double passiveSpeed = 0.1;
+    public static double passiveSpeed = 0.5;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
     public static double currentThresh = 20;

@@ -52,6 +52,4 @@ public interface LiftIO extends AutoCloseable {
   public default void testMethod() {}
 
   public default void setLimitEnabled(boolean enable) {}
-
-  public default void updateEMA(double data) {}
 }

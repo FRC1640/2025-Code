@@ -921,8 +921,7 @@ public class RobotContainer {
         new WaitUntilCommand(
                 () ->
                     liftSubsystem.isAtPreset(
-                            algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && gantrySubsystem.isAtPreset(coralPreset, true))
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
             .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",

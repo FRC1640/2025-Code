@@ -378,6 +378,11 @@ public class RobotContainer {
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
                 Logger.recordOutput("autoramppos", autoRampPos);
+
+                Logger.recordOutput(
+                    "gantrything",
+                    gantryCommandFactory.getSetpointOdometry(
+                        () -> coralPreset, () -> RobotOdometry.instance.getPose("Main")));
               }
             });
   }

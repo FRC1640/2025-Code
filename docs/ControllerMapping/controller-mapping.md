@@ -24,11 +24,15 @@ Right X Axis Joystick: Rotates Robot
 
 Left Joystick: Controls robot movement (X axis for left/right, Y axis for forward/backward)
 
-Start Button: Sets the robot's movement direction based on its current orientation
+Start Button: Sets the robot's movement direction based on its current orientation (gyro reset)
+
+Back Button: Turns off the lift auto pid
 
 Button A: Align with the reef
 
 Button B: Runs intake voltage at 3 volts
+
+Button Y: Toggles anti tip
 
 Left Bumper: Align with nearest reef
 
@@ -38,36 +42,48 @@ Right Bumper: Slow Mode
 
 Right Trigger: Shoots algae grabber
 
-POVUp: Outtakes coral
+POV Up: Outtakes coral
 ### Operator Controller
 Port: 1
+
+Start: Reset Lift and Climber encoder
+
+Back: Gantry Home Command
 
 Button Y: Runs Lift to safe
 
 Button A: Confirm Coral Preset Board Position
 
-Button X: Clamp Climber
+Button X: Auto Place Command
 
-Button B: Sets lift voltage to 0
+Button B: Toggles Climber Clamp State
 
 Left Bumper: Move Gantry Left
 
 Right Bumper: Move Gantry Right
 
-Right Joystick Y: Lift Up/Down
+Right Joystick Y: Climber Elevator Up/Down
+
+Left Joystick Y: Winch Voltage Command
 
 Back Button: Sets gantry to home
 
 Start Button: Lift Home
 
+Left Trigger: Sets "HasAlgae" to false
+
+Right Trigger: Algae Process
+
 Operator POV Up: Part 1 of climber, unwinds arm, lowers lift, and sets the clamp state to false
 
 Operator POV Down: Part 2 of climber, sets clamp state to true, winds arm, does the winch
 
-Operator POV Left: Resets the climber position
+Operator POV Left: Cancel command (default command is pid to climber default position)
 
-Operator POV Right: sets climber lift to home
+Operator POV Right: Unhooks the Lift
 
+RUMBLE:
+If Algae is intaked
 ## **FightSticks Controller**
 ### Preset Board
 Port: 2

@@ -11,8 +11,12 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
+import frc.robot.util.misc.EMA;
 import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class LiftIOSpark implements LiftIO {
@@ -35,6 +39,7 @@ public class LiftIOSpark implements LiftIO {
   PIDController velocityController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");
   private boolean limits;
+  private EMA EMACurrent;
 
   public LiftIOSpark() {
     leaderMotor =
@@ -48,26 +53,35 @@ public class LiftIOSpark implements LiftIO {
     followerEncoder = followerMotor.getEncoder();
     liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
     profiledPIDController.setTolerance(0.003);
+    EMACurrent = new EMA(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
   }
   /*
    * Set voltage of the motor
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
-    Logger.recordOutput("LIFTINPUT", voltage);
+    double clampedVoltage;
+    if(EMACurrent.get() < LiftConstants.currentThresh){
+      clampedVoltage = voltage;
+    } 
+    else{ 
+      clampedVoltage = 0;
+    }
+
+    Logger.recordOutput("LIFTINPUT", clampedVoltage);
     Logger.recordOutput(
         "liftinputclamped",
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
-                voltage,
+                clampedVoltage,
                 limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
-                voltage,
+                clampedVoltage,
                 limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
   }
@@ -172,5 +186,9 @@ public class LiftIOSpark implements LiftIO {
     profiledPIDController =
         RobotPIDConstants.constructProfiledPIDController(
             RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
+  }
+  @Override
+  public void updateEMA(double data){
+    EMACurrent.update(data);
   }
 }

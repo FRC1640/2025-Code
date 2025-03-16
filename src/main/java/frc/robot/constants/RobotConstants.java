@@ -18,6 +18,7 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
+import frc.robot.util.misc.EMA;
 import frc.robot.util.misc.Limits;
 import frc.robot.util.robotswitch.RobotSwitch;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
@@ -212,6 +213,8 @@ public class RobotConstants {
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
     public static final double currentThresh = 80; // for the EMA
 
+    public static final double emaSmoothing = 0;
+    public static final double emaPeriod = 0;
     public enum GantrySetpoint {
       LEFT,
       RIGHT,

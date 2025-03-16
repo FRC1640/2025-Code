@@ -26,8 +26,12 @@ public class ReefDetector extends PeriodicBase {
     reefDetectorIO.updateInputs(inputs);
     Logger.processInputs("ReefDetector", inputs);
     Logger.recordOutput("Found threshold", foundThresh);
+
     if (getDistanceToReef() < Double.MAX_VALUE) {
-      Logger.recordOutput("FilteredDist", getDistanceToReef());
+      Logger.recordOutput("ReefDetector/FilteredDist", getDistanceToReef());
+      Logger.recordOutput("ReefDetector/ReefSeen", true);
+    } else {
+      Logger.recordOutput("ReefDetector/ReefSeen", false);
     }
   }
 

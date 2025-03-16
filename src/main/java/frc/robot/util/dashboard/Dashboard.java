@@ -86,13 +86,13 @@ public class Dashboard {
     // httpCamera.setResolution(1280 / 5, 720 / 5);
     // httpCamera.setFPS(15);
     // teleopTab.add("Front Cam", httpCamera).withSize(3, 3).withPosition(2, 1);
-    // UsbCamera camera = new UsbCamera("BackCamera", 1);
-    // camera.setFPS(30);
-    // camera.setResolution(1920 / 2, 1080 / 2);
+    // UsbCamera camera = new UsbCamera("USB Camera 0", 1);
+    // camera.setFPS(10);
+    // camera.setVideoMode(new VideoMode(PixelFormat.kBGR, 640, 480, 10));
     // teleopTab.add(camera);
 
     teleopTab
-        .addCamera("BackCamera", "USB Camera 0", "http://10.16.40.52:1186/stream.mjpg")
+        .addCamera("USB Camera 0", "USB Camera 0", "10.16.40.2:1181")
         .withSize(4, 3)
         .withPosition(5, 1);
     teleopTab

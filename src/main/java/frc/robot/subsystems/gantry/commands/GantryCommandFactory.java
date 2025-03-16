@@ -153,7 +153,7 @@ public class GantryCommandFactory {
                                             - GantryConstants.gantryLimits.low)
                                     < GantryConstants.gantryPadding)))
         .repeatedly()
-        .until(() -> reefDetector.getDistanceToReef() < 500)
+        .until(() -> reefDetector.isDetecting())
         .andThen(new InstantCommand(() -> gantrySubsystem.setGantryVoltage(0)));
   }
 

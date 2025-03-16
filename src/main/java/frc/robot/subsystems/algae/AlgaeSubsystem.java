@@ -10,6 +10,10 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
+  private double EMACurrent;
+  private double EMAMultiplier =
+      AlgaeConstants.EMASmoothingFactor / (1 + AlgaeConstants.EMAPeriods);
+  // bwaahaha not rolling average. its actually an Exponential Moving Average
 
   public AlgaeSubsystem(AlgaeIO io) {
     this.io = io;
@@ -19,6 +23,14 @@ public class AlgaeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Algae", inputs);
+
+    // Update the EMACurrent
+    EMACurrent =
+        (EMAMultiplier * ((inputs.intakeMotorLeftCurrent + inputs.intakeMotorRightCurrent) / 2))
+            + (EMAMultiplier * EMACurrent);
+
+    Logger.recordOutput("Algae/EMACurrent", EMACurrent);
+
     if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
@@ -72,9 +84,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public boolean algaeCurrentHit() {
-    return (inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
-            || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh)
-        || io.hasSimAlgae();
+    return EMACurrent > AlgaeConstants.currentThresh || io.hasSimAlgae();
   }
 
   public boolean setHasAlgae(boolean has) {

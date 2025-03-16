@@ -23,7 +23,6 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
-  private EMA emaCurrent;
 
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
@@ -46,7 +45,6 @@ public class LiftSubsystem extends SubsystemBase {
     LogRunner.addLog(
         new VelocityLogStorage(
             () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
-    emaCurrent = new EMA(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
   }
 
   @Override

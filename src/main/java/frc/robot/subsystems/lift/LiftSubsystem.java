@@ -12,6 +12,9 @@ import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.misc.EMA;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import java.util.function.DoubleSupplier;
+
+import javax.swing.border.EmptyBorder;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -25,6 +28,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
+  private EMA emaCurrent; 
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
     LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
@@ -46,6 +50,7 @@ public class LiftSubsystem extends SubsystemBase {
     LogRunner.addLog(
         new VelocityLogStorage(
             () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
+    emaCurrent = new EMA(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
   }
 
   @Override

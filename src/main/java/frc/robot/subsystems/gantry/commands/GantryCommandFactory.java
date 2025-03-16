@@ -208,11 +208,11 @@ public class GantryCommandFactory {
     }
     System.out.println(reefPos);
     // calculate gantry offset
-    double gyroRadians = getPose.get().getRotation().getRadians();
+    double gyroRadians = -getPose.get().getRotation().getRadians();
     double deltaY = reefPos.getY() - getPose.get().getTranslation().getY();
     double deltaX = reefPos.getX() - getPose.get().getTranslation().getX();
     double gantryCenter =
-        Math.cos(gyroRadians + Math.atan(deltaY / deltaX))
+        Math.sin(gyroRadians - Math.atan(deltaY / deltaX))
             * reefPos
                 .getTranslation()
                 .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?

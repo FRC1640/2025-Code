@@ -374,8 +374,8 @@ public class RobotConstants {
     public static double passiveSpeed = 0.1;
     public static double highSpeed = 0.7;
     public static double gearRatio = 1;
-    public static double currentThresh = 25;
+    public static double currentThresh = 20;
     public static double emaSmoothing = 8;
-    public static double emaPeriod = 20; // number of periods to calculate EMA over
+    public static double emaPeriod = 21; // number of periods to calculate EMA over
   }
 }

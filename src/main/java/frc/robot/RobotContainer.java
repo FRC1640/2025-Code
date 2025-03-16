@@ -26,6 +26,7 @@ import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.CameraConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotConstants.GantryConstants;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.constants.RobotConstants.RobotConfigConstants;
 import frc.robot.constants.RobotConstants.RobotDimensions;
@@ -633,6 +634,8 @@ public class RobotContainer {
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+
+    new Trigger(() -> (liftSubsystem.getEmaCurrent() < LiftConstants.currentThresh));
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));

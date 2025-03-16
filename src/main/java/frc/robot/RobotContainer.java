@@ -133,7 +133,8 @@ public class RobotContainer {
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 
-  private FollowPathNearest followPathNearest;
+  private FollowPathNearest followPathReef;
+  private FollowPathNearest followPathStation;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -286,11 +287,11 @@ public class RobotContainer {
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger());
-    followPathNearest =
+    followPathReef =
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
-            () -> chooseAlignPos(),
+            () -> chooseReefAlignPos(),
             AutoAlignConfig.pathConstraints,
             (x) ->
                 coralAdjust(
@@ -298,6 +299,14 @@ public class RobotContainer {
                         x, (algaeMode ? 0 : RobotDimensions.robotLength / 2), x.getRotation()),
                     () -> coralPreset),
             driveSubsystem);
+    followPathStation =
+    new FollowPathNearest(
+        () -> RobotOdometry.instance.getPose("Main"),
+        gyro,
+        () -> chooseStationAlignPos(),
+        AutoAlignConfig.pathConstraints,
+        null,
+        driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 
@@ -330,7 +339,7 @@ public class RobotContainer {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
-                Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
+                Logger.recordOutput("AutoAlignDone", followPathReef.isAutoalignComplete());
                 Logger.recordOutput(
                     "LiftDone",
                     liftSubsystem.isAtPreset(
@@ -394,17 +403,17 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.5
-                    && followPathNearest.isEnabled()
+                    && followPathReef.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathNearest.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
+    followPathReef.generateTrigger(
+        () -> driveController.a().getAsBoolean() && !followPathReef.isAutoalignComplete());
     new Trigger(
             () ->
-                followPathNearest.isAutoalignComplete()
+                followPathReef.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
                     && (gantrySubsystem.isAtPreset(
@@ -414,7 +423,7 @@ public class RobotContainer {
         .onTrue(getAutoPlaceCommand());
     new Trigger(
             () ->
-                followPathNearest.isAutoalignComplete()
+                followPathReef.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(CoralPreset.Safe.lift)
                     && algaeIntakeSubsystem.hasAlgae()
                     && Robot.getState() != RobotState.AUTONOMOUS)
@@ -439,18 +448,6 @@ public class RobotContainer {
                         .getDistance(getTarget().getTranslation())
                     > 2)
         .onTrue(runLiftToSafe());
-
-    DriveWeightCommand.createWeightTrigger(
-        new RotateToAngleWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                DistanceManager.getNearestPosition(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
-                    .getRotation()
-                    .plus(Rotation2d.fromDegrees(180))),
-        driveController.leftBumper());
 
     driveController
         .povDown()
@@ -582,7 +579,7 @@ public class RobotContainer {
   }
 
   public Pose2d getTarget() {
-    return followPathNearest.getFinalPosition();
+    return followPathReef.getFinalPosition();
   }
 
   public Command getAutoPlaceCommand() {
@@ -631,7 +628,7 @@ public class RobotContainer {
         });
   }
 
-  public Pose2d[] chooseAlignPos() {
+  public Pose2d[] chooseReefAlignPos() {
     return algaeIntakeSubsystem.hasAlgae()
         ? new Pose2d[] {
           AllianceManager.chooseFromAlliance(
@@ -639,6 +636,12 @@ public class RobotContainer {
         }
         : AllianceManager.chooseFromAlliance(
             FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
+  }
+
+  public Pose2d[] chooseStationAlignPos() {
+    return AllianceManager.chooseFromAlliance(
+      FieldConstants.coralStationPosBlue,
+      FieldConstants.coralStationPosRed);
   }
 
   public Command runLiftToSafe() {

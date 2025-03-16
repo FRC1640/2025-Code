@@ -210,6 +210,7 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+    public static final double currentThresh = 80; // for the EMA
 
     public enum GantrySetpoint {
       LEFT,

@@ -6,8 +6,10 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
+import frc.robot.util.misc.EMA;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -23,6 +25,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
+  private EMA EMACurrent;
 
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
@@ -49,6 +52,7 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    EMACurrent.update((getFollowerMotorCurrent() + getLeaderMotorCurrent()) / 2);
     liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
@@ -100,7 +104,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public void setLiftVoltage(double voltage) {
-    io.setLiftVoltage(voltage, inputs);
+    io.setLiftVoltage(EMACurrent.get() < LiftConstants.currentThresh ? voltage : 0, inputs);
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

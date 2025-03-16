@@ -196,8 +196,7 @@ public class GantryCommandFactory {
     Pose2d reefPos = reefPositions[0];
     double closest = Double.MAX_VALUE;
     for (Pose2d face : reefPositions) {
-      double distance = face.getTranslation()
-          .minus(getPose.get().getTranslation()).getNorm();
+      double distance = face.getTranslation().minus(getPose.get().getTranslation()).getNorm();
       if (distance < closest) {
         closest = distance;
         reefPos = face;

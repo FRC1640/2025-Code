@@ -738,7 +738,9 @@ public class RobotContainer {
     return liftCommandFactory
         .runLiftMotionProfile(
             () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
-        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> RobotOdometry.instance.getPose("Main")))
+        .alongWith(
+            autoScoringCommandFactory.gantryAlignCommand(
+                coralPreset, () -> RobotOdometry.instance.getPose("Main")))
         .alongWith(climberCommandFactory.setClampState(() -> false));
   }
 
@@ -756,9 +758,10 @@ public class RobotContainer {
                       .andThen(
                           liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
                       .alongWith(
-                          autoScoringCommandFactory
-                              .gantryAlignCommand(() -> gantryPresetActive, () -> RobotOdometry.instance.getPose("Main")))
-                              .asProxy())
+                          autoScoringCommandFactory.gantryAlignCommand(
+                              () -> gantryPresetActive,
+                              () -> RobotOdometry.instance.getPose("Main")))
+                      .asProxy())
                   .alongWith(climberCommandFactory.setClampState(() -> false))
                   .schedule();
             })

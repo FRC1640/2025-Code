@@ -188,11 +188,15 @@ public class GantryCommandFactory {
   }
 
   public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
+    // skip calculations if centered
+    if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
+      return GantryConstants.gantryLimitCenter;
+    }
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(
             FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed);
-    // find target face
+    // find closest face
     Pose2d reefPos = reefPositions[0];
     double closest = Double.MAX_VALUE;
     for (Pose2d face : reefPositions) {

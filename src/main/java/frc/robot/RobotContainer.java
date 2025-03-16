@@ -434,7 +434,6 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
-                    && (gantrySubsystem.isAtPreset(gantryPresetActive, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
 

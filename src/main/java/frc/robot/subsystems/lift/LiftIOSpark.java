@@ -53,35 +53,27 @@ public class LiftIOSpark implements LiftIO {
     followerEncoder = followerMotor.getEncoder();
     liftLimitSwitch = leaderMotor.getReverseLimitSwitch();
     profiledPIDController.setTolerance(0.003);
-    EMACurrent = new EMA(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
   }
   /*
    * Set voltage of the motor
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
-    double clampedVoltage;
-    if(EMACurrent.get() < LiftConstants.currentThresh){
-      clampedVoltage = voltage;
-    } 
-    else{ 
-      clampedVoltage = 0;
-    }
-
-    Logger.recordOutput("LIFTINPUT", clampedVoltage);
+    
+    Logger.recordOutput("LIFTINPUT", voltage);
     Logger.recordOutput(
         "liftinputclamped",
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
-                clampedVoltage,
+                voltage,
                 limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
     leaderMotor.setVoltage(
         MotorLim.clampVoltage(
             MotorLim.applyLimits(
                 inputs.leaderMotorPosition,
-                clampedVoltage,
+                voltage,
                 limits ? LiftConstants.liftLimits.low : -99999,
                 LiftConstants.liftLimits.high)));
   }
@@ -187,8 +179,5 @@ public class LiftIOSpark implements LiftIO {
         RobotPIDConstants.constructProfiledPIDController(
             RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
   }
-  @Override
-  public void updateEMA(double data){
-    EMACurrent.update(data);
-  }
+  
 }

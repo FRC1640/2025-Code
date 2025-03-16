@@ -50,7 +50,6 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    io.updateEMA((getFollowerMotorCurrent() + getLeaderMotorCurrent()) / 2);
     liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);

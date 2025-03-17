@@ -5,6 +5,7 @@ public class TestMode {
     none,
     pidTuning,
     sysIDTesting,
-    motorTest;
+    motorTest,
+    pit;
   }
 }

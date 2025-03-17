@@ -92,9 +92,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "L4 Processor 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Processor 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
+                }
+              }
+            ]
           }
         }
       ]

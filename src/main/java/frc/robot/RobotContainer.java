@@ -285,12 +285,7 @@ public class RobotContainer {
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     generateNamedCommands();
-    driveSubsystem =
-        new DriveSubsystem(
-            gyro,
-            () -> liftSubsystem.driveAccelLimit(),
-            () -> liftSubsystem.driveDeaccelLimit(),
-            () -> liftSubsystem.driveMaxSpeed());
+    driveSubsystem = new DriveSubsystem(gyro);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
     dashboard =

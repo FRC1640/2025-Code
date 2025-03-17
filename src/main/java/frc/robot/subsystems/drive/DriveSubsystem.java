@@ -53,8 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
   private DoubleSupplier deaccelLimit;
   private DoubleSupplier maxSpeed;
 
-  public DriveSubsystem(
-      Gyro gyro, DoubleSupplier accelLimit, DoubleSupplier deaccelLimit, DoubleSupplier maxSpeed) {
+  public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
     this.accelLimit = accelLimit;
     this.deaccelLimit = deaccelLimit;

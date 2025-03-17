@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.8333806818181815,
+        "y": 4.064886363636362
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.435078023407021,
+        "y": 3.7999349804941476
+      },
+      "isLocked": false,
+      "linkedName": "ReefCenterRight_OffsetLeft"
+    },
+    {
+      "anchor": {
+        "x": 7.393205461638491,
+        "y": 1.7586475942782829
+      },
+      "prevControl": {
+        "x": 5.875325097529259,
+        "y": 1.5702210663198948
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "L4 Algae",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

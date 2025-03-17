@@ -37,7 +37,6 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -49,47 +48,29 @@ public class DriveSubsystem extends SubsystemBase {
   private SwerveSetpoint previousSetpoint;
   public static final Lock odometryLock = new ReentrantLock();
   Rotation2d totalRot = new Rotation2d();
-  private DoubleSupplier accelLimit;
-  private DoubleSupplier deaccelLimit;
-  private DoubleSupplier maxSpeed;
 
   public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
-    this.accelLimit = accelLimit;
-    this.deaccelLimit = deaccelLimit;
-    this.maxSpeed = maxSpeed;
     switch (Robot.getMode()) { // create modules
       case REAL:
-        modules[0] =
-            new Module(
-                new ModuleIOSparkMax(DriveConstants.FL), PivotId.FL, accelLimit, deaccelLimit);
-        modules[1] =
-            new Module(
-                new ModuleIOSparkMax(DriveConstants.FR), PivotId.FR, accelLimit, deaccelLimit);
-        modules[2] =
-            new Module(
-                new ModuleIOSparkMax(DriveConstants.BL), PivotId.BL, accelLimit, deaccelLimit);
-        modules[3] =
-            new Module(
-                new ModuleIOSparkMax(DriveConstants.BR), PivotId.BR, accelLimit, deaccelLimit);
+        modules[0] = new Module(new ModuleIOSparkMax(DriveConstants.FL), PivotId.FL);
+        modules[1] = new Module(new ModuleIOSparkMax(DriveConstants.FR), PivotId.FR);
+        modules[2] = new Module(new ModuleIOSparkMax(DriveConstants.BL), PivotId.BL);
+        modules[3] = new Module(new ModuleIOSparkMax(DriveConstants.BR), PivotId.BR);
         break;
 
       case SIM:
-        modules[0] =
-            new Module(new ModuleIOSim(DriveConstants.FL), PivotId.FL, accelLimit, deaccelLimit);
-        modules[1] =
-            new Module(new ModuleIOSim(DriveConstants.FR), PivotId.FR, accelLimit, deaccelLimit);
-        modules[2] =
-            new Module(new ModuleIOSim(DriveConstants.BL), PivotId.BL, accelLimit, deaccelLimit);
-        modules[3] =
-            new Module(new ModuleIOSim(DriveConstants.BR), PivotId.BR, accelLimit, deaccelLimit);
+        modules[0] = new Module(new ModuleIOSim(DriveConstants.FL), PivotId.FL);
+        modules[1] = new Module(new ModuleIOSim(DriveConstants.FR), PivotId.FR);
+        modules[2] = new Module(new ModuleIOSim(DriveConstants.BL), PivotId.BL);
+        modules[3] = new Module(new ModuleIOSim(DriveConstants.BR), PivotId.BR);
         break;
 
       default:
-        modules[0] = new Module(new ModuleIO() {}, PivotId.FL, accelLimit, deaccelLimit);
-        modules[1] = new Module(new ModuleIO() {}, PivotId.FR, accelLimit, deaccelLimit);
-        modules[2] = new Module(new ModuleIO() {}, PivotId.BL, accelLimit, deaccelLimit);
-        modules[3] = new Module(new ModuleIO() {}, PivotId.BR, accelLimit, deaccelLimit);
+        modules[0] = new Module(new ModuleIO() {}, PivotId.FL);
+        modules[1] = new Module(new ModuleIO() {}, PivotId.FR);
+        modules[2] = new Module(new ModuleIO() {}, PivotId.BL);
+        modules[3] = new Module(new ModuleIO() {}, PivotId.BR);
         break;
     }
     sysIdRoutine =
@@ -158,8 +139,6 @@ public class DriveSubsystem extends SubsystemBase {
     totalRot =
         totalRot.plus(Rotation2d.fromRadians(getChassisSpeeds().omegaRadiansPerSecond * 0.02));
     Logger.recordOutput("totalRot", totalRot);
-    Logger.recordOutput("maxSpeed", maxSpeed);
-    Logger.recordOutput("maxSpeedGet", maxSpeed.getAsDouble());
   }
 
   public void stop() {
@@ -206,8 +185,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
     ChassisSpeeds percent =
         new ChassisSpeeds(
-            speeds.vxMetersPerSecond / maxSpeed.getAsDouble(),
-            speeds.vyMetersPerSecond / maxSpeed.getAsDouble(),
+            speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
+            speeds.vyMetersPerSecond / DriveConstants.maxSpeed,
             speeds.omegaRadiansPerSecond / DriveConstants.maxOmega);
 
     ChassisSpeeds doubleCone = inceptionMode(percent, new Translation2d(), dreamLevel);
@@ -215,13 +194,13 @@ public class DriveSubsystem extends SubsystemBase {
         fieldCentric
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 new ChassisSpeeds(
-                    doubleCone.vxMetersPerSecond * maxSpeed.getAsDouble(),
-                    doubleCone.vyMetersPerSecond * maxSpeed.getAsDouble(),
+                    doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
+                    doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
                     doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
                 gyro.getAngleRotation2d())
             : new ChassisSpeeds(
-                doubleCone.vxMetersPerSecond * maxSpeed.getAsDouble(),
-                doubleCone.vyMetersPerSecond * maxSpeed.getAsDouble(),
+                doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
+                doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
                 doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega);
 
     previousSetpoint =

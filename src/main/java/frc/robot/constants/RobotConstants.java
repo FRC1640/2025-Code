@@ -60,41 +60,35 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Deux25;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean liftSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
     public static final boolean algaeIntakeEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean climberSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Prime24, false)
             .get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     // odometry

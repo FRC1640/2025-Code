@@ -230,7 +230,7 @@ public class GantryCommandFactory {
                 == GantrySetpoint.LEFT
             ? -Units.inchesToMeters(13 / 2)
             : Units.inchesToMeters(13 / 2);
-    double setpoint = GantryConstants.gantryLimitCenter + gantryCenter + poleOffset;
+    double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset;
     Logger.recordOutput("A_DEBUG/setpoint", setpoint);
     return setpoint;
   }

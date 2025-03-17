@@ -758,7 +758,14 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
-        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+        .onTrue(setupAutoPlace(() -> coralPreset));
+    pitController
+        .leftTrigger()
+        .and(() -> algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.processCommand()));
     pitController
         .start()
         .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)

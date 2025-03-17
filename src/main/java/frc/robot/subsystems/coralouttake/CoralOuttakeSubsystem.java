@@ -76,4 +76,8 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   public boolean hasCoral() {
     return inputs.hasCoral;
   }
+
+  public boolean guillotineCheck() {
+    return inputs.guillotineCheck;
+  }
 }

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.166665291060716,
-        "y": 4.016367351196143
+        "x": 6.62695487374966,
+        "y": 4.181617445559898
       },
       "isLocked": false,
       "linkedName": "MidStart"
@@ -20,8 +20,8 @@
         "y": 4.064886363636362
       },
       "prevControl": {
-        "x": 7.149054829608831,
-        "y": 3.890799353682323
+        "x": 6.642336656123318,
+        "y": 4.064886363636362
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,16 +33,47 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "SetModeCoral",
-      "waypointRelativePos": 0.3802024746906659,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "L4Left",
-      "waypointRelativePos": 0.6794150731158606,
+      "waypointRelativePos": 0.7571428571428569,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryLeft"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -58,7 +89,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "L4 Algae",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

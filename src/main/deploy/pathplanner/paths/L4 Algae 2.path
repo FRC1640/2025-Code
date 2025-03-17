@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.435078023407021,
-        "y": 3.7999349804941476
+        "x": 7.497816780821918,
+        "y": 4.025
       },
       "isLocked": false,
       "linkedName": "ReefCenterRight_OffsetLeft"
@@ -20,20 +20,15 @@
         "y": 1.7586475942782829
       },
       "prevControl": {
-        "x": 5.875325097529259,
-        "y": 1.5702210663198948
+        "x": 7.422688356164383,
+        "y": 2.522431506849315
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "L4 Algae",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.868977272727273,
-        "y": 5.151789772727272
+        "x": 3.8490340909090905,
+        "y": 5.091960227272727
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.772102272727273,
-        "y": 5.989403409090909
+        "x": 4.164474433839869,
+        "y": 5.008459809620381
       },
       "isLocked": false,
-      "linkedName": "ReefTopLeft"
+      "linkedName": "ReefTopLeft_OffsetLeft"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.235852272727272
       },
       "prevControl": {
-        "x": 2.263551136363637,
-        "y": 6.2386931818181806
+        "x": 1.6605432816960348,
+        "y": 7.047864430362766
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -55.0
   },
   "reversed": false,
-  "folder": "L1 Spam Opposite",
+  "folder": "L4 Opposite",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -59.99999999999999

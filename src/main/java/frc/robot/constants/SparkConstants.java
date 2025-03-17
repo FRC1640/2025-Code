@@ -105,7 +105,7 @@ public class SparkConstants {
     return SparkConfigurer.configSparkFlex(
         new SparkConfiguration(
             id,
-            getDefaultFlex(id).getIdleMode(),
+            IdleMode.kBrake,
             true,
             45,
             8,

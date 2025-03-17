@@ -8,7 +8,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
-import frc.robot.util.misc.EMA;
 import frc.robot.util.misc.MotorLim;
 import java.util.function.BooleanSupplier;
 
@@ -27,7 +26,6 @@ public class LiftIOSim implements LiftIO {
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.liftProfiledPIDConstants, LiftConstants.constraints, "LiftPPID");
   private boolean limits;
-  private EMA EMACurrent;
 
   public LiftIOSim(BooleanSupplier liftLimitSwitch) {
     this.liftLimitSwitch = liftLimitSwitch;
@@ -44,8 +42,6 @@ public class LiftIOSim implements LiftIO {
             LinearSystemId.createDCMotorSystem(
                 motor2SimGearbox, 0.00019125, LiftConstants.gearRatio),
             motor2SimGearbox);
-
-    EMACurrent = new EMA(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
   }
 
   /*
@@ -127,9 +123,5 @@ public class LiftIOSim implements LiftIO {
   @Override
   public void setLimitEnabled(boolean enable) {
     limits = enable;
-  }
-
-  public void updateEMA(double data) {
-    EMACurrent.update(data);
   }
 }

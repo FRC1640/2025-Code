@@ -1,11 +1,12 @@
 package frc.robot.util.misc;
 
-public class EMA {
+public class ExponentialMovingAverage {
+  // https://www.investopedia.com/terms/e/ema.asp
 
   private double multiplier;
   private double current;
 
-  public EMA(double smoothing, double period) {
+  public ExponentialMovingAverage(double smoothing, double period) {
     this.multiplier = smoothing / (1 + period);
   }
 

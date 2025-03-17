@@ -2,7 +2,7 @@ package frc.robot.subsystems.algae;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
-import frc.robot.util.misc.EMA;
+import frc.robot.util.misc.ExponentialMovingAverage;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeSubsystem extends SubsystemBase {
@@ -11,7 +11,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
-  private EMA emaCurrent = new EMA(AlgaeConstants.emaSmoothing, AlgaeConstants.emaPeriod);
+  private ExponentialMovingAverage emaCurrent = new ExponentialMovingAverage(AlgaeConstants.emaSmoothing, AlgaeConstants.emaPeriod);
   // bwaahaha not rolling average. its actually an Exponential Moving Average
 
   public AlgaeSubsystem(AlgaeIO io) {

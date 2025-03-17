@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.constants.SparkConstants;
-import frc.robot.util.misc.EMA;
 import frc.robot.util.misc.MotorLim;
 import frc.robot.util.spark.SparkConfigurer;
 import org.littletonrobotics.junction.Logger;
@@ -36,7 +35,6 @@ public class LiftIOSpark implements LiftIO {
   PIDController velocityController =
       RobotPIDConstants.constructPID(RobotPIDConstants.liftVelocityPID, "LiftVelocityPID");
   private boolean limits;
-  private EMA EMACurrent;
 
   public LiftIOSpark() {
     leaderMotor =

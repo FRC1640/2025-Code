@@ -75,12 +75,6 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
     // if (getDistance() >= ReefDetectorConstants.detectionThresh) {
     //   detect = false;
     // }
-    inputs.isDetecting = false;
-    if (getDistance() < 495 && getDistance() > 400) {
-      inputs.isDetecting = true;
-    }
-    if (getDistance() < 180) {
-      inputs.isDetecting = true;
-    }
+    inputs.isDetecting = getDistance() < ReefDetectorConstants.detectionThresh;
   }
 }

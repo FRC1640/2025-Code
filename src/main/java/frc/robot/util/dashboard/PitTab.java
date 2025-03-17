@@ -92,6 +92,7 @@ public class PitTab {
     instructLayout.add("Instruct7", "L/R Bumpers: Gantry");
     instructLayout.add("Instruct8", "Back Button: Gantry Home");
     instructLayout.add("Instruct9", "Right Trigger: Algae Intake");
+    instructLayout.add("Instruct10", "Left Trigger: Algae Outtake");
     instructLayout.add("Instruct11", "POV Left: Disable Climber PID");
     instructLayout.add("Instruct12", "X: Disable Antitip");
 

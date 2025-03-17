@@ -210,6 +210,10 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
+    public static final double currentThresh = 50; // for the EMA
+
+    public static final double emaSmoothing = 10;
+    public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
       LEFT,
@@ -218,6 +222,16 @@ public class RobotConstants {
     }
 
     public enum CoralPreset {
+      //   Pickup(0, GantrySetpoint.CENTER),
+      //   Safe(0, 0.1, GantrySetpoint.CENTER),
+      //   LeftL2(0.115, 0.3, GantrySetpoint.CENTER),
+      //   RightL2(0.115, 0.3, GantrySetpoint.CENTER),
+      //   LeftL3(0.289, 0.486, GantrySetpoint.CENTER),
+      //   RightL3(0.289, 0.486, GantrySetpoint.CENTER),
+      //   LeftL4(0.563, GantrySetpoint.CENTER),
+      //   RightL4(0.563, GantrySetpoint.CENTER),
+      // //   Trough(0, GantrySetpoint.CENTER);
+      //   TODO:SWITCH THIS BACK IMPORTANT!!!!!!!
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
       LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
@@ -363,13 +377,15 @@ public class RobotConstants {
   }
 
   public static class AlgaeConstants {
-    public static int motorLeftChannel = new RobotSwitch<Integer>(11).get();
-    public static int motorRightChannel = new RobotSwitch<Integer>(12).get();
-    public static int solenoidChannelForward = 0;
-    public static int solenoidChannelReverse = 1;
-    public static double passiveSpeed = 0.1;
-    public static double highSpeed = 0.7;
-    public static double gearRatio = 1;
-    public static double currentThresh = 50;
+    public static final int motorLeftChannel = new RobotSwitch<Integer>(11).get();
+    public static final int motorRightChannel = new RobotSwitch<Integer>(12).get();
+    public static final int solenoidChannelForward = 0;
+    public static final int solenoidChannelReverse = 1;
+    public static final double passiveSpeed = 0.1;
+    public static final double highSpeed = 0.7;
+    public static final double gearRatio = 1;
+    public static final double currentThresh = 20; // for the EMA
+    public static final double emaSmoothing = 8;
+    public static final double emaPeriod = 21; // number of periods to calculate EMA over
   }
 }

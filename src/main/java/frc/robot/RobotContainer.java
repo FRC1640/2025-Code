@@ -635,6 +635,11 @@ public class RobotContainer {
     //                     > 0.3)
     //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+
+    //    new Trigger(() -> liftSubsystem.getIsLimited())
+    //        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0)); TODO: THIS IS THE
+    // ELEVATOR LIMIT!!!!!!
+
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
@@ -753,7 +758,14 @@ public class RobotContainer {
             algaeCommandFactory
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)))
-        .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
+        .onTrue(setupAutoPlace(() -> coralPreset));
+    pitController
+        .leftTrigger()
+        .and(() -> algaeIntakeSubsystem.hasAlgae())
+        .whileTrue(
+            algaeCommandFactory
+                .setSolenoidState(() -> true)
+                .andThen(algaeCommandFactory.processCommand()));
     pitController
         .start()
         .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)

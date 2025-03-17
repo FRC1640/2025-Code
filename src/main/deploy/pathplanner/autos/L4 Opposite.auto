@@ -90,6 +90,25 @@
           "data": {
             "name": "AutoReef"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Opposite 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
+                }
+              }
+            ]
+          }
         }
       ]
     }

@@ -344,7 +344,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 343.15).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 344.5).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
@@ -373,6 +373,8 @@ public class RobotContainer {
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
                 Logger.recordOutput("AutoAlignDone", followPathNearest.isAutoalignComplete());
                 Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
+                Logger.recordOutput(
+                    "LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
                 Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
@@ -914,7 +916,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",
-        new WaitUntilCommand(() -> (coralOuttakeSubsystem.isCoralDetected()))
+        (new WaitUntilCommand(() -> (coralOuttakeSubsystem.hasCoral())))
             .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));
@@ -924,12 +926,11 @@ public class RobotContainer {
         new WaitUntilCommand(
                 () ->
                     liftSubsystem.isAtPreset(
-                            algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())
-                        && gantrySubsystem.isAtPreset(coralPreset, true))
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
             .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(1)
+        new WaitCommand(0.1)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

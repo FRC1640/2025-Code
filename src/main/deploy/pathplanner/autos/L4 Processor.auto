@@ -90,6 +90,12 @@
           "data": {
             "name": "AutoReef"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Processor 4"
+          }
         }
       ]
     }

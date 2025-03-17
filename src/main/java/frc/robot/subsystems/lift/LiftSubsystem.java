@@ -26,7 +26,8 @@ public class LiftSubsystem extends SubsystemBase {
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
 
-  private ExponentialMovingAverage emaCurrent = new ExponentialMovingAverage(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
+  private ExponentialMovingAverage emaCurrent =
+      new ExponentialMovingAverage(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
 
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;

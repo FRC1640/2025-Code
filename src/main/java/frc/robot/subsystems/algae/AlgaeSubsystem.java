@@ -11,7 +11,8 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
-  private ExponentialMovingAverage emaCurrent = new ExponentialMovingAverage(AlgaeConstants.emaSmoothing, AlgaeConstants.emaPeriod);
+  private ExponentialMovingAverage emaCurrent =
+      new ExponentialMovingAverage(AlgaeConstants.emaSmoothing, AlgaeConstants.emaPeriod);
   // bwaahaha not rolling average. its actually an Exponential Moving Average
 
   public AlgaeSubsystem(AlgaeIO io) {

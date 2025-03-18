@@ -66,8 +66,8 @@ public class JoystickDriveWeight implements DriveWeight {
       xyMult = 0.98;
       omegaMult = 0.75;
       if (liftHeight.getAsDouble() > CoralPreset.LeftL2.lift) {
-        xyMult = 0.3;
-        omegaMult = 0.5;
+        xyMult = 0.0;
+        omegaMult = 0.0;
       }
     }
     ChassisSpeeds speeds =

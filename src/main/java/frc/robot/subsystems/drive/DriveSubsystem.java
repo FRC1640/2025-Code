@@ -48,6 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SwerveSetpoint previousSetpoint;
   public static final Lock odometryLock = new ReentrantLock();
   Rotation2d totalRot = new Rotation2d();
+  private boolean fieldCentric = true;
 
   public DriveSubsystem(Gyro gyro) {
     this.gyro = gyro;
@@ -183,6 +184,11 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
+    if (!fieldCentric) {
+      Translation2d vTranslational = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+      Translation2d vRotated = vTranslational.rotateBy(RobotOdometry.instance.getPose("Main").getRotation().times(-1));
+      speeds = new ChassisSpeeds(vRotated.getX(), vRotated.getY(), speeds.omegaRadiansPerSecond);
+    }
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
@@ -258,5 +264,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysIdRoutine.dynamic(direction);
+  }
+
+  public void setFieldCentric(boolean field) {
+    this.fieldCentric = field;
+  }
+
+  public void toggleFieldCentric() {
+    this.fieldCentric = !this.fieldCentric;
   }
 }

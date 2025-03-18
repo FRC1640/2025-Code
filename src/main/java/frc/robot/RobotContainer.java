@@ -648,7 +648,11 @@ public class RobotContainer {
     driveController
         .y()
         .onTrue(
-            new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
+            new InstantCommand(
+                () -> {
+                  AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled());
+                  driveSubsystem.toggleFieldCentric();
+                }));
 
     driveController
         .rightTrigger()

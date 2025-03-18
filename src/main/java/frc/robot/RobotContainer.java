@@ -286,7 +286,7 @@ public class RobotContainer {
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
     generateNamedCommands();
     driveSubsystem =
-        new DriveSubsystem(
+        new DriveSubsystem( // takes in limits from lift
             gyro,
             () -> liftSubsystem.driveAccelLimit(),
             () -> liftSubsystem.driveDeaccelLimit(),

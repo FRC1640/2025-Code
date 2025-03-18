@@ -142,6 +142,7 @@ public class LiftSubsystem extends SubsystemBase {
     io.testMethod();
   }
 
+  // following three return motion limits based on height
   public double driveAccelLimit() {
     return getLeaderMotorPosition() > .12 ? DriveConstants.accelLimitUp : DriveConstants.accelLimit;
   }

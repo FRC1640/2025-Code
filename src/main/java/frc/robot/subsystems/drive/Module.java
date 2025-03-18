@@ -26,6 +26,7 @@ public class Module {
   public Module(ModuleIO io, PivotId id, DoubleSupplier accelLimit, DoubleSupplier deaccelLimit) {
     this.accelLimit = accelLimit;
     this.deaccelLimit = deaccelLimit;
+    // rate limiters based on limits passed into constructor
     accelLimiter = new SlewRateLimiter(accelLimit.getAsDouble());
     deaccelLimiter = new SlewRateLimiter(deaccelLimit.getAsDouble());
     this.io = io;
@@ -57,6 +58,7 @@ public class Module {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Drive/Modules/" + id, inputs);
+    // logging what the limits are
     Logger.recordOutput("accelLimit", accelLimit);
     Logger.recordOutput("deaccelLimit", deaccelLimit);
   }

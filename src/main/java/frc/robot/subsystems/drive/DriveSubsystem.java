@@ -53,6 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
   private DoubleSupplier deaccelLimit;
   private DoubleSupplier maxSpeed;
 
+  // constructor takes in limits, creates modules with acceleration limits as parameters
   public DriveSubsystem(
       Gyro gyro, DoubleSupplier accelLimit, DoubleSupplier deaccelLimit, DoubleSupplier maxSpeed) {
     this.gyro = gyro;
@@ -159,6 +160,8 @@ public class DriveSubsystem extends SubsystemBase {
     totalRot =
         totalRot.plus(Rotation2d.fromRadians(getChassisSpeeds().omegaRadiansPerSecond * 0.02));
     Logger.recordOutput("totalRot", totalRot);
+    // logs max speed as well as maxSpeed.getAsDouble-- have been returning the same thing
+    // fortunately
     Logger.recordOutput("maxSpeed", maxSpeed);
     Logger.recordOutput("maxSpeedGet", maxSpeed.getAsDouble());
   }
@@ -204,6 +207,7 @@ public class DriveSubsystem extends SubsystemBase {
     return states;
   }
 
+  // our maxSpeed replaces the old constant one
   public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
     ChassisSpeeds percent =
         new ChassisSpeeds(

@@ -636,8 +636,9 @@ public class RobotContainer {
     //     .onTrue(runLiftToSafe());
     operatorController.b().onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
 
-    //    new Trigger(() -> liftSubsystem.getIsLimited())
-    //        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0)); TODO: THIS IS THE
+    new Trigger(() -> liftSubsystem.getIsLimited())
+        .onTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 0));
+    // TODO: THIS IS THE
     // ELEVATOR LIMIT!!!!!!
 
     // operatorController.b().whileTrue(climberCommandFactory.setWinchPosPID(() -> 90));

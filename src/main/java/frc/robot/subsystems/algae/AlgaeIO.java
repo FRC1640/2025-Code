@@ -27,4 +27,6 @@ public interface AlgaeIO {
   public default boolean hasSimAlgae() {
     return false;
   }
+
+  public default void updateEMA(double data) {}
 }

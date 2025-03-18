@@ -70,6 +70,8 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
+    inputs.driveConnected = true;
+    inputs.steerConnected = true;
     inputs.drivePositionMeters =
         -(driveEncoder.getPosition() / DriveConstants.driveGearRatio)
             * DriveConstants.wheelRadius

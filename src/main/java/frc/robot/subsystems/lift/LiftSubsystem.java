@@ -6,9 +6,12 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
+import frc.robot.util.misc.ExponentialMovingAverage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -23,6 +26,9 @@ public class LiftSubsystem extends SubsystemBase {
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
 
+  private ExponentialMovingAverage emaCurrent =
+      new ExponentialMovingAverage(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
+
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
     LoggedMechanismRoot2d liftMechanismRoot = liftMechanism.getRoot("lift base", 1, 0);
@@ -36,21 +42,25 @@ public class LiftSubsystem extends SubsystemBase {
                 this::getLeaderMotorVelocity,
                 this,
                 new SysIdRoutine.Config(
-                    Volts.per(Seconds).of(0.5),
-                    Volts.of(3.5),
+                    Volts.per(Seconds).of(0.65),
+                    Volts.of(4),
                     Seconds.of(100),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
+
+    LogRunner.addLog(
+        new VelocityLogStorage(
+            () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
   }
 
   @Override
   public void periodic() {
+    emaCurrent.update((getFollowerMotorCurrent() + getLeaderMotorCurrent()) / 2);
     liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
+    Logger.recordOutput("Lift/EMACurrent", emaCurrent.get());
+    Logger.recordOutput("Lift/isLimited", getEmaCurrent() > LiftConstants.currentThresh);
     Logger.processInputs("Lift/", inputs);
-    LogRunner.addLog(
-        new VelocityLogStorage(
-            () -> getLeaderMotorVelocity(), () -> io.velocitySetpoint(), getName()));
   }
 
   public double getMotorPosition() {
@@ -93,8 +103,8 @@ public class LiftSubsystem extends SubsystemBase {
     return inputs.followerTemperature;
   }
 
-  public void setLiftPosition(double pos) {
-    io.setLiftPosition(pos, inputs);
+  public void setLiftPosition(DoubleSupplier pos) {
+    io.setLiftPosition(pos.getAsDouble(), inputs);
   }
 
   public void setLiftVoltage(double voltage) {
@@ -115,6 +125,8 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void resetLiftMotionProfile() {
     io.resetLiftMotionProfile(inputs);
+    io.resetLiftPositionPid();
+    // testMethod();
   }
 
   public void resetEncoder() {
@@ -122,7 +134,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.04;
+    return Math.abs(getMotorPosition() - pos) < 0.0045;
   }
 
   public boolean isLimitSwitchPressed() {
@@ -131,5 +143,17 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void setLimitEnabled(boolean enable) {
     io.setLimitEnabled(enable);
+  }
+
+  public void testMethod() {
+    io.testMethod();
+  }
+
+  public double getEmaCurrent() {
+    return emaCurrent.get();
+  }
+
+  public boolean getIsLimited() {
+    return getEmaCurrent() > LiftConstants.currentThresh;
   }
 }

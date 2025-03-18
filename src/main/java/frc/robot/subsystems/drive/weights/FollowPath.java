@@ -48,6 +48,9 @@ public class FollowPath {
     this.driveSubsystem = driveSubsystem;
     new Trigger(() -> !isNearSetpoint() && pathCommand != null)
         .onTrue(new InstantCommand(() -> restartPath()));
+
+    new Trigger(() -> isAutoalignComplete() && pathCommand != null)
+        .onTrue(new InstantCommand(() -> stopPath()));
   }
 
   public void restartPath() {
@@ -119,10 +122,16 @@ public class FollowPath {
   }
 
   public boolean isAutoalignComplete() {
+    if (pose2dArray == null) {
+      return false;
+    }
+    if (pose2dArray.length == 0) {
+      return false;
+    }
     Pose2d target = getFinalPosition();
     Pose2d robot = robotPose.get();
     boolean complete =
-        (target.getTranslation().getDistance(robot.getTranslation()) < 0.15
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.1
             && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 2);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
     complete &=

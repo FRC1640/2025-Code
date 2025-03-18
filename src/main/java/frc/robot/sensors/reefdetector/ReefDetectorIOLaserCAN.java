@@ -3,7 +3,6 @@ package frc.robot.sensors.reefdetector;
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
-import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -11,16 +10,16 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
   private boolean isConnected;
   private boolean detect;
-  private TimeInterpolatableBuffer<Double> distanceBuffer =
-      TimeInterpolatableBuffer.createDoubleBuffer(10);
+  // private TimeInterpolatableBuffer<Double> distanceBuffer =
+  //     TimeInterpolatableBuffer.createDoubleBuffer(10);
 
   public ReefDetectorIOLaserCAN() {
     laserCan = new LaserCan(ReefDetectorConstants.channel);
     isConnected = true;
     try {
       laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
-      laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 4, 4));
-      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_50MS);
+      laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 4, 4, 4));
+      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
     } catch (ConfigurationFailedException e) {
       Logger.recordOutput("LaserCAN Configuration failed! " + e.toString(), false);
       isConnected = false;
@@ -76,12 +75,6 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
     // if (getDistance() >= ReefDetectorConstants.detectionThresh) {
     //   detect = false;
     // }
-    inputs.isDetecting = false;
-    if (getDistance() < 495 && getDistance() > 400) {
-      inputs.isDetecting = true;
-    }
-    if (getDistance() < 180) {
-      inputs.isDetecting = true;
-    }
+    inputs.isDetecting = getDistance() < ReefDetectorConstants.detectionThresh;
   }
 }

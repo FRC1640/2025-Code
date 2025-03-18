@@ -2,6 +2,7 @@ package frc.robot.subsystems.algae;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.RobotConstants.AlgaeConstants;
+import frc.robot.util.misc.ExponentialMovingAverage;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeSubsystem extends SubsystemBase {
@@ -10,6 +11,9 @@ public class AlgaeSubsystem extends SubsystemBase {
   private boolean hasAlgae = false;
   private double releaseTime = 0.0;
   private double lastTime = 0.0;
+  private ExponentialMovingAverage emaCurrent =
+      new ExponentialMovingAverage(AlgaeConstants.emaSmoothing, AlgaeConstants.emaPeriod);
+  // bwaahaha not rolling average. its actually an Exponential Moving Average
 
   public AlgaeSubsystem(AlgaeIO io) {
     this.io = io;
@@ -19,11 +23,17 @@ public class AlgaeSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Algae", inputs);
+
+    // Update the EMACurrent
+    emaCurrent.update((inputs.intakeMotorLeftCurrent + inputs.intakeMotorRightCurrent) / 2);
+
+    Logger.recordOutput("Algae/EMACurrent", emaCurrent.get());
+
     if (algaeCurrentHit() && !hasAlgae) {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
-      if (releaseTime > 0.2) {
+      if (releaseTime > 0.8) {
         hasAlgae = false;
         releaseTime = 0;
       }
@@ -32,7 +42,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
     lastTime = System.currentTimeMillis();
 
-    Logger.recordOutput("HasAlgae", hasAlgae());
+    Logger.recordOutput("Sensors/HasAlgae", hasAlgae());
   }
 
   public double getIntakeMotorLeftVoltage() {
@@ -72,9 +82,12 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public boolean algaeCurrentHit() {
-    return (inputs.intakeMotorLeftCurrent > AlgaeConstants.currentThresh
-            || inputs.intakeMotorRightCurrent > AlgaeConstants.currentThresh)
-        || io.hasSimAlgae();
+    return emaCurrent.get() > AlgaeConstants.currentThresh || io.hasSimAlgae();
+  }
+
+  public boolean setHasAlgae(boolean has) {
+    hasAlgae = has;
+    return hasAlgae;
   }
 
   public boolean hasAlgae() {

@@ -11,14 +11,16 @@ import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
-import frc.robot.util.tools.AllianceManager;
-import frc.robot.util.tools.DistanceManager;
+import frc.robot.util.misc.AllianceManager;
+import frc.robot.util.misc.DistanceManager;
 import java.util.function.DoubleSupplier;
 
 public class CoralOuttakeCommandFactory {
   CoralOuttakeSubsystem intakeSubsystem;
   public boolean runningBack = false;
   public boolean outtaking = false;
+  boolean setHasCoral = false;
+  public boolean ranBack = false;
 
   public CoralOuttakeCommandFactory(CoralOuttakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
@@ -32,16 +34,20 @@ public class CoralOuttakeCommandFactory {
 
   public Command runBack() {
     return (new InstantCommand(() -> runningBack = true)
-            .andThen(
-                setIntakeVoltage(() -> -1)
-                    .repeatedly()
-                    .until(() -> intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> 2).until(() -> !intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> -0.75).until(() -> intakeSubsystem.isCoralDetected()))
             .andThen(new InstantCommand(() -> runningBack = false)))
         .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
 
   public void constructTriggers() {
-    new Trigger(() -> !intakeSubsystem.hasCoral() && Robot.getState() != RobotState.AUTONOMOUS)
+    new Trigger(
+            () ->
+                !intakeSubsystem.isCoralDetected()
+                    && !ranBack
+                    && !intakeSubsystem.hasCoral()
+                    && Robot.getState() != RobotState.AUTONOMOUS)
+        .debounce(0.01)
         .and(
             () ->
                 CoralOuttakeConstants.distanceRequired
@@ -49,26 +55,30 @@ public class CoralOuttakeCommandFactory {
                         RobotOdometry.instance.getPose("Main"),
                         AllianceManager.chooseFromAlliance(
                             FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(setIntakeVoltage(() -> CoralOuttakeConstants.passiveSpeed * 12));
+        .whileTrue(outtake());
 
     new Trigger(
             () ->
-                !intakeSubsystem.isCoralDetected()
-                    && intakeSubsystem.hasCoral()
+                intakeSubsystem.isCoralDetected()
                     && !outtaking
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack());
+        .onTrue(runBack().finallyDo(() -> ranBack = true))
+        .debounce(0.05);
+
+    new Trigger(() -> !intakeSubsystem.hasCoral())
+        .debounce(0.05)
+        .onTrue(new InstantCommand(() -> ranBack = false));
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> 3)
+    return setIntakeVoltage(() -> setHasCoral ? 3 : 2)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {
                 outtaking = true;
               }
             })
-        .finallyDo(() -> outtaking = false);
+        .beforeStarting(() -> setHasCoral = intakeSubsystem.hasCoral());
   }
 
   public Command outtakeCoralCommand() {

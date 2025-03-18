@@ -316,7 +316,8 @@ public class RobotContainer {
                     - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftX() : 0),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
-            driveController.leftTrigger());
+            driveController.leftTrigger(),
+            () -> liftSubsystem.getLeaderMotorPosition());
 
     followPathNearest =
         new FollowPathNearest(

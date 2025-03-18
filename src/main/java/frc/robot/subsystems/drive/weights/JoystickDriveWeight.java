@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -18,6 +19,7 @@ public class JoystickDriveWeight implements DriveWeight {
   private static final double DEADBAND = 0.02;
   private BooleanSupplier slowMode;
   private BooleanSupplier fastMode;
+  private DoubleSupplier liftHeight;
   private boolean enabled = true;
 
   public JoystickDriveWeight(
@@ -25,12 +27,14 @@ public class JoystickDriveWeight implements DriveWeight {
       DoubleSupplier yPercent,
       DoubleSupplier omegaPercent,
       BooleanSupplier slowMode,
-      BooleanSupplier fastMode) {
+      BooleanSupplier fastMode,
+      DoubleSupplier liftHeight) {
     this.xPercent = xPercent;
     this.yPercent = yPercent;
     this.omegaPercent = omegaPercent;
     this.slowMode = slowMode;
     this.fastMode = fastMode;
+    this.liftHeight = liftHeight;
   }
 
   public void setEnabled(boolean enabled) {
@@ -61,6 +65,10 @@ public class JoystickDriveWeight implements DriveWeight {
     } else if (fastMode.getAsBoolean()) {
       xyMult = 0.98;
       omegaMult = 0.75;
+      if (liftHeight.getAsDouble() > CoralPreset.LeftL2.lift) {
+        xyMult = 0.3;
+        omegaMult = 0.5;
+      }
     }
     ChassisSpeeds speeds =
         new ChassisSpeeds(

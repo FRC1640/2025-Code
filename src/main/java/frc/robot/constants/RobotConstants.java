@@ -60,41 +60,35 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Prime24;
+    public static final RobotType robotType = RobotType.Deux25;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean liftSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
     public static final boolean algaeIntakeEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean coralOuttakeSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     public static final boolean climberSubsystemEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Deux24, false)
-            .addValue(RobotType.Prime24, true)
+            .addValue(RobotType.Prime24, false)
             .get();
     // sensors
     public static final boolean reefDetectorEnabled =
         new RobotSwitch<Boolean>(true)
-            .addValue(RobotType.Prime24, true)
-            .addValue(RobotType.Deux24, false)
+            .addValue(RobotType.Prime24, false)
             .get();
 
     // odometry
@@ -166,10 +160,11 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(13.95),
-                    Units.inchesToMeters(11.9),
-                    Units.inchesToMeters(12.125)),
-                new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
+                    Units.inchesToMeters(new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 29.5 / 2).get()),
+                    Units.inchesToMeters(new RobotSwitch<Double>(11.9).addValue(RobotType.Deux25, 29.5 / 2 - 8).get()),
+                    Units.inchesToMeters(new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 10.5).get())),
+                new RobotSwitch<Rotation3d>(new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15)))
+                    .addValue(RobotType.Deux25, new Rotation3d()).get()),
             1,
             "Sommar",
             "Front Left");
@@ -179,12 +174,13 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(13.95),
-                    -Units.inchesToMeters(11.9),
-                    Units.inchesToMeters(12.125)),
-                new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
+                    Units.inchesToMeters(new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 7.575).get()),
+                    -Units.inchesToMeters(new RobotSwitch<Double>(11.9).addValue(RobotType.Deux25, 13.325).get()),
+                    Units.inchesToMeters(new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 14.1875).get())),
+                new RobotSwitch<Rotation3d>(new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15)))
+                    .addValue(RobotType.Deux25, new Rotation3d(0, Math.toRadians(-2), Math.toRadians(-2.5))).get()),
             1,
-            "Dodds",
+            new RobotSwitch<String>("Markward").addValue(RobotType.Deux25, "Park").get(),
             "Front Right");
 
     public static final CameraConstant backCamera =

@@ -380,6 +380,11 @@ public class RobotContainer {
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
                 Logger.recordOutput("autoramppos", autoRampPos);
+
+                Logger.recordOutput(
+                    "gantrything",
+                    gantryCommandFactory.getSetpointOdometry(
+                        () -> coralPreset, () -> RobotOdometry.instance.getPose("Main")));
               }
             });
   }
@@ -446,7 +451,6 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
-                    && (gantrySubsystem.isAtPreset(gantryPresetActive, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
 
@@ -848,7 +852,9 @@ public class RobotContainer {
     return liftCommandFactory
         .runLiftMotionProfile(
             () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
-        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> true))
+        .alongWith(
+            autoScoringCommandFactory.gantryAlignCommand(
+                coralPreset, () -> RobotOdometry.instance.getPose("Main")))
         .alongWith(climberCommandFactory.setClampState(() -> false));
   }
 
@@ -866,9 +872,10 @@ public class RobotContainer {
                       .andThen(
                           liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
                       .alongWith(
-                          autoScoringCommandFactory
-                              .gantryAlignCommand(() -> gantryPresetActive, () -> true)
-                              .asProxy()))
+                          autoScoringCommandFactory.gantryAlignCommand(
+                              () -> gantryPresetActive,
+                              () -> RobotOdometry.instance.getPose("Main")))
+                      .asProxy())
                   .alongWith(climberCommandFactory.setClampState(() -> false))
                   .schedule();
             })

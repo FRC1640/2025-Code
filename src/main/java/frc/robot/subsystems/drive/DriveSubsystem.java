@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -182,7 +183,10 @@ public class DriveSubsystem extends SubsystemBase {
     return states;
   }
 
-  public void runVelocity(ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
+  public void runVelocity(
+      ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel, BooleanSupplier limitSpeeds) {
+
+    double scale = limitSpeeds.getAsBoolean() ? 0.5 : 1;
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,
@@ -194,14 +198,14 @@ public class DriveSubsystem extends SubsystemBase {
         fieldCentric
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 new ChassisSpeeds(
-                    doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
-                    doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
-                    doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega),
+                    doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed * scale,
+                    doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed * scale,
+                    doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega * scale),
                 gyro.getAngleRotation2d())
             : new ChassisSpeeds(
-                doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed,
-                doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed,
-                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega);
+                doubleCone.vxMetersPerSecond * DriveConstants.maxSpeed * scale,
+                doubleCone.vyMetersPerSecond * DriveConstants.maxSpeed * scale,
+                doubleCone.omegaRadiansPerSecond * DriveConstants.maxOmega * scale);
 
     previousSetpoint =
         setpointGenerator.generateSetpoint(

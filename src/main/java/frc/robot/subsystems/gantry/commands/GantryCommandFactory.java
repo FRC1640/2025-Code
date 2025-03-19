@@ -140,7 +140,7 @@ public class GantryCommandFactory {
     double deltaY = reefPos.getY() - getPose.get().getTranslation().getY();
     double deltaX = reefPos.getX() - getPose.get().getTranslation().getX();
     double gantryCenter =
-        Math.sin(Math.atan(deltaY / deltaX) - gyroRadians)
+        Math.sin(Math.atan2(deltaY, deltaX) - gyroRadians)
             * reefPos
                 .getTranslation()
                 .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?
@@ -154,8 +154,7 @@ public class GantryCommandFactory {
     // Logger.recordOutput("A_DEBUG/robotX", getPose.get().getTranslation().getX());
     // Logger.recordOutput("A_DEBUG/robotY", getPose.get().getTranslation().getY());
     double poleOffset =
-        coralPreset.get().getGantrySetpoint(AllianceManager.onDsSideReef(getPose))
-                == GantrySetpoint.LEFT
+        coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
             ? -Units.inchesToMeters(13 / 2)
             : Units.inchesToMeters(13 / 2);
     double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset;
@@ -167,38 +166,31 @@ public class GantryCommandFactory {
     return (gantrySetVelocityCommand(
                 () ->
                     gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter
-                        ? GantryConstants.alignSpeed
-                        : -GantryConstants.alignSpeed)
-            .andThen(
-                new InstantCommand(
-                    () ->
-                        direction =
-                            gantrySubsystem.getCarriagePosition()
-                                < GantryConstants.gantryLimitCenter))
+                        ? -GantryConstants.alignSpeed
+                        : GantryConstants.alignSpeed)
             .until(
                 () ->
                     Math.abs(
-                            gantrySubsystem.getCarriagePosition()
-                                - GantryConstants.gantryLimitCenter)
-                        < GantryConstants.gantryPadding)
+                                gantrySubsystem.getCarriagePosition()
+                                    - GantryConstants.gantryLimits.high)
+                            < GantryConstants.gantryPadding
+                        || Math.abs(
+                                gantrySubsystem.getCarriagePosition()
+                                    - GantryConstants.gantryLimits.low)
+                            < GantryConstants.gantryPadding)
             .andThen(
-                new InstantCommand(() -> direction = !direction)
-                    .andThen(
-                        gantrySetVelocityCommand(
-                            () ->
-                                direction
-                                    ? GantryConstants.alignSpeed
-                                    : -GantryConstants.alignSpeed))
+                gantrySetVelocityCommand(
+                        () ->
+                            gantrySubsystem.getCarriagePosition()
+                                    < GantryConstants.gantryLimitCenter
+                                ? GantryConstants.alignSpeed
+                                : -GantryConstants.alignSpeed)
                     .until(
                         () ->
                             Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.high)
-                                    < GantryConstants.gantryPadding
-                                || Math.abs(
-                                        gantrySubsystem.getCarriagePosition()
-                                            - GantryConstants.gantryLimits.low)
-                                    < GantryConstants.gantryPadding)))
+                                    gantrySubsystem.getCarriagePosition()
+                                        - GantryConstants.gantryLimitCenter)
+                                < GantryConstants.gantryPadding)))
         .repeatedly()
         .until(() -> reefDetector.isDetecting())
         .andThen(new InstantCommand(() -> gantrySubsystem.setGantryVoltage(0)));

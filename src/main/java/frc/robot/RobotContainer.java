@@ -150,6 +150,8 @@ public class RobotContainer {
 
   private boolean autoRampPos = false;
 
+  private boolean isFC = true;
+
   boolean homed = false;
 
   public RobotContainer() {
@@ -316,7 +318,9 @@ public class RobotContainer {
                     - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftX() : 0),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
-            driveController.leftTrigger());
+            driveController.leftTrigger(),
+            () -> isFC,
+            gyro);
 
     followPathNearest =
         new FollowPathNearest(
@@ -426,6 +430,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
+    driveController.y().onTrue(new InstantCommand(() -> isFC = !isFC));
     // lift/gantry presets for autoalign
     new Trigger(
             () ->

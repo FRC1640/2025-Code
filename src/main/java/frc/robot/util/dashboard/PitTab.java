@@ -49,8 +49,8 @@ public class PitTab {
   public void pitTesterBuild() {
     pitTab
         .addCamera("BackCamera", "USB Camera 0", "http://10.16.40.52:1186/stream.mjpg")
-        .withSize(2, 2)
-        .withPosition(7, 2);
+        .withSize(4, 3)
+        .withPosition(5, 2);
     pitTab
         .addBoolean("Left Sensor", () -> climberSubsystem.getSensor1())
         .withSize(1, 1)
@@ -70,12 +70,12 @@ public class PitTab {
     pitTab
         .addString(
             "PIT Controller", () -> "Switch your controller to Port 4 and Preset Board on Port 2")
-        .withSize(7, 1)
+        .withSize(5, 1)
         .withPosition(0, 0);
     pitTab
         .addString(
             "IMPORTANT", () -> "To Make This Work, Make sure to be in TEST Mode, not Teleoperated")
-        .withSize(7, 1)
+        .withSize(5, 1)
         .withPosition(0, 4);
     ShuffleboardLayout instructLayout =
         pitTab
@@ -101,7 +101,7 @@ public class PitTab {
             .getLayout("IMPORTANT BINDINGS", BuiltInLayouts.kList)
             .withSize(2, 3)
             .withProperties(Map.of("Label position", "HIDDEN"))
-            .withPosition(5, 1);
+            .withPosition(3, 1);
     instructLayoutCoral.add("Instruct1", "Start: Zero Lift Encoders");
     instructLayoutCoral.add("Instruct2", "& Start: Enable Climber PID");
     instructLayoutCoral.add("Instruct3", "Use Preset board for Lift");
@@ -111,7 +111,7 @@ public class PitTab {
     instructLayoutCoral.add("Instruct7", "X: Disable Antitip");
 
     ShuffleboardLayout canID =
-        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 3).withPosition(3, 1);
+        pitTab.getLayout("Can IDs", BuiltInLayouts.kList).withSize(2, 2).withPosition(5, 0);
     canID.add("Front Left Drive", "1");
     canID.add("Front Left Steering", "2");
     canID.add("Front Right Drive", "3");

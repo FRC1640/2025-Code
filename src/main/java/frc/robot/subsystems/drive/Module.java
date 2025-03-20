@@ -18,12 +18,10 @@ public class Module {
   PivotId id;
   ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
 
-  SlewRateLimiter accelLimiter;
-  SlewRateLimiter deaccelLimiter;
+  SlewRateLimiter accelLimiter = new SlewRateLimiter(DriveConstants.accelLimit);
+  SlewRateLimiter deaccelLimiter = new SlewRateLimiter(DriveConstants.deaccelLimit);
 
   public Module(ModuleIO io, PivotId id) {
-    accelLimiter = new SlewRateLimiter(DriveConstants.accelLimit);
-    deaccelLimiter = new SlewRateLimiter(DriveConstants.deaccelLimit);
     this.io = io;
     this.id = id;
     AlertsManager.addAlert(

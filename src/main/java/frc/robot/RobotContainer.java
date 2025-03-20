@@ -438,10 +438,10 @@ public class RobotContainer {
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
-    // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
-    //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    // followPathNearest.generateTrigger( !!!testing
-    //     () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
+    new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
+        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    followPathNearest.generateTrigger(
+        () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(
             () ->
                 followPathNearest.isAutoalignComplete()
@@ -617,23 +617,7 @@ public class RobotContainer {
         .whileTrue(
             new InstantCommand(() -> liftSubsystem.resetEncoder())
                 .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder())));
-    driveController.a().onTrue(setupAutoPlace(() -> coralPreset)); // !!!testing
-    driveController
-        .b()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  coralPreset = CoralPreset.RightL4;
-                  algaeMode = false;
-                }));
-    driveController
-        .y()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  coralPreset = CoralPreset.Safe;
-                  algaeMode = false;
-                }));
+    operatorController.a().onTrue(setupAutoPlace(() -> coralPreset));
 
     new Trigger(
             () ->
@@ -661,11 +645,11 @@ public class RobotContainer {
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
-    // driveController !!!testing
-    //     .y()
-    //     .onTrue(
-    //         new InstantCommand(() ->
-    // AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
+    driveController
+        .y()
+        .onTrue(
+            new InstantCommand(() ->
+    AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
 
     driveController
         .rightTrigger()

@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "L4Go",
-      "waypointRelativePos": 0.6636670416197968,
+      "waypointRelativePos": 0.544431946006751,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "L4Left",
-      "waypointRelativePos": 0.7197802197802234,
+      "waypointRelativePos": 0.4476940382452227,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

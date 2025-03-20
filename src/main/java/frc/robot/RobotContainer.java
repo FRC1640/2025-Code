@@ -509,18 +509,6 @@ public class RobotContainer {
 
     driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
 
-    DriveWeightCommand.createWeightTrigger(
-        new RotateToAngleWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                DistanceManager.getNearestPosition(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
-                    .getRotation()
-                    .plus(Rotation2d.fromDegrees(180))),
-        driveController.leftBumper());
-
     // driveController
     //     .povDown()
     //     .onTrue(new InstantCommand(() -> joystickDriveWeight.setEnabled(true)));

@@ -68,7 +68,6 @@ import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
-import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;

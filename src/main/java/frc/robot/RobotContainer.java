@@ -439,7 +439,7 @@ public class RobotContainer {
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
-        // .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    // .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathNearest.generateTrigger(
         () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(

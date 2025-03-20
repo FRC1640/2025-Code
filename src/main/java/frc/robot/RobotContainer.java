@@ -738,6 +738,7 @@ public class RobotContainer {
                 pitController.getHID().getPOV() == 270
                     && ((Robot.getState() == RobotState.TEST) ? true : false))
         .whileTrue(new InstantCommand(() -> autoRampPos = false));
+
     new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
         .whileTrue(
             climberCommandFactory.elevatorApplyVoltageCommand(
@@ -761,13 +762,6 @@ public class RobotContainer {
     .onTrue(setupAutoPlace(() -> CoralPreset.Pickup));
 
     pitController
-        .leftTrigger()
-        .and(() -> algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.processCommand()));
-    pitController
         .start()
         .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(
@@ -790,10 +784,6 @@ public class RobotContainer {
         .back()
         .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
         .whileTrue(gantryCommandFactory.gantryHomeCommand());
-    pitController
-        .povRight()
-        .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
-        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
     pitController
         .a()
         .and(() -> (Robot.getState() == RobotState.TEST) ? true : false)
@@ -875,8 +865,7 @@ public class RobotContainer {
             })
         .onlyIf(
             () ->
-                (!coralOuttakeSubsystem.hasCoral() || coralOuttakeCommandFactory.ranBack)
-                    && !coralOuttakeSubsystem.guillotineCheck());
+                (!coralOuttakeSubsystem.hasCoral() || coralOuttakeCommandFactory.ranBack));
   }
 
   public Pose2d[] chooseAlignPos() {

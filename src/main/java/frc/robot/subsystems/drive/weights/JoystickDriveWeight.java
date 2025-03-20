@@ -22,6 +22,7 @@ public class JoystickDriveWeight implements DriveWeight {
   private boolean enabled = true;
   private BooleanSupplier isFC;
   private Gyro gyro;
+  private BooleanSupplier isLimited;
 
   public JoystickDriveWeight(
       DoubleSupplier xPercent,
@@ -30,7 +31,8 @@ public class JoystickDriveWeight implements DriveWeight {
       BooleanSupplier slowMode,
       BooleanSupplier fastMode,
       BooleanSupplier isFC,
-      Gyro gyro) {
+      Gyro gyro,
+      BooleanSupplier isLimited) {
     this.xPercent = xPercent;
     this.yPercent = yPercent;
     this.omegaPercent = omegaPercent;
@@ -38,6 +40,7 @@ public class JoystickDriveWeight implements DriveWeight {
     this.fastMode = fastMode;
     this.isFC = isFC;
     this.gyro = gyro;
+    this.isLimited = isLimited;
   }
 
   public void setEnabled(boolean enabled) {
@@ -69,11 +72,13 @@ public class JoystickDriveWeight implements DriveWeight {
       xyMult = 0.98;
       omegaMult = 0.75;
     }
+    double scale = isLimited.getAsBoolean() ? 0.25 : 1;
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * DriveConstants.maxSpeed * xyMult,
-            linearVelocity.getY() * DriveConstants.maxSpeed * xyMult,
-            omega * DriveConstants.maxOmega * omegaMult);
+                linearVelocity.getX() * DriveConstants.maxSpeed * xyMult,
+                linearVelocity.getY() * DriveConstants.maxSpeed * xyMult,
+                omega * DriveConstants.maxOmega * omegaMult)
+            .times(scale);
 
     if (!isFC.getAsBoolean()) {
       Translation2d speedsNotRotated =

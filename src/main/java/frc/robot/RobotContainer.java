@@ -320,7 +320,8 @@ public class RobotContainer {
             driveController.rightBumper(),
             driveController.leftTrigger(),
             () -> isFC,
-            gyro);
+            gyro,
+            () -> liftSubsystem.getMotorPosition() > 0.2);
 
     followPathNearest =
         new FollowPathNearest(
@@ -359,7 +360,7 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
-            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.1));
+            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.2));
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

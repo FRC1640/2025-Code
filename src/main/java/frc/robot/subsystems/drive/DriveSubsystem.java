@@ -186,7 +186,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void runVelocity(
       ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel, BooleanSupplier limitSpeeds) {
 
-    double scale = limitSpeeds.getAsBoolean() ? 0.5 : 1;
+    double scale = 1;
     ChassisSpeeds percent =
         new ChassisSpeeds(
             speeds.vxMetersPerSecond / DriveConstants.maxSpeed,

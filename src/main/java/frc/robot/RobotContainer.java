@@ -438,8 +438,8 @@ public class RobotContainer {
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
-    new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
-        .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
+    // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
+        // .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathNearest.generateTrigger(
         () -> driveController.a().getAsBoolean() && !followPathNearest.isAutoalignComplete());
     new Trigger(
@@ -649,8 +649,7 @@ public class RobotContainer {
     driveController
         .y()
         .onTrue(
-            new InstantCommand(() ->
-    AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
+            new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));
 
     driveController
         .rightTrigger()

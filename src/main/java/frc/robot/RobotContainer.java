@@ -67,7 +67,6 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
-import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -149,6 +148,8 @@ public class RobotContainer {
   private boolean gantryAuto = false;
 
   private boolean autoRampPos = false;
+
+  private boolean isFC = true;
 
   boolean homed = false;
 
@@ -316,7 +317,10 @@ public class RobotContainer {
                     - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftX() : 0),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
-            driveController.leftTrigger());
+            driveController.leftTrigger(),
+            () -> isFC,
+            gyro,
+            () -> liftSubsystem.getMotorPosition() > 0.2);
 
     followPathNearest =
         new FollowPathNearest(
@@ -353,7 +357,9 @@ public class RobotContainer {
         algaeCommandFactory
             .setSolenoidState(() -> false)
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
-    driveSubsystem.setDefaultCommand(DriveWeightCommand.create(driveCommandFactory));
+    driveSubsystem.setDefaultCommand(
+        DriveWeightCommand.create(
+            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.2));
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
@@ -426,6 +432,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
+    driveController.y().onTrue(new InstantCommand(() -> isFC = !isFC));
     // lift/gantry presets for autoalign
     new Trigger(
             () ->
@@ -446,7 +454,6 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
-                    && (gantrySubsystem.isAtPreset(gantryPresetActive, true))
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
 
@@ -493,17 +500,18 @@ public class RobotContainer {
 
     driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
 
-    DriveWeightCommand.createWeightTrigger(
-        new RotateToAngleWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                DistanceManager.getNearestPosition(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
-                    .getRotation()
-                    .plus(Rotation2d.fromDegrees(180))),
-        driveController.leftBumper());
+    // DriveWeightCommand.createWeightTrigger(
+    //     new RotateToAngleWeight(
+    //         () -> RobotOdometry.instance.getPose("Main"),
+    //         () ->
+    //             DistanceManager.getNearestPosition(
+    //                     RobotOdometry.instance.getPose("Main"),
+    //                     AllianceManager.chooseFromAlliance(
+    //                         FieldConstants.coralStationPosBlue,
+    // FieldConstants.coralStationPosRed))
+    //                 .getRotation()
+    //                 .plus(Rotation2d.fromDegrees(180))),
+    //     driveController.leftBumper());
 
     // driveController
     //     .povDown()
@@ -645,6 +653,11 @@ public class RobotContainer {
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+
+    driveController
+        .leftBumper()
+        .onTrue(setupAutoPlace(() -> CoralPreset.Trough))
+        .onFalse(setupAutoPlace(() -> CoralPreset.Safe));
 
     driveController
         .y()
@@ -849,7 +862,9 @@ public class RobotContainer {
     return liftCommandFactory
         .runLiftMotionProfile(
             () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
-        .alongWith(autoScoringCommandFactory.gantryAlignCommand(coralPreset, () -> true))
+        .alongWith(
+            autoScoringCommandFactory.gantryAlignCommand(
+                coralPreset, () -> RobotOdometry.instance.getPose("Main")))
         .alongWith(climberCommandFactory.setClampState(() -> false));
   }
 
@@ -868,7 +883,9 @@ public class RobotContainer {
                           liftCommandFactory.runLiftMotionProfile(() -> presetActive).asProxy())
                       .alongWith(
                           autoScoringCommandFactory
-                              .gantryAlignCommand(() -> gantryPresetActive, () -> true)
+                              .gantryAlignCommand(
+                                  () -> gantryPresetActive,
+                                  () -> RobotOdometry.instance.getPose("Main"))
                               .asProxy()))
                   .alongWith(climberCommandFactory.setClampState(() -> false))
                   .schedule();

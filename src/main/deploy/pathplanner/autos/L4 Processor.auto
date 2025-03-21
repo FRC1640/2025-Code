@@ -92,7 +92,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -108,6 +108,43 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForCoral"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunBackCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Processor 5"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         }
       ]

@@ -70,7 +70,7 @@ public class CoralOuttakeCommandFactory {
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> setHasCoral ? 3 : 2)
+    return setIntakeVoltage(() -> setHasCoral ? 3.5 : 2)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {

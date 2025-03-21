@@ -71,8 +71,8 @@ public class GantryIOSparkMax implements GantryIO {
         MotorLim.applyLimits(
             inputs.encoderPosition,
             MotorLim.clampVoltage(voltage),
-            limits ? GantryConstants.gantryLimits.low : -999999999,
-            GantryConstants.gantryLimits.high));
+            limits ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding : -999999999,
+            GantryConstants.gantryLimits.high - GantryConstants.gantryPadding));
   }
 
   public void setGantryPosition(double position, GantryIOInputs inputs) {

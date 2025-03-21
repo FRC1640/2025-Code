@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.constants.RobotConstants.DriveConstants;
+import frc.robot.sensors.gyro.Gyro;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -19,18 +20,27 @@ public class JoystickDriveWeight implements DriveWeight {
   private BooleanSupplier slowMode;
   private BooleanSupplier fastMode;
   private boolean enabled = true;
+  private BooleanSupplier isFC;
+  private Gyro gyro;
+  private BooleanSupplier isLimited;
 
   public JoystickDriveWeight(
       DoubleSupplier xPercent,
       DoubleSupplier yPercent,
       DoubleSupplier omegaPercent,
       BooleanSupplier slowMode,
-      BooleanSupplier fastMode) {
+      BooleanSupplier fastMode,
+      BooleanSupplier isFC,
+      Gyro gyro,
+      BooleanSupplier isLimited) {
     this.xPercent = xPercent;
     this.yPercent = yPercent;
     this.omegaPercent = omegaPercent;
     this.slowMode = slowMode;
     this.fastMode = fastMode;
+    this.isFC = isFC;
+    this.gyro = gyro;
+    this.isLimited = isLimited;
   }
 
   public void setEnabled(boolean enabled) {
@@ -62,11 +72,26 @@ public class JoystickDriveWeight implements DriveWeight {
       xyMult = 0.98;
       omegaMult = 0.75;
     }
+    double scale = isLimited.getAsBoolean() ? 0.25 : 1;
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            linearVelocity.getX() * DriveConstants.maxSpeed * xyMult,
-            linearVelocity.getY() * DriveConstants.maxSpeed * xyMult,
-            omega * DriveConstants.maxOmega * omegaMult);
+                linearVelocity.getX() * DriveConstants.maxSpeed * xyMult,
+                linearVelocity.getY() * DriveConstants.maxSpeed * xyMult,
+                omega * DriveConstants.maxOmega * omegaMult)
+            .times(scale);
+
+    if (!isFC.getAsBoolean()) {
+      Translation2d speedsNotRotated =
+          new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+
+      speedsNotRotated =
+          speedsNotRotated.rotateBy(
+              gyro.getAngleRotation2d().plus(Rotation2d.fromRadians(Math.PI)));
+
+      return new ChassisSpeeds(
+          speedsNotRotated.getX(), speedsNotRotated.getY(), speeds.omegaRadiansPerSecond);
+    }
+
     return speeds;
   }
 

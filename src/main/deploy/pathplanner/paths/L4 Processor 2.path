@@ -8,27 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.235642259372673,
-        "y": 2.699965665270971
+        "x": 5.6638636363636365,
+        "y": 1.6916477272727264
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
-    },
-    {
-      "anchor": {
-        "x": 5.025681818181818,
-        "y": 1.8611647727272724
-      },
-      "prevControl": {
-        "x": 5.824695199629781,
-        "y": 2.3405728015960507
-      },
-      "nextControl": {
-        "x": 4.327670454545454,
-        "y": 1.4423579545454537
-      },
-      "isLocked": false,
-      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +20,8 @@
         "y": 1.0534659090909075
       },
       "prevControl": {
-        "x": 1.6851988636363635,
-        "y": 1.5919318181818176
+        "x": 2.373238636363636,
+        "y": 1.123267045454544
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,8 +32,8 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.723284589426318,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 3.0,

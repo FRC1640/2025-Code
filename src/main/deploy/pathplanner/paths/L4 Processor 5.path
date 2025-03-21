@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.1367613636363636,
+        "y": 1.0534659090909075
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0078267276315795,
+        "y": 1.6845049692068443
+      },
+      "isLocked": false,
+      "linkedName": "BottomSource"
+    },
+    {
+      "anchor": {
+        "x": 3.779232954545455,
+        "y": 2.9879545454545444
+      },
+      "prevControl": {
+        "x": 3.3466245750901487,
+        "y": 2.6686498225653836
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.5196850393700834,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetModeCoral"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryLeft"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 55.0
+  },
+  "useDefaultConstraints": true
+}

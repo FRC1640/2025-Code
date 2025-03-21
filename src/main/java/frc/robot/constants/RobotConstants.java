@@ -240,7 +240,7 @@ public class RobotConstants {
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
       LeftL4(0.565, GantrySetpoint.LEFT),
       RightL4(0.565, GantrySetpoint.RIGHT),
-      Trough(0, GantrySetpoint.RIGHT);
+      Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective

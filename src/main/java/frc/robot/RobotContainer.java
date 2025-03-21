@@ -67,7 +67,6 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
-import frc.robot.subsystems.drive.weights.RotateToAngleWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
 import frc.robot.subsystems.gantry.GantryIOSparkMax;
@@ -501,17 +500,18 @@ public class RobotContainer {
 
     driveController.back().onTrue(new InstantCommand(() -> autoRampPos = !autoRampPos));
 
-    DriveWeightCommand.createWeightTrigger(
-        new RotateToAngleWeight(
-            () -> RobotOdometry.instance.getPose("Main"),
-            () ->
-                DistanceManager.getNearestPosition(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed))
-                    .getRotation()
-                    .plus(Rotation2d.fromDegrees(180))),
-        driveController.leftBumper());
+    // DriveWeightCommand.createWeightTrigger(
+    //     new RotateToAngleWeight(
+    //         () -> RobotOdometry.instance.getPose("Main"),
+    //         () ->
+    //             DistanceManager.getNearestPosition(
+    //                     RobotOdometry.instance.getPose("Main"),
+    //                     AllianceManager.chooseFromAlliance(
+    //                         FieldConstants.coralStationPosBlue,
+    // FieldConstants.coralStationPosRed))
+    //                 .getRotation()
+    //                 .plus(Rotation2d.fromDegrees(180))),
+    //     driveController.leftBumper());
 
     // driveController
     //     .povDown()
@@ -653,6 +653,11 @@ public class RobotContainer {
     // operatorController.b().whileTrue(climberCommandFactory.setElevatorPosPID(() -> -30));
     operatorController.povRight().onTrue(climberCommandFactory.setClampState(() -> false));
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+
+    driveController
+        .leftBumper()
+        .onTrue(setupAutoPlace(() -> CoralPreset.Trough))
+        .onFalse(setupAutoPlace(() -> CoralPreset.Safe));
 
     driveController
         .y()

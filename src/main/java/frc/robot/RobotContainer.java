@@ -309,12 +309,8 @@ public class RobotContainer {
     // Otherwise we wouldn't have a drive controller during the match
     joystickDriveWeight =
         new JoystickDriveWeight(
-            () ->
-                -driveController.getLeftY()
-                    - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftY() : 0),
-            () ->
-                -driveController.getLeftX()
-                    - ((Robot.getState() == RobotState.TEST) ? 0.3 * pitController.getLeftX() : 0),
+            () -> -driveController.getLeftY() - 0.3 * pitController.getLeftY(),
+            () -> -driveController.getLeftX() - 0.3 * pitController.getLeftX(),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger(),
@@ -454,6 +450,7 @@ public class RobotContainer {
             () ->
                 followPathNearest.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
+                    && gantryPresetActive != CoralPreset.Safe
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(getAutoPlaceCommand());
 
@@ -734,11 +731,11 @@ public class RobotContainer {
     new Trigger(() -> (pitController.getHID().getPOV() == 0))
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
-                (pitController.getHID().getPOV() == 0 ? () -> -.5 : () -> .5)));
+                (pitController.getHID().getPOV() == 0 ? () -> -2.5 : () -> 2.5)));
     new Trigger(() -> (pitController.getHID().getPOV() == 180))
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
-                (pitController.getHID().getPOV() == 180 ? () -> .5 : () -> -.5)));
+                (pitController.getHID().getPOV() == 180 ? () -> 2.5 : () -> -2.5)));
 
     new Trigger(() -> pitController.getHID().getPOV() == 270)
         .whileTrue(new InstantCommand(() -> autoRampPos = false));

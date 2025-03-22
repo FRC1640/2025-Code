@@ -210,7 +210,7 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
-    public static final double currentThresh = 55; // for the EMA
+    public static final double currentThresh = 70; // for the EMA
 
     public static final double emaSmoothing = 10;
     public static final double emaPeriod = 21;

@@ -309,8 +309,8 @@ public class RobotContainer {
     // Otherwise we wouldn't have a drive controller during the match
     joystickDriveWeight =
         new JoystickDriveWeight(
-            () -> -driveController.getLeftY() - 0.3 * pitController.getLeftY(),
-            () -> -driveController.getLeftX() - 0.3 * pitController.getLeftX(),
+            () -> -driveController.getLeftY() - 1 * pitController.getLeftY(),
+            () -> -driveController.getLeftX() - 1 * pitController.getLeftX(),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger(),

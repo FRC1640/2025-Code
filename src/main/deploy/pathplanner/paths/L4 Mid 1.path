@@ -53,7 +53,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryRight"
+                      "name": "SetGantryLeft"
                     }
                   },
                   {

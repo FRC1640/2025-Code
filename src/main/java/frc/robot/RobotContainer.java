@@ -926,7 +926,7 @@ public class RobotContainer {
             .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.1)
+        new WaitCommand(0.35)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

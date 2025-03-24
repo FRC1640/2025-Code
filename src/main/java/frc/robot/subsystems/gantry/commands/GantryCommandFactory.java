@@ -48,7 +48,7 @@ public class GantryCommandFactory {
                 .repeatedly()
                 .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            gantryApplyVoltageCommand(() -> -1)
+            gantryApplyVoltageCommand(() -> -0.6)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed()))
         // .andThen(

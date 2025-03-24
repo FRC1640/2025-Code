@@ -13,6 +13,8 @@ import frc.robot.util.misc.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class FollowPathDirect extends FollowPath {
   private Supplier<Pose2d[]> positions;
   private Function<Pose2d, Pose2d> poseFunction;
@@ -66,8 +68,11 @@ public class FollowPathDirect extends FollowPath {
     Pose2d robot = robotPose.get();
     boolean complete =
         (target.getTranslation().getDistance(robot.getTranslation())
-                < Units.inchesToMeters(RobotConstants.RobotDimensions.robotLengthInches) / 2 + 0.01
+                < Units.inchesToMeters(RobotConstants.RobotDimensions.robotLengthInches) / 2 + 0.1
             && Math.abs(endRotation.minus(robot.getRotation()).getDegrees()) < 2);
+    Logger.recordOutput("A_DEBUG/distanceThreshold",
+        Units.inchesToMeters(RobotConstants.RobotDimensions.robotLengthInches) / 2 + 0.01);
+    Logger.recordOutput("A_DEBUG/distance", target.getTranslation().getDistance(robot.getTranslation()));
     // ChassisSpeeds chassisSpeeds = super.getDriveChassisSpeeds();
     // complete &=
     //     Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.005;

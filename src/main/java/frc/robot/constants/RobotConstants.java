@@ -29,6 +29,8 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.7;
     public static final double robotLength = 0.7; // 0.927
+    public static final double robotWidthInches = 30;
+    public static final double robotLengthInches = 30;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -166,11 +168,18 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 29.5 / 2).get()),
-                    Units.inchesToMeters(new RobotSwitch<Double>(11.9).addValue(RobotType.Deux25, 29.5 / 2 - 8).get()),
-                    Units.inchesToMeters(new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 10.5).get())),
-                new RobotSwitch<Rotation3d>(new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15)))
-                    .addValue(RobotType.Deux25, new Rotation3d()).get()),
+                    Units.inchesToMeters(
+                        new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 29.5 / 2).get()),
+                    Units.inchesToMeters(
+                        new RobotSwitch<Double>(11.9)
+                            .addValue(RobotType.Deux25, 29.5 / 2 - 8)
+                            .get()),
+                    Units.inchesToMeters(
+                        new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 10.5).get())),
+                new RobotSwitch<Rotation3d>(
+                        new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15)))
+                    .addValue(RobotType.Deux25, new Rotation3d())
+                    .get()),
             1,
             "Sommar",
             "Front Left");
@@ -180,11 +189,18 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 7.575).get()),
-                    -Units.inchesToMeters(new RobotSwitch<Double>(11.9).addValue(RobotType.Deux25, 13.325).get()),
-                    Units.inchesToMeters(new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 14.1875).get())),
-                new RobotSwitch<Rotation3d>(new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15)))
-                    .addValue(RobotType.Deux25, new Rotation3d(0, Math.toRadians(-2), Math.toRadians(-2.5))).get()),
+                    Units.inchesToMeters(
+                        new RobotSwitch<Double>(13.95).addValue(RobotType.Deux25, 7.575).get()),
+                    -Units.inchesToMeters(
+                        new RobotSwitch<Double>(11.9).addValue(RobotType.Deux25, 13.325).get()),
+                    Units.inchesToMeters(
+                        new RobotSwitch<Double>(12.125).addValue(RobotType.Deux25, 14.1875).get())),
+                new RobotSwitch<Rotation3d>(
+                        new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15)))
+                    .addValue(
+                        RobotType.Deux25,
+                        new Rotation3d(0, Math.toRadians(-2), Math.toRadians(-2.5)))
+                    .get()),
             1,
             new RobotSwitch<String>("Markward").addValue(RobotType.Deux25, "Park").get(),
             "Front Right");

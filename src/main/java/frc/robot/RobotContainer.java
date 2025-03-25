@@ -858,10 +858,7 @@ public class RobotContainer {
                   .alongWith(climberCommandFactory.setClampState(() -> false))
                   .schedule();
             })
-        .onlyIf(
-            () ->
-                (!coralOuttakeSubsystem.hasCoral() || coralOuttakeCommandFactory.ranBack)
-                    && !coralOuttakeSubsystem.guillotineCheck());
+        .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck());
   }
 
   public Pose2d[] chooseAlignPos() {

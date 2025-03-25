@@ -339,10 +339,10 @@ public class RobotContainer {
                     FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
             (x) ->
                 DistanceManager.addRotatedDim(
-                    x, (RobotDimensions.robotLength / 2), x.getRotation()),
+                    x, (-RobotDimensions.robotLength / 2), x.getRotation()),
             gyro,
             () -> RobotOdometry.instance.getPose("Main"),
-            AutoAlignConfig.pathConstraints,
+            AutoAlignConfig.coralStationPathConstraints,
             driveSubsystem);
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);

@@ -1,10 +1,6 @@
 package frc.robot.subsystems.drive.weights;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +8,8 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.misc.DistanceManager;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class FollowPathDirect extends FollowPath {
   private Supplier<Pose2d[]> positions;

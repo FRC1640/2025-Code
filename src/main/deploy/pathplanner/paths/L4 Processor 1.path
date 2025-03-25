@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.2327556818181815,
-        "y": 1.6703693181818184
+        "x": 6.936663307106417,
+        "y": 1.9002045281021944
       },
       "isLocked": false,
       "linkedName": "ProcessorStart"
     },
     {
       "anchor": {
-        "x": 5.195198863636364,
-        "y": 3.0577556818181812
+        "x": 5.065568181818182,
+        "y": 2.958039772727272
       },
       "prevControl": {
-        "x": 5.943157179674908,
-        "y": 2.2000830417807453
+        "x": 5.8632954545454545,
+        "y": 2.4993465909090897
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.3172103487064114,
+      "minWaypointRelativePos": 0.8346456692913418,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 1.0,
@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "L4Left",
-      "waypointRelativePos": 0.7197802197802234,
+      "waypointRelativePos": 0.29246344206974284,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -67,7 +67,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryRight"
+                      "name": "SetGantryLeft"
                     }
                   },
                   {
@@ -91,8 +91,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

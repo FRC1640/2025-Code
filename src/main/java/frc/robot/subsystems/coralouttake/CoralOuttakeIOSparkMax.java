@@ -13,6 +13,7 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
   private final SparkMax intakeSpark;
   // private final DigitalInput coralDetector;
   private final DigitalInput hasCoralDetector;
+  private final DigitalInput guillotineCheck;
 
   public CoralOuttakeIOSparkMax() {
     intakeSpark =
@@ -21,6 +22,7 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
                 CoralOuttakeConstants.intakeSparkID, false, IdleMode.kBrake));
     // coralDetector = new DigitalInput(CoralOuttakeConstants.coralDetectorChannel);
     hasCoralDetector = new DigitalInput(CoralOuttakeConstants.hasCoralDetectorChannel);
+    guillotineCheck = new DigitalInput(7);
   }
 
   @Override
@@ -30,6 +32,7 @@ public class CoralOuttakeIOSparkMax implements CoralOuttakeIO {
     inputs.coralDetectedHigh = intakeSpark.getReverseLimitSwitch().isPressed();
     inputs.outtakeVelocity = intakeSpark.getEncoder().getVelocity();
     inputs.hasCoral = !hasCoralDetector.get();
+    inputs.guillotineCheck = !guillotineCheck.get();
   }
 
   @Override

@@ -6,8 +6,10 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.RobotConstants.LiftConstants;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
+import frc.robot.util.misc.ExponentialMovingAverage;
 import frc.robot.util.sysid.SimpleMotorSysidRoutine;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
@@ -23,6 +25,9 @@ public class LiftSubsystem extends SubsystemBase {
 
   private LoggedMechanism2d liftMechanism = new LoggedMechanism2d(3, 3);
   LoggedMechanismLigament2d liftHeight = new LoggedMechanismLigament2d("lift", 2, 90);
+
+  private ExponentialMovingAverage emaCurrent =
+      new ExponentialMovingAverage(LiftConstants.emaSmoothing, LiftConstants.emaPeriod);
 
   public LiftSubsystem(LiftIO liftIO) {
     this.io = liftIO;
@@ -49,9 +54,12 @@ public class LiftSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    emaCurrent.update((getFollowerMotorCurrent() + getLeaderMotorCurrent()) / 2);
     liftHeight.setLength(getLeaderMotorPosition()); // conversion?
     io.updateInputs(inputs);
     Logger.recordOutput("Mechanisms/Lift", liftMechanism);
+    Logger.recordOutput("Lift/EMACurrent", emaCurrent.get());
+    Logger.recordOutput("Lift/isLimited", getEmaCurrent() > LiftConstants.currentThresh);
     Logger.processInputs("Lift/", inputs);
   }
 
@@ -126,7 +134,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.0055;
+    return Math.abs(getMotorPosition() - pos) < 0.0045;
   }
 
   public boolean isLimitSwitchPressed() {
@@ -139,5 +147,13 @@ public class LiftSubsystem extends SubsystemBase {
 
   public void testMethod() {
     io.testMethod();
+  }
+
+  public double getEmaCurrent() {
+    return emaCurrent.get();
+  }
+
+  public boolean getIsLimited() {
+    return getEmaCurrent() > LiftConstants.currentThresh;
   }
 }

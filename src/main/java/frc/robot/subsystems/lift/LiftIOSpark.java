@@ -54,6 +54,7 @@ public class LiftIOSpark implements LiftIO {
    */
   @Override
   public void setLiftVoltage(double voltage, LiftIOInputs inputs) {
+
     Logger.recordOutput("LIFTINPUT", voltage);
     Logger.recordOutput(
         "liftinputclamped",

@@ -168,6 +168,11 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
                 CameraConstants.frontCameraLeft));
+
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraCenter),
+                CameraConstants.frontCameraCenter));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled

@@ -187,6 +187,19 @@ public class RobotConstants {
             "Dodds",
             "Front Right");
 
+    public static final CameraConstant frontCameraCenter =
+        new CameraConstant(
+            new SimCameraProperties(),
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(10.277),
+                    Units.inchesToMeters(2.433),
+                    Units.inchesToMeters(9.2531)),
+                new Rotation3d(0, 0, 0)),
+            1,
+            "LL",
+            "Front Center");
+
     public static final CameraConstant backCamera =
         new CameraConstant(
             new SimCameraProperties(),

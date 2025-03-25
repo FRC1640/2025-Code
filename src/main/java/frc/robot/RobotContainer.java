@@ -337,7 +337,9 @@ public class RobotContainer {
             () ->
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
-            null,
+            (x) ->
+                DistanceManager.addRotatedDim(
+                    x, (RobotDimensions.robotLength / 2), x.getRotation()),
             gyro,
             () -> RobotOdometry.instance.getPose("Main"),
             AutoAlignConfig.pathConstraints,

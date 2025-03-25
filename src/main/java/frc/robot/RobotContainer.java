@@ -437,7 +437,7 @@ public class RobotContainer {
                             .getPose("Main")
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
-                        < 1
+                        < 1.5
                     && followPathNearest.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
@@ -11,7 +12,6 @@ import frc.robot.subsystems.coralouttake.commands.CoralOuttakeCommandFactory;
 import frc.robot.subsystems.gantry.commands.GantryCommandFactory;
 import frc.robot.subsystems.lift.LiftSubsystem;
 import frc.robot.subsystems.lift.commands.LiftCommandFactory;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class AutoScoringCommandFactory {
@@ -40,9 +40,9 @@ public class AutoScoringCommandFactory {
     this.algaeSubsystem = algaeSubsystem;
   }
 
-  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, BooleanSupplier getDsSide) {
+  public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, Supplier<Pose2d> getPose) {
     return gantryCommandFactory.gantryPIDCommand(
-        () -> getPreset.get().getGantry(getDsSide.getAsBoolean()));
+        () -> gantryCommandFactory.getSetpointOdometry(getPreset, getPose));
   }
 
   public Command autoPlace() {

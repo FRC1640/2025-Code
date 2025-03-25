@@ -230,7 +230,7 @@ public class RobotConstants {
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
-    public static final double currentThresh = 55; // for the EMA
+    public static final double currentThresh = 60; // for the EMA
 
     public static final double emaSmoothing = 10;
     public static final double emaPeriod = 21;
@@ -260,7 +260,7 @@ public class RobotConstants {
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
       LeftL4(0.565, GantrySetpoint.LEFT),
       RightL4(0.565, GantrySetpoint.RIGHT),
-      Trough(0, GantrySetpoint.RIGHT);
+      Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective

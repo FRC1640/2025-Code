@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.474403409090908,
-        "y": 6.4680397727272725
+        "x": 6.122556818181818,
+        "y": 5.520738636363636
       },
       "isLocked": false,
       "linkedName": "OppositeStart"
     },
     {
       "anchor": {
-        "x": 5.065568181818182,
-        "y": 5.121875
+        "x": 5.095482954545455,
+        "y": 5.062045454545454
       },
       "prevControl": {
-        "x": 5.194192120675063,
-        "y": 5.3362482314281365
+        "x": 5.8333806818181815,
+        "y": 5.361193181818181
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6029246344207057,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -53,7 +67,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryRight"
+                      "name": "SetGantryLeft"
                     }
                   },
                   {
@@ -77,8 +91,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

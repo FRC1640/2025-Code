@@ -15,8 +15,9 @@ public class DriveWeightCommand {
 
   static ArrayList<DriveWeight> weights = new ArrayList<>();
 
-  public static Command create(DriveCommandFactory driveCommandFactory) {
-    Command c = driveCommandFactory.runVelocityCommand(() -> getAllSpeeds());
+  public static Command create(
+      DriveCommandFactory driveCommandFactory, BooleanSupplier limitSpeeds) {
+    Command c = driveCommandFactory.runVelocityCommand(() -> getAllSpeeds(), limitSpeeds);
     return c;
   }
 

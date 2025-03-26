@@ -138,8 +138,4 @@ public class FollowPath {
         Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.005;
     return complete;
   }
-
-  protected ChassisSpeeds getDriveChassisSpeeds() {
-    return driveSubsystem.getChassisSpeeds();
-  }
 }

@@ -675,11 +675,6 @@ public class RobotContainer {
     operatorController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
 
     driveController
-        .leftBumper()
-        .onTrue(setupAutoPlace(() -> CoralPreset.Trough))
-        .onFalse(setupAutoPlace(() -> CoralPreset.Safe));
-
-    driveController
         .y()
         .onTrue(
             new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(!AntiTipWeight.getEnabled())));

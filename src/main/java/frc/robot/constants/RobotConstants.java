@@ -185,7 +185,7 @@ public class RobotConstants {
                     -Units.inchesToMeters(11.9),
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
-            1,
+            1.1,
             "Dodds",
             "Front Right");
 
@@ -198,7 +198,7 @@ public class RobotConstants {
                     Units.inchesToMeters(2.433),
                     Units.inchesToMeters(9.2531)),
                 new Rotation3d(0, 0, 0)),
-            0.75,
+            0.6,
             "OV9281",
             "Front Center");
 
@@ -208,7 +208,7 @@ public class RobotConstants {
             new Transform3d(
                 new Translation3d(0.146, -0.356, 0.406),
                 new Rotation3d(0, Math.toRadians(1), Math.PI)),
-            1,
+            1.1,
             "BackLL",
             "Back");
     public static final Matrix<N3, N1> defaultDriveStandardDev = VecBuilder.fill(0.1, 0.1, 0.1);

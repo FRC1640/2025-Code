@@ -44,7 +44,7 @@ public class AutoScoringCommandFactory {
     return gantryCommandFactory.gantryPIDCommand(
         () ->
             gantryCommandFactory.getSetpointOdometry(
-                getPreset, getPose, () -> liftSubsystem.isAtPreset(getPreset.get().getLift())));
+                getPreset, getPose, () -> liftSubsystem.isAtPresetAlgae(getPreset.get())));
   }
 
   public Command autoPlace() {

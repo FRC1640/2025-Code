@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.RobotConstants.LiftConstants;
+import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.misc.ExponentialMovingAverage;
@@ -135,6 +136,10 @@ public class LiftSubsystem extends SubsystemBase {
 
   public boolean isAtPreset(double pos) {
     return Math.abs(getMotorPosition() - pos) < 0.0045;
+  }
+
+  public boolean isAtPresetAlgae(CoralPreset preset) {
+    return isAtPreset(preset.getLift()); // TODO increase error band
   }
 
   public boolean isLimitSwitchPressed() {

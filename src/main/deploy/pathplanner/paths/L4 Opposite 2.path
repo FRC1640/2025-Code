@@ -8,31 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.726534090909091,
-        "y": 6.298522727272727
+        "x": 4.399102564102564,
+        "y": 6.2851923076923075
       },
       "isLocked": false,
       "linkedName": "ReefTopRight"
     },
     {
       "anchor": {
-        "x": 1.3561363636363635,
-        "y": 7.116193181818181
+        "x": 1.6538461538461533,
+        "y": 7.358525641025641
       },
       "prevControl": {
-        "x": 2.8917613636363635,
-        "y": 6.697386363636363
+        "x": 1.7666278488682103,
+        "y": 7.135410672303344
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "TopSource"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6631578947368423,
+      "rotationDegrees": -54.904
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.843644544431939,
+      "minWaypointRelativePos": 0.7707641196013264,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -56,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -54.90418321297385
   },
   "reversed": false,
   "folder": "L4 Opposite",

@@ -23,9 +23,25 @@
         "x": 1.7666278488682103,
         "y": 7.135410672303344
       },
-      "nextControl": null,
+      "nextControl": {
+        "x": 1.5410644588240963,
+        "y": 7.581640609747938
+      },
       "isLocked": false,
       "linkedName": "TopSource"
+    },
+    {
+      "anchor": {
+        "x": 1.6538461538461533,
+        "y": 7.358525641025641
+      },
+      "prevControl": {
+        "x": 1.518448753226048,
+        "y": 7.568686398317098
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [

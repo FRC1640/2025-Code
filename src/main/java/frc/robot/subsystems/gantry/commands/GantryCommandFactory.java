@@ -12,6 +12,7 @@ import frc.robot.constants.RobotConstants.LiftConstants.GantrySetpoint;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.subsystems.gantry.GantrySubsystem;
 import frc.robot.util.misc.AllianceManager;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -115,7 +116,14 @@ public class GantryCommandFactory {
             });
   }
 
-  public double getSetpointOdometry(Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose) {
+  public double getSetpointOdometry(
+      Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose, BooleanSupplier liftAtPreset) {
+    // return one side if lift not up
+    if (!liftAtPreset.getAsBoolean()) {
+      return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
+          ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+          : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+    }
     // skip calculations if centered
     if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
       return GantryConstants.gantryLimitCenter;
@@ -144,15 +152,15 @@ public class GantryCommandFactory {
             * reefPos
                 .getTranslation()
                 .getDistance(getPose.get().getTranslation()); // TODO flip gyro sign?
-    // Logger.recordOutput("A_DEBUG/gyroRadians", gyroRadians);
-    // Logger.recordOutput("A_DEBUG/deltaY", deltaY);
-    // Logger.recordOutput("A_DEBUG/deltaX", deltaX);
-    // Logger.recordOutput("A_DEBUG/atan", Math.atan(deltaY / deltaX));
-    // Logger.recordOutput(
-    //     "A_DEBUG/translation",
-    //     reefPos.getTranslation().getDistance(getPose.get().getTranslation()));
-    // Logger.recordOutput("A_DEBUG/robotX", getPose.get().getTranslation().getX());
-    // Logger.recordOutput("A_DEBUG/robotY", getPose.get().getTranslation().getY());
+    /* Logger.recordOutput("A_DEBUG/gyroRadians", gyroRadians);
+    Logger.recordOutput("A_DEBUG/deltaY", deltaY);
+    Logger.recordOutput("A_DEBUG/deltaX", deltaX);
+    Logger.recordOutput("A_DEBUG/atan", Math.atan(deltaY / deltaX));
+    Logger.recordOutput(
+        "A_DEBUG/translation",
+        reefPos.getTranslation().getDistance(getPose.get().getTranslation()));
+    Logger.recordOutput("A_DEBUG/robotX", getPose.get().getTranslation().getX());
+    Logger.recordOutput("A_DEBUG/robotY", getPose.get().getTranslation().getY()); */
     double poleOffset =
         coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
             ? -Units.inchesToMeters(13 / 2)

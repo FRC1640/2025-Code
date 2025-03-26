@@ -110,6 +110,8 @@ public class RobotConstants {
 
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
+    public static final PathConstraints coralStationPathConstraints =
+        new PathConstraints(3, 1.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
   }

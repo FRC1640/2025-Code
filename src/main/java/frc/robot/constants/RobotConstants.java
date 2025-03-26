@@ -60,7 +60,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Deux25;
+    public static final RobotType robotType = RobotType.Prime24;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -110,10 +110,10 @@ public class RobotConstants {
 
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
-    public static final PathConstraints pathConstraints =
-        new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
     public static final PathConstraints coralStationPathConstraints =
         new PathConstraints(3, 1.5, Math.PI + 0.75, 4 * Math.PI);
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -186,7 +186,7 @@ public class RobotConstants {
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
             1,
-            new RobotSwitch<String>("Markward").addValue(RobotType.Deux25, "Park").get(),
+            "Dodds",
             "Front Right");
 
     public static final CameraConstant frontCameraCenter =

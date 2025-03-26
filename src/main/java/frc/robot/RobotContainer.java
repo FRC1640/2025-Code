@@ -360,7 +360,7 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
-            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.2));
+            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

@@ -57,7 +57,7 @@ public class FollowPathNearest extends FollowPath {
     double midPointLength = Math.abs(angle.getCos() * v);
 
     Pose2d midPoint =
-        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.5, nearestPos.getRotation());
+        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.25, nearestPos.getRotation());
 
     pose2dArray = new Pose2d[] {midPoint, nearestPos};
     endRotation = findNearest(positions.get()).getRotation();

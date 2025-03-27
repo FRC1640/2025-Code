@@ -438,7 +438,7 @@ public class RobotContainer {
     PIDCommandRegistry.attachPIDCommand(
         "climberLiftPID", (x) -> climberCommandFactory.setElevatorPosPID(() -> x));
     PIDCommandRegistry.attachPIDCommand(
-        "winchPID", (x) -> climberCommandFactory.setWinchPosPID(() -> x));
+        "winchPID", (x) -> climberCommandFactory.setWinchAnglePID(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(
         "LiftPPID", (x) -> liftCommandFactory.runLiftMotionProfile(() -> x));
     PIDCommandRegistry.attachProfiledPIDCommand(

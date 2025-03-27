@@ -30,6 +30,12 @@ public class ClimberCommandFactory {
         .finallyDo(() -> climberSubsystem.setClimberElevatorVoltage(0));
   }
 
+  public Command setWinchAnglePID(DoubleSupplier angle) {
+    return new RunCommand(
+            () -> winchSubsystem.setClimberWinchAngle(angle.getAsDouble()), winchSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
+  }
+
   public Command setWinchPosPID(DoubleSupplier pos) {
     return new RunCommand(
             () -> winchSubsystem.setClimberWinchPosition(pos.getAsDouble()), winchSubsystem)

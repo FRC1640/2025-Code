@@ -7,10 +7,8 @@ public class ResolverPWM {
 
   private DutyCycleEncoder resolver;
   private double offset;
-  private int channel;
 
   public ResolverPWM(int channel, double offset) {
-    this.channel = channel;
     resolver = new DutyCycleEncoder(new DigitalInput(channel));
     this.offset = offset;
   }

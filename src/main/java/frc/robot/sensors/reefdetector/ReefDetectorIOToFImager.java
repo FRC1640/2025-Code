@@ -26,7 +26,7 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = getValue() != 0;
-    inputs.isDetecting = getValue() != 255 && inputs.isConnected;
+    inputs.isDetecting = getValue() != 255;
     inputs.distanceToReef = 0.0;
     inputs.deltaX = getValue();
   }

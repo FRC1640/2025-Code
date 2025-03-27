@@ -43,9 +43,7 @@ public class FollowPathDirect extends FollowPath {
     // create target
     Pose2d nearest = findNearest(positions.get());
     Pose2d end =
-        new Pose2d(
-            nearest.getTranslation(),
-            robotPose.get().getRotation().rotateBy(new Rotation2d(Math.PI)));
+        new Pose2d(nearest.getTranslation(), nearest.getRotation().plus(new Rotation2d(Math.PI)));
     // override rotation
     endRotation = findNearest(positions.get()).getRotation();
     pose2dArray = new Pose2d[] {end};

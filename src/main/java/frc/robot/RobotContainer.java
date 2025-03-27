@@ -67,6 +67,7 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
@@ -142,6 +143,7 @@ public class RobotContainer {
 
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
+  private LocalTagAlignWeight localAlign;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -164,17 +166,20 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-                CameraConstants.frontCameraRight));
+                CameraConstants.frontCameraRight,
+                () -> localAlign.getTargetTagId()));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-                CameraConstants.frontCameraLeft));
+                CameraConstants.frontCameraLeft,
+                () -> localAlign.getTargetTagId()));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraCenter),
-                CameraConstants.frontCameraCenter));
+                CameraConstants.frontCameraCenter,
+                () -> localAlign.getTargetTagId()));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -228,7 +233,8 @@ public class RobotContainer {
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCameraLeft));
+                CameraConstants.frontCameraLeft,
+                () -> localAlign.getTargetTagId()));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled

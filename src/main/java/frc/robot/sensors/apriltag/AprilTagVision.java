@@ -15,6 +15,8 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.IntSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagVision extends PeriodicBase {
@@ -24,9 +26,10 @@ public class AprilTagVision extends PeriodicBase {
   private String displayName;
   public final double standardDeviation;
 
-  private ArrayList<Translation3d> camerasToTags = new ArrayList<>();
+  private IntSupplier getLocalAlignId;
+  private Translation3d localAlignVector = null;
 
-  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
+  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants, IntSupplier getLocalAlignId) {
     this.io = io;
     cameraName = cameraConstants.networkName;
     displayName = cameraConstants.displayName;
@@ -34,6 +37,7 @@ public class AprilTagVision extends PeriodicBase {
     this.standardDeviation = cameraConstants.standardDevConstant;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
+    this.getLocalAlignId = getLocalAlignId;
   }
 
   public double getStandardDeviation() {
@@ -155,6 +159,11 @@ public class AprilTagVision extends PeriodicBase {
     // Calculate local translation in camera's coordinate system
     Translation3d cameraToTagCameraFrame =
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
+
+    // update local vector if tag matches
+    if (getLocalAlignId.getAsInt() == observation.fiducialId()) {
+      localAlignVector = cameraToTagCameraFrame;
+    }
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =

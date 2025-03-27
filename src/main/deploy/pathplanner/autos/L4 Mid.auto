@@ -108,6 +108,18 @@
           "data": {
             "name": "AutoReef"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 Mid 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
         }
       ]
     }

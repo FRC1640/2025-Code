@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.135,
-        "y": 2.905
+        "x": 5.065568181818182,
+        "y": 2.958039772727272
       },
       "prevControl": {
-        "x": 5.898108552631578,
-        "y": 1.5041118421052633
+        "x": 5.82867673444976,
+        "y": 1.5571516148325353
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefLowerRight"
     }
   ],
   "rotationTargets": [],

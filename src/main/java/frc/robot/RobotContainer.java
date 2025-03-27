@@ -457,7 +457,7 @@ public class RobotContainer {
                             .getPose("Main")
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
-                        < 1
+                        < 1.3
                     && followPathReef.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
@@ -850,7 +850,7 @@ public class RobotContainer {
             () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
         .alongWith(
             autoScoringCommandFactory.gantryAlignCommand(
-                coralPreset, () -> RobotOdometry.instance.getPose("Main")))
+                coralPreset, () -> RobotOdometry.instance.getPose("MainTrig")))
         .alongWith(climberCommandFactory.setClampState(() -> false));
   }
 
@@ -871,7 +871,7 @@ public class RobotContainer {
                           autoScoringCommandFactory
                               .gantryAlignCommand(
                                   () -> gantryPresetActive,
-                                  () -> RobotOdometry.instance.getPose("Main"))
+                                  () -> RobotOdometry.instance.getPose("MainTrig"))
                               .asProxy()))
                   .alongWith(climberCommandFactory.setClampState(() -> false))
                   .schedule();

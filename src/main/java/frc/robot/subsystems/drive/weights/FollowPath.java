@@ -131,8 +131,8 @@ public class FollowPath {
     Pose2d target = getFinalPosition();
     Pose2d robot = robotPose.get();
     boolean complete =
-        (target.getTranslation().getDistance(robot.getTranslation()) < 0.1
-            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 2);
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
+            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
     complete &=
         Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.005;

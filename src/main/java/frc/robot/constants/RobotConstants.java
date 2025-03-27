@@ -27,8 +27,8 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.8;
-    public static final double robotLength = 0.8; // 0.927
+    public static final double robotWidth = 0.92;
+    public static final double robotLength = 0.92; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -111,9 +111,9 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
-        new PathConstraints(3, 1.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(2, 1.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
-        new PathConstraints(1.5, 1, Math.PI, 4 * Math.PI);
+        new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
   }
 
   public static class DriveConstants {
@@ -198,7 +198,7 @@ public class RobotConstants {
                     Units.inchesToMeters(2.433),
                     Units.inchesToMeters(9.2531)),
                 new Rotation3d(0, 0, 0)),
-            0.6,
+            0.8,
             "OV9281",
             "Front Center");
 
@@ -253,8 +253,8 @@ public class RobotConstants {
       RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.565, GantrySetpoint.LEFT),
-      RightL4(0.565, GantrySetpoint.RIGHT),
+      LeftL4(0.567, GantrySetpoint.LEFT),
+      RightL4(0.567, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
@@ -362,7 +362,7 @@ public class RobotConstants {
   public static class GantryConstants {
     public static final int gantrySparkID = new RobotSwitch<Integer>(17).get();
     public static final double gantryGearRatio = 27.4;
-    public static final double pulleyRadius = Units.inchesToMeters(0.5);
+    public static final double pulleyRadius = Units.inchesToMeters(0.5) * 1.13278894472;
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.36);
     public static final double gantryLimitCenter =

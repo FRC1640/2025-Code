@@ -118,16 +118,19 @@ public class GantryCommandFactory {
 
   public double getSetpointOdometry(
       Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose, BooleanSupplier liftAtPreset) {
+
+    // skip calculations if centered
+    if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
+      return GantryConstants.gantryLimitCenter;
+    }
+
     // return one side if lift not up
     if (!liftAtPreset.getAsBoolean()) {
       return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
           ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
           : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
     }
-    // skip calculations if centered
-    if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
-      return GantryConstants.gantryLimitCenter;
-    }
+
     // select reef positions
     Pose2d[] reefPositions =
         AllianceManager.chooseFromAlliance(

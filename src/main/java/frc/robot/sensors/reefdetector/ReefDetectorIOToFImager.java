@@ -21,13 +21,15 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
     return ToFImagerDutyCycle.getOutput() * 255.0;
   }
 
-  public int getValue() {return (((int) Math.round(getValue() + 1)) / 16 - 1) / 2}
+  public int getColumn() {
+    return ((int) Math.round((getRawValue() - 3) / 28)) - 1;
+  }
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
-    inputs.isConnected = getValue() != 0;
-    inputs.isDetecting = getValue() != 255;
+    inputs.isConnected = getColumn() != 0;
+    inputs.isDetecting = getColumn() != 255;
     inputs.distanceToReef = 0.0;
-    inputs.deltaX = getValue();
+    inputs.deltaX = getColumn();
   }
 }

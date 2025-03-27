@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "L3Algae",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.3368421052631584,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

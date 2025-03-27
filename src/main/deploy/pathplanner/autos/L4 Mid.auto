@@ -96,6 +96,18 @@
           "data": {
             "pathName": "L4 Mid 3"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
         }
       ]
     }

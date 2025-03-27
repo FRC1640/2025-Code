@@ -15,7 +15,7 @@ public class ReefDetectorIOTOFSensor implements ReefDetectorIO {
    */
   public double getValue(){
     double pulseWidth = sensor.getPeriod();
-    return pulseWidth;  
+    return pulseWidth;
   }
   public boolean isReefDetected(){
     return getValue() != 255 && getValue() != 0;

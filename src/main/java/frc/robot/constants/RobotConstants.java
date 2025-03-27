@@ -232,30 +232,33 @@ public class RobotConstants {
       //   RightL4(0.563, GantrySetpoint.CENTER),
       // //   Trough(0, GantrySetpoint.CENTER);
       //   TODO:SWITCH THIS BACK IMPORTANT!!!!!!!
-      Pickup(0, GantrySetpoint.CENTER),
+      Pickup(0, GantrySetpoint.CENTER, -1),
       Safe(0, 0.1, GantrySetpoint.CENTER),
       LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
       RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.565, GantrySetpoint.LEFT),
-      RightL4(0.565, GantrySetpoint.RIGHT),
-      Trough(0.06, GantrySetpoint.CENTER);
+      LeftL4(0.565, GantrySetpoint.LEFT, 0.421),
+      RightL4(0.565, GantrySetpoint.RIGHT, 0.421),
+      Trough(0.06, GantrySetpoint.CENTER, -1);
 
       public final double lift;
       public final GantrySetpoint gantrySetpoint; // Driver Station side perspective
       private double liftAlgae;
+      private double algaeEvasionThresh;
 
       private CoralPreset(double lift, double liftAlgae, GantrySetpoint setpoint) {
         this.lift = lift;
         this.liftAlgae = liftAlgae;
         this.gantrySetpoint = setpoint;
+        this.algaeEvasionThresh = -1;
       }
 
-      private CoralPreset(double lift, GantrySetpoint setpoint) {
+      private CoralPreset(double lift, GantrySetpoint setpoint, double algaeEvasionThresh) {
         this.lift = lift;
         this.liftAlgae = lift;
         this.gantrySetpoint = setpoint;
+        this.algaeEvasionThresh = algaeEvasionThresh;
       }
 
       public double getLift() {
@@ -298,6 +301,10 @@ public class RobotConstants {
 
       public boolean isRight() {
         return gantrySetpoint == GantrySetpoint.RIGHT;
+      }
+
+      public double getEvasionThresh() {
+        return algaeEvasionThresh;
       }
     }
   }

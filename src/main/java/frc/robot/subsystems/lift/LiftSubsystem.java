@@ -139,7 +139,11 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPresetAlgae(CoralPreset preset) {
-    return isAtPreset(preset.getLift()); // TODO increase error band
+    double error = 0.0045;
+    if (preset.getEvasionThresh() != -1) {
+      error += preset.getLift() - preset.getEvasionThresh();
+    }
+    return Math.abs(getMotorPosition() - preset.getLift()) < error;
   }
 
   public boolean isLimitSwitchPressed() {

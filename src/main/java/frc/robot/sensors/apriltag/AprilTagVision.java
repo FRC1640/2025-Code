@@ -24,6 +24,8 @@ public class AprilTagVision extends PeriodicBase {
   private String displayName;
   public final double standardDeviation;
 
+  private ArrayList<Translation3d> camerasToTags = new ArrayList<>();
+
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.networkName;

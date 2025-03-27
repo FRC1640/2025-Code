@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 3.9066079545454544,
-        "y": 1.8967329545454537
+        "y": 1.8967329545454534
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.293308599396966
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": "L4 Processor",

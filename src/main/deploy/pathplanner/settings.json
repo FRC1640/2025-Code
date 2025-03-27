@@ -6,7 +6,8 @@
     "L1 Spam Opposite",
     "L4 Mid",
     "L4 Opposite",
-    "L4 Processor"
+    "L4 Processor",
+    "L4 MID Destroy the other side"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,

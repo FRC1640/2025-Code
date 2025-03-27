@@ -17,20 +17,17 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
    *
    * @return
    */
-  public double getValue() {
+  public double getRawValue() {
     return ToFImagerDutyCycle.getOutput() * 255.0;
   }
 
-  public boolean isValid() {
-    // TODO: implement this!
-    return true;
-  }
+  public int getValue() {return (((int) Math.round(getValue() + 1)) / 16 - 1) / 2}
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = getValue() != 0;
     inputs.isDetecting = getValue() != 255 && inputs.isConnected;
     inputs.distanceToReef = 0.0;
-    inputs.deltaX = 0.0;
+    inputs.deltaX = getValue();
   }
 }

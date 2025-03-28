@@ -111,9 +111,19 @@ public class AutoAlignHelper {
 
   public ChassisSpeeds getLocalAlignSpeedsLine(
       Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
+    // calculate percentages
     double x = -localXLinearDrivePid.calculate(vector.getX(), 0);
     double y = -localYLinearDrivePid.calculate(vector.getY(), 0);
     double rot = localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
+    // convert to velocity
+    x = MathUtil.applyDeadband(MathUtil.clamp(x, -1, 1), 0.01);
+    y = MathUtil.applyDeadband(MathUtil.clamp(y, -1, 1), 0.01);
+    double angle = MathUtil.clamp(Math.abs(Math.atan2(y, x)), 0, Math.PI);
+    x *= Math.cos(angle) * DriveConstants.maxSpeed;
+    y *= Math.sin(angle) * DriveConstants.maxSpeed;
+
+    rot = MathUtil.applyDeadband(MathUtil.clamp(rot, -1, 1), 0.01) * DriveConstants.maxOmega;
+    // convert to field-centric
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
   }
 

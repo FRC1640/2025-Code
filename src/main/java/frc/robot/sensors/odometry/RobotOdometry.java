@@ -5,6 +5,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -54,6 +55,21 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   // getters/setters
+
+  public Translation2d getAverageLocalAlignVector() {
+    double ki = 0;
+    double kj = 0;
+    double total = 0;
+    for (AprilTagVision vision : visionMap.values()) {
+      if (vision.getLastVectorTimestamp()
+          - DriverStation.getMatchTime() * 1000 < 20) {
+        ki += vision.getLocalAlignVector().getX();
+        kj += vision.getLocalAlignVector().getY();
+        total++;
+      }
+    }
+    return new Translation2d(ki / total, kj / total);
+  }
 
   public boolean usingAutoApriltags() {
     return useAutoApriltags;

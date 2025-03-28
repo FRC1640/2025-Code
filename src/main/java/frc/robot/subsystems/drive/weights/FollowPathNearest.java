@@ -36,7 +36,7 @@ public class FollowPathNearest extends FollowPath {
     new Trigger(
             () ->
                 getFinalPosition().getTranslation().getDistance(robotPose.get().getTranslation())
-                        < 0.5
+                        < 0.8
                     && pathCommand != null)
         .onTrue(new InstantCommand(() -> restartPath()));
   }
@@ -73,7 +73,7 @@ public class FollowPathNearest extends FollowPath {
 
     // PathplannerWeight.overrideRotation(() -> omegaOverride(() -> nearestPos.getRotation()));
     setPathConstraints(AutoAlignConfig.coralStationPathConstraints);
-    if (getFinalPosition().getTranslation().getDistance(robotPose.get().getTranslation()) < 0.5) {
+    if (getFinalPosition().getTranslation().getDistance(robotPose.get().getTranslation()) < 0.8) {
       setPathConstraints(AutoAlignConfig.coralStationPathConstraintsSlow);
     }
 

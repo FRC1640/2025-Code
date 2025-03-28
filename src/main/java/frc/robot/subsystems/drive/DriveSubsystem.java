@@ -83,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
                 modules[3],
                 this,
                 new SysIdRoutine.Config(
-                    Volts.per(Seconds).of(2),
+                    Volts.per(Seconds).of(1),
                     Volts.of(8),
                     Seconds.of(15),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
@@ -105,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
         this::getChassisSpeeds,
         (x) -> PathplannerWeight.setSpeeds(x),
         new PPHolonomicDriveController(
-            new PIDConstants(3.2, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+            new PIDConstants(3.6, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         config,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         new RequirementHandler());

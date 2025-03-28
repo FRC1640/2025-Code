@@ -4,10 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "L1 Spam Opposite",
+    "L4 MID Destroy the other side",
     "L4 Mid",
     "L4 Opposite",
     "L4 Processor",
-    "L4 MID Destroy the other side"
+    "L4 Mid 3 Algae removal"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,

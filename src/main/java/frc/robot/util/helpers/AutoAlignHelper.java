@@ -13,6 +13,8 @@ import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.misc.AllianceManager;
+
+import java.util.ArrayList;
 import java.util.stream.IntStream;
 import org.littletonrobotics.junction.Logger;
 
@@ -95,14 +97,10 @@ public class AutoAlignHelper {
   }
 
   public static AprilTag getAutoalignTagId(Pose2d target) {
-    AprilTag[] autoalignTags =
-        (AprilTag[])
-            IntStream.of(
-                    AllianceManager.chooseFromAlliance(
-                        new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
-                .mapToObj((a) -> new AprilTag(a, FieldConstants.aprilTagLayout.getTagPose(a).get()))
-                .toArray();
-    AprilTag nearestTag = autoalignTags[0];
+    ArrayList<AprilTag> autoalignTags = new ArrayList<>();
+    IntStream.of(AllianceManager.chooseFromAlliance(new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
+                .forEach((i) -> autoalignTags.add(new AprilTag(i, FieldConstants.aprilTagLayout.getTagPose(i).get())));
+    AprilTag nearestTag = autoalignTags.get(0);
     double nearestDist = Double.MAX_VALUE;
     for (AprilTag tag : autoalignTags) {
       double dist =

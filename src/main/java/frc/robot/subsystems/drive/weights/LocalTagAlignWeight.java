@@ -24,18 +24,20 @@ public class LocalTagAlignWeight implements DriveWeight {
   private Supplier<AprilTag> targetTag;
   private Supplier<Pose2d> targetPose;
   private Gyro gyro;
+  private AutoAlignHelper autoAlignHelper;
   // TODO Trapezoidal Constraints???????? 
 
   public LocalTagAlignWeight(Supplier<Pose2d> targetPose, Gyro gyro) {
     this.gyro = gyro;
     this.targetPose = targetPose;
     this.targetTag = () -> AutoAlignHelper.getAutoalignTagId(targetPose.get());
+    this.autoAlignHelper = new AutoAlignHelper();
   }
 
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    return AutoAlignHelper.getLocalAlignSpeedsLine();
+    return AutoAlignHelper.getLocalAlignSpeedsLine(aprilTagVector(), gyro, targetTag.get().pose.toPose2d().getRotation());
   }
 
 }

@@ -387,9 +387,8 @@ public class RobotContainer {
                     RobotOdometry.instance.getPose("Main"),
                     AllianceManager.chooseFromAlliance(
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
-            () -> RobotOdometry.instance.getPose("Main").getRotation());
-
-    new AprilTagAlignHelper(visionArray);
+            () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            visionArray);
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

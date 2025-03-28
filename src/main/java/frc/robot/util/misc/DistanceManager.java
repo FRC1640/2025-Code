@@ -1,15 +1,9 @@
 package frc.robot.util.misc;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.constants.FieldConstants;
-
-import java.util.ArrayList;
 import java.util.function.Function;
-import java.util.stream.IntStream;
-
 import org.littletonrobotics.junction.Logger;
 
 public class DistanceManager {
@@ -78,27 +72,5 @@ public class DistanceManager {
 
     Logger.recordOutput("OUTPUT", new Pose2d(translation, pose2d.getRotation()));
     return new Pose2d(translation, pose2d.getRotation());
-  }
-
-  public static AprilTag getAutoalignTagId(Pose2d target) {
-    ArrayList<AprilTag> autoalignTags = new ArrayList<>();
-    IntStream.of(
-            AllianceManager.chooseFromAlliance(
-                new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
-        .forEach(
-            (i) ->
-                autoalignTags.add(
-                    new AprilTag(i, FieldConstants.aprilTagLayout.getTagPose(i).get())));
-    AprilTag nearestTag = autoalignTags.get(0);
-    double nearestDist = Double.MAX_VALUE;
-    for (AprilTag tag : autoalignTags) {
-      double dist =
-          target.getTranslation().getDistance(tag.pose.getTranslation().toTranslation2d());
-      if (dist < nearestDist) {
-        nearestTag = tag;
-        nearestDist = dist;
-      }
-    }
-    return nearestTag;
   }
 }

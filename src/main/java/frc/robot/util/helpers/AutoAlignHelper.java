@@ -1,6 +1,5 @@
 package frc.robot.util.helpers;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -8,13 +7,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
-import frc.robot.util.misc.AllianceManager;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
@@ -114,7 +109,10 @@ public class AutoAlignHelper {
     // calculate percentages
     double x = -localXLinearDrivePid.calculate(vector.getX(), 0);
     double y = -localYLinearDrivePid.calculate(vector.getY(), 0);
-    double rot = localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
+    double rot =
+        localRotationPid.calculate(
+            robotRotation.getRadians(),
+            AprilTagAlignHelper.clampToInterval(endRotation, robotRotation).getRadians());
     // convert to velocity
     x = MathUtil.applyDeadband(MathUtil.clamp(x, -1, 1), 0.01);
     y = MathUtil.applyDeadband(MathUtil.clamp(y, -1, 1), 0.01);

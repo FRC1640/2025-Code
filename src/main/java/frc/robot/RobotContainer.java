@@ -390,7 +390,7 @@ public class RobotContainer {
                     RobotOdometry.instance.getPose("Main"),
                     AllianceManager.chooseFromAlliance(
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
-            gyro);
+            () -> RobotOdometry.instance.getPose("Main").getRotation());
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

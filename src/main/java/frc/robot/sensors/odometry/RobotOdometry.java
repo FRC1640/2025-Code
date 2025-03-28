@@ -56,18 +56,25 @@ public class RobotOdometry extends PeriodicBase {
 
   // getters/setters
 
-  public static Translation2d getAverageLocalAlignVector() {
+  public static Optional<Translation2d> getAverageLocalAlignVector() {
     double ki = 0;
     double kj = 0;
     double total = 0;
+    boolean present = false;
     for (AprilTagVision vision : instance.visionMap.values()) {
       if (vision.getLocalAlignVector().isPresent()) {
+        present = true;
         ki += vision.getLocalAlignVector().get().getX();
         kj += vision.getLocalAlignVector().get().getY();
         total++;
       }
     }
-    return new Translation2d(ki / total, kj / total);
+    if (!present) {
+      return Optional.empty();
+    }
+    Translation2d average = new Translation2d(ki / total, kj / total);
+    Logger.recordOutput("Drive/Odometry/LocalAlignVector", new Pose2d(average, new Rotation2d()));
+    return Optional.of(average);
   }
 
   public boolean usingAutoApriltags() {

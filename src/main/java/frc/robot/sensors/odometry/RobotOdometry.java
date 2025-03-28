@@ -56,11 +56,11 @@ public class RobotOdometry extends PeriodicBase {
 
   // getters/setters
 
-  public Translation2d getAverageLocalAlignVector() {
+  public static Translation2d getAverageLocalAlignVector() {
     double ki = 0;
     double kj = 0;
     double total = 0;
-    for (AprilTagVision vision : visionMap.values()) {
+    for (AprilTagVision vision : instance.visionMap.values()) {
       if (vision.getLocalAlignVector().isPresent()) {
         ki += vision.getLocalAlignVector().get().getX();
         kj += vision.getLocalAlignVector().get().getY();

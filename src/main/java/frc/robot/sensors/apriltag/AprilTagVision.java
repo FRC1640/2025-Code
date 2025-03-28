@@ -5,10 +5,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.RobotDimensions;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
 import frc.robot.util.alerts.AlertsManager;
@@ -16,7 +18,6 @@ import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.IntSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagVision extends PeriodicBase {
@@ -27,9 +28,10 @@ public class AprilTagVision extends PeriodicBase {
   public final double standardDeviation;
 
   private IntSupplier getLocalAlignId;
-  private Translation3d localAlignVector = null;
+  private Translation2d localAlignVector = null;
 
-  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants, IntSupplier getLocalAlignId) {
+  public AprilTagVision(
+      AprilTagVisionIO io, CameraConstant cameraConstants, IntSupplier getLocalAlignId) {
     this.io = io;
     cameraName = cameraConstants.networkName;
     displayName = cameraConstants.displayName;
@@ -85,6 +87,10 @@ public class AprilTagVision extends PeriodicBase {
     double xy = 0.25 * getTrigDistFactor(observation);
     Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevTrig", xy);
     return xy;
+  }
+
+  public Translation2d getLocalAlignVector() {
+    return localAlignVector;
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
@@ -162,7 +168,9 @@ public class AprilTagVision extends PeriodicBase {
 
     // update local vector if tag matches
     if (getLocalAlignId.getAsInt() == observation.fiducialId()) {
-      localAlignVector = cameraToTagCameraFrame;
+      Translation2d centerToTag =
+          cameraDisplacement.getTranslation().plus(cameraToTagCameraFrame).toTranslation2d();
+      localAlignVector = centerToTag.minus(new Translation2d(0, RobotDimensions.robotLength / 2));
     }
 
     // Rotate through coordinate systems:

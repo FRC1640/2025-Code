@@ -8,14 +8,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.misc.AllianceManager;
-
 import java.util.stream.IntStream;
-
 import org.littletonrobotics.junction.Logger;
 
 public class AutoAlignHelper {
@@ -62,14 +60,18 @@ public class AutoAlignHelper {
   }
 
   public static AprilTag getAutoalignTagId(Pose2d target) {
-    AprilTag[] autoalignTags = (AprilTag[])IntStream.of(AllianceManager.chooseFromAlliance(
-      new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
-      .mapToObj((a) -> new AprilTag(a, FieldConstants.aprilTagLayout.getTagPose(a).get())).toArray();
+    AprilTag[] autoalignTags =
+        (AprilTag[])
+            IntStream.of(
+                    AllianceManager.chooseFromAlliance(
+                        new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
+                .mapToObj((a) -> new AprilTag(a, FieldConstants.aprilTagLayout.getTagPose(a).get()))
+                .toArray();
     AprilTag nearestTag = autoalignTags[0];
     double nearestDist = Double.MAX_VALUE;
     for (AprilTag tag : autoalignTags) {
-      double dist = target.getTranslation().getDistance(
-          tag.pose.getTranslation().toTranslation2d());
+      double dist =
+          target.getTranslation().getDistance(tag.pose.getTranslation().toTranslation2d());
       if (dist < nearestDist) {
         nearestTag = tag;
         nearestDist = dist;

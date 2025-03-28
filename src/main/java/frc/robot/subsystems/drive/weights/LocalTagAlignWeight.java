@@ -1,11 +1,10 @@
 package frc.robot.subsystems.drive.weights;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.util.helpers.AutoAlignHelper;
+import java.util.function.Supplier;
 
 public class LocalTagAlignWeight implements DriveWeight {
   private Supplier<Pose2d> targetPose;
@@ -17,7 +16,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getSpeeds'");
   }
-  
+
   public int getTargetTagId() {
     return AutoAlignHelper.getAutoalignTagId(targetPose.get()).ID;
   }

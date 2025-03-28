@@ -27,13 +27,13 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.85;
-    public static final double robotLength = 0.85; // 0.927
+    public static final double robotWidth = 0.81;
+    public static final double robotLength = 0.81; // 0.927
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
   public class TestConfig {
-    public static final TestingSetting testingMode = TestingSetting.pit;
+    public static final TestingSetting testingMode = TestingSetting.sysIDTesting;
   }
 
   public class MotorInfo {
@@ -111,7 +111,9 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
-        new PathConstraints(1.8, 1.1, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(2.5, 2.5, Math.PI + 0.75, 4 * Math.PI);
+    public static final PathConstraints coralStationPathConstraintsSlow =
+        new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
   }

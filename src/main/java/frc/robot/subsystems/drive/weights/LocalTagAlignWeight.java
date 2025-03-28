@@ -26,4 +26,8 @@ public class LocalTagAlignWeight implements DriveWeight {
         gyro,
         AutoAlignHelper.getAutoalignTagId(targetPose.get()).pose.toPose2d().getRotation());
   }
+
+  public int getTargetTagId() {
+    return AutoAlignHelper.getAutoalignTagId(targetPose.get()).ID;
+  }
 }

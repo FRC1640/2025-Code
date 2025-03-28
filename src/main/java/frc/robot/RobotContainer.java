@@ -402,6 +402,13 @@ public class RobotContainer {
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
                 Logger.recordOutput("autoramppos", autoRampPos);
+
+                Logger.recordOutput(
+                    "DistFromTarget",
+                    RobotOdometry.instance
+                        .getPose("Main")
+                        .getTranslation()
+                        .getDistance(getTarget().getTranslation()));
               }
             });
   }
@@ -414,10 +421,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.09;
+        side = 0.08;
         break;
       case RIGHT:
-        side = -0.09;
+        side = -0.08;
         break;
       case CENTER:
         side = 0;

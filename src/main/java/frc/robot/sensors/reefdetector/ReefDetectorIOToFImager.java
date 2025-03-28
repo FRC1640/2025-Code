@@ -13,16 +13,22 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
   }
 
   /**
-   * Returns between 0 - 255, 0 being not detecting, and the more up, the more right it is detecting
+   * Raw Value Duty Cycle Ratio mult by 255
    *
-   * @return
+   * @return Returns between 0 - 255, 0 being not detecting, and the more up, the more right it is
+   *     detecting
    */
   public double getRawValue() {
-    return ToFImagerDutyCycle.getOutput() * 255.0;
+    return ToFImagerDutyCycle.getOutput();
   }
 
+  /**
+   * Column being triggered on the reef detector
+   *
+   * @return Returns 0-7 although currently we have disabled it from 0 and 7 so... 1-6
+   */
   public int getColumn() {
-    return ((int) Math.round((getRawValue() - 3) / 28)) - 1;
+    return ((int) Math.round(((getRawValue() * 255) - 3) / 28)) - 1;
   }
 
   @Override

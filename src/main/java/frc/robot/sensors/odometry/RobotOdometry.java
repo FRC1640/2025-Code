@@ -61,10 +61,9 @@ public class RobotOdometry extends PeriodicBase {
     double kj = 0;
     double total = 0;
     for (AprilTagVision vision : visionMap.values()) {
-      if (vision.getLastVectorTimestamp()
-          - DriverStation.getMatchTime() * 1000 < 20) {
-        ki += vision.getLocalAlignVector().getX();
-        kj += vision.getLocalAlignVector().getY();
+      if (vision.getLocalAlignVector().isPresent()) {
+        ki += vision.getLocalAlignVector().get().getX();
+        kj += vision.getLocalAlignVector().get().getY();
         total++;
       }
     }

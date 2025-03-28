@@ -28,9 +28,7 @@ public class AprilTagVision extends PeriodicBase {
   public final double standardDeviation;
 
   private IntSupplier getLocalAlignId;
-  private TimestampedVector localAlignVector;
-
-  private record TimestampedVector(Translation2d vector, double timestamp) {}
+  private ArrayList<Translation2d> localAlignVectors = new ArrayList<>();
 
   public AprilTagVision(
       AprilTagVisionIO io, CameraConstant cameraConstants, IntSupplier getLocalAlignId) {
@@ -91,15 +89,16 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  public Translation2d getLocalAlignVector() {
-    return localAlignVector.vector;
-  }
-
-  public double getLastVectorTimestamp() {
-    return localAlignVector.timestamp;
+  public Optional<Translation2d> getLocalAlignVector() {
+    if (localAlignVectors.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(localAlignVectors.get(localAlignVectors.size()));
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
+    // reset alignment vectors to prevent stale results
+    localAlignVectors.clear();
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
     if (inputs.trigTargetObservations.length == 0) {
@@ -176,9 +175,8 @@ public class AprilTagVision extends PeriodicBase {
     if (getLocalAlignId.getAsInt() == observation.fiducialId()) {
       Translation2d centerToTag =
           cameraDisplacement.getTranslation().plus(cameraToTagCameraFrame).toTranslation2d();
-      localAlignVector = new TimestampedVector(centerToTag.minus(
-        new Translation2d(0, RobotDimensions.robotLength / 2)),
-        observation.timestamp());
+      localAlignVectors.add(
+          centerToTag.minus(new Translation2d(0, RobotDimensions.robotLength / 2)));
     }
 
     // Rotate through coordinate systems:

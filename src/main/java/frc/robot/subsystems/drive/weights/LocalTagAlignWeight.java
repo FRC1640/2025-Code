@@ -18,9 +18,9 @@ import frc.robot.util.helpers.AutoAlignHelper;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.constants.RobotPIDConstants;
 
-public class LocalTagAlignWeight extends DriveToPointWeight {
+public class LocalTagAlignWeight implements DriveWeight {
   private Supplier<Translation2d> aprilTagVector = () -> RobotOdometry.getAverageLocalAlignVector();
-  private Supplier<Rotation2d> reefFaceRotation;
+  private Supplier<AprilTag> targetTag;
   // TODO Trapezoidal Constraints???????? 
 
   public LocalTagAlignWeight(Supplier<Pose2d> robotPose, Gyro gyro) {
@@ -30,6 +30,11 @@ public class LocalTagAlignWeight extends DriveToPointWeight {
 
   public int getTargetTagId() {
     return AutoAlignHelper.getAutoalignTagId(targetPose.get()).ID;
+  }
+
+  @Override
+  public ChassisSpeeds getSpeeds() {
+    return AutoAlignHelper.getLocalAlignSpeedsLine();
   }
 
 }

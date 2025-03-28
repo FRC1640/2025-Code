@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -21,16 +22,16 @@ import frc.robot.constants.RobotPIDConstants;
 public class LocalTagAlignWeight implements DriveWeight {
   private Supplier<Translation2d> aprilTagVector = () -> RobotOdometry.getAverageLocalAlignVector();
   private Supplier<AprilTag> targetTag;
+  private Supplier<Pose2d> targetPose;
+  private Gyro gyro;
   // TODO Trapezoidal Constraints???????? 
 
-  public LocalTagAlignWeight(Supplier<Pose2d> robotPose, Gyro gyro) {
-
-    super(robotPose, () -> new Pose2d(aprilTagVector.get(), reefFaceRotation.get()), gyro);
+  public LocalTagAlignWeight(Supplier<Pose2d> targetPose, Gyro gyro) {
+    this.gyro = gyro;
+    this.targetPose = targetPose;
+    this.targetTag = () -> AutoAlignHelper.getAutoalignTagId(targetPose.get());
   }
 
-  public int getTargetTagId() {
-    return AutoAlignHelper.getAutoalignTagId(targetPose.get()).ID;
-  }
 
   @Override
   public ChassisSpeeds getSpeeds() {

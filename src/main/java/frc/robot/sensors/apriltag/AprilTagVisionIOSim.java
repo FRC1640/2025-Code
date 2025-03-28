@@ -3,8 +3,6 @@ package frc.robot.sensors.apriltag;
 import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
-
-import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import org.photonvision.simulation.PhotonCameraSim;
 

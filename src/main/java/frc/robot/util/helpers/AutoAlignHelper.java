@@ -22,6 +22,9 @@ public class AutoAlignHelper {
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
+  private PIDController localLinearDrivePid = RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
+  private PIDController localRotationPid = RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
+
   public ChassisSpeeds getPoseSpeedsLine(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;
     Pose2d target = targetPose;
@@ -57,6 +60,34 @@ public class AutoAlignHelper {
                     gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
                 .unaryMinus());
     return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
+  }
+
+  public ChassisSpeeds getLocalAlignSpeedsLine(Translation2d vector, Gyro gyro, Rotation2d endRotation) {
+    // measure error
+    Rotation2d deltaTheta = endRotation.minus(gyro.getAngleRotation2d());
+    double dist = vector.getNorm();
+    // calculate percentages
+    double linearOutput = localLinearDrivePid.calculate(dist, 0);
+    double rotationalOutput = localRotationPid.calculate(deltaTheta.getRadians(), 0);
+    // convert output to velocity
+    linearOutput = MathUtil.clamp(linearOutput, -1, 1);
+    linearOutput = MathUtil.applyDeadband(linearOutput, 0.01);
+    linearOutput *= DriveConstants.maxSpeed;
+
+    rotationalOutput = MathUtil.clamp(rotationalOutput, -1, 1);
+    rotationalOutput = MathUtil.applyDeadband(rotationalOutput, 0.01);
+    rotationalOutput *= DriveConstants.maxOmega;
+    // filter slew rate
+    linearOutput = accel.calculate(linearOutput);
+
+    // convert to robot-centric speeds
+    double xSpeed = Math.cos(deltaTheta.getRadians()) * linearOutput;
+    double ySpeed = Math.sin(deltaTheta.getRadians()) * linearOutput;
+    Logger.recordOutput("Drive/LocalAlignPosition", vector);
+
+    // convert to robot relative from field relative
+    ChassisSpeeds fieldRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalOutput);
+    return convertToFieldRelative(fieldRelative, gyro, new Pose2d(new Translation2d(), gyro.getAngleRotation2d()));
   }
 
   public static AprilTag getAutoalignTagId(Pose2d target) {

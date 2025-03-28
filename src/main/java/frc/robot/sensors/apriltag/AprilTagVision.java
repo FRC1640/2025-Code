@@ -95,7 +95,7 @@ public class AprilTagVision extends PeriodicBase {
     if (localAlignVectors.isEmpty()) {
       return Optional.empty();
     }
-    return Optional.of(localAlignVectors.get(localAlignVectors.size()));
+    return Optional.of(localAlignVectors.get(localAlignVectors.size() - 1));
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {

@@ -18,7 +18,6 @@ import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.IntSupplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 

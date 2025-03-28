@@ -383,6 +383,15 @@ public class RobotContainer {
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
 
+    localAlign =
+        new LocalTagAlignWeight(
+            () ->
+                DistanceManager.getNearestPosition(
+                    RobotOdometry.instance.getPose("Main"),
+                    AllianceManager.chooseFromAlliance(
+                        FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
+            gyro);
+
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
     // 4));

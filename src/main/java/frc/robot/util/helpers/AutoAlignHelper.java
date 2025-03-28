@@ -22,8 +22,10 @@ public class AutoAlignHelper {
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
-  private PIDController localLinearDrivePid = RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
-  private PIDController localRotationPid = RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
+  private PIDController localLinearDrivePid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
+  private PIDController localRotationPid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
   public ChassisSpeeds getPoseSpeedsLine(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;
@@ -62,7 +64,8 @@ public class AutoAlignHelper {
     return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
   }
 
-  public ChassisSpeeds getLocalAlignSpeedsLine(Translation2d vector, Gyro gyro, Rotation2d endRotation) {
+  public ChassisSpeeds getLocalAlignSpeedsLine(
+      Translation2d vector, Gyro gyro, Rotation2d endRotation) {
     // measure error
     Rotation2d deltaTheta = endRotation.minus(gyro.getAngleRotation2d());
     double dist = vector.getNorm();
@@ -87,7 +90,8 @@ public class AutoAlignHelper {
 
     // convert to robot relative from field relative
     ChassisSpeeds fieldRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalOutput);
-    return convertToFieldRelative(fieldRelative, gyro, new Pose2d(new Translation2d(), gyro.getAngleRotation2d()));
+    return convertToFieldRelative(
+        fieldRelative, gyro, new Pose2d(new Translation2d(), gyro.getAngleRotation2d()));
   }
 
   public static AprilTag getAutoalignTagId(Pose2d target) {

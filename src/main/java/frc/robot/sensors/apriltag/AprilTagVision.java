@@ -18,6 +18,8 @@ import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.IntSupplier;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagVision extends PeriodicBase {
@@ -89,6 +91,7 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
+  @AutoLogOutput(key = "AprilTagVision/LocalAlignVector")
   public Optional<Translation2d> getLocalAlignVector() {
     if (localAlignVectors.isEmpty()) {
       return Optional.empty();

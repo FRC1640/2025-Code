@@ -88,6 +88,7 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
+import frc.robot.util.helpers.AprilTagAlignHelper;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
@@ -166,20 +167,17 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-                CameraConstants.frontCameraRight,
-                () -> localAlign.getTargetTagId()));
+                CameraConstants.frontCameraRight));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-                CameraConstants.frontCameraLeft,
-                () -> localAlign.getTargetTagId()));
+                CameraConstants.frontCameraLeft));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraCenter),
-                CameraConstants.frontCameraCenter,
-                () -> localAlign.getTargetTagId()));
+                CameraConstants.frontCameraCenter));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -233,8 +231,7 @@ public class RobotContainer {
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCameraLeft,
-                () -> localAlign.getTargetTagId()));
+                CameraConstants.frontCameraLeft));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -391,6 +388,8 @@ public class RobotContainer {
                     AllianceManager.chooseFromAlliance(
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
             () -> RobotOdometry.instance.getPose("Main").getRotation());
+
+    new AprilTagAlignHelper(visionArray);
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

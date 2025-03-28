@@ -126,26 +126,4 @@ public class AutoAlignHelper {
     // convert to field-centric
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
   }
-
-  public static AprilTag getAutoalignTagId(Pose2d target) {
-    ArrayList<AprilTag> autoalignTags = new ArrayList<>();
-    IntStream.of(
-            AllianceManager.chooseFromAlliance(
-                new int[] {17, 18, 19, 20, 21, 22}, new int[] {6, 7, 8, 9, 10, 11}))
-        .forEach(
-            (i) ->
-                autoalignTags.add(
-                    new AprilTag(i, FieldConstants.aprilTagLayout.getTagPose(i).get())));
-    AprilTag nearestTag = autoalignTags.get(0);
-    double nearestDist = Double.MAX_VALUE;
-    for (AprilTag tag : autoalignTags) {
-      double dist =
-          target.getTranslation().getDistance(tag.pose.getTranslation().toTranslation2d());
-      if (dist < nearestDist) {
-        nearestTag = tag;
-        nearestDist = dist;
-      }
-    }
-    return nearestTag;
-  }
 }

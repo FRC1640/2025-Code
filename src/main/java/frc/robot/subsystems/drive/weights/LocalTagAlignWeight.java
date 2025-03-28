@@ -4,8 +4,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.sensors.odometry.RobotOdometry;
+import frc.robot.util.helpers.AprilTagAlignHelper;
 import frc.robot.util.helpers.AutoAlignHelper;
+import frc.robot.util.misc.DistanceManager;
+import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,13 +27,13 @@ public class LocalTagAlignWeight implements DriveWeight {
   public ChassisSpeeds getSpeeds() {
     Logger.recordOutput(
         "A_DEBUG/end rotation",
-        AutoAlignHelper.getAutoalignTagId(targetPose.get()).pose.toPose2d().getRotation());
+        DistanceManager.getAutoalignTagId(targetPose.get()).pose.toPose2d().getRotation());
+    Optional<Translation2d> localAlignVector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId());
     return autoAlignHelper.getLocalAlignSpeedsLine(
-        RobotOdometry.getAverageLocalAlignVector().isPresent()
-            ? RobotOdometry.getAverageLocalAlignVector().get()
-            : new Translation2d(),
+        localAlignVector.isPresent() ? localAlignVector.get() : new Translation2d(),
         robotRotation.get(),
-        AutoAlignHelper.getAutoalignTagId(targetPose.get())
+        DistanceManager.getAutoalignTagId(targetPose.get())
             .pose
             .toPose2d()
             .getRotation()
@@ -39,6 +41,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public int getTargetTagId() {
-    return AutoAlignHelper.getAutoalignTagId(targetPose.get()).ID;
+    return DistanceManager.getAutoalignTagId(targetPose.get()).ID;
   }
 }

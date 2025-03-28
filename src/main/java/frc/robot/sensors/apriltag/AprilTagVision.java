@@ -17,7 +17,6 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.IntSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,11 +27,11 @@ public class AprilTagVision extends PeriodicBase {
   private String displayName;
   public final double standardDeviation;
 
-  private IntSupplier getLocalAlignId;
-  private ArrayList<Translation2d> localAlignVectors = new ArrayList<>();
+  private ArrayList<FiducialVector> localAlignVectors = new ArrayList<>();
 
-  public AprilTagVision(
-      AprilTagVisionIO io, CameraConstant cameraConstants, IntSupplier getLocalAlignId) {
+  public record FiducialVector(int id, double timestamp, Translation2d vector) {}
+
+  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.networkName;
     displayName = cameraConstants.displayName;
@@ -40,7 +39,6 @@ public class AprilTagVision extends PeriodicBase {
     this.standardDeviation = cameraConstants.standardDevConstant;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
-    this.getLocalAlignId = getLocalAlignId;
   }
 
   public double getStandardDeviation() {
@@ -90,17 +88,15 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  @AutoLogOutput(key = "AprilTagVision/LocalAlignVector")
-  public Optional<Translation2d> getLocalAlignVector() {
-    if (localAlignVectors.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(localAlignVectors.get(localAlignVectors.size() - 1));
+  @AutoLogOutput(key = "AprilTagVision/LocalAlignVectors")
+  public FiducialVector[] getLocalAlignVectors() {
+    FiducialVector[] vectors =
+        localAlignVectors.toArray(new FiducialVector[localAlignVectors.size()]);
+    localAlignVectors.clear();
+    return vectors;
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
-    // reset alignment vectors to prevent stale results
-    localAlignVectors.clear();
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
     if (inputs.trigTargetObservations.length == 0) {
@@ -173,13 +169,15 @@ public class AprilTagVision extends PeriodicBase {
     Translation3d cameraToTagCameraFrame =
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
 
-    // update local vector if tag matches
-    if (getLocalAlignId.getAsInt() == observation.fiducialId()) {
-      Translation2d centerToTag =
-          cameraDisplacement.getTranslation().plus(cameraToTagCameraFrame).toTranslation2d();
-      localAlignVectors.add(
-          centerToTag.minus(new Translation2d(0, RobotDimensions.robotLength / 2)));
-    }
+    // update local vectors
+    Translation2d centerToTag =
+        cameraDisplacement
+            .getTranslation()
+            .plus(cameraToTagCameraFrame)
+            .toTranslation2d()
+            .minus(new Translation2d(0, RobotDimensions.robotLength / 2));
+    localAlignVectors.add(
+        new FiducialVector(observation.fiducialId(), observation.timestamp(), centerToTag));
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =

@@ -5,7 +5,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -55,27 +54,6 @@ public class RobotOdometry extends PeriodicBase {
   }
 
   // getters/setters
-
-  public static Optional<Translation2d> getAverageLocalAlignVector() {
-    double ki = 0;
-    double kj = 0;
-    double total = 0;
-    boolean present = false;
-    for (AprilTagVision vision : instance.visionMap.values()) {
-      if (vision.getLocalAlignVector().isPresent()) {
-        present = true;
-        ki += vision.getLocalAlignVector().get().getX();
-        kj += vision.getLocalAlignVector().get().getY();
-        total++;
-      }
-    }
-    if (!present) {
-      return Optional.empty();
-    }
-    Translation2d average = new Translation2d(ki / total, kj / total);
-    Logger.recordOutput("Drive/Odometry/LocalAlignVector", new Pose2d(average, new Rotation2d()));
-    return Optional.of(average);
-  }
 
   public boolean usingAutoApriltags() {
     return useAutoApriltags;

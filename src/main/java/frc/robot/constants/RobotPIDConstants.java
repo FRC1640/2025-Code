@@ -127,5 +127,5 @@ public class RobotPIDConstants {
 
   public static final PIDConstants localTagAlignX = new PIDConstants(0.25, 0, 0);
   public static final PIDConstants localTagAlignY = new PIDConstants(0.25, 0, 0);
-  public static final PIDConstants localAnglePid = new PIDConstants(0.25, 0, 0);
+  public static final PIDConstants localAnglePid = new PIDConstants(0.5, 0.001, 0.001);
 }

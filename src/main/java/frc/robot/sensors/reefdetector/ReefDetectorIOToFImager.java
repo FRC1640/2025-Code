@@ -7,9 +7,11 @@ import frc.robot.constants.RobotConstants.ReefDetectorConstants;
 public class ReefDetectorIOToFImager implements ReefDetectorIO {
 
   private final DutyCycle ToFImagerDutyCycle;
+  private final DigitalInput ToFImagerDigitalInput;
 
   public ReefDetectorIOToFImager() {
-    ToFImagerDutyCycle = new DutyCycle(new DigitalInput(ReefDetectorConstants.sensorTOFChannel));
+    ToFImagerDigitalInput = new DigitalInput(ReefDetectorConstants.sensorTOFChannel);
+    ToFImagerDutyCycle = new DutyCycle(ToFImagerDigitalInput);
   }
 
   /**
@@ -19,13 +21,14 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
    *     detecting
    */
   public double getRawValue() {
-    return ToFImagerDutyCycle.getOutput();
+    return ToFImagerDigitalInput.get() ? 255 : ToFImagerDutyCycle.getOutput();
   }
 
   /**
    * Column being triggered on the reef detector
    *
-   * @return Returns 0-7 although currently we have disabled it from 0 and 7 so... 1-6
+   * @return Returns 0-7 although currently we have disabled it from 0 and 7 so... 1-6 returns -1 if
+   *     sensor is disconnected
    */
   public int getColumn() {
     return ((int) Math.round(((getRawValue() * 255) - 3) / 28)) - 1;

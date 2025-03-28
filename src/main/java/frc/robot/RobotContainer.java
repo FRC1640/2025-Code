@@ -758,6 +758,7 @@ public class RobotContainer {
     } else {
       // put in TESTBOARD triggers here
     }
+    DriveWeightCommand.createWeightTrigger(localAlign, driveController.x());
   }
 
   private void configurePitBindings() {

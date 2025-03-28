@@ -102,6 +102,10 @@ public class FollowPath {
     }
   }
 
+  public void setPathConstraints(PathConstraints constraints) {
+    pathConstraints = constraints;
+  }
+
   public Trigger generateTrigger(BooleanSupplier condition) {
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> startPath()))

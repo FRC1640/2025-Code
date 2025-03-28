@@ -112,6 +112,8 @@ public class RobotConstants {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
         new PathConstraints(1.8, 1.1, Math.PI + 0.75, 4 * Math.PI);
+    public static final PathConstraints coralStationPathConstraintsSlow =
+        new PathConstraints(1, 0.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
   }

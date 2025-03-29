@@ -345,7 +345,7 @@ public class RobotContainer {
                     FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
             (x) ->
                 DistanceManager.addRotatedDim(
-                    x, (-(RobotDimensions.robotLength + 0.05) / 2), x.getRotation()),
+                    x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
             gyro,
             () -> RobotOdometry.instance.getPose("Main"),
             AutoAlignConfig.coralStationPathConstraints,

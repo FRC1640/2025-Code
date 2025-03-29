@@ -925,7 +925,6 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "HoldAlgae", algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
     NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
-    NamedCommands.registerCommand("Process", algaeCommandFactory.processCommand());
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",

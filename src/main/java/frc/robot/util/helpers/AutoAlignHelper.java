@@ -19,7 +19,7 @@ public class AutoAlignHelper {
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
   private PIDController localLinearDrivePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignX);
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
   // private PIDController localYLinearDrivePid =
   //     RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
   private PIDController localRotationPid =
@@ -41,7 +41,7 @@ public class AutoAlignHelper {
     rotationalPID *= DriveConstants.maxOmega;
     linearPID = accel.calculate(linearPID);
 
-    double xSpeed = +Math.cos(angleToTarget.getRadians()) * linearPID;
+    double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
     double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
     Logger.recordOutput("Drive/AutoAlignPosition", target);
 
@@ -85,7 +85,7 @@ public class AutoAlignHelper {
     // convert to velocities
     linearPid = MathUtil.clamp(linearPid, -1, 1);
     linearPid = MathUtil.applyDeadband(linearPid, 0.01);
-    linearPid *= DriveConstants.maxSpeed;
+    linearPid *= DriveConstants.maxSpeed * 0.8;
 
     rotationalPid = MathUtil.clamp(rotationalPid, -1, 1);
     rotationalPid = MathUtil.applyDeadband(rotationalPid, 0.01);
@@ -154,8 +154,8 @@ public class AutoAlignHelper {
     x = MathUtil.applyDeadband(MathUtil.clamp(x, -1, 1), 0.01);
     y = MathUtil.applyDeadband(MathUtil.clamp(y, -1, 1), 0.01);
     double angle = MathUtil.clamp(Math.abs(Math.atan2(y, x)), 0, Math.PI);
-    x *= Math.cos(angle) * DriveConstants.maxSpeed;
-    y *= Math.sin(angle) * DriveConstants.maxSpeed;
+    x *= Math.cos(angle) * DriveConstants.maxSpeed * 0.3;
+    y *= Math.sin(angle) * DriveConstants.maxSpeed * 0.3;
 
     rot = MathUtil.applyDeadband(MathUtil.clamp(rot, -1, 1), 0.01) * DriveConstants.maxOmega;
     // convert to field-centric

@@ -17,6 +17,8 @@ public class LocalTagAlignWeight implements DriveWeight {
   private AutoAlignHelper autoAlignHelper;
   private AprilTagVision[] visions;
 
+  private Translation2d lastVector = new Translation2d();
+
   // TODO Trapezoidal Constraints????????
   public LocalTagAlignWeight(
       Supplier<Pose2d> targetPose, Supplier<Rotation2d> robotRotation, AprilTagVision... visions) {
@@ -30,9 +32,10 @@ public class LocalTagAlignWeight implements DriveWeight {
   public ChassisSpeeds getSpeeds() {
     Optional<Translation2d> localAlignVector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (localAlignVector.isPresent()) { lastVector = localAlignVector.get(); }
     Logger.recordOutput("A_DEBUG/hello", localAlignVector.isPresent());
     return autoAlignHelper.getLocalAlignSpeedsLine(
-        localAlignVector.isPresent() ? localAlignVector.get() : new Translation2d(),
+        lastVector,
         robotRotation.get(),
         AprilTagAlignHelper.getAutoalignTagId(targetPose.get())
             .pose

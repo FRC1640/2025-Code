@@ -9,7 +9,7 @@ import org.littletonrobotics.junction.Logger;
 public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
   private LaserCan laserCan;
   private boolean isConnected;
-  private boolean detect;
+
   // private TimeInterpolatableBuffer<Double> distanceBuffer =
   //     TimeInterpolatableBuffer.createDoubleBuffer(10);
 

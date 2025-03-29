@@ -19,6 +19,7 @@ public class FieldConstants {
               AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark))
           .addValue(AprilTagSetting.WPICal, WPICALPosManager.aprilTagFieldLayout)
           .get();
+
   public static final int tagCount = 22;
 
   public static final VisionSystemSim visionSim = new VisionSystemSim("main");

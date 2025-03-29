@@ -67,6 +67,7 @@ import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
@@ -87,6 +88,7 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
+import frc.robot.util.helpers.AprilTagAlignHelper;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
@@ -142,6 +144,7 @@ public class RobotContainer {
 
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
+  private LocalTagAlignWeight localAlign;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -376,6 +379,16 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
+
+    localAlign =
+        new LocalTagAlignWeight(
+            () ->
+                DistanceManager.getNearestPosition(
+                    RobotOdometry.instance.getPose("Main"),
+                    AllianceManager.chooseFromAlliance(
+                        FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
+            () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            visionArray);
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
@@ -750,6 +763,7 @@ public class RobotContainer {
     } else {
       // put in TESTBOARD triggers here
     }
+    DriveWeightCommand.createWeightTrigger(localAlign, driveController.x());
   }
 
   private void configurePitBindings() {

@@ -196,10 +196,10 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(10.277),
-                    Units.inchesToMeters(2.433),
-                    Units.inchesToMeters(9.2531)),
-                new Rotation3d(0, Math.toRadians(14), 0)),
+                    Units.inchesToMeters(8.4405),
+                    Units.inchesToMeters(2.6609),
+                    Units.inchesToMeters(8.3501)),
+                new Rotation3d(0, Math.toRadians(12.68), 0)),
             0.2,
             "OV9281",
             "Front Center");

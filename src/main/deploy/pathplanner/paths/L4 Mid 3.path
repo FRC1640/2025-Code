@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.219431818181818,
-        "y": 3.9053409090909086
+        "x": 6.825,
+        "y": 4.065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.4578122454298335,
-        "y": 4.000178536427621
+        "x": 6.8795230263157885,
+        "y": 2.639473684210526
       },
       "isLocked": false,
-      "linkedName": "MidStart"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.723693181818183,
-        "y": 4.064886363636362
+        "x": 5.065568181818182,
+        "y": 2.958039772727272
       },
       "prevControl": {
-        "x": 7.01564195028432,
-        "y": 3.936510735108509
+        "x": 5.82867673444976,
+        "y": 1.5571516148325353
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefCenterRight_OffsetLeft"
+      "linkedName": "ReefLowerRight"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -47,33 +47,27 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4Left",
-      "waypointRelativePos": 0.1241758241758282,
+      "name": "L3Algae",
+      "waypointRelativePos": 0.3368421052631584,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
         "data": {
           "commands": [
             {
-              "type": "sequential",
+              "type": "parallel",
               "data": {
                 "commands": [
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetModeCoral"
+                      "name": "SetModeAlgae"
                     }
                   },
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryLeft"
-                    }
-                  },
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "SetupL4"
+                      "name": "SetupL3"
                     }
                   }
                 ]
@@ -91,8 +85,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -100,13 +94,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "L4 Mid",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 110.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

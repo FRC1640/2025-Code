@@ -21,7 +21,9 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
    *     detecting
    */
   public double getRawValue() {
-    return ToFImagerDigitalInput.get() ? 255 : ToFImagerDutyCycle.getOutput();
+    return ToFImagerDigitalInput.get() && ToFImagerDutyCycle.getOutput() == 0
+        ? 1
+        : ToFImagerDutyCycle.getOutput();
   }
 
   /**

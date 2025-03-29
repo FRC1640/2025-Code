@@ -28,9 +28,6 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    Logger.recordOutput(
-        "A_DEBUG/end rotation",
-        AprilTagAlignHelper.getAutoalignTagId(targetPose.get()).pose.toPose2d().getRotation());
     Optional<Translation2d> localAlignVector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     Logger.recordOutput("A_DEBUG/hello", localAlignVector.isPresent());

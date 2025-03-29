@@ -169,14 +169,14 @@ public class AprilTagVision extends PeriodicBase {
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
 
     // update local vectors
-    Translation2d centerToTag =
+    Translation2d frontToTag =
         cameraDisplacement
             .getTranslation()
             .plus(cameraToTagCameraFrame)
             .toTranslation2d()
-            .minus(new Translation2d(0, RobotDimensions.robotLength / 2));
+            .minus(new Translation2d(RobotDimensions.robotLength / 2, 0));
     localAlignVectors.add(
-        new FiducialVector(observation.fiducialId(), observation.timestamp(), centerToTag));
+        new FiducialVector(observation.fiducialId(), observation.timestamp(), frontToTag));
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =

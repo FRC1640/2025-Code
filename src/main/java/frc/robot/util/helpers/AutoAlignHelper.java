@@ -18,10 +18,10 @@ public class AutoAlignHelper {
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
-  private PIDController localXLinearDrivePid =
+  private PIDController localLinearDrivePid =
       RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignX);
-  private PIDController localYLinearDrivePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
+  // private PIDController localYLinearDrivePid =
+  //     RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
   private PIDController localRotationPid =
       RobotPIDConstants.constructPID(RobotPIDConstants.localAnglePid);
 
@@ -41,7 +41,7 @@ public class AutoAlignHelper {
     rotationalPID *= DriveConstants.maxOmega;
     linearPID = accel.calculate(linearPID);
 
-    double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
+    double xSpeed = +Math.cos(angleToTarget.getRadians()) * linearPID;
     double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
     Logger.recordOutput("Drive/AutoAlignPosition", target);
 
@@ -71,15 +71,52 @@ public class AutoAlignHelper {
     return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
   }
 
+  public ChassisSpeeds getLocalAlignSpeedsLine(
+      Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
+    // target origin
+    Translation2d target = new Translation2d();
+    // measurements
+    Rotation2d angleToTarget = vector.minus(target).getAngle();
+    double dist = vector.getDistance(target);
+    // calculate percent output
+    double linearPid = localLinearDrivePid.calculate(dist, 0);
+    double rotationalPid =
+        localRotationPid.calculate(robotRotation.minus(endRotation).getRadians(), 0);
+    // convert to velocities
+    linearPid = MathUtil.clamp(linearPid, -1, 1);
+    linearPid = MathUtil.applyDeadband(linearPid, 0.01);
+    linearPid *= DriveConstants.maxSpeed;
+
+    rotationalPid = MathUtil.clamp(rotationalPid, -1, 1);
+    rotationalPid = MathUtil.applyDeadband(rotationalPid, 0.01);
+    rotationalPid *= DriveConstants.maxOmega;
+    // limit slew rate
+    linearPid = accel.calculate(linearPid);
+    // convert to xy components
+    double xSpeed = -Math.cos(angleToTarget.getRadians()) * linearPid;
+    double ySpeed = -Math.sin(angleToTarget.getRadians()) * linearPid;
+    Logger.recordOutput("Drive/LocalAlignVector", vector);
+
+    Logger.recordOutput("A_DEBUG/AngleToTarget", angleToTarget);
+    Logger.recordOutput("A_DEBUG/distance", dist);
+    Logger.recordOutput("A_DEBUG/linearPid", linearPid);
+    Logger.recordOutput("A_DEBUG/rotationalPid", rotationalPid);
+    Logger.recordOutput("A_DEBUG/xSpeed", xSpeed);
+    Logger.recordOutput("A_DEBUG/ySpeed", ySpeed);
+    // convert robot relative to field relative
+    ChassisSpeeds robotRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalPid);
+    return convertToFieldRelative(robotRelative, robotRotation);
+  }
+
   /*
   public ChassisSpeeds getLocalAlignSpeedsLine(
       Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
     // measure error
-    Rotation2d deltaTheta = endRotation.minus(robotRotation);
+    // Rotation2d deltaTheta = endRotation.minus(robotRotation);
     double dist = vector.getNorm();
     // calculate percentages
     double linearOutput = localXLinearDrivePid.calculate(dist, 0);
-    double rotationalOutput = localRotationPid.calculate(deltaTheta.getRadians(), 0);
+    double rotationalOutput = localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
     // convert output to velocity
     linearOutput = MathUtil.clamp(linearOutput, -1, 1);
     linearOutput = MathUtil.applyDeadband(linearOutput, 0.01);
@@ -93,8 +130,8 @@ public class AutoAlignHelper {
 
     // convert to robot-centric speeds
     double vectorAngle = Math.atan2(vector.getY(), vector.getX());
-    double xSpeed = Math.cos(deltaTheta.getRadians()) * linearOutput;
-    double ySpeed = Math.sin(deltaTheta.getRadians()) * linearOutput;
+    double xSpeed = -Math.cos(vectorAngle) * linearOutput;
+    double ySpeed = -Math.sin(vectorAngle) * linearOutput;
     Logger.recordOutput("Drive/LocalAlignPosition", vector);
 
     // convert to robot relative from field relative
@@ -103,7 +140,7 @@ public class AutoAlignHelper {
     return fieldRelative;
   }
   */
-
+  /*
   public ChassisSpeeds getLocalAlignSpeedsLine(
       Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
     // calculate percentages
@@ -123,5 +160,5 @@ public class AutoAlignHelper {
     rot = MathUtil.applyDeadband(MathUtil.clamp(rot, -1, 1), 0.01) * DriveConstants.maxOmega;
     // convert to field-centric
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
-  }
+  } */
 }

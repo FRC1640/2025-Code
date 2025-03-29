@@ -88,7 +88,6 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  @AutoLogOutput(key = "AprilTagVision/LocalAlignVectors")
   public FiducialVector[] getLocalAlignVectors() {
     FiducialVector[] vectors =
         localAlignVectors.toArray(new FiducialVector[localAlignVectors.size()]);

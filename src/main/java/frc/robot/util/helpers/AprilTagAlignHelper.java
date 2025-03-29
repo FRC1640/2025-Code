@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.littletonrobotics.junction.Logger;
+
 public class AprilTagAlignHelper {
   private AprilTagAlignHelper() {}
 
@@ -57,7 +59,9 @@ public class AprilTagAlignHelper {
       kj += vector.vector().getY();
       total++;
     }
-    return Optional.of(new Translation2d(ki / total, kj / total));
+    Translation2d average = new Translation2d(ki / total, kj / total);
+    Logger.recordOutput("A_DEBUG/avgLocalVector", average);
+    return Optional.of(average);
   }
 
   public static ArrayList<FiducialVector[]> getLocalAlignVectors(AprilTagVision[] visions) {

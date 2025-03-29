@@ -39,7 +39,7 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = getRawValue() != 0;
-    inputs.isDetecting = getColumn() == 3 || getColumn() == 4;
+    inputs.isDetecting = getColumn() == 4 || getColumn() == 5;
     inputs.distanceToReef = 0.0;
     inputs.deltaX = getColumn();
   }

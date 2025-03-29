@@ -177,11 +177,11 @@ public class GantryCommandFactory {
     if (reefDetector.getDeltaX() == 9 || reefDetector.getDeltaX() == 0) {
       return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
     }
-    if (reefDetector.getDeltaX() < 3) {
-      return true; // go left
+    if (reefDetector.getDeltaX() < 4) {
+      return false; // go left
     }
-    if (reefDetector.getDeltaX() > 4) {
-      return false; // go right
+    if (reefDetector.getDeltaX() > 5) {
+      return true; // go right
     }
     return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
   }

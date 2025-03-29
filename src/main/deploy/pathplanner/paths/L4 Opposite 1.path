@@ -13,11 +13,10 @@
       },
       "isLocked": false,
       "linkedName": "OppositeStart"
-       },
+      },
     {
       "anchor": {
         "x": 5.095482954545455,
-@@ -20,8 +20,8 @@
         "y": 5.062045454545454
       },
       "prevControl": {

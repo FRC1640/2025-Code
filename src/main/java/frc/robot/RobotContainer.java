@@ -934,7 +934,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",
-        (new WaitUntilCommand(() -> (coralOuttakeSubsystem.hasCoral())))
+        (new WaitUntilCommand(() -> (coralOuttakeSubsystem.isCoralDetected())))
             .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));

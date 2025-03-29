@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.766420454545455,
-        "y": 1.6467755681818175
+        "x": 5.574119318181818,
+        "y": 1.6717045454545436
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     },
     {
       "anchor": {
-        "x": 1.663,
-        "y": 0.75
+        "x": 1.1367613636363636,
+        "y": 1.0534659090909075
       },
       "prevControl": {
-        "x": 3.9066079545454544,
-        "y": 1.8967329545454534
+        "x": 2.373238636363636,
+        "y": 1.123267045454544
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,15 +29,12 @@
     }
   ],
   "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8241563055062168,
-      "rotationDegrees": 54.6
-    }
+    
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.9,
+      "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,

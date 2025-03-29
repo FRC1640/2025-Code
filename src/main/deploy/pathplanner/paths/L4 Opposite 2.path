@@ -26,12 +26,8 @@
       "nextControl": null,
       "isLocked": false,
       "linkedName": "TopSource"
-      },
-      "isLocked": false,
-      "linkedName": "TopSource"
-    },
     }
-  ]
+  ],
    "rotationTargets": [],
   "constraintZones": [
     {
@@ -60,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55
+    "rotation": -55.0
   },
   "reversed": false,
   "folder": "L4 Opposite",

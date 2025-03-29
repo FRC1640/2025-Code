@@ -29,16 +29,11 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": ""
+      "name": "",
       "waypointRelativePos": 0.5196850393700834,
       "endWaypointRelativePos": null,
       "command": {

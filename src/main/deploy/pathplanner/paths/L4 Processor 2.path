@@ -28,9 +28,7 @@
       "linkedName": "BottomSource"
     }
   ],
-  "rotationTargets": [
-    
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",

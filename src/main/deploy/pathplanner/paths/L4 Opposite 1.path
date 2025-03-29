@@ -1,24 +1,28 @@
 {
   "version": "2025.0",
-  "waypoints":
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.2,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.122556818181818,
         "y": 5.520738636363636
       },
-      isLocked": false,
+      "isLocked": false,
       "linkedName": "OppositeStart"
+       },
+    {
+      "anchor": {
+        "x": 5.095482954545455,
 @@ -20,8 +20,8 @@
         "y": 5.062045454545454
       },
       "prevControl": {
         "x": 5.8333806818181815,
         "y": 5.361193181818181
-      },
-      "prevControl": {
-        "x": 5.953039772727273,
-        "y": 5.8547869318181816
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +33,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6029246344207057
+      "minWaypointRelativePos": 0.6029246344207057,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,

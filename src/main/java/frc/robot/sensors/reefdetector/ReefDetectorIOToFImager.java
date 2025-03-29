@@ -15,9 +15,9 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
   }
 
   /**
-   * Raw Value Duty Cycle Ratio mult by 255
+   * Raw Value Duty Cycle Ratio
    *
-   * @return Returns between 0 - 255, 0 being not detecting, and the more up, the more right it is
+   * @return Returns between 0 - 1, 0 being not detecting, and the more up, the more right it is
    *     detecting
    */
   public double getRawValue() {

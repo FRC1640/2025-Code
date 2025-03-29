@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.878948863636363,
-        "y": 2.918153409090909
+        "x": 3.868977272727273,
+        "y": 2.878267045454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2362553578556232,
-        "y": 2.2926426805695295
+        "x": 3.226283766946533,
+        "y": 2.2527563169331657
       },
       "isLocked": false,
       "linkedName": "ReefBottomLeft"
     },
     {
       "anchor": {
-        "x": 1.5854829545454543,
-        "y": 0.6944886363636351
+        "x": 1.5057102272727272,
+        "y": 0.7244034090909076
       },
       "prevControl": {
-        "x": 2.0738898054848347,
-        "y": 1.1825698538134666
+        "x": 1.9941170782121076,
+        "y": 1.2124846265407392
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8458942632170976,
+      "minWaypointRelativePos": 0.8278965129358821,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -47,7 +47,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

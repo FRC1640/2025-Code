@@ -8,6 +8,7 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
 
   private final DutyCycle ToFImagerDutyCycle;
   private final DigitalInput ToFImagerDigitalInput;
+  private boolean lastReading;
 
   public ReefDetectorIOToFImager() {
     ToFImagerDigitalInput = new DigitalInput(ReefDetectorConstants.sensorTOFChannel);
@@ -39,7 +40,8 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = getRawValue() != 0;
-    inputs.isDetecting = getColumn() == 40 || getColumn() == 50;
+    inputs.isDetecting = (getColumn() >= 40 && getColumn() <= 50) && lastReading;
+    lastReading = inputs.isDetecting;
     inputs.distanceToReef = 0.0;
     inputs.deltaX = getColumn();
   }

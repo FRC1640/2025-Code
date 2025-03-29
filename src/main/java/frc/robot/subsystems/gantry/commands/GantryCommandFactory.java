@@ -174,7 +174,9 @@ public class GantryCommandFactory {
   }
 
   public boolean chooseDirection() {
-    if (reefDetector.getDeltaX() == 200 || reefDetector.getDeltaX() == 0) {
+    if (reefDetector.getDeltaX() == 200
+        || reefDetector.getDeltaX() == 0
+        || reefDetector.getDeltaX() == 260) {
       return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
     }
     if (reefDetector.getDeltaX() < 40) {

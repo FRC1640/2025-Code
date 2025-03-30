@@ -9,11 +9,9 @@ import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.apriltag.AprilTagVision.FiducialVector;
 import frc.robot.util.misc.AllianceManager;
-
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.IntStream;
-
 import org.littletonrobotics.junction.Logger;
 
 public class AprilTagAlignHelper {
@@ -31,7 +29,8 @@ public class AprilTagAlignHelper {
     return averageVector;
   }
 
-  public static Optional<Translation2d> getAverageLocalAlignVector(int id, AprilTagVision... visions) {
+  public static Optional<Translation2d> getAverageLocalAlignVector(
+      int id, AprilTagVision... visions) {
     ArrayList<FiducialVector[]> allVectors = getLocalAlignVectors(visions);
     ArrayList<FiducialVector> filteredVectors = new ArrayList<>();
     for (FiducialVector[] visionVectors : allVectors) {
@@ -64,7 +63,7 @@ public class AprilTagAlignHelper {
     return Optional.of(average);
   }
 
-  public static ArrayList<FiducialVector[]> getLocalAlignVectors(AprilTagVision[] visions) {
+  private static ArrayList<FiducialVector[]> getLocalAlignVectors(AprilTagVision[] visions) {
     ArrayList<FiducialVector[]> vectors = new ArrayList<>();
     for (AprilTagVision vision : visions) {
       vectors.add(vision.getLocalAlignVectors());
@@ -74,7 +73,7 @@ public class AprilTagAlignHelper {
 
   public static Rotation2d clampToInterval(Rotation2d angle, Rotation2d other) {
     double otherRad = other.getRadians();
-    double intervals = (int)(otherRad / (2 * Math.PI));
+    double intervals = (int) (otherRad / (2 * Math.PI));
     double clamped = 2 * Math.PI * intervals + (angle.getRadians() % (2 * Math.PI));
     return new Rotation2d(clamped);
   }

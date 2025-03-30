@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -115,6 +116,11 @@ public class RobotConstants {
         new PathConstraints(2, 1.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
+    
+    // local align
+    public static final Constraints localAlignPpidConstraints =
+        new Constraints(DriveConstants.maxSpeed, 1);
+    public static final double profiledDistThreshold = 0.4;
   }
 
   public static class DriveConstants {

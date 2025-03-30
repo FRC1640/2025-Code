@@ -88,7 +88,6 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
-import frc.robot.util.helpers.AprilTagAlignHelper;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
@@ -388,6 +387,7 @@ public class RobotContainer {
                     AllianceManager.chooseFromAlliance(
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
             () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            driveSubsystem,
             visionArray);
 
     // winchSubsystem.setDefaultCommand(

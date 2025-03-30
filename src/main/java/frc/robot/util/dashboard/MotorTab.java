@@ -1,7 +1,6 @@
 package frc.robot.util.dashboard;
 
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;

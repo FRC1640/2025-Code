@@ -21,6 +21,7 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.logging.LoggerManager;
+import frc.robot.util.logging.MotorTrack;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
@@ -137,6 +138,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     PeriodicScheduler.getInstance().run();
     LoggerManager.updateLog();
+    MotorTrack.update();
   }
 
   @Override

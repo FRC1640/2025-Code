@@ -1,6 +1,7 @@
 package frc.robot.util.dashboard;
 
-import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -13,27 +14,27 @@ import frc.robot.constants.RobotConstants.MotorInfo;
 import frc.robot.util.logging.MotorTrack;
 import java.util.Map;
 
-public class FLEXMotorTab {
+public class MotorTab {
   public ShuffleboardTab motorTab;
-  private static SendableChooser<SparkFlex> motorSelect = new SendableChooser<SparkFlex>();
-  public SparkFlex selectedSparkFlex;
+  private static SendableChooser<SparkBase> motorSelect = new SendableChooser<SparkBase>();
+  public SparkBase selectedSparkMax;
   NetworkTable networkTable;
 
   public void init() {
-    motorTab = Shuffleboard.getTab("Flex Motor Testing");
+    motorTab = Shuffleboard.getTab("Max Motor Testing");
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
-    networkTable = nt.getTable("/Shuffleboard/Flex Motor Testing");
+    networkTable = nt.getTable("/Shuffleboard/Max Motor Testing");
     createWidgets();
   }
 
   public void createWidgets() {
     motorSelect.setDefaultOption("none", null);
-    for (int id : MotorTrack.motorFlexHashMap.keySet()) {
+    for (int id : MotorTrack.motorHashMap.keySet()) {
       if (MotorInfo.motorLoggingManager.getMap().containsKey(id)) {
         motorSelect.addOption(
-            MotorInfo.motorLoggingManager.getMap().get(id), MotorTrack.motorFlexHashMap.get(id));
+            MotorInfo.motorLoggingManager.getMap().get(id), MotorTrack.motorHashMap.get(id));
       } else {
-        motorSelect.addOption("Motor " + id, MotorTrack.motorFlexHashMap.get(id));
+        motorSelect.addOption("Motor " + id, MotorTrack.motorHashMap.get(id));
       }
     }
     motorSelect.onChange((x) -> update());
@@ -51,8 +52,8 @@ public class FLEXMotorTab {
             "Run Spark At Voltage",
             new InstantCommand(
                 () -> {
-                  if (selectedSparkFlex != null) {
-                    selectedSparkFlex.setVoltage(networkTable.getEntry("Voltage Set").getDouble(0));
+                  if (selectedSparkMax != null) {
+                    selectedSparkMax.setVoltage(networkTable.getEntry("Voltage Set").getDouble(0));
                   }
                 }))
         .withPosition(0, 2);
@@ -61,14 +62,14 @@ public class FLEXMotorTab {
             "Stop Spark",
             new InstantCommand(
                 () -> {
-                  if (selectedSparkFlex != null) {
-                    selectedSparkFlex.setVoltage(0);
+                  if (selectedSparkMax != null) {
+                    selectedSparkMax.setVoltage(0);
                   }
                 }))
         .withPosition(0, 3);
   }
 
   public void update() {
-    selectedSparkFlex = motorSelect.getSelected();
+    selectedSparkMax = motorSelect.getSelected();
   }
 }

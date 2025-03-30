@@ -345,7 +345,7 @@ public class RobotContainer {
                     FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
             (x) ->
                 DistanceManager.addRotatedDim(
-                    x, (-RobotDimensions.robotLength / 2), x.getRotation()),
+                    x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
             gyro,
             () -> RobotOdometry.instance.getPose("Main"),
             AutoAlignConfig.coralStationPathConstraints,
@@ -421,10 +421,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.08;
+        side = 0.1;
         break;
       case RIGHT:
-        side = -0.08;
+        side = -0.1;
         break;
       case CENTER:
         side = 0;
@@ -858,7 +858,8 @@ public class RobotContainer {
         .alongWith(
             autoScoringCommandFactory.gantryAlignCommand(
                 coralPreset, () -> RobotOdometry.instance.getPose("MainTrig")))
-        .alongWith(climberCommandFactory.setClampState(() -> false));
+        .alongWith(climberCommandFactory.setClampState(() -> false))
+        .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck());
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -934,7 +935,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunBackCoral", coralOuttakeCommandFactory.runBack());
     NamedCommands.registerCommand(
         "WaitForCoral",
-        (new WaitUntilCommand(() -> (coralOuttakeSubsystem.hasCoral())))
+        (new WaitUntilCommand(() -> (coralOuttakeSubsystem.guillotineCheck())))
             .deadlineFor(coralOuttakeCommandFactory.outtake()));
 
     NamedCommands.registerCommand("RunToPreset", autonAutoPlace(() -> coralPreset));
@@ -948,7 +949,7 @@ public class RobotContainer {
             .deadlineFor(autonAutoPlace(() -> coralPreset)));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.35)
+        new WaitCommand(0.1)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

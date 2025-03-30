@@ -8,6 +8,7 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
 
   private final DutyCycle ToFImagerDutyCycle;
   private final DigitalInput ToFImagerDigitalInput;
+  private boolean lastReading;
 
   public ReefDetectorIOToFImager() {
     ToFImagerDigitalInput = new DigitalInput(ReefDetectorConstants.sensorTOFChannel);
@@ -32,14 +33,15 @@ public class ReefDetectorIOToFImager implements ReefDetectorIO {
    * @return Returns 0-7 although currently we have disabled it from 0 and 7 so... 1-6 returns -1 if
    *     sensor is disconnected
    */
-  public int getColumn() {
-    return ((int) Math.round(((getRawValue() * 255) - 3) / 28)) - 1;
+  public double getColumn() {
+    return Math.round(getRawValue() * 255 / 10) * 10;
   }
 
   @Override
   public void updateInputs(ReefDetectorIOInputs inputs) {
     inputs.isConnected = getRawValue() != 0;
-    inputs.isDetecting = getColumn() == 4 || getColumn() == 5;
+    inputs.isDetecting = (getColumn() >= 40 && getColumn() <= 50);
+    lastReading = inputs.isDetecting;
     inputs.distanceToReef = 0.0;
     inputs.deltaX = getColumn();
   }

@@ -344,7 +344,7 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(-180.0, 99999999.9);
+    public static final Limits liftLimits = new Limits(-170.0, 99999999.9);
     public static final double winchClimbedPosition = 45;
     public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =
@@ -370,7 +370,7 @@ public class RobotConstants {
     public static final Limits gantryLimits = new Limits(0.01, 0.36);
     public static final double gantryLimitCenter =
         (gantryLimits.high + gantryLimits.low) / 2 - 0.01;
-    public static final double gantryPadding = 0.03;
+    public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;
     public static final double gantryMaxVel = 2; // PLACEHOLDER

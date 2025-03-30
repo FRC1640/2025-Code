@@ -91,8 +91,7 @@ public class RobotPIDConstants {
   }
 
   public static final PIDConstants drivePID = new PIDConstants(0.17189, 0.0, 0);
-  public static final FeedForwardConstants driveFF =
-      new FeedForwardConstants(0.12506, 2.1, 0.27879);
+  public static final FeedForwardConstants driveFF = new FeedForwardConstants(0.12506, 2, 0.27879);
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 

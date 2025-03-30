@@ -478,10 +478,15 @@ public class RobotContainer {
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathReef.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathReef.isAutoalignComplete());
+        () ->
+            driveController.a().getAsBoolean()
+                && !followPathReef.isAutoalignComplete()
+                && !localAlign.isReady());
     followPathCoral.generateTrigger(
         () ->
             driveController.leftBumper().getAsBoolean() && !followPathCoral.isAutoalignComplete());
+    DriveWeightCommand.createWeightTrigger(
+        localAlign, () -> followPathReef.isEnabled() && localAlign.isReady());
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()

@@ -30,6 +30,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     this.targetPose = targetPose;
     this.autoAlignHelper = new AutoAlignHelper();
     this.visions = visions;
+    this.driveSubsystem = driveSubsystem;
   }
 
   @Override
@@ -42,7 +43,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     }
     if (!lastVector.equals(new Translation2d())) {
       return autoAlignHelper.getLocalAlignSpeedsLine(
-          localAlignVector.get(),
+          lastVector,
           robotRotation.get(),
           AprilTagAlignHelper.getAutoalignTagId(targetPose.get())
               .pose
@@ -58,11 +59,25 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
+    lastVector = new Translation2d();
     Optional<Translation2d> vector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
       lastVector = vector.get();
+    }
+    if (!lastVector.equals(new Translation2d())) {
       autoAlignHelper.resetLocalMotionProfile(lastVector, driveSubsystem);
     }
+  }
+
+  public boolean isReady() {
+    Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isPresent()) {
+      lastVector = vector.get();
+    }
+    boolean ready = lastVector.getNorm() < 1.5 && vector.isPresent();
+    Logger.recordOutput("A_DEBUG/vector present", vector.isPresent());
+    Logger.recordOutput("A_DEBUG/localAlignReady", ready);
+    return ready;
   }
 }

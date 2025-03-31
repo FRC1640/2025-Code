@@ -1,9 +1,11 @@
 package frc.robot.subsystems.drive.weights;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.helpers.AprilTagAlignHelper;
@@ -45,11 +47,15 @@ public class LocalTagAlignWeight implements DriveWeight {
       return autoAlignHelper.getLocalAlignSpeedsLine(
           lastVector,
           robotRotation.get(),
-          AprilTagAlignHelper.getAutoalignTagId(targetPose.get())
-              .pose
-              .toPose2d()
-              .getRotation()
-              .minus(Rotation2d.kPi));
+          new Rotation2d(
+              MathUtil.angleModulus(
+                  FieldConstants.aprilTagLayout
+                      .getTagPose(getTargetTagId())
+                      .get()
+                      .getRotation()
+                      .toRotation2d()
+                      .minus(Rotation2d.kPi)
+                      .getRadians())));
     } else return new ChassisSpeeds();
   }
 
@@ -71,7 +77,8 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public boolean isReady() {
-    Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
       lastVector = vector.get();
     }

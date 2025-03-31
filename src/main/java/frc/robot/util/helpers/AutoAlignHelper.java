@@ -83,39 +83,29 @@ public class AutoAlignHelper {
       Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
     // target origin
     Translation2d target = new Translation2d();
-    // measurements
-    Rotation2d angleToTarget = vector.minus(target).getAngle();
+    // take measurements
     double dist = vector.getDistance(target);
-    // calculate percent output
-    double linearPid =
-        dist < AutoAlignConfig.profiledDistThreshold
-            ? localDrivePid.calculate(dist, 0)
-            : localDriveProfiledPid.calculate(dist, 0); // TODO velocity control?
-    double rotationalPid =
+    Rotation2d angle = vector.minus(target).getAngle();
+    // calculate output
+    double linear =
+        dist < 0.5 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
+    double rotational =
         localRotationPid.calculate(robotRotation.minus(endRotation).getRadians(), 0);
-    // convert to velocities
-    linearPid = MathUtil.clamp(linearPid, -1, 1);
-    linearPid = MathUtil.applyDeadband(linearPid, 0.01);
-    linearPid *= DriveConstants.maxSpeed * 0.8;
+    // convert to percentage
+    linear = MathUtil.clamp(linear, -1, 1);
+    linear = MathUtil.applyDeadband(linear, 0.01);
+    linear *= DriveConstants.maxSpeed;
 
-    rotationalPid = MathUtil.clamp(rotationalPid, -1, 1);
-    rotationalPid = MathUtil.applyDeadband(rotationalPid, 0.01);
-    rotationalPid *= DriveConstants.maxOmega;
-    // limit slew rate
-    linearPid = accel.calculate(linearPid);
-    // convert to xy components
-    double xSpeed = -Math.cos(angleToTarget.getRadians()) * linearPid;
-    double ySpeed = -Math.sin(angleToTarget.getRadians()) * linearPid;
-    Logger.recordOutput("Drive/LocalAlignVector", vector);
-
-    Logger.recordOutput("A_DEBUG/AngleToTarget", angleToTarget);
-    Logger.recordOutput("A_DEBUG/distance", dist);
-    Logger.recordOutput("A_DEBUG/linearPid", linearPid);
-    Logger.recordOutput("A_DEBUG/rotationalPid", rotationalPid);
-    Logger.recordOutput("A_DEBUG/xSpeed", xSpeed);
-    Logger.recordOutput("A_DEBUG/ySpeed", ySpeed);
-    // convert robot relative to field relative
-    ChassisSpeeds robotRelative = new ChassisSpeeds(xSpeed, ySpeed, rotationalPid);
+    rotational = MathUtil.clamp(rotational, -1, 1);
+    rotational = MathUtil.applyDeadband(rotational, 0.01);
+    rotational *= DriveConstants.maxOmega;
+    // limit rate
+    linear = accel.calculate(linear);
+    // find component vectors
+    double vx = -linear * angle.getCos();
+    double vy = -linear * angle.getSin();
+    // convert chassis speeds
+    ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
     return convertToFieldRelative(robotRelative, robotRotation);
   }
 

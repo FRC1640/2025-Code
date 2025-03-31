@@ -68,14 +68,8 @@ public class AprilTagAlignHelper {
     for (AprilTagVision vision : visions) {
       vectors.add(vision.getLocalAlignVectors());
     }
+    Logger.recordOutput("A_DEBUG/goodbye", !vectors.isEmpty());
     return vectors;
-  }
-
-  public static Rotation2d clampToInterval(Rotation2d angle, Rotation2d other) {
-    double otherRad = other.getRadians();
-    double intervals = (int) (otherRad / (2 * Math.PI));
-    double clamped = 2 * Math.PI * intervals + (angle.getRadians() % (2 * Math.PI));
-    return new Rotation2d(clamped);
   }
 
   public static AprilTag getAutoalignTagId(Pose2d target) {

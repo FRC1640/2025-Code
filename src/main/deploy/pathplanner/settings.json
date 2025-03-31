@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.9271,
-  "robotLength": 0.9271,
+  "robotWidth": 0.81,
+  "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
     "L1 Spam Opposite",

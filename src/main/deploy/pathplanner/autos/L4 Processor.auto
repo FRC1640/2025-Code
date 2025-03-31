@@ -40,6 +40,12 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "L4 Processor 2"
@@ -52,12 +58,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {
@@ -96,6 +96,12 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "L4 Processor 4"
@@ -108,12 +114,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {

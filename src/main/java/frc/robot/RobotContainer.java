@@ -364,7 +364,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 344.5).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 346.6).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
@@ -492,7 +492,10 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(operatorController.getLeftY()) > 0.03)
         .whileTrue(
             climberCommandFactory.winchApplyVoltageCommand(
-                () -> -operatorController.getLeftY() * 4));
+                () ->
+                    -Math.signum(operatorController.getLeftY())
+                        * Math.pow(operatorController.getLeftY(), 2)
+                        * 12));
 
     // new Trigger(
     //         () ->
@@ -724,8 +727,7 @@ public class RobotContainer {
         .povUp()
         .whileTrue(
             climberRoutines.setupClimb().alongWith(new InstantCommand(() -> autoRampPos = false)));
-    new Trigger(operatorController.povDown() /*.and(() -> climberRoutines.isReadyToClamp()) */)
-        .onTrue(climberRoutines.activateClimb());
+    operatorController.povDown().whileTrue(climberCommandFactory.setWinchPosPIDFast(() -> 22));
 
     Command cancelCommand =
         (climberCommandFactory
@@ -920,7 +922,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetupL4",
         new InstantCommand(
-            () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4));
+            () -> coralPreset = gantryAuto ? CoralPreset.RightL3 : CoralPreset.LeftL3));
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(

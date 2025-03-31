@@ -121,6 +121,7 @@ public class RobotPIDConstants {
       new PIDConstants(2, 0, 0); // PLACEHOLDER
   public static final PIDConstants climberLiftPID = new PIDConstants(0.2, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.35, 0, 0);
+  public static final PIDConstants climberWinchPIDFast = new PIDConstants(1, 0, 0);
 
   public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
 }

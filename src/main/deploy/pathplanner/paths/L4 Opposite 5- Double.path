@@ -8,31 +8,31 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2236647727272727,
-        "y": 6.886846590909091
+        "x": 1.8594847874696943,
+        "y": 7.127660383694939
       },
       "isLocked": false,
       "linkedName": "TopSource"
     },
     {
       "anchor": {
-        "x": 3.868977272727273,
-        "y": 5.0520738636363625
+        "x": 3.958721590909091,
+        "y": 5.101931818181818
       },
       "prevControl": {
-        "x": 3.3436332904815154,
-        "y": 5.476634299469517
+        "x": 3.792243741711379,
+        "y": 5.288439527744998
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefTopLeft_OffsetLeft"
+      "linkedName": "ReefTopLeft_OffsetRight"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8031496062992064,
+      "minWaypointRelativePos": 0.7176602924634305,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4Left",
-      "waypointRelativePos": 0.5669291338582704,
+      "name": "L4Go",
+      "waypointRelativePos": 0.544431946006751,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -67,7 +67,7 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetGantryRight"
+                      "name": "SetGantryLeft"
                     }
                   },
                   {
@@ -103,7 +103,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "L4 Opposite",
+  "folder": "L4 Opposite - Double",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -55.0

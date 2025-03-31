@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2462269487647144,
+        "x": 3.246226948764714,
         "y": 2.2726994987513467
       },
       "isLocked": false,
@@ -59,7 +59,7 @@
     "rotation": 55.0
   },
   "reversed": false,
-  "folder": "L4 Processor",
+  "folder": "L4 Processor - Triple",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 59.99999999999999

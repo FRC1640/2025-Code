@@ -24,6 +24,7 @@ public class LocalTagAlignWeight implements DriveWeight {
   private Gyro gyro;
 
   private Translation2d lastVector = new Translation2d();
+  private boolean running = false;
 
   public LocalTagAlignWeight(
       Supplier<Pose2d> targetPose,
@@ -44,10 +45,12 @@ public class LocalTagAlignWeight implements DriveWeight {
     Optional<Translation2d> localAlignVector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     Logger.recordOutput("A_DEBUG/hello", localAlignVector.isPresent());
+    this.running = false;
     if (localAlignVector.isPresent()) {
       lastVector = localAlignVector.get();
     }
     if (!lastVector.equals(new Translation2d())) {
+      this.running = true;
       return autoAlignHelper.getLocalAlignSpeedsLine(
           lastVector,
           gyro,
@@ -105,5 +108,10 @@ public class LocalTagAlignWeight implements DriveWeight {
     Logger.recordOutput("A_DEBUG/vector present", vector.isPresent());
     Logger.recordOutput("A_DEBUG/localAlignReady", ready);
     return ready;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return running;
   }
 }

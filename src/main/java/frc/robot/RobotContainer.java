@@ -476,7 +476,7 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.3
-                    && followPathReef.isEnabled()
+                    && dynamicAlign.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign

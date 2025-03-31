@@ -39,4 +39,9 @@ public class DynamicAlignWeight implements DriveWeight {
   public void onFinish() {
     globalAlign.stopPath();
   }
+
+  @Override
+  public boolean isEnabled() {
+    return this.isEnabled() && (globalAlign.isEnabled() || localAlign.isEnabled());
+  }
 }

@@ -98,8 +98,17 @@ public class DriveWeightCommand {
         .onTrue(new InstantCommand(() -> removeWeight(weight)));
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> {addWeight(weight); weight.onStart();}))
-        .onFalse(new InstantCommand(() -> removeWeight(weight)));
+        .onFalse(new InstantCommand(() -> {removeWeight(weight); weight.onFinish();}));
   }
+
+  /* public static void createWeightTrigger(DriveWeight weight, BooleanSupplier condition, BooleanSupplier startRequirement) {
+    new Trigger(() -> weight.cancelCondition())
+        .onTrue(new InstantCommand(() -> removeWeight(weight)));
+    new Trigger(() -> condition.getAsBoolean() && startRequirement.getAsBoolean())
+        .onTrue(new InstantCommand(() -> {addWeight(weight); weight.onStart();}));
+    new Trigger(condition)
+        .onFalse(new InstantCommand(() -> removeWeight(weight)));
+  } */
 
   public static boolean checkWeight(DriveWeight weight) {
     return weights.contains(weight) || persistentWeights.contains(weight);

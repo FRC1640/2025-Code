@@ -64,6 +64,7 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
+import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
@@ -144,6 +145,7 @@ public class RobotContainer {
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
+  private DynamicAlignWeight dynamicAlign;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -388,7 +390,10 @@ public class RobotContainer {
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
             () -> RobotOdometry.instance.getPose("Main").getRotation(),
             driveSubsystem,
+            gyro,
             visionArray);
+
+    dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
@@ -477,16 +482,16 @@ public class RobotContainer {
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathReef.generateTrigger(
-        () ->
-            driveController.a().getAsBoolean()
-                && !followPathReef.isAutoalignComplete()
-                && !localAlign.isReady());
+    // followPathReef.generateTrigger(
+    //     () ->
+    //         driveController.a().getAsBoolean()
+    //             && !followPathReef.isAutoalignComplete());
+    DriveWeightCommand.createWeightTrigger(
+        dynamicAlign,
+        () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
     followPathCoral.generateTrigger(
         () ->
             driveController.leftBumper().getAsBoolean() && !followPathCoral.isAutoalignComplete());
-    DriveWeightCommand.createWeightTrigger(
-        localAlign, () -> followPathReef.isEnabled() && localAlign.isReady());
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()

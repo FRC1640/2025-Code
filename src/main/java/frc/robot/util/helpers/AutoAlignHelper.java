@@ -50,7 +50,7 @@ public class AutoAlignHelper {
     linearPID = accel.calculate(linearPID);
 
     double xSpeed = Math.cos(angleToTarget.getRadians()) * linearPID;
-    double ySpeed = Math.sin(angleToTarget.getRadians()) * linearPID;
+    double ySpeed = -Math.sin(angleToTarget.getRadians()) * linearPID;
     Logger.recordOutput("Drive/AutoAlignPosition", target);
 
     // convert to robot relative from field relative
@@ -67,20 +67,20 @@ public class AutoAlignHelper {
             new Rotation2d(
                     gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
                 .unaryMinus());
-    return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
-  }
-
-  public static ChassisSpeeds convertToFieldRelative(
-      ChassisSpeeds fieldRelative, Rotation2d robotRotation) {
-    Translation2d xy =
-        new Translation2d(fieldRelative.vxMetersPerSecond, fieldRelative.vyMetersPerSecond);
-    Logger.recordOutput("A_DEBUG/speedsNotRotated", new Pose2d(xy, new Rotation2d()));
-    Translation2d rotated = xy.rotateBy(robotRotation);
+    Logger.recordOutput(
+        "A_DEBUG/speedConversionRotation",
+        new Rotation2d(
+                gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
+            .unaryMinus());
+    Logger.recordOutput("A_DEBUG/gyroOffset", gyro.getOffset());
     return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
   }
 
   public ChassisSpeeds getLocalAlignSpeedsLine(
-      Translation2d vector, Rotation2d robotRotation, Rotation2d endRotation) {
+      Translation2d vector, Gyro gyro, Rotation2d robotRotation, Rotation2d endRotation) {
+    Logger.recordOutput("A_DEBUG/endRotation", endRotation);
+    Logger.recordOutput("A_DEBUG/robotRotation", robotRotation);
+    localRotationPid.enableContinuousInput(-Math.PI, Math.PI);
     // target origin
     Translation2d target = new Translation2d();
     // take measurements
@@ -90,7 +90,11 @@ public class AutoAlignHelper {
     double linear =
         dist < 0.5 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
     double rotational =
-        localRotationPid.calculate(robotRotation.minus(endRotation).getRadians(), 0);
+        localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
+    Logger.recordOutput(
+        "A_DEBUG/modulusRobotRot", MathUtil.angleModulus(robotRotation.getRadians()));
+    Logger.recordOutput(
+        "A_DEBUG/modulusEndRotation", MathUtil.angleModulus(endRotation.getRadians()));
     // convert to percentage
     linear = MathUtil.clamp(linear, -1, 1);
     linear = MathUtil.applyDeadband(linear, 0.01);
@@ -106,14 +110,15 @@ public class AutoAlignHelper {
     double vy = -linear * angle.getSin();
     // convert chassis speeds
     ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
-    return convertToFieldRelative(robotRelative, robotRotation);
+    return convertToFieldRelative(robotRelative, gyro, new Pose2d());
   }
 
   public void resetLocalMotionProfile(Translation2d vector, DriveSubsystem driveSubsystem) {
     ChassisSpeeds speeds = driveSubsystem.getChassisSpeeds();
+    System.out.println(speeds);
     Translation2d velocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
     double parallelVel =
-        driveSubsystem.chassisSpeedsMagnitude()
+        -driveSubsystem.chassisSpeedsMagnitude()
             * (velocity.getAngle().minus(vector.getAngle())).getCos();
     localDriveProfiledPid.reset(vector.getNorm(), parallelVel);
   }

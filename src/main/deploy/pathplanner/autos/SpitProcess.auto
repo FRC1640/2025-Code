@@ -61,16 +61,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunToPreset"
+                  "name": "WaitForPreset"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
           }
         },
         {

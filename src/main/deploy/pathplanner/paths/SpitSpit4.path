@@ -3,49 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.075539772727272,
-        "y": 2.948068181818182
+        "x": 5.1054545454545455,
+        "y": 2.938096590909091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.656991517731496,
-        "y": 1.7404806389932221
+        "x": 5.982954545454545,
+        "y": 1.8212784090909087
       },
       "isLocked": false,
-      "linkedName": "ReefLowerRight"
+      "linkedName": "ReefLowerRight_Center"
     },
     {
       "anchor": {
-        "x": 6.02,
-        "y": 0.57
+        "x": 6.651051136363637,
+        "y": 2.1503409090909087
       },
       "prevControl": {
-        "x": 6.010028409090909,
-        "y": 1.7366761363636374
+        "x": 6.112585227272728,
+        "y": 1.9608806818181812
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SpitShot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.19607843137254902,
+      "waypointRelativePos": 0.19715808170515017,
       "rotationDegrees": 119.99999999999999
-    },
-    {
-      "waypointRelativePos": 0.8061002178649236,
-      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.11248593925759799,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.8,
+        "maxVelocity": 0.9,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,8 +52,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "lift down",
-      "waypointRelativePos": 0.1619797525309359,
+      "name": "Safe",
+      "waypointRelativePos": 0.22722159730033764,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -68,8 +64,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -77,10 +73,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 30.963756532073674
   },
   "reversed": false,
-  "folder": "SpitProcess",
+  "folder": "SpitSpit",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

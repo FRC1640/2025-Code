@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -922,7 +923,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetupL4",
         new InstantCommand(
-            () -> coralPreset = gantryAuto ? CoralPreset.RightL3 : CoralPreset.LeftL3));
+            () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4));
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(
@@ -953,7 +954,8 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
-            .deadlineFor(autonAutoPlace(() -> coralPreset)));
+            .deadlineFor(autonAutoPlace(() -> coralPreset))
+            .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
         new WaitCommand(0.1)

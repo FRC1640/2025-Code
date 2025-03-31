@@ -91,8 +91,7 @@ public class RobotPIDConstants {
   }
 
   public static final PIDConstants drivePID = new PIDConstants(0.17189, 0.0, 0);
-  public static final FeedForwardConstants driveFF =
-      new FeedForwardConstants(0.12506, 2.1, 0.27879);
+  public static final FeedForwardConstants driveFF = new FeedForwardConstants(0.12506, 2, 0.27879);
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
@@ -106,7 +105,7 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryPID = new PIDConstants(80, 1, 0);
   public static final PIDConstants gantryProfiledPID =
       new PIDConstants(2, 0, 0); // PLACEHOLDERRRRRRRRR
-  public static final PIDConstants liftPID = new PIDConstants(45, 100, 0);
+  public static final PIDConstants liftPID = new PIDConstants(20, 90, 0);
   public static final PIDConstants liftProfiledPIDConstants =
       new PIDConstants(45, 0, 0); // new PIDConstants(27.25, 0.010569);
   public static final PIDConstants liftVelocityPID = new PIDConstants(0, 0, 0);
@@ -122,6 +121,7 @@ public class RobotPIDConstants {
       new PIDConstants(2, 0, 0); // PLACEHOLDER
   public static final PIDConstants climberLiftPID = new PIDConstants(0.2, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.35, 0, 0);
+  public static final PIDConstants climberWinchPIDFast = new PIDConstants(1, 0, 0);
 
   public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
 }

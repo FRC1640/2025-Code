@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.511448863636364,
-        "y": 2.070568181818181
+        "x": 6.936663307106417,
+        "y": 1.9002045281021944
       },
       "isLocked": false,
       "linkedName": "ProcessorStart"
@@ -20,8 +20,8 @@
         "y": 2.948068181818182
       },
       "prevControl": {
-        "x": 5.833380681818181,
-        "y": 2.469431818181819
+        "x": 5.873267045454545,
+        "y": 2.489375
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7829021372328501,
+      "minWaypointRelativePos": 0.8346456692913418,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 1.5,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -91,8 +91,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -103,7 +103,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "L4 Processor - Triple",
+  "folder": "L4 Processor - Double",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 135.7

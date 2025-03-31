@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.065568181818182,
-        "y": 2.958039772727272
+        "x": 5.075539772727272,
+        "y": 2.948068181818182
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.574119318181818,
-        "y": 1.6717045454545436
+        "x": 4.357585227272727,
+        "y": 1.9409375000000002
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     },
     {
       "anchor": {
-        "x": 1.1367613636363636,
-        "y": 1.0534659090909075
+        "x": 1.545596590909091,
+        "y": 0.6944886363636351
       },
       "prevControl": {
-        "x": 2.373238636363636,
-        "y": 1.123267045454544
+        "x": 2.472954545454545,
+        "y": 1.6717045454545452
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.85,
+      "minWaypointRelativePos": 0.8323959505061864,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
+        "maxAcceleration": 1.4,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -59,7 +59,7 @@
     "rotation": 55.0
   },
   "reversed": false,
-  "folder": "L4 Processor",
+  "folder": "L4 Processor - Triple",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

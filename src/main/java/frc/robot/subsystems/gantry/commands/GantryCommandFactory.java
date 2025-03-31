@@ -174,13 +174,15 @@ public class GantryCommandFactory {
   }
 
   public boolean chooseDirection() {
-    if (reefDetector.getDeltaX() == 9 || reefDetector.getDeltaX() == 0) {
+    if (reefDetector.getDeltaX() == 200
+        || reefDetector.getDeltaX() == 0
+        || reefDetector.getDeltaX() == 260) {
       return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
     }
-    if (reefDetector.getDeltaX() < 4) {
+    if (reefDetector.getDeltaX() < 40) {
       return false; // go left
     }
-    if (reefDetector.getDeltaX() > 5) {
+    if (reefDetector.getDeltaX() > 50) {
       return true; // go right
     }
     return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;

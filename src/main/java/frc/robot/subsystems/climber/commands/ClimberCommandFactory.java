@@ -36,6 +36,12 @@ public class ClimberCommandFactory {
         .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
   }
 
+  public Command setWinchPosPIDFast(DoubleSupplier pos) {
+    return new RunCommand(
+            () -> winchSubsystem.setClimberWinchPositionFast(pos.getAsDouble()), winchSubsystem)
+        .finallyDo(() -> winchSubsystem.setClimberWinchVoltage(0));
+  }
+
   public Command winchApplyVoltageCommand(DoubleSupplier voltage) {
     return new RunCommand(
             () -> winchSubsystem.setClimberWinchVoltage(voltage.getAsDouble()), winchSubsystem)

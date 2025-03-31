@@ -33,4 +33,6 @@ public interface WinchIO extends AutoCloseable {
    * Set voltage of the motor
    */
   public default void setClimberWinchVoltage(double voltage, WinchIOInputs inputs) {}
+
+  public default void setClimberWinchPositionFast(double position, WinchIOInputs inputs) {}
 }

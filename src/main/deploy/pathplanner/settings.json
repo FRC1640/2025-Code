@@ -4,10 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "L1 Spam Opposite",
-    "L4 Mid",
+    "SpitProcess",
     "L4 Opposite - Double",
-    "L4 Processor - Triple",
-    "L4 Processor - Double"
+    "L4 Processor - Double",
+    "L4 Processor - Triple"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,

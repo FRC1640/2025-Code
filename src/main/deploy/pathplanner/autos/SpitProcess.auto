@@ -1,0 +1,130 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SpitProcess 1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetModeAlgae"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetupL2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPreset"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpitProcess 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpitProcess 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpitProcess 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

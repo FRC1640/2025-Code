@@ -1,0 +1,89 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.075539772727272,
+        "y": 2.948068181818182
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.656991517731496,
+        "y": 1.7404806389932221
+      },
+      "isLocked": false,
+      "linkedName": "ReefLowerRight"
+    },
+    {
+      "anchor": {
+        "x": 5.982954545454545,
+        "y": 0.5149999999999989
+      },
+      "prevControl": {
+        "x": 5.972982954545454,
+        "y": 1.6816761363636363
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19607843137254902,
+      "rotationDegrees": 119.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.8061002178649236,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.8,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "lift down",
+      "waypointRelativePos": 0.1619797525309359,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Safe"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "SpitProcess",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": false
+}

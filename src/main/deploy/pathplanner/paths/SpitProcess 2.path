@@ -8,33 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.491501497821191,
-        "y": 4.065
+        "x": 7.797784090909091,
+        "y": 4.084829545454545
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.851712328767124,
-        "y": 4.065
+        "x": 7.289232954545455,
+        "y": 2.2899431818181815
       },
       "prevControl": {
-        "x": 6.46578947368421,
-        "y": 4.053865131578948
+        "x": 7.24934659090909,
+        "y": 2.8882386363636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SpitShot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19893428063943186,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "lift down",
-      "waypointRelativePos": 0.7190476190476179,
+      "waypointRelativePos": 0.16197975253093722,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -54,10 +59,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 110.0
+    "rotation": 1.1691393279074498
   },
   "reversed": false,
-  "folder": "L4 Mid",
+  "folder": "SpitProcess",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

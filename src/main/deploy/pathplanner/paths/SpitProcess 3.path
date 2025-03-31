@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.825,
-        "y": 4.065
+        "x": 7.289232954545455,
+        "y": 2.2899431818181815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.8795230263157885,
-        "y": 2.639473684210526
+        "x": 6.192357954545455,
+        "y": 2.1104545454545462
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SpitShot"
     },
     {
       "anchor": {
-        "x": 5.065568181818182,
-        "y": 2.958039772727272
+        "x": 5.075539772727272,
+        "y": 2.948068181818182
       },
       "prevControl": {
-        "x": 5.82867673444976,
-        "y": 1.5571516148325353
+        "x": 5.982954545454545,
+        "y": 1.9409374999999998
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8206039076376608,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -48,7 +53,7 @@
   "eventMarkers": [
     {
       "name": "L3Algae",
-      "waypointRelativePos": 0.3368421052631584,
+      "waypointRelativePos": 0.8436445444319463,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -85,8 +90,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -97,10 +102,10 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "L4 Mid",
+  "folder": "SpitProcess",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 110.0
+    "rotation": 1.1691393279074498
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

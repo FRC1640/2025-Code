@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L4 Mid 1"
+                  "pathName": "SpitProcess 1"
                 }
               }
             ]
@@ -82,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Mid 2"
+            "pathName": "SpitProcess 2"
           }
         },
         {
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Mid 3"
+            "pathName": "SpitProcess 3"
           }
         },
         {
@@ -112,7 +112,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 Mid 4"
+            "pathName": "SpitProcess 4"
           }
         },
         {

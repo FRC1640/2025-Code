@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.065568181818182,
-        "y": 2.958039772727272
+        "x": 5.075539772727272,
+        "y": 2.948068181818182
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.647019926822406,
-        "y": 1.750452229902312
+        "x": 5.656991517731496,
+        "y": 1.7404806389932221
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     },
     {
       "anchor": {
-        "x": 6.2,
-        "y": 0.52
+        "x": 5.982954545454545,
+        "y": 0.5149999999999989
       },
       "prevControl": {
-        "x": 6.082501808376124,
-        "y": 1.6914305052056373
+        "x": 5.972982954545454,
+        "y": 1.6816761363636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Processor"
     }
   ],
   "rotationTargets": [
@@ -44,8 +44,8 @@
       "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.8,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -57,7 +57,7 @@
   "eventMarkers": [
     {
       "name": "lift down",
-      "waypointRelativePos": 0.6473684210526316,
+      "waypointRelativePos": 0.1619797525309359,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -68,8 +68,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -80,10 +80,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "L4 Mid",
+  "folder": "SpitProcess",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

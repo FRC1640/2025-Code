@@ -103,7 +103,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "L4 Mid",
+  "folder": "SpitProcess",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -53,13 +53,13 @@ public class LocalTagAlignWeight implements DriveWeight {
           gyro,
           new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
           new Rotation2d(
-                  FieldConstants.aprilTagLayout
-                      .getTagPose(getTargetTagId())
-                      .get()
-                      .getRotation()
-                      .toRotation2d()
-                      .minus(Rotation2d.kPi)
-                      .getRadians()));
+              FieldConstants.aprilTagLayout
+                  .getTagPose(getTargetTagId())
+                  .get()
+                  .getRotation()
+                  .toRotation2d()
+                  .minus(Rotation2d.kPi)
+                  .getRadians()));
     } else return new ChassisSpeeds();
   }
 
@@ -90,7 +90,18 @@ public class LocalTagAlignWeight implements DriveWeight {
     }
     Logger.recordOutput("A_DEBUG/ready vector present?", vector.isPresent());
     // System.out.println(lastVector);
-    boolean ready = lastVector.getNorm() < 1.5;
+    double goalAngle =
+        MathUtil.angleModulus(
+            FieldConstants.aprilTagLayout
+                .getTagPose(getTargetTagId())
+                .get()
+                .toPose2d()
+                .getRotation()
+                .unaryMinus()
+                .getRadians());
+    boolean ready =
+        lastVector.getNorm() < 1.5
+            && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
     Logger.recordOutput("A_DEBUG/vector present", vector.isPresent());
     Logger.recordOutput("A_DEBUG/localAlignReady", ready);
     return ready;

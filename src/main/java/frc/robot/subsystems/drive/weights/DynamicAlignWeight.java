@@ -1,7 +1,6 @@
 package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 
 public class DynamicAlignWeight implements DriveWeight {
   private FollowPathNearest globalAlign;
@@ -14,7 +13,9 @@ public class DynamicAlignWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    boolean[] conditions = {localAlign.isReady(), globalAlign.isEnabled(), !globalAlign.isAutoalignComplete()};
+    boolean[] conditions = {
+      localAlign.isReady(), globalAlign.isEnabled(), !globalAlign.isAutoalignComplete()
+    };
     System.out.println(conditions[0] + " " + conditions[1] + " " + conditions[2]);
     if (conditions[0]) {
       globalAlign.stopPath();

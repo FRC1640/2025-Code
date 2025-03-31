@@ -1,0 +1,114 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.723693181818183,
+        "y": 4.064886363636362
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.2521875,
+        "y": 4.015028409090909
+      },
+      "isLocked": false,
+      "linkedName": "ReefCenterRight_OffsetLeft"
+    },
+    {
+      "anchor": {
+        "x": 7.039943181818181,
+        "y": 3.9053409090909086
+      },
+      "prevControl": {
+        "x": 6.710880681818183,
+        "y": 4.214460227272727
+      },
+      "nextControl": {
+        "x": 7.444991618504156,
+        "y": 3.5248408625071117
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.982954545454545,
+        "y": 0.5149999999999989
+      },
+      "prevControl": {
+        "x": 6.0783614759818425,
+        "y": 1.2134732052595494
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.2042628774422726,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0674915635545557,
+      "maxWaypointRelativePos": 0.8053993250843728,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.8,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.7277840269966163,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.8,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Safe",
+      "waypointRelativePos": 0.6164229471316142,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Safe"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Process",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

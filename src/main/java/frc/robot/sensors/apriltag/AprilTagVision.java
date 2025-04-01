@@ -5,10 +5,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.RobotDimensions;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
 import frc.robot.util.alerts.AlertsManager;
@@ -23,6 +25,10 @@ public class AprilTagVision extends PeriodicBase {
   private String cameraName;
   private String displayName;
   public final double standardDeviation;
+
+  private ArrayList<FiducialVector> localAlignVectors = new ArrayList<>();
+
+  public record FiducialVector(int id, double timestamp, Translation2d vector) {}
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
@@ -79,6 +85,13 @@ public class AprilTagVision extends PeriodicBase {
     double xy = 0.25 * getTrigDistFactor(observation);
     Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/xyStdDevTrig", xy);
     return xy;
+  }
+
+  public FiducialVector[] getLocalAlignVectors() {
+    FiducialVector[] vectors =
+        localAlignVectors.toArray(new FiducialVector[localAlignVectors.size()]);
+    localAlignVectors.clear();
+    return vectors;
   }
 
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
@@ -153,6 +166,16 @@ public class AprilTagVision extends PeriodicBase {
     // Calculate local translation in camera's coordinate system
     Translation3d cameraToTagCameraFrame =
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
+
+    // update local vectors
+    Translation2d frontToTag =
+        cameraDisplacement
+            .getTranslation()
+            .plus(cameraToTagCameraFrame)
+            .toTranslation2d()
+            .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
+    localAlignVectors.add(
+        new FiducialVector(observation.fiducialId(), observation.timestamp(), frontToTag));
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =

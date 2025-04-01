@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -29,6 +30,7 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.81;
     public static final double robotLength = 0.81; // 0.927
+    public static final double robotLengthLocalAlign = 0.79;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -116,6 +118,11 @@ public class RobotConstants {
         new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
+    
+    // local align
+    public static final Constraints localAlignPpidConstraints =
+        new Constraints(DriveConstants.maxSpeed, 1);
+    public static final double profiledDistThreshold = 0.4;
   }
 
   public static class DriveConstants {
@@ -233,9 +240,15 @@ public class RobotConstants {
     public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
-      LEFT,
-      RIGHT,
-      CENTER;
+      LEFT(Units.inchesToMeters(13 / 2)),
+      RIGHT(-Units.inchesToMeters(13 / 2)),
+      CENTER(0);
+
+      public double alignOffset;
+
+      private GantrySetpoint(double alignOffset) {
+        this.alignOffset = alignOffset;
+      }
     }
 
     public enum CoralPreset {

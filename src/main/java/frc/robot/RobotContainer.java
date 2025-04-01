@@ -65,9 +65,11 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
+import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
@@ -143,6 +145,8 @@ public class RobotContainer {
 
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
+  private LocalTagAlignWeight localAlign;
+  private DynamicAlignWeight dynamicAlign;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -378,6 +382,20 @@ public class RobotContainer {
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
 
+    localAlign =
+        new LocalTagAlignWeight(
+            () ->
+                DistanceManager.getNearestPosition(
+                    RobotOdometry.instance.getPose("Main"),
+                    AllianceManager.chooseFromAlliance(
+                        FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
+            () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            driveSubsystem,
+            gyro,
+            visionArray[2]);
+
+    dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
+
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
     // 4));
@@ -466,14 +484,19 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.3
-                    && followPathReef.isEnabled()
+                    && dynamicAlign.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathReef.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathReef.isAutoalignComplete());
+    // followPathReef.generateTrigger(
+    //     () ->
+    //         driveController.a().getAsBoolean()
+    //             && !followPathReef.isAutoalignComplete());
+    DriveWeightCommand.createWeightTrigger(
+        dynamicAlign,
+        () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
     followPathCoral.generateTrigger(
         () ->
             driveController.leftBumper().getAsBoolean() && !followPathCoral.isAutoalignComplete());

@@ -173,7 +173,7 @@ public class AprilTagVision extends PeriodicBase {
             .getTranslation()
             .plus(cameraToTagCameraFrame)
             .toTranslation2d()
-            .minus(new Translation2d(RobotDimensions.robotLength / 2, 0));
+            .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
     localAlignVectors.add(
         new FiducialVector(observation.fiducialId(), observation.timestamp(), frontToTag));
 

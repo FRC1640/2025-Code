@@ -42,7 +42,7 @@ public class AutoScoringCommandFactory {
 
   public Command gantryAlignCommand(Supplier<CoralPreset> getPreset, Supplier<Pose2d> getPose) {
     return gantryCommandFactory.gantryPIDCommand(
-        () -> gantryCommandFactory.getSetpointOdometry(getPreset, getPose, () -> true));
+        () -> gantryCommandFactory.getSetpointOdometry(getPreset, getPose, () -> true)); // TODO ask Justin about () -> true
   }
 
   public Command autoPlace() {

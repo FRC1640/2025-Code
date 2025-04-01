@@ -391,7 +391,7 @@ public class RobotContainer {
             () -> RobotOdometry.instance.getPose("Main").getRotation(),
             driveSubsystem,
             gyro,
-            visionArray);
+            visionArray[2]);
 
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
 

@@ -204,7 +204,7 @@ public class GantryCommandFactory {
                                             - GantryConstants.gantryLimits.low)
                                     < GantryConstants.gantryPadding)
                     .andThen(
-                        new InstantCommand(() -> direction = !direction)
+                        new InstantCommand(() -> direction = !direction) // this just looks like the normal switch. where does this happen?
                             .andThen(
                                 gantrySetVelocityCommand(
                                         () ->

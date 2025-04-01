@@ -23,6 +23,8 @@ public class AutoAlignHelper {
 
   private PIDController localDrivePid =
       RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
+  private PIDController localVelocityPid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignVelocity);
   // private PIDController localYLinearDrivePid =
   //     RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
   private PIDController localRotationPid =
@@ -77,7 +79,7 @@ public class AutoAlignHelper {
   }
 
   public ChassisSpeeds getLocalAlignSpeedsLine(
-      Translation2d vector, Gyro gyro, Rotation2d robotRotation, Rotation2d endRotation) {
+      Translation2d vector, Gyro gyro, Rotation2d robotRotation, Rotation2d endRotation, DriveSubsystem driveSubsystem) {
     Logger.recordOutput("A_DEBUG/endRotation", endRotation);
     Logger.recordOutput("A_DEBUG/robotRotation", robotRotation);
     localRotationPid.enableContinuousInput(-Math.PI, Math.PI);
@@ -88,7 +90,7 @@ public class AutoAlignHelper {
     Rotation2d angle = vector.minus(target).getAngle();
     // calculate output
     double linear =
-        dist < 0.5 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
+        dist < 0.25 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
     double rotational =
         localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
     Logger.recordOutput(

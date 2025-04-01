@@ -287,6 +287,7 @@ public class RobotConstants {
       }
 
       public GantrySetpoint getGantrySetpoint(boolean dSide) {
+        // if dSide is true it will flip the output
         switch (gantrySetpoint) {
           case LEFT:
             return false ^ dSide ? GantrySetpoint.RIGHT : GantrySetpoint.LEFT;

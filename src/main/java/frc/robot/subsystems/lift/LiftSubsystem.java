@@ -135,7 +135,7 @@ public class LiftSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPreset(double pos) {
-    return Math.abs(getMotorPosition() - pos) < 0.0045;
+    return Math.abs(getMotorPosition() - pos) < 0.004;
   }
 
   public boolean isAtPresetAlgae(CoralPreset preset) {

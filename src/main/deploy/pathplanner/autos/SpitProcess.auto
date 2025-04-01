@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L4 Opposite 1"
+                  "pathName": "SpitProcess 1"
                 }
               }
             ]
@@ -36,44 +36,32 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "parallel",
                 "data": {
-                  "pathName": "L4 Opposite 2"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetModeAlgae"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SetupL2"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L4 Opposite 3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunBackCoral"
+                  "name": "RunToPreset"
                 }
               }
             ]
@@ -92,47 +80,21 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L4 Opposite 4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Safe"
-                }
-              }
-            ]
+            "pathName": "SpitProcess 2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "WaitForCoral"
+            "name": "Process"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L4 Opposite 5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunBackCoral"
-                }
-              }
-            ]
+            "pathName": "SpitProcess 3"
           }
         },
         {
@@ -145,6 +107,18 @@
           "type": "named",
           "data": {
             "name": "AutoReef"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpitProcess 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Process"
           }
         }
       ]

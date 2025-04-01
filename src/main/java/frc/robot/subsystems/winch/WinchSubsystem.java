@@ -82,6 +82,10 @@ public class WinchSubsystem extends SubsystemBase {
     winchIO.setClimberWinchPosition(pos, inputs);
   }
 
+  public void setClimberWinchPositionFast(double pos) {
+    winchIO.setClimberWinchPositionFast(pos, inputs);
+  }
+
   public void setClimberWinchVoltage(double voltage) {
     winchIO.setClimberWinchVoltage(voltage, inputs);
   }

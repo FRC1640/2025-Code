@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.724,
+        "y": 4.065
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.797784090909091,
+        "y": 4.084829545454545
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.289232954545455,
+        "y": 2.2899431818181815
+      },
+      "prevControl": {
+        "x": 7.24934659090909,
+        "y": 2.8882386363636363
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SpitShot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19893428063943186,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "lift down",
+      "waypointRelativePos": 0.16197975253093722,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Safe"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 1.1691393279074498
+  },
+  "reversed": false,
+  "folder": "SpitProcess",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

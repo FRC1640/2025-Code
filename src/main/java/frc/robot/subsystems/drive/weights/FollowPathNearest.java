@@ -5,6 +5,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotPIDConstants;
 import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -30,6 +33,12 @@ public class FollowPathNearest extends FollowPath {
     pose2dArray = new Pose2d[] {findNearest(this.positions.get())};
     endRotation = findNearest(this.positions.get()).getRotation();
     this.poseFunction = poseFunction;
+    new Trigger(
+            () ->
+                getFinalPosition().getTranslation().getDistance(robotPose.get().getTranslation())
+                        < 0.8
+                    && pathCommand != null)
+        .onTrue(new InstantCommand(() -> restartPath()));
   }
 
   public void setPoseFunction(Function<Pose2d, Pose2d> poseFunction) {
@@ -57,12 +66,16 @@ public class FollowPathNearest extends FollowPath {
     double midPointLength = Math.abs(angle.getCos() * v);
 
     Pose2d midPoint =
-        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.25, nearestPos.getRotation());
+        DistanceManager.addRotatedDim(nearestPos, midPointLength * 0.1, nearestPos.getRotation());
 
     pose2dArray = new Pose2d[] {midPoint, nearestPos};
     endRotation = findNearest(positions.get()).getRotation();
 
     // PathplannerWeight.overrideRotation(() -> omegaOverride(() -> nearestPos.getRotation()));
+    setPathConstraints(AutoAlignConfig.coralStationPathConstraints);
+    if (getFinalPosition().getTranslation().getDistance(robotPose.get().getTranslation()) < 0.8) {
+      setPathConstraints(AutoAlignConfig.coralStationPathConstraintsSlow);
+    }
 
     super.startPath();
   }

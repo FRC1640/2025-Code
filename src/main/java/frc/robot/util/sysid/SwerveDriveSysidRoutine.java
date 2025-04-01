@@ -30,10 +30,10 @@ public class SwerveDriveSysidRoutine {
         config,
         new SysIdRoutine.Mechanism(
             (Voltage volts) -> {
-              fl.setDriveVoltage(volts.in(Volts));
-              fr.setDriveVoltage(volts.in(Volts));
-              bl.setDriveVoltage(volts.in(Volts));
-              br.setDriveVoltage(volts.in(Volts));
+              fl.setDriveVoltage(-volts.in(Volts));
+              fr.setDriveVoltage(-volts.in(Volts));
+              bl.setDriveVoltage(-volts.in(Volts));
+              br.setDriveVoltage(-volts.in(Volts));
             },
             null,
             subsystem));

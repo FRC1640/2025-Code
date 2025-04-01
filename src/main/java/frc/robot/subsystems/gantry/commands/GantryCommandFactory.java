@@ -173,11 +173,23 @@ public class GantryCommandFactory {
     return setpoint;
   }
 
+  public boolean chooseDirection() {
+    if (reefDetector.getDeltaX() == 200
+        || reefDetector.getDeltaX() == 0
+        || reefDetector.getDeltaX() == 260) {
+      return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
+    }
+    if (reefDetector.getDeltaX() < 40) {
+      return false; // go left
+    }
+    if (reefDetector.getDeltaX() > 50) {
+      return true; // go right
+    }
+    return gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter;
+  }
+
   public Command gantryDriftCommandThresh() {
-    return new InstantCommand(
-            () ->
-                direction =
-                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter)
+    return new InstantCommand(() -> direction = chooseDirection())
         .andThen(
             (gantrySetVelocityCommand(
                         () -> direction ? -GantryConstants.alignSpeed : GantryConstants.alignSpeed)

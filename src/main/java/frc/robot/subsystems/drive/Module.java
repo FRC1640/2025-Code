@@ -45,7 +45,8 @@ public class Module {
         id.toString() + " steer motor is hot.",
         AlertType.kWarning);
     LogRunner.addLog(
-        new VelocityLogStorage(() -> getVelocity(), () -> io.velocitySetpoint(), "driveVelocity"));
+        new VelocityLogStorage(
+            () -> getVelocity(), () -> io.velocitySetpoint(), "driveVelocity" + id));
   }
 
   public void periodic() {

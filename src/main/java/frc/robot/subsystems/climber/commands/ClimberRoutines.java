@@ -73,7 +73,12 @@ public class ClimberRoutines {
   public Command setupClimb() {
     return climberCommandFactory
         .setClampState(() -> false)
-        .andThen(lowerLift().alongWith(new WaitCommand(0.5).andThen(unwindArm())))
+        .andThen(
+            lowerLift()
+                .alongWith(
+                    new WaitCommand(1)
+                        .deadlineFor(climberCommandFactory.setWinchPosPID(() -> 330))
+                        .andThen(unwindArm())))
         .repeatedly();
   }
 

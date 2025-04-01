@@ -28,14 +28,14 @@ public class RobotConstants {
   // READ DOCS FOR HOW THE ROBOT TYPE SWITCHERS WORK
 
   public class RobotDimensions {
-    public static final double robotWidth = 0.92;
-    public static final double robotLength = 0.92; // 0.927
+    public static final double robotWidth = 0.81;
+    public static final double robotLength = 0.81; // 0.927
     public static final double robotLengthLocalAlign = 0.79;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
   public class TestConfig {
-    public static final TestingSetting testingMode = TestingSetting.pit;
+    public static final TestingSetting testingMode = TestingSetting.sysIDTesting;
   }
 
   public class MotorInfo {
@@ -113,7 +113,9 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
-        new PathConstraints(2, 1.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(2.5, 2.5, Math.PI + 0.75, 4 * Math.PI);
+    public static final PathConstraints coralStationPathConstraintsSlow =
+        new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
     
@@ -201,11 +203,11 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(10.277),
-                    Units.inchesToMeters(2.433),
-                    Units.inchesToMeters(9.2531)),
-                new Rotation3d(0, 0, 0)),
-            0.8,
+                    Units.inchesToMeters(8.4405),
+                    Units.inchesToMeters(2.6609),
+                    Units.inchesToMeters(8.3501)),
+                new Rotation3d(0, Math.toRadians(12.68), 0)),
+            0.2,
             "OV9281",
             "Front Center");
 
@@ -337,6 +339,7 @@ public class RobotConstants {
     public static final double averagePercentage = 0.8;
     public static final double waitTimeSeconds = 0.1;
     public static final double timeDerivative = 0.5;
+    public static final int sensorTOFChannel = 5;
   }
 
   // TODO replace with actual values
@@ -354,7 +357,7 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(-180.0, 99999999.9);
+    public static final Limits liftLimits = new Limits(-170.0, 99999999.9);
     public static final double winchClimbedPosition = 45;
     public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =
@@ -378,9 +381,8 @@ public class RobotConstants {
     public static final double pulleyRadius = Units.inchesToMeters(0.5) * 1.13278894472;
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.36);
-    public static final double gantryLimitCenter =
-        (gantryLimits.high + gantryLimits.low) / 2 - 0.01;
-    public static final double gantryPadding = 0.03;
+    public static final double gantryLimitCenter = 0.187;
+    public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;
     public static final double gantryMaxVel = 2; // PLACEHOLDER

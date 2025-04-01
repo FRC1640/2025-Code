@@ -13,6 +13,8 @@ public class WinchIOSparkMax implements WinchIO {
   private final SparkMax winchFollowerSpark;
   private final PIDController winchPID =
       RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPID, "winchPID");
+  private final PIDController winchPIDFast =
+      RobotPIDConstants.constructPID(RobotPIDConstants.climberWinchPIDFast, "winchPIDFast");
 
   public WinchIOSparkMax() {
     winchLeaderSpark =
@@ -24,6 +26,7 @@ public class WinchIOSparkMax implements WinchIO {
             winchLeaderSpark);
 
     winchPID.enableContinuousInput(0, 360);
+    winchPIDFast.enableContinuousInput(0, 360);
   }
   /*
    * Set voltage of the winch motors
@@ -58,5 +61,12 @@ public class WinchIOSparkMax implements WinchIO {
     inputs.winchFollowerMotorVoltage = winchFollowerSpark.getAppliedOutput();
     inputs.winchLeaderMotorTemperature = winchLeaderSpark.getMotorTemperature();
     inputs.winchFollowerMotorTemperature = winchFollowerSpark.getMotorTemperature();
+  }
+
+  @Override
+  public void setClimberWinchPositionFast(double pos, WinchIOInputs inputs) {
+    setClimberWinchVoltage(
+        MotorLim.clampVoltage(winchPIDFast.calculate(inputs.winchLeaderMotorPosition, pos)),
+        inputs);
   }
 }

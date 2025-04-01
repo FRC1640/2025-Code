@@ -8,35 +8,44 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.357585227272727,
-        "y": 1.9409375000000002
+        "x": 5.656991517731496,
+        "y": 1.7404806389932221
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     },
     {
       "anchor": {
-        "x": 1.545596590909091,
-        "y": 0.6944886363636351
+        "x": 5.982954545454545,
+        "y": 0.5149999999999989
       },
       "prevControl": {
-        "x": 2.472954545454545,
-        "y": 1.6717045454545452
+        "x": 5.972982954545454,
+        "y": 1.6816761363636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BottomSource"
+      "linkedName": "Processor"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19607843137254902,
+      "rotationDegrees": 119.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.8061002178649236,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8323959505061864,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.4,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.8,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -45,10 +54,22 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "lift down",
+      "waypointRelativePos": 0.1619797525309359,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Safe"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.75,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,10 +77,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "L4 Processor - Triple",
+  "folder": "SpitProcess",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

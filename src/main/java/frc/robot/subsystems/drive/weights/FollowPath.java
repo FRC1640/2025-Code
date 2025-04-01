@@ -102,6 +102,10 @@ public class FollowPath {
     }
   }
 
+  public void setPathConstraints(PathConstraints constraints) {
+    pathConstraints = constraints;
+  }
+
   public Trigger generateTrigger(BooleanSupplier condition) {
     return new Trigger(condition)
         .onTrue(new InstantCommand(() -> startPath()))
@@ -131,11 +135,10 @@ public class FollowPath {
     Pose2d target = getFinalPosition();
     Pose2d robot = robotPose.get();
     boolean complete =
-        (target.getTranslation().getDistance(robot.getTranslation()) < 0.2
-            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 3);
+        (target.getTranslation().getDistance(robot.getTranslation()) < 0.15
+            && Math.abs(target.getRotation().minus(robot.getRotation()).getDegrees()) < 6);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
-    complete &=
-        Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.005;
+    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
     return complete;
   }
 }

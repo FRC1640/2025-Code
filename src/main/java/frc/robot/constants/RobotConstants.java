@@ -186,7 +186,7 @@ public class RobotConstants {
                     Units.inchesToMeters(13.95),
                     -Units.inchesToMeters(11.9),
                     Units.inchesToMeters(12.125)),
-                new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
+                new Rotation3d(0, Math.toRadians(8), Math.toRadians(15))),
             1.1,
             "Dodds",
             "Front Right");

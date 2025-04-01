@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.122556818181818,
-        "y": 5.520738636363636
+        "x": 6.0627272727272725,
+        "y": 5.610482954545455
       },
       "isLocked": false,
       "linkedName": "OppositeStart"
@@ -20,8 +20,8 @@
         "y": 5.062045454545454
       },
       "prevControl": {
-        "x": 5.8333806818181815,
-        "y": 5.361193181818181
+        "x": 5.514289772727272,
+        "y": 5.590539772727272
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0.6029246344207057,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.8,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "L4Left",
-      "waypointRelativePos": 0.2384701912260978,
+      "waypointRelativePos": 0.15298087739033,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

@@ -103,7 +103,7 @@ public class LocalTagAlignWeight implements DriveWeight {
                 .unaryMinus()
                 .getRadians());
     boolean ready =
-        lastVector.getNorm() < 1.5
+        lastVector.getNorm() < 1
             && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
     Logger.recordOutput("A_DEBUG/vector present", vector.isPresent());
     Logger.recordOutput("A_DEBUG/localAlignReady", ready);

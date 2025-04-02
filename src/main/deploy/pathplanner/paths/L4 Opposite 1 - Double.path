@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.095482954545455,
-        "y": 5.062045454545454
+        "x": 5.175255681818181,
+        "y": 5.0520738636363625
       },
       "prevControl": {
-        "x": 5.514289772727272,
-        "y": 5.590539772727272
+        "x": 5.594062499999999,
+        "y": 5.5805681818181805
       },
       "nextControl": null,
       "isLocked": false,
@@ -106,7 +106,7 @@
   "folder": "L4 Opposite - Double",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -134.3
+    "rotation": -144.0
   },
   "useDefaultConstraints": false
 }

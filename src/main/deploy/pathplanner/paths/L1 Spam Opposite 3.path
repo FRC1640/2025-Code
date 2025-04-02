@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.545596590909091,
-        "y": 7.32559659090909
+        "x": 1.6453125,
+        "y": 7.1959659090909085
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5455965909090903,
-        "y": 7.32559659090909
+        "x": 2.6453124999999993,
+        "y": 7.1959659090909085
       },
       "isLocked": false,
       "linkedName": "TopSource"
@@ -48,7 +48,7 @@
   "folder": "L1 Spam Opposite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -50.0
   },
   "useDefaultConstraints": true
 }

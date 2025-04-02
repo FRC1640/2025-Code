@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.174742225276624,
-        "y": 5.542259370420599
+        "x": 6.072698863636364,
+        "y": 5.421022727272727
       },
       "isLocked": false,
       "linkedName": "OppositeStart"
     },
     {
       "anchor": {
-        "x": 5.132087126137841,
-        "y": 5.108452535760728
+        "x": 5.175255681818181,
+        "y": 5.0520738636363625
       },
       "prevControl": {
-        "x": 5.571381085589557,
-        "y": 5.309486120485441
+        "x": 5.6638636363636365,
+        "y": 5.301363636363635
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.78,
+      "minWaypointRelativePos": 0.769403824521935,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,
-        "maxAcceleration": 1.5,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -91,8 +91,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -106,7 +106,7 @@
   "folder": "L4 Opposite - Triple",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -134.3
+    "rotation": -144.0
   },
   "useDefaultConstraints": false
 }

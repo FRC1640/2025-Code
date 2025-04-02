@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 4.108295454545455,
-        "y": 1.9010511363636364
+        "y": 1.9010511363636367
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7806524184476907,
+      "minWaypointRelativePos": 0.7604049493813249,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,

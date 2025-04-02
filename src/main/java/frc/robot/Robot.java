@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -64,7 +63,6 @@ public class Robot extends LoggedRobot {
   }
 
   public Robot() {
-    CanBridge.runTCP();
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);

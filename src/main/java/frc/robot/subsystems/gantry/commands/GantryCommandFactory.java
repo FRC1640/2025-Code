@@ -125,11 +125,11 @@ public class GantryCommandFactory {
     }
 
     // return one side if lift not up
-    if (!liftAtPreset.getAsBoolean()) {
-      return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
-          ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
-          : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
-    }
+    // if (!liftAtPreset.getAsBoolean()) {
+    //   return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
+    //       ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+    //       : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+    // }
 
     // select reef positions
     Pose2d[] reefPositions =

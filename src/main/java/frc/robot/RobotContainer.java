@@ -117,6 +117,9 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final CommandXboxController pitController = new CommandXboxController(4);
 
+  private final XboxController driveHID = driveController.getHID();
+  private final XboxController opHID = operatorController.getHID();
+
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
@@ -365,10 +368,10 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 346.6).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 348.7).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
-        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setElevatorPosPID(() -> -5.8).onlyIf(() -> autoRampPos).repeatedly());
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -403,6 +406,8 @@ public class RobotContainer {
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);
 
                 Logger.recordOutput("autoramppos", autoRampPos);
+
+                Logger.recordOutput("WeightSize", DriveWeightCommand.getWeightsSize());
 
                 Logger.recordOutput(
                     "DistFromTarget",
@@ -473,10 +478,9 @@ public class RobotContainer {
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
     followPathReef.generateTrigger(
-        () -> driveController.a().getAsBoolean() && !followPathReef.isAutoalignComplete());
+        () -> driveHID.getAButton() && !followPathReef.isAutoalignComplete());
     followPathCoral.generateTrigger(
-        () ->
-            driveController.leftBumper().getAsBoolean() && !followPathCoral.isAutoalignComplete());
+        () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()

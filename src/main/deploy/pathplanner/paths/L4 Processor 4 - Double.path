@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.7649715909090908,
-        "y": 0.9537500000000011
+        "x": 1.525653409090909,
+        "y": 0.9138636363636362
       },
       "prevControl": {
-        "x": 2.2037215909090913,
-        "y": 1.5620170454545472
+        "x": 1.9644034090909095,
+        "y": 1.5221306818181821
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 50.0
   },
   "reversed": false,
   "folder": "L4 Processor - Double",

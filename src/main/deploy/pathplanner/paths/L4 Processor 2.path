@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.055596590909091,
-        "y": 2.918153409090909
+        "x": 5.045624999999999,
+        "y": 2.938096590909091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.118267045454546,
-        "y": 1.8811079545454545
+        "x": 4.108295454545455,
+        "y": 1.9010511363636364
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
     },
     {
       "anchor": {
-        "x": 1.7649715909090908,
-        "y": 0.9537500000000011
+        "x": 1.525653409090909,
+        "y": 0.9138636363636362
       },
       "prevControl": {
-        "x": 2.243607954545454,
-        "y": 1.5919318181818198
+        "x": 2.229261363636364,
+        "y": 1.6158806818181812
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 50.0
   },
   "reversed": false,
   "folder": "L4 Processor - Triple",

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.256198539673805,
-        "y": 2.3225574532968025
+        "x": 3.1510227272727276,
+        "y": 2.3497727272727276
       },
       "isLocked": false,
       "linkedName": "ReefBottomLeft"
     },
     {
       "anchor": {
-        "x": 1.7649715909090908,
-        "y": 0.9537500000000011
+        "x": 1.525653409090909,
+        "y": 0.9138636363636362
       },
       "prevControl": {
-        "x": 2.2533784418484712,
-        "y": 1.4418312174498327
+        "x": 2.0298295454545454,
+        "y": 1.3965056818181814
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7986501687289014,
+      "minWaypointRelativePos": 0.7424071991001111,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 1.5,
+        "maxAcceleration": 1.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 50.0
   },
   "reversed": false,
   "folder": "L4 Processor - Triple",

@@ -369,5 +369,8 @@ public class RobotOdometry extends PeriodicBase {
   @Override
   public void periodic() {
     updateAllOdometries();
+    Logger.recordOutput(
+        "gyroBufferSize",
+        RobotOdometry.instance.odometries.get("Main").gyroBuffer.getInternalBuffer().size());
   }
 }

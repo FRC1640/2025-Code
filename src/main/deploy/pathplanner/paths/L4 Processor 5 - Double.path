@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7649715909090908,
-        "y": 0.9537500000000011
+        "x": 1.525653409090909,
+        "y": 0.9138636363636362
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.431523349277902,
-        "y": 1.6600000685304344
+        "x": 2.1922051674597203,
+        "y": 1.6201137048940693
       },
       "isLocked": false,
       "linkedName": "BottomSource"
@@ -85,7 +85,7 @@
   "folder": "L4 Processor - Double",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 50.0
   },
   "useDefaultConstraints": true
 }

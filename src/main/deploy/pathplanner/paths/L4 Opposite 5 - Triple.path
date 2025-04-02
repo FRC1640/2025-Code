@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.545596590909091,
+        "x": 1.765,
         "y": 7.32559659090909
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.789683651106058,
-        "y": 7.077802429149483
+        "x": 2.096355030603205,
+        "y": 7.083555496676858
       },
       "isLocked": false,
       "linkedName": "TopSource"
@@ -20,8 +20,8 @@
         "y": 5.101931818181818
       },
       "prevControl": {
-        "x": 3.792243741711379,
-        "y": 5.288439527744998
+        "x": 3.7088016296542414,
+        "y": 5.095606237862628
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7176602924634305,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L4Go",
-      "waypointRelativePos": 0.544431946006751,
+      "name": "L4Left",
+      "waypointRelativePos": 0.52,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -75,14 +75,14 @@
                     "data": {
                       "name": "SetupL4"
                     }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "RunToPreset"
+                    }
                   }
                 ]
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "RunToPreset"
               }
             }
           ]

@@ -42,8 +42,8 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
+import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
-import frc.robot.sensors.reefdetector.ReefDetectorIOToFImager;
 import frc.robot.subsystems.algae.AlgaeIO;
 import frc.robot.subsystems.algae.AlgaeIOSim;
 import frc.robot.subsystems.algae.AlgaeIOSpark;
@@ -182,7 +182,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOToFImager()
+                    ? new ReefDetectorIOLaserCAN()
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -427,10 +427,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.1;
+        side = 0.07;
         break;
       case RIGHT:
-        side = -0.1;
+        side = -0.07;
         break;
       case CENTER:
         side = 0;

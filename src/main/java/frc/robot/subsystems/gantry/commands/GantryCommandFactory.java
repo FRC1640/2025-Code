@@ -189,7 +189,10 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommandThresh() {
-    return new InstantCommand(() -> direction = chooseDirection())
+    return new InstantCommand(
+            () ->
+                direction =
+                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter)
         .andThen(
             (gantrySetVelocityCommand(
                         () -> direction ? -GantryConstants.alignSpeed : GantryConstants.alignSpeed)

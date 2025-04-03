@@ -368,7 +368,7 @@ public class RobotConstants {
     public static final double pulleyRadius = Units.inchesToMeters(0.5) * 1.13278894472;
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.36);
-    public static final double gantryLimitCenter = 0.187;
+    public static final double gantryLimitCenter = 0.197;
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;

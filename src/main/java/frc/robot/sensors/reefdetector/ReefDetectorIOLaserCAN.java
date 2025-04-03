@@ -19,7 +19,7 @@ public class ReefDetectorIOLaserCAN implements ReefDetectorIO {
     try {
       laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
       laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 4, 4, 4));
-      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+      laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
     } catch (ConfigurationFailedException e) {
       Logger.recordOutput("LaserCAN Configuration failed! " + e.toString(), false);
       isConnected = false;

@@ -427,10 +427,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.07;
+        side = 0.05;
         break;
       case RIGHT:
-        side = -0.07;
+        side = -0.05;
         break;
       case CENTER:
         side = 0;

@@ -76,7 +76,7 @@ public class ClimberRoutines {
         .andThen(
             lowerLift()
                 .alongWith(
-                    new WaitCommand(1)
+                    new WaitCommand(0.8)
                         .deadlineFor(climberCommandFactory.setWinchPosPID(() -> 330))
                         .andThen(unwindArm())))
         .repeatedly();

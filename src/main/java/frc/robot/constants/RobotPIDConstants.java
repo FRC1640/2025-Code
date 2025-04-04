@@ -119,7 +119,7 @@ public class RobotPIDConstants {
   public static final PIDConstants gantryVelocityPID = new PIDConstants(1);
   public static final PIDConstants gantryVelocityProfiledPID =
       new PIDConstants(2, 0, 0); // PLACEHOLDER
-  public static final PIDConstants climberLiftPID = new PIDConstants(0.3, 0, 0);
+  public static final PIDConstants climberLiftPID = new PIDConstants(0.4, 0, 0);
   public static final PIDConstants climberWinchPID = new PIDConstants(0.35, 0, 0);
   public static final PIDConstants climberWinchPIDFast = new PIDConstants(0.75, 0, 0);
 

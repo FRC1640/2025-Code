@@ -168,7 +168,7 @@ public class GantryCommandFactory {
         coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
             ? -Units.inchesToMeters(13 / 2)
             : Units.inchesToMeters(13 / 2);
-    double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset;
+    double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset - 0.04;
     // Logger.recordOutput("A_DEBUG/setpoint", setpoint);
     return setpoint;
   }

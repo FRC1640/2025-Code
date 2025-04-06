@@ -969,7 +969,7 @@ public class RobotContainer {
             .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.1)
+        new WaitCommand(0)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

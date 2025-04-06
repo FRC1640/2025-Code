@@ -116,6 +116,15 @@ public class GantryCommandFactory {
             });
   }
 
+  public double getSetpoint(Supplier<CoralPreset> coralPreset) {
+    if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
+      return GantryConstants.gantryLimitCenter;
+    }
+    return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
+        ? GantryConstants.gantryLimits.low + GantryConstants.gantryPadding
+        : GantryConstants.gantryLimits.high - GantryConstants.gantryPadding;
+  }
+
   public double getSetpointOdometry(
       Supplier<CoralPreset> coralPreset, Supplier<Pose2d> getPose, BooleanSupplier liftAtPreset) {
 

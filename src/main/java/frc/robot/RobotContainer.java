@@ -481,6 +481,13 @@ public class RobotContainer {
         () -> driveHID.getAButton() && !followPathReef.isAutoalignComplete());
     followPathCoral.generateTrigger(
         () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+
+    new Trigger(
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    && coralOuttakeCommandFactory.ranBack
+                    && !coralOuttakeSubsystem.guillotineCheck())
+        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove));
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()

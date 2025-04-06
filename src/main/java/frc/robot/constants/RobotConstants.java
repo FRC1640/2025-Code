@@ -255,8 +255,8 @@ public class RobotConstants {
       RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.566, GantrySetpoint.LEFT),
-      RightL4(0.566, GantrySetpoint.RIGHT),
+      LeftL4(0.568, GantrySetpoint.LEFT),
+      RightL4(0.568, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
@@ -344,7 +344,7 @@ public class RobotConstants {
     public static final int climberWinch1MotorID = new RobotSwitch<Integer>(13).get();
     public static final int climberWinch2MotorID = new RobotSwitch<Integer>(14).get();
 
-    public static final Limits liftLimits = new Limits(-170.0, 99999999.9);
+    public static final Limits liftLimits = new Limits(-175.0, 99999999.9);
     public static final double winchClimbedPosition = 45;
     public static final Limits winchLimits = new Limits(-99999999999999.0, 99999999999999999.0);
     public static final ResolverVoltageInfo winchResolverInfo =
@@ -365,10 +365,11 @@ public class RobotConstants {
   public static class GantryConstants {
     public static final int gantrySparkID = new RobotSwitch<Integer>(17).get();
     public static final double gantryGearRatio = 27.4;
-    public static final double pulleyRadius = Units.inchesToMeters(0.5) * 1.13278894472;
+    public static final double pulleyRadius =
+        Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.01, 0.36);
-    public static final double gantryLimitCenter = 0.187;
+    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(1));
+    public static final double gantryLimitCenter = 0.198;
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;

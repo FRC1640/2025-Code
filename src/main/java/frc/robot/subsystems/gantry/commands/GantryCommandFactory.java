@@ -45,11 +45,11 @@ public class GantryCommandFactory {
         .repeatedly()
         .until(() -> gantrySubsystem.isLimitSwitchPressed())
         .andThen(
-            gantryApplyVoltageCommand(() -> 1)
+            gantryApplyVoltageCommand(() -> 0.8)
                 .repeatedly()
                 .until(() -> !gantrySubsystem.isLimitSwitchPressed()))
         .andThen(
-            gantryApplyVoltageCommand(() -> -0.6)
+            gantryApplyVoltageCommand(() -> -0.5)
                 .repeatedly()
                 .until(() -> gantrySubsystem.isLimitSwitchPressed()))
         // .andThen(
@@ -168,7 +168,7 @@ public class GantryCommandFactory {
         coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.LEFT
             ? -Units.inchesToMeters(13 / 2)
             : Units.inchesToMeters(13 / 2);
-    double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset;
+    double setpoint = GantryConstants.gantryLimitCenter - gantryCenter - poleOffset - 0.04;
     // Logger.recordOutput("A_DEBUG/setpoint", setpoint);
     return setpoint;
   }
@@ -189,7 +189,10 @@ public class GantryCommandFactory {
   }
 
   public Command gantryDriftCommandThresh() {
-    return new InstantCommand(() -> direction = chooseDirection())
+    return new InstantCommand(
+            () ->
+                direction =
+                    gantrySubsystem.getCarriagePosition() < GantryConstants.gantryLimitCenter)
         .andThen(
             (gantrySetVelocityCommand(
                         () -> direction ? -GantryConstants.alignSpeed : GantryConstants.alignSpeed)

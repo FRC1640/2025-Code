@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "EnableAprilTags"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L1 Spam Opposite 1"
+                  "pathName": "L4 Opposite 1 - Triple"
                 }
               }
             ]
@@ -20,17 +26,29 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForPreset"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L1 Spam Opposite 2"
+                  "pathName": "L4 Opposite 2 - Triple"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
                 }
               }
             ]
@@ -47,15 +65,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RunBackCoral"
+                  "pathName": "L4 Opposite 3 - Triple"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "L1 Spam Opposite 3"
+                  "name": "RunBackCoral"
                 }
               }
             ]
@@ -64,17 +82,29 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForPreset"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L1 Spam Opposite 4"
+                  "pathName": "L4 Opposite 4 - Triple"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
                 }
               }
             ]
@@ -91,15 +121,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RunBackCoral"
+                  "pathName": "L4 Opposite 5 - Triple"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "L1 Spam Opposite 5"
+                  "name": "RunBackCoral"
                 }
               }
             ]
@@ -108,7 +138,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PlaceTrough"
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         }
       ]

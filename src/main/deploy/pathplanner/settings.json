@@ -7,8 +7,10 @@
     "L4 Opposite - Double",
     "L4 Processor - Double",
     "L4 Processor - Triple",
+    "L4 Opposite - Triple",
     "Process",
-    "SpitProcess"
+    "SpitProcess",
+    "SpitSpit"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,

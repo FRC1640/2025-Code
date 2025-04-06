@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.045624999999999,
-        "y": 2.938096590909091
+        "x": 5.175255681818181,
+        "y": 5.0520738636363625
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.334801136363636,
-        "y": 2.050625
+        "x": 4.440640146589431,
+        "y": 5.962939509693816
       },
       "isLocked": false,
-      "linkedName": "ReefLowerRight"
+      "linkedName": "ReefTopRight"
     },
     {
       "anchor": {
-        "x": 1.525653409090909,
-        "y": 0.9138636363636362
+        "x": 1.6453125,
+        "y": 7.1959659090909085
       },
       "prevControl": {
-        "x": 2.0042897727272724,
-        "y": 1.980823863636365
+        "x": 2.582642045454545,
+        "y": 6.368323863636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BottomSource"
+      "linkedName": "TopSource"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.85,
+      "minWaypointRelativePos": 0.8256467941507301,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 50.0
+    "rotation": -50.0
   },
   "reversed": false,
-  "folder": "L4 Processor - Double",
+  "folder": "L4 Opposite - Triple",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": false
 }

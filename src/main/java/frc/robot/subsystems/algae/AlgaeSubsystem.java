@@ -33,7 +33,7 @@ public class AlgaeSubsystem extends SubsystemBase {
       hasAlgae = true;
     } else if (inputs.intakeMotorRightVoltage < 0 || inputs.intakeMotorLeftVoltage < 0) {
       releaseTime += (System.currentTimeMillis() - lastTime) / 1000;
-      if (releaseTime > 0.8) {
+      if (releaseTime > 0.5) {
         hasAlgae = false;
         releaseTime = 0;
       }

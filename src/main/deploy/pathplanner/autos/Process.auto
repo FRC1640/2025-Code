@@ -40,7 +40,7 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
@@ -61,16 +61,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunToPreset"
+                  "name": "WaitForPreset"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
           }
         },
         {
@@ -80,15 +74,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Process 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Process 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldAlgae"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Process"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Process 3"
           }
         }
       ]

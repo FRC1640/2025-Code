@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.067017045454547,
-        "y": 7.515056818181818
+        "x": 6.02,
+        "y": 0.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.690937500000002,
-        "y": 7.22588068181818
+        "x": 5.324829545454545,
+        "y": 0.7044602272727275
       },
       "isLocked": false,
-      "linkedName": "Opposite Start"
+      "linkedName": "Processor"
     },
     {
       "anchor": {
-        "x": 5.175255681818181,
-        "y": 5.0520738636363625
+        "x": 3.609715909090909,
+        "y": 0.7044602272727275
       },
       "prevControl": {
-        "x": 5.793494318181818,
-        "y": 5.949517045454544
+        "x": 4.367556818181823,
+        "y": 0.6845170454545427
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefTopRight"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "L1 Spam Opposite",
+  "folder": "Process",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

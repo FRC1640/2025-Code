@@ -40,7 +40,7 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
@@ -61,16 +61,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunToPreset"
+                  "name": "WaitForPreset"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
           }
         },
         {
@@ -80,9 +74,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "SpitProcess 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SpitProcess 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldAlgae"
+                }
+              }
+            ]
           }
         },
         {
@@ -110,9 +117,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "SpitProcess 4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SpitSpit4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HoldAlgae"
+                }
+              }
+            ]
           }
         },
         {

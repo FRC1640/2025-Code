@@ -3,44 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.651051136363637,
-        "y": 2.1503409090909087
+        "x": 7.2,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.554176136363636,
-        "y": 1.9708522727272735
+        "x": 6.072698863636364,
+        "y": 5.421022727272727
       },
       "isLocked": false,
-      "linkedName": "SpitShot"
+      "linkedName": "OppositeStart"
     },
     {
       "anchor": {
-        "x": 5.1054545454545455,
-        "y": 2.938096590909091
+        "x": 5.175255681818181,
+        "y": 5.0520738636363625
       },
       "prevControl": {
-        "x": 6.012869318181818,
-        "y": 1.9309659090909086
+        "x": 5.6638636363636365,
+        "y": 5.301363636363635
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefLowerRight_Center"
+      "linkedName": "ReefTopRight"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8206039076376608,
-      "rotationDegrees": 119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8256467941507388,
+      "minWaypointRelativePos": 0.769403824521935,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 1.5,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -52,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L3Algae",
-      "waypointRelativePos": 0.7424071991001008,
+      "name": "L4Left",
+      "waypointRelativePos": 0.29,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -66,13 +61,19 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetModeAlgae"
+                      "name": "SetModeCoral"
                     }
                   },
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetupL3"
+                      "name": "SetGantryLeft"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
                     }
                   }
                 ]
@@ -99,13 +100,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "SpitProcess",
+  "folder": "L4 Opposite - Triple",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 30.963756532073674
+    "rotation": -144.0
   },
   "useDefaultConstraints": false
 }

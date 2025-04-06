@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,8 +42,8 @@ import frc.robot.sensors.gyro.GyroIOSim;
 import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.sensors.reefdetector.ReefDetector;
 import frc.robot.sensors.reefdetector.ReefDetectorIO;
+import frc.robot.sensors.reefdetector.ReefDetectorIOLaserCAN;
 import frc.robot.sensors.reefdetector.ReefDetectorIOSim;
-import frc.robot.sensors.reefdetector.ReefDetectorIOToFImager;
 import frc.robot.subsystems.algae.AlgaeIO;
 import frc.robot.subsystems.algae.AlgaeIOSim;
 import frc.robot.subsystems.algae.AlgaeIOSpark;
@@ -118,6 +119,9 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
   private final CommandXboxController pitController = new CommandXboxController(4);
 
+  private final XboxController driveHID = driveController.getHID();
+  private final XboxController opHID = operatorController.getHID();
+
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
   private final PresetBoard simBoard = new PresetBoard(3);
@@ -182,7 +186,7 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOToFImager()
+                    ? new ReefDetectorIOLaserCAN()
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
@@ -368,10 +372,10 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 346.6).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 348).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
-        climberCommandFactory.setElevatorPosPID(() -> 0).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setElevatorPosPID(() -> -5.8).onlyIf(() -> autoRampPos).repeatedly());
 
     algaeIntakeSubsystem.setDefaultCommand(
         algaeCommandFactory
@@ -421,6 +425,8 @@ public class RobotContainer {
 
                 Logger.recordOutput("autoramppos", autoRampPos);
 
+                Logger.recordOutput("WeightSize", DriveWeightCommand.getWeightsSize());
+
                 Logger.recordOutput(
                     "DistFromTarget",
                     RobotOdometry.instance
@@ -439,10 +445,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.1;
+        side = 0.05;
         break;
       case RIGHT:
-        side = -0.1;
+        side = -0.05;
         break;
       case CENTER:
         side = 0;
@@ -497,8 +503,7 @@ public class RobotContainer {
         dynamicAlign,
         () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
     followPathCoral.generateTrigger(
-        () ->
-            driveController.leftBumper().getAsBoolean() && !followPathCoral.isAutoalignComplete());
+        () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()
@@ -945,7 +950,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetupL4",
         new InstantCommand(
-            () -> coralPreset = gantryAuto ? CoralPreset.RightL3 : CoralPreset.LeftL3));
+            () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4));
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(
@@ -976,7 +981,8 @@ public class RobotContainer {
                 () ->
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
-            .deadlineFor(autonAutoPlace(() -> coralPreset)));
+            .deadlineFor(autonAutoPlace(() -> coralPreset))
+            .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
         new WaitCommand(0.1)

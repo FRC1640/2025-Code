@@ -3,45 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.651051136363637,
-        "y": 2.1503409090909087
+        "x": 1.6453125,
+        "y": 7.1959659090909085
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.554176136363636,
-        "y": 1.9708522727272735
+        "x": 2.2635511363636365,
+        "y": 6.55778409090909
       },
       "isLocked": false,
-      "linkedName": "SpitShot"
+      "linkedName": "TopSource"
     },
     {
       "anchor": {
-        "x": 5.1054545454545455,
-        "y": 2.938096590909091
+        "x": 3.799176136363636,
+        "y": 5.032130681818181
       },
       "prevControl": {
-        "x": 6.012869318181818,
-        "y": 1.9309659090909086
+        "x": 3.4800852272727276,
+        "y": 5.421022727272727
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefLowerRight_Center"
+      "linkedName": "ReefTopLeft_OffsetLeft"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8206039076376608,
-      "rotationDegrees": 119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8256467941507388,
+      "minWaypointRelativePos": 0.708661417322838,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 0.9,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -52,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L3Algae",
-      "waypointRelativePos": 0.7424071991001008,
+      "name": "L4Left",
+      "waypointRelativePos": 0.48,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -66,13 +61,19 @@
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetModeAlgae"
+                      "name": "SetModeCoral"
                     }
                   },
                   {
                     "type": "named",
                     "data": {
-                      "name": "SetupL3"
+                      "name": "SetGantryRight"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
                     }
                   }
                 ]
@@ -90,8 +91,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -99,13 +100,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "SpitProcess",
+  "folder": "L4 Opposite - Triple",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 30.963756532073674
+    "rotation": -50.0
   },
   "useDefaultConstraints": false
 }

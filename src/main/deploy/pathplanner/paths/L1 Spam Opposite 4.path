@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.6153977272727271,
-        "y": 7.375454545454545
+        "x": 1.6453125,
+        "y": 7.1959659090909085
       },
       "prevControl": {
-        "x": 2.3832102272727282,
-        "y": 6.378295454545453
+        "x": 2.413125000000001,
+        "y": 6.198806818181817
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": -50.0
   },
   "reversed": false,
   "folder": "L1 Spam Opposite",

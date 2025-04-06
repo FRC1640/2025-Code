@@ -6,12 +6,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 import frc.robot.Robot.RobotState;
-import frc.robot.constants.FieldConstants;
-import frc.robot.constants.RobotConstants.CoralOuttakeConstants;
-import frc.robot.sensors.odometry.RobotOdometry;
 import frc.robot.subsystems.coralouttake.CoralOuttakeSubsystem;
-import frc.robot.util.misc.AllianceManager;
-import frc.robot.util.misc.DistanceManager;
 import java.util.function.DoubleSupplier;
 
 public class CoralOuttakeCommandFactory {
@@ -35,35 +30,48 @@ public class CoralOuttakeCommandFactory {
     return (new InstantCommand(() -> runningBack = true)
             .andThen(
                 setIntakeVoltage(() -> 2)
-                    .until(() -> !intakeSubsystem.isCoralDetected() && intakeSubsystem.hasCoral()))
+                    .until(
+                        () ->
+                            !intakeSubsystem.isCoralDetected()
+                                && intakeSubsystem.hasCoral()
+                                && !intakeSubsystem.guillotineCheck()))
             .andThen(setIntakeVoltage(() -> -0.75).until(() -> intakeSubsystem.isCoralDetected()))
             .andThen(new InstantCommand(() -> runningBack = false)))
         .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
 
   public void constructTriggers() {
-    new Trigger(
-            () ->
-                !intakeSubsystem.isCoralDetected()
-                    && !ranBack
-                    && !intakeSubsystem.hasCoral()
-                    && Robot.getState() != RobotState.AUTONOMOUS)
-        .debounce(0.01)
-        .and(
-            () ->
-                CoralOuttakeConstants.distanceRequired
-                    > DistanceManager.getNearestPositionDistance(
-                        RobotOdometry.instance.getPose("Main"),
-                        AllianceManager.chooseFromAlliance(
-                            FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed)))
-        .whileTrue(outtake());
+    // new Trigger(
+    //         () ->
+    //             !intakeSubsystem.isCoralDetected()
+    //                 && !ranBack
+    //                 && !intakeSubsystem.hasCoral()
+    //                 && Robot.getState() != RobotState.AUTONOMOUS)
+    //     .debounce(0.01)
+    //     .and(
+    //         () ->
+    //             CoralOuttakeConstants.distanceRequired
+    //                 > DistanceManager.getNearestPositionDistance(
+    //                     RobotOdometry.instance.getPose("Main"),
+    //                     AllianceManager.chooseFromAlliance(
+    //                         FieldConstants.coralStationPosBlue,
+    // FieldConstants.coralStationPosRed)))
+    //     .whileTrue(outtake());
 
     new Trigger(
             () ->
                 intakeSubsystem.isCoralDetected()
                     && !outtaking
+                    && !ranBack
                     && Robot.getState() != RobotState.AUTONOMOUS)
-        .onTrue(runBack().finallyDo(() -> ranBack = true))
+        .onTrue(
+            runBack()
+                .finallyDo(
+                    () -> {
+                      if (intakeSubsystem.hasCoral() && !intakeSubsystem.guillotineCheck()) {
+                        ranBack = true;
+                      }
+                    }))
         .debounce(0.05);
 
     new Trigger(() -> !intakeSubsystem.hasCoral())

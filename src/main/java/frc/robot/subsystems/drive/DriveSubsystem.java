@@ -137,9 +137,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
     gyro.periodic();
     odometryLock.unlock();
-    totalRot =
-        totalRot.plus(Rotation2d.fromRadians(getChassisSpeeds().omegaRadiansPerSecond * 0.02));
-    Logger.recordOutput("totalRot", totalRot);
   }
 
   public void stop() {

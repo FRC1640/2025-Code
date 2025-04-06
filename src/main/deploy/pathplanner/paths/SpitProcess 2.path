@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.724,
-        "y": 4.065
+        "x": 5.653892045454545,
+        "y": 4.005056818181817
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.797784090909091,
-        "y": 4.084829545454545
+        "x": 7.727676136363636,
+        "y": 4.024886363636361
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefCenterRight_OffsetLeft"
     },
     {
       "anchor": {
-        "x": 7.289232954545455,
-        "y": 2.2899431818181815
+        "x": 6.651051136363637,
+        "y": 2.1503409090909087
       },
       "prevControl": {
-        "x": 7.24934659090909,
-        "y": 2.8882386363636363
+        "x": 6.611164772727271,
+        "y": 2.7486363636363635
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,21 @@
       "rotationDegrees": 180.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.05399325084364717,
+      "constraints": {
+        "maxVelocity": 0.6,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -50,8 +64,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -59,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.1691393279074498
+    "rotation": 30.963756532073674
   },
   "reversed": false,
   "folder": "SpitProcess",

@@ -13,14 +13,10 @@ public class DynamicAlignWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
-    boolean[] conditions = {
-      localAlign.isReady(), globalAlign.isEnabled(), !globalAlign.isAutoalignComplete()
-    };
-    System.out.println(conditions[0] + " " + conditions[1] + " " + conditions[2]);
-    if (conditions[0]) {
+    if (localAlign.isReady()) {
       globalAlign.stopPath();
       return localAlign.getSpeeds();
-    } else if (conditions[2]) {
+    } else if (!globalAlign.isAutoalignComplete()) {
       if (!globalAlign.isEnabled()) {
         globalAlign.startPath();
       }

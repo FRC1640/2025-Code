@@ -58,7 +58,7 @@ public class AprilTagAlignHelper {
       total++;
     }
     Translation2d average = new Translation2d(ki / total, kj / total);
-    Logger.recordOutput("A_DEBUG/avgLocalVector", average);
+    Logger.recordOutput("LocalTagAlign/averageVector", average);
     return Optional.of(average);
   }
 
@@ -67,7 +67,6 @@ public class AprilTagAlignHelper {
     for (AprilTagVision vision : visions) {
       vectors.add(vision.getLocalAlignVectors());
     }
-    Logger.recordOutput("A_DEBUG/goodbye", !vectors.isEmpty());
     return vectors;
   }
 

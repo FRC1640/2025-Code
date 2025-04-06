@@ -79,9 +79,11 @@ public class AutoAlignHelper {
   }
 
   public ChassisSpeeds getLocalAlignSpeedsLine(
-      Translation2d vector, Gyro gyro, Rotation2d robotRotation, Rotation2d endRotation, DriveSubsystem driveSubsystem) {
-    Logger.recordOutput("A_DEBUG/endRotation", endRotation);
-    Logger.recordOutput("A_DEBUG/robotRotation", robotRotation);
+      Translation2d vector,
+      Gyro gyro,
+      Rotation2d robotRotation,
+      Rotation2d endRotation,
+      DriveSubsystem driveSubsystem) {
     localRotationPid.enableContinuousInput(-Math.PI, Math.PI);
     // target origin
     Translation2d target = new Translation2d();
@@ -93,14 +95,10 @@ public class AutoAlignHelper {
         dist < 0.25 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
     double rotational =
         localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
-    Logger.recordOutput(
-        "A_DEBUG/modulusRobotRot", MathUtil.angleModulus(robotRotation.getRadians()));
-    Logger.recordOutput(
-        "A_DEBUG/modulusEndRotation", MathUtil.angleModulus(endRotation.getRadians()));
     // convert to percentage
     linear = MathUtil.clamp(linear, -1, 1);
     linear = MathUtil.applyDeadband(linear, 0.01);
-    linear *= DriveConstants.maxSpeed;
+    linear *= DriveConstants.maxSpeed; // TODO scale max speed for acceleration?
 
     rotational = MathUtil.clamp(rotational, -1, 1);
     rotational = MathUtil.applyDeadband(rotational, 0.01);

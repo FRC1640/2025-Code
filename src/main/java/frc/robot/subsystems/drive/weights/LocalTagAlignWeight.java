@@ -44,7 +44,7 @@ public class LocalTagAlignWeight implements DriveWeight {
   public ChassisSpeeds getSpeeds() {
     Optional<Translation2d> localAlignVector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    Logger.recordOutput("A_DEBUG/hello", localAlignVector.isPresent());
+    Logger.recordOutput("LocalTagAlign/isVectorPresent", localAlignVector.isPresent());
     this.running = false;
     if (localAlignVector.isPresent()) {
       lastVector = localAlignVector.get();
@@ -62,7 +62,8 @@ public class LocalTagAlignWeight implements DriveWeight {
                   .getRotation()
                   .toRotation2d()
                   .minus(Rotation2d.kPi)
-                  .getRadians()));
+                  .getRadians()),
+          driveSubsystem);
     } else return new ChassisSpeeds();
   }
 
@@ -72,14 +73,11 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    // System.out.println("hey there");
-    // lastVector = new Translation2d();
     Optional<Translation2d> vector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
       lastVector = vector.get();
     }
-    Logger.recordOutput("A_DEBUG/starting vector present?", vector.isPresent());
     if (!lastVector.equals(new Translation2d())) {
       autoAlignHelper.resetLocalMotionProfile(lastVector, driveSubsystem);
     }
@@ -91,8 +89,6 @@ public class LocalTagAlignWeight implements DriveWeight {
     if (vector.isPresent()) {
       lastVector = vector.get();
     }
-    Logger.recordOutput("A_DEBUG/ready vector present?", vector.isPresent());
-    // System.out.println(lastVector);
     double goalAngle =
         MathUtil.angleModulus(
             FieldConstants.aprilTagLayout
@@ -105,8 +101,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     boolean ready =
         lastVector.getNorm() < 1
             && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
-    Logger.recordOutput("A_DEBUG/vector present", vector.isPresent());
-    Logger.recordOutput("A_DEBUG/localAlignReady", ready);
+    Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
     return ready;
   }
 

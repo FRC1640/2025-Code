@@ -118,7 +118,7 @@ public class RobotConstants {
         new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
         new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
-    
+
     // local align
     public static final Constraints localAlignPpidConstraints =
         new Constraints(DriveConstants.maxSpeed, 1);

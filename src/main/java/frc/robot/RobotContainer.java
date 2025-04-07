@@ -415,6 +415,7 @@ public class RobotContainer {
                         .getPose("Main")
                         .getTranslation()
                         .getDistance(getTarget().getTranslation()));
+                Logger.recordOutput("target", getTarget());
               }
             });
   }

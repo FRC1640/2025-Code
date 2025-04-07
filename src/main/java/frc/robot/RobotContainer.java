@@ -146,6 +146,8 @@ public class RobotContainer {
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 
+  private boolean premoveLift = false;
+
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
@@ -512,7 +514,10 @@ public class RobotContainer {
                 coralOuttakeSubsystem.hasCoral()
                     && coralOuttakeCommandFactory.ranBack
                     && !coralOuttakeSubsystem.guillotineCheck())
-        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove));
+        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove).onlyIf(() -> premoveLift));
+
+    driveController.povDown().onTrue(new InstantCommand(() -> premoveLift = true));
+    driveController.povUp().onTrue(new InstantCommand(() -> premoveLift = false));
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()
@@ -628,7 +633,6 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().onTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(
@@ -852,6 +856,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return homing()
         .andThen(new InstantCommand(() -> autoRampPos = true))
+        .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }

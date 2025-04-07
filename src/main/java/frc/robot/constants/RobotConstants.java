@@ -18,7 +18,6 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
-import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.Limits;
 import frc.robot.util.robotswitch.RobotSwitch;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;

@@ -27,10 +27,6 @@ public class AprilTagVision extends PeriodicBase {
   public final double standardDeviation;
   private Transform3d cameraTransform;
 
-  private ArrayList<FiducialVector> localAlignVectors = new ArrayList<>();
-
-  public record FiducialVector(int id, double timestamp, Translation2d vector) {}
-
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.networkName;
@@ -93,13 +89,6 @@ public class AprilTagVision extends PeriodicBase {
     return xy;
   }
 
-  public FiducialVector[] getLocalAlignVectors() {
-    FiducialVector[] vectors =
-        localAlignVectors.toArray(new FiducialVector[localAlignVectors.size()]);
-    localAlignVectors.clear();
-    return vectors;
-  }
-
   public Optional<PoseObservation> getTrigResult(Rotation2d gyroRotation) {
     // trig solution
     ArrayList<PoseObservation> trigPoses = new ArrayList<>();
@@ -107,7 +96,8 @@ public class AprilTagVision extends PeriodicBase {
       return Optional.empty();
     }
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      PoseObservation result = calculateTrigResult(observation, gyroRotation);
+      Translation3d cameraToTag = calculateCameraVector(observation);
+      PoseObservation result = calculateTrigResult(observation, cameraToTag, gyroRotation);
       trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
@@ -151,13 +141,10 @@ public class AprilTagVision extends PeriodicBase {
     return Optional.of(observation);
   }
 
-  public PoseObservation calculateTrigResult(
-      TrigTargetObservation observation, Rotation2d gyroRotation) {
+  private Translation3d calculateCameraVector(TrigTargetObservation observation) {
 
     // Get camera displacement details
-    Transform3d cameraDisplacement = inputs.cameraDisplacement;
-    Translation3d cameraToRobot = cameraDisplacement.getTranslation();
-    Rotation3d cameraRotation = cameraDisplacement.getRotation();
+    Translation3d cameraToRobot = inputs.cameraDisplacement.getTranslation();
 
     // Calculate vertical offset between camera and tag
     double deltaZ =
@@ -173,19 +160,19 @@ public class AprilTagVision extends PeriodicBase {
     Translation3d cameraToTagCameraFrame =
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
 
-    // update local vectors
-    Translation2d frontToTag =
-        cameraDisplacement
-            .getTranslation()
-            .plus(cameraToTagCameraFrame)
-            .toTranslation2d()
-            .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
-    localAlignVectors.add(
-        new FiducialVector(observation.fiducialId(), observation.timestamp(), frontToTag));
+    return cameraToTagCameraFrame;
+  }
+
+  private PoseObservation calculateTrigResult(
+      TrigTargetObservation observation, Translation3d cameraToTag, Rotation2d gyroRotation) {
+    // Get camera displacement details
+    Transform3d cameraDisplacement = inputs.cameraDisplacement;
+    Translation3d cameraToRobot = cameraDisplacement.getTranslation();
+    Rotation3d cameraRotation = cameraDisplacement.getRotation();
 
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =
-        cameraToTagCameraFrame
+        cameraToTag
             .rotateBy(cameraRotation)
             .rotateBy(new Rotation3d(0, 0, gyroRotation.getRadians()));
 
@@ -215,6 +202,32 @@ public class AprilTagVision extends PeriodicBase {
         1,
         observation.cameraToTarget().getTranslation().getNorm(),
         observation.cameraToTarget().getTranslation().getNorm());
+  }
+
+  public Optional<Translation2d> getLocalAlignVector(int id) {
+    TrigTargetObservation[] trigObservations = inputs.trigTargetObservations;
+    Optional<TrigTargetObservation> observation = Optional.empty();
+    for (int i = trigObservations.length - 1; i >= 0; i--) {
+      if (trigObservations[i].fiducialId() == id) {
+        observation = Optional.of(trigObservations[i]);
+        break;
+      }
+    }
+    if (observation.isPresent()) {
+      // calculate camera vector
+      Translation3d vector = calculateCameraVector(observation.get());
+      // update local vectors
+      Translation2d frontToTag =
+          inputs
+              .cameraDisplacement
+              .getTranslation()
+              .plus(vector)
+              .toTranslation2d()
+              .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
+      return Optional.of(frontToTag);
+    } else {
+      return Optional.empty();
+    }
   }
 
   public PoseObservation[] getPhotonResults() {

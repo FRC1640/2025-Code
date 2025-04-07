@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.sensors.apriltag.AprilTagVision;
-import frc.robot.sensors.apriltag.AprilTagVision.FiducialVector;
 import frc.robot.util.misc.AllianceManager;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,42 +17,31 @@ public class AprilTagAlignHelper {
 
   public static Optional<Translation2d> getAverageLocalAlignVector(
       int id, AprilTagVision... visions) {
-    ArrayList<FiducialVector[]> allVectors = getLocalAlignVectors(visions);
-    ArrayList<FiducialVector> filteredVectors = new ArrayList<>();
-    for (FiducialVector[] visionVectors : allVectors) {
-      Optional<FiducialVector> vector = Optional.empty();
-      for (FiducialVector tagVector : visionVectors) {
-        if (tagVector.id() == id) {
-          if (vector.isPresent() && vector.get().timestamp() < tagVector.timestamp()) {
-            vector = Optional.of(tagVector);
-          } else if (vector.isEmpty()) {
-            vector = Optional.of(tagVector);
-          }
-        }
+    Translation2d[] vectors = getLocalAlignVectors(id, visions).toArray(Translation2d[]::new);
+    Translation2d average = null;
+    if (vectors.length != 0) {
+      double ki = 0, kj = 0;
+      int total = 0;
+      for (Translation2d vector : vectors) {
+        ki += vector.getX();
+        kj += vector.getY();
+        total++;
       }
-      if (vector.isPresent()) {
-        filteredVectors.add(vector.get());
-      }
+      average = new Translation2d(ki / total, kj / total);
     }
-    if (filteredVectors.isEmpty()) {
-      return Optional.empty();
+    if (average != null) {
+      Logger.recordOutput("LocalTagAlign/averageVector", average);
     }
-    double ki = 0, kj = 0;
-    int total = 0;
-    for (FiducialVector vector : filteredVectors) {
-      ki += vector.vector().getX();
-      kj += vector.vector().getY();
-      total++;
-    }
-    Translation2d average = new Translation2d(ki / total, kj / total);
-    Logger.recordOutput("LocalTagAlign/averageVector", average);
-    return Optional.of(average);
+    return Optional.ofNullable(average);
   }
 
-  private static ArrayList<FiducialVector[]> getLocalAlignVectors(AprilTagVision[] visions) {
-    ArrayList<FiducialVector[]> vectors = new ArrayList<>();
+  private static ArrayList<Translation2d> getLocalAlignVectors(int id, AprilTagVision[] visions) {
+    ArrayList<Translation2d> vectors = new ArrayList<>();
     for (AprilTagVision vision : visions) {
-      vectors.add(vision.getLocalAlignVectors());
+      Optional<Translation2d> vector = vision.getLocalAlignVector(id);
+      if (vector.isPresent()) {
+        vectors.add(vector.get());
+      }
     }
     return vectors;
   }
@@ -81,7 +69,8 @@ public class AprilTagAlignHelper {
   }
 
   @Deprecated
-  public static Optional<Translation2d> getPoleAlignVector(int id, CoralPreset preset, AprilTagVision... visions) {
+  public static Optional<Translation2d> getPoleAlignVector(
+      int id, CoralPreset preset, AprilTagVision... visions) {
     Optional<Translation2d> averageVector = getAverageLocalAlignVector(id, visions);
     if (averageVector.isPresent()) {
       averageVector =

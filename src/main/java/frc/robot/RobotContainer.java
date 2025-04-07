@@ -1009,6 +1009,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
 
-    NamedCommands.registerCommand("LocalAlign", localAlign.getAutoCommand());
+    NamedCommands.registerCommand(
+        "LocalAlign", localAlign.getAutoCommand().deadlineFor(autonAutoPlace(() -> coralPreset)));
   }
 }

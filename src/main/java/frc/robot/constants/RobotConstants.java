@@ -18,6 +18,7 @@ import frc.robot.subsystems.drive.ModuleInfo;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
+import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.Limits;
 import frc.robot.util.robotswitch.RobotSwitch;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
@@ -316,6 +317,16 @@ public class RobotConstants {
       public boolean isRight() {
         return gantrySetpoint == GantrySetpoint.RIGHT;
       }
+    }
+
+    public static double getReefOffset(CoralPreset preset, int reefFace) {
+      int idReturn = 0;
+      idReturn = reefFace * 2;
+      if (!preset.isRight()) {
+        idReturn++;
+      }
+      return AllianceManager.chooseFromAlliance(
+          FieldConstants.heightArrayBlue[idReturn], FieldConstants.heightArrayRed[idReturn]);
     }
   }
 

@@ -35,22 +35,22 @@ public class FieldConstants {
 
   public static final Pose2d[] reefPositionsRed =
       new Pose2d[] {
-        new Pose2d(12.227305999999999, 4.0259, Rotation2d.fromDegrees(360)),
-        new Pose2d(12.643358, 4.745482, Rotation2d.fromDegrees(300)),
-        new Pose2d(13.474446, 4.745482, Rotation2d.fromDegrees(240)),
-        new Pose2d(13.890498, 4.0259, Rotation2d.fromDegrees(180)),
-        new Pose2d(13.474446, 3.3063179999999996, Rotation2d.fromDegrees(120)),
-        new Pose2d(12.643358, 3.3063179999999996, Rotation2d.fromDegrees(60)),
+        new Pose2d(13.890498, 4.0259, Rotation2d.fromDegrees(180)), // id 7
+        new Pose2d(13.474446, 3.3063179999999996, Rotation2d.fromDegrees(120)), // id 6
+        new Pose2d(12.643358, 3.3063179999999996, Rotation2d.fromDegrees(60)), // id 11
+        new Pose2d(12.227305999999999, 4.0259, Rotation2d.fromDegrees(360)), // id 10
+        new Pose2d(12.643358, 4.745482, Rotation2d.fromDegrees(300)), // id 9
+        new Pose2d(13.474446, 4.745482, Rotation2d.fromDegrees(240)), // id 8
       };
 
   public static final Pose2d[] reefPositionsBlue =
       new Pose2d[] {
-        new Pose2d(5.321046, 4.0259, Rotation2d.fromDegrees(180)),
-        new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromDegrees(480)),
-        new Pose2d(4.073905999999999, 3.3063179999999996, Rotation2d.fromDegrees(420)),
-        new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(360)),
-        new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(300)),
-        new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)),
+        new Pose2d(3.6576, 4.0259, Rotation2d.fromDegrees(360)), // id 18
+        new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromDegrees(300)), // id 19
+        new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromDegrees(240)), // id 20
+        new Pose2d(5.321046, 4.0259, Rotation2d.fromDegrees(180)), // id 21
+        new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromDegrees(480)), // id 22
+        new Pose2d(4.073905999999999, 3.3063179999999996, Rotation2d.fromDegrees(420)), // id 17
       };
 
   public static final Translation2d reefCenterPosRed = new Translation2d(13.07, 4);
@@ -74,4 +74,11 @@ public class FieldConstants {
         new Pose2d(16.697198, 0.65532, Rotation2d.fromDegrees(126)), // 1
         new Pose2d(16.697198, 7.3964799999999995, Rotation2d.fromDegrees(234)) // 2
       };
+  // left is +1 id
+  public static final double[] heightArrayBlue = {
+    9, 10, 9, 9.4, 10.5, 9, 9, 10, 9, 9.4, 10.5, 9,
+  };
+  public static final double[] heightArrayRed = {
+    9, 10, 9, 9.4, 10.5, 9, 9, 10, 9, 9.4, 10.5, 9,
+  };
 }

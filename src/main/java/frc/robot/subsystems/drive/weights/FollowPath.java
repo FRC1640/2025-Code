@@ -51,6 +51,13 @@ public class FollowPath {
 
     new Trigger(() -> isAutoalignComplete() && pathCommand != null)
         .onTrue(new InstantCommand(() -> stopPath()));
+
+    new Trigger(() -> pathCommand == null)
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  PathplannerWeight.setSpeeds(new ChassisSpeeds());
+                }));
   }
 
   public void restartPath() {

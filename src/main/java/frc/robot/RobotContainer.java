@@ -418,6 +418,7 @@ public class RobotContainer {
                 Logger.recordOutput("Pole", getPoleID());
                 Logger.recordOutput("Coral Offset", getCoralOffset(getPoleID()));
 
+                Logger.recordOutput("target", getTarget());
               }
             });
   }
@@ -463,10 +464,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.05;
+        side = 0;
         break;
       case RIGHT:
-        side = -0.05;
+        side = 0;
         break;
       case CENTER:
         side = 0;

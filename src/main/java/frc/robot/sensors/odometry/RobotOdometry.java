@@ -192,6 +192,10 @@ public class RobotOdometry extends PeriodicBase {
 
   public void addPhotonEstimate(OdometryStorage odometryStorage, AprilTagVision vision) {
 
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     List<Pose2d> robotPoses = new LinkedList<>();
     List<Pose2d> robotPosesAccepted = new LinkedList<>();
     List<Pose2d> robotPosesRejected = new LinkedList<>();

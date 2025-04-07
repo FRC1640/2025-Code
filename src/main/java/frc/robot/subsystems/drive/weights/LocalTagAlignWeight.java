@@ -40,6 +40,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     this.autoAlignHelper = new AutoAlignHelper();
     this.visions = visions;
     this.driveSubsystem = driveSubsystem;
+    this.driveCommandFactory = driveCommandFactory;
     this.gyro = gyro;
   }
 
@@ -108,7 +109,8 @@ public class LocalTagAlignWeight implements DriveWeight {
   public Command getAutoCommand() {
     return driveCommandFactory
         .runVelocityCommand(() -> getSpeeds(), () -> true)
-        .finallyDo(() -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
+        .finallyDo(
+            () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
   }
 
   public boolean isAutoalignComplete() {

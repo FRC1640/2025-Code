@@ -26,8 +26,9 @@ public class DynamicAlignWeight implements DriveWeight {
         return localAlign.getSpeeds();
       case kGlobal:
         if (!globalAlign.isEnabled()) {
-          globalAlign.stopPath();
-        } return new ChassisSpeeds();
+          globalAlign.startPath();
+        }
+        return new ChassisSpeeds();
       default:
         globalAlign.stopPath();
         return new ChassisSpeeds();
@@ -45,7 +46,10 @@ public class DynamicAlignWeight implements DriveWeight {
   }
 
   public boolean isAutoalignComplete() {
-    return globalAlignComplete() || localAlignComplete();
+    if (getStage() == AlignStage.kLocal) {
+      return localAlignComplete();
+    }
+    return globalAlignComplete();
   }
 
   public boolean globalAlignComplete() {

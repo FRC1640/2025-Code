@@ -418,7 +418,8 @@ public class RobotContainer {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
-                Logger.recordOutput("AutoAlignDone", followPathReef.isAutoalignComplete());
+                Logger.recordOutput("AutoAlignDone", dynamicAlign.isAutoalignComplete());
+                Logger.recordOutput("LocalTagAlign/alignStage", dynamicAlign.getStage());
                 Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
                     "LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
@@ -793,6 +794,8 @@ public class RobotContainer {
     } else {
       // put in TESTBOARD triggers here
     }
+
+    driveController.x().onTrue(localAlign.getAutoCommand());
   }
 
   private void configurePitBindings() {
@@ -1011,5 +1014,6 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "LocalAlign", localAlign.getAutoCommand().deadlineFor(autonAutoPlace(() -> coralPreset)));
+    NamedCommands.registerCommand("WaitForLocal", new WaitUntilCommand(() -> localAlign.isReady()));
   }
 }

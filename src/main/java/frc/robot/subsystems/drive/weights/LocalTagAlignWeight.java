@@ -26,6 +26,8 @@ public class LocalTagAlignWeight implements DriveWeight {
   private DriveCommandFactory driveCommandFactory;
   private Gyro gyro;
 
+  private Translation2d lastVector = new Translation2d();
+
   public LocalTagAlignWeight(
       Supplier<Pose2d> targetPose,
       Supplier<Rotation2d> robotRotation,
@@ -50,6 +52,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     Logger.recordOutput("LocalTagAlign/isVectorPresent", localAlignVector.isPresent());
     // drive if vector present
     if (localAlignVector.isPresent()) {
+      lastVector = localAlignVector.get();
       if (!localAlignVector.get().equals(new Translation2d())) {
         return autoAlignHelper.getLocalAlignSpeedsLine(
             localAlignVector.get(),
@@ -103,6 +106,18 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public Command getAutoCommand() {
-    return driveCommandFactory.runVelocityCommand(() -> getSpeeds(), () -> true);
+    return driveCommandFactory
+        .runVelocityCommand(() -> getSpeeds(), () -> true)
+        .finallyDo(() -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
+  }
+
+  public boolean isAutoalignComplete() {
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isPresent()) {
+      return vector.get().equals(new Translation2d());
+    } else {
+      return lastVector.equals(new Translation2d());
+    }
   }
 }

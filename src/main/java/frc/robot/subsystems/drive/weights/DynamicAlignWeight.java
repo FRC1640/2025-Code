@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 
 public class DynamicAlignWeight implements DriveWeight {
   private FollowPathNearest globalAlign;
@@ -38,6 +39,6 @@ public class DynamicAlignWeight implements DriveWeight {
 
   @Override
   public boolean isEnabled() {
-    return this.isEnabled() && (globalAlign.isEnabled() || localAlign.isEnabled());
+    return DriveWeightCommand.checkWeight(this);
   }
 }

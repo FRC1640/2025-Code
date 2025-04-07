@@ -394,6 +394,7 @@ public class RobotContainer {
                         FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
             () -> RobotOdometry.instance.getPose("Main").getRotation(),
             driveSubsystem,
+            driveCommandFactory,
             gyro,
             visionArray[2]);
 
@@ -994,5 +995,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
+
+    NamedCommands.registerCommand("LocalAlign", localAlign.getAutoCommand());
   }
 }

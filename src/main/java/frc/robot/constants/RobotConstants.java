@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
+import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
@@ -276,12 +277,12 @@ public class RobotConstants {
         this.gantrySetpoint = setpoint;
       }
 
-      public double getLift(int reefFace) {
-        return lift - getReefOffset(this, reefFace);
+      public double getLift() {
+        return lift - getReefOffset(this, FollowPathNearest.reefFaceSelected);
       }
 
-      public double getLiftAlgae(int reefFace) {
-        return liftAlgae - getReefOffset(this, reefFace);
+      public double getLiftAlgae() {
+        return liftAlgae - getReefOffset(this, FollowPathNearest.reefFaceSelected);
       }
 
       public double getGantry(boolean dsSide) {

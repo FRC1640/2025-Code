@@ -415,18 +415,46 @@ public class RobotContainer {
                         .getPose("Main")
                         .getTranslation()
                         .getDistance(getTarget().getTranslation()));
-                Logger.recordOutput(
-                    "Pole", 
-                    getPoleID())));
+                Logger.recordOutput("Pole", getPoleID());
+                Logger.recordOutput("Coral Offset", getCoralOffset(getPoleID()));
+
               }
             });
   }
-  public int getPoleID(){
-    return DistanceManager.getNearestPosition(
-        RobotOdometry.instance.getPose("Main"),
-        AllianceManager.chooseFromAlliance(
-            FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed));
+
+  public int getPoleID() {
+    Pose2d pose =
+        DistanceManager.getNearestPosition(
+            RobotOdometry.instance.getPose("Main"),
+            AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed));
+    int poleID = 0;
+    for (int i = 0;
+        i
+            < AllianceManager.chooseFromAlliance(
+                FieldConstants.reefPositionsBlue.length, FieldConstants.reefPositionsRed.length);
+        i++) {
+      if (pose.getTranslation()
+              .getDistance(
+                  AllianceManager.chooseFromAlliance(
+                          FieldConstants.reefPositionsBlue[i], FieldConstants.reefPositionsRed[i])
+                      .getTranslation())
+          < 0.2) {
+        poleID = i;
+      }
+    }
+
+    poleID = (poleID * 2) + (coralPreset.isRight() ? 0 : 1);
+
+    return poleID;
   }
+
+  public double getCoralOffset(int poleID) {
+    return AllianceManager.chooseFromAlliance(
+        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[poleID],
+        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[poleID]);
+  }
+
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
     if (algaeMode) {
       return pose;

@@ -99,6 +99,7 @@ public class FollowPath {
     if (pathCommand == null) {
       pathCommand = AutoBuilder.followPath(path);
       pathCommand.schedule();
+      pathCommand.finallyDo(() -> stopPath());
     }
   }
 

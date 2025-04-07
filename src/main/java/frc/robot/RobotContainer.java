@@ -397,7 +397,7 @@ public class RobotContainer {
             driveSubsystem,
             driveCommandFactory,
             gyro,
-            visionArray[2]);
+            Robot.getMode() == Mode.SIM ? visionArray : new AprilTagVision[] {visionArray[2]});
 
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
 

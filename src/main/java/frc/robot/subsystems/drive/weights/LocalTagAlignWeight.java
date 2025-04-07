@@ -54,21 +54,21 @@ public class LocalTagAlignWeight implements DriveWeight {
     // drive if vector present
     if (localAlignVector.isPresent()) {
       lastVector = localAlignVector.get();
-      if (!localAlignVector.get().equals(new Translation2d())) {
-        return autoAlignHelper.getLocalAlignSpeedsLine(
-            localAlignVector.get(),
-            gyro,
-            new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
-            new Rotation2d(
-                FieldConstants.aprilTagLayout
-                    .getTagPose(getTargetTagId())
-                    .get()
-                    .getRotation()
-                    .toRotation2d()
-                    .minus(Rotation2d.kPi)
-                    .getRadians()),
-            driveSubsystem);
-      } else return new ChassisSpeeds();
+    }
+    if (!lastVector.equals(new Translation2d())) {
+      return autoAlignHelper.getLocalAlignSpeedsLine(
+          lastVector,
+          gyro,
+          new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
+          new Rotation2d(
+              FieldConstants.aprilTagLayout
+                  .getTagPose(getTargetTagId())
+                  .get()
+                  .getRotation()
+                  .toRotation2d()
+                  .minus(Rotation2d.kPi)
+                  .getRadians()),
+          driveSubsystem);
     } else return new ChassisSpeeds();
   }
 
@@ -78,17 +78,14 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    Optional<Translation2d> vector =
-        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    if (vector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
-    }
+    autoAlignHelper.resetLocalMotionProfile(lastVector, driveSubsystem);
   }
 
   public boolean isReady() {
     Optional<Translation2d> vector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
+      lastVector = vector.get();
       double goalAngle =
           MathUtil.angleModulus(
               FieldConstants.aprilTagLayout

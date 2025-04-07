@@ -276,12 +276,12 @@ public class RobotConstants {
         this.gantrySetpoint = setpoint;
       }
 
-      public double getLift() {
-        return lift;
+      public double getLift(int reefFace) {
+        return lift - getReefOffset(this, reefFace);
       }
 
-      public double getLiftAlgae() {
-        return liftAlgae;
+      public double getLiftAlgae(int reefFace) {
+        return liftAlgae - getReefOffset(this, reefFace);
       }
 
       public double getGantry(boolean dsSide) {

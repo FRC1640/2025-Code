@@ -61,7 +61,7 @@ public class RobotConstants {
   }
 
   public class RobotConfigConstants {
-    public static final RobotType robotType = RobotType.Sim;
+    public static final RobotType robotType = RobotType.Prime24;
     // subsystems
     public static final boolean gantrySubsystemEnabled =
         new RobotSwitch<Boolean>(true)
@@ -317,23 +317,6 @@ public class RobotConstants {
       public boolean isRight() {
         return gantrySetpoint == GantrySetpoint.RIGHT;
       }
-    }
-
-    public static double getReefOffset(CoralPreset preset, int reefFace) {
-      int idReturn = 0;
-      idReturn = reefFace * 2;
-      if (!preset.isRight()) {
-        idReturn++;
-      }
-      return AllianceManager.chooseFromAlliance(
-          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[idReturn],
-          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[idReturn]);
-    }
-
-    public static double getReefOffset(int reefPole) {
-      return AllianceManager.chooseFromAlliance(
-          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[reefPole],
-          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[reefPole]);
     }
   }
 

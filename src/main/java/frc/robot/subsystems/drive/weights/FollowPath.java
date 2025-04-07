@@ -82,7 +82,6 @@ public class FollowPath {
   public void startPath() {
     List<Waypoint> waypoints;
     ArrayList<Pose2d> waypointPos = new ArrayList<>();
-
     for (Pose2d waypointPose2d : pose2dArray) {
       Logger.recordOutput("waypointPose2d", waypointPose2d.getRotation().getDegrees());
       waypointPos.add(waypointPose2d);

@@ -55,7 +55,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     if (localAlignVector.isPresent()) {
       lastVector = localAlignVector.get();
     }
-    if (!lastVector.equals(new Translation2d())) {
+    if (!vectorDeadband(lastVector)) {
       return autoAlignHelper.getLocalAlignSpeedsLine(
           lastVector,
           gyro,
@@ -114,9 +114,12 @@ public class LocalTagAlignWeight implements DriveWeight {
     Optional<Translation2d> vector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
-      return vector.get().equals(new Translation2d());
-    } else {
-      return lastVector.equals(new Translation2d());
+      return vectorDeadband(vector.get());
     }
+    return vectorDeadband(lastVector);
+  }
+
+  private boolean vectorDeadband(Translation2d vector) {
+    return Math.abs(vector.getX()) < 0.03 && Math.abs(vector.getY()) < 0.03;
   }
 }

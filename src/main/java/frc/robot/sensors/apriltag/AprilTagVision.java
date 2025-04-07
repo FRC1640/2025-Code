@@ -25,6 +25,7 @@ public class AprilTagVision extends PeriodicBase {
   private String cameraName;
   private String displayName;
   public final double standardDeviation;
+  private Transform3d cameraTransform;
 
   private ArrayList<FiducialVector> localAlignVectors = new ArrayList<>();
 
@@ -36,8 +37,13 @@ public class AprilTagVision extends PeriodicBase {
     displayName = cameraConstants.displayName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
     this.standardDeviation = cameraConstants.standardDevConstant;
+    this.cameraTransform = cameraConstants.transform;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
+  }
+
+  public Transform3d getCameraTransform() {
+    return cameraTransform;
   }
 
   public double getStandardDeviation() {

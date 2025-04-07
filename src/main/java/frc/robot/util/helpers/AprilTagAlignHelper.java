@@ -16,18 +16,6 @@ import org.littletonrobotics.junction.Logger;
 public class AprilTagAlignHelper {
   private AprilTagAlignHelper() {}
 
-  public static Optional<Translation2d> getOffsetAlignVector(int id, CoralPreset preset) {
-    Optional<Translation2d> averageVector = getAverageLocalAlignVector(id);
-    if (averageVector.isPresent()) {
-      averageVector =
-          Optional.of(
-              averageVector
-                  .get()
-                  .plus(new Translation2d(0, preset.getGantrySetpoint(true).alignOffset)));
-    }
-    return averageVector;
-  }
-
   public static Optional<Translation2d> getAverageLocalAlignVector(
       int id, AprilTagVision... visions) {
     ArrayList<FiducialVector[]> allVectors = getLocalAlignVectors(visions);
@@ -90,5 +78,18 @@ public class AprilTagAlignHelper {
       }
     }
     return nearestTag;
+  }
+
+  @Deprecated
+  public static Optional<Translation2d> getPoleAlignVector(int id, CoralPreset preset, AprilTagVision... visions) {
+    Optional<Translation2d> averageVector = getAverageLocalAlignVector(id, visions);
+    if (averageVector.isPresent()) {
+      averageVector =
+          Optional.of(
+              averageVector
+                  .get()
+                  .plus(new Translation2d(0, preset.getGantrySetpoint(true).alignOffset)));
+    }
+    return averageVector;
   }
 }

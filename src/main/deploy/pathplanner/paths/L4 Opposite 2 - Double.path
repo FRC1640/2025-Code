@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.175255681818181,
-        "y": 5.0520738636363625
+        "x": 5.107,
+        "y": 5.096
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.537073863636363,
-        "y": 6.208778409090908
+        "x": 4.468818181818182,
+        "y": 6.252704545454546
       },
       "isLocked": false,
       "linkedName": "ReefTopRight"

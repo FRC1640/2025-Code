@@ -434,6 +434,7 @@ public class RobotContainer {
                         .getPose("Main")
                         .getTranslation()
                         .getDistance(getTarget().getTranslation()));
+                Logger.recordOutput("target", getTarget());
               }
             });
   }
@@ -446,10 +447,10 @@ public class RobotContainer {
     double side;
     switch (preset.get().getGantrySetpoint(alliance)) {
       case LEFT:
-        side = 0.05;
+        side = 0;
         break;
       case RIGHT:
-        side = -0.05;
+        side = 0;
         break;
       case CENTER:
         side = 0;
@@ -505,6 +506,13 @@ public class RobotContainer {
         () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
     followPathCoral.generateTrigger(
         () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+
+    new Trigger(
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    && coralOuttakeCommandFactory.ranBack
+                    && !coralOuttakeSubsystem.guillotineCheck())
+        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove));
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()
@@ -986,7 +994,7 @@ public class RobotContainer {
             .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.1)
+        new WaitCommand(0)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

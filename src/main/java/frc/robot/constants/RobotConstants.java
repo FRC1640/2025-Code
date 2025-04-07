@@ -327,8 +327,8 @@ public class RobotConstants {
         idReturn++;
       }
       return AllianceManager.chooseFromAlliance(
-          10 - FieldConstants.reefPoleHeightBlue[idReturn],
-          10 - FieldConstants.reefPoleHeightRed[idReturn]);
+        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[idReturn],
+        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[idReturn]);
     }
 
     public static double getReefOffset(int reefPole) {

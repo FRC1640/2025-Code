@@ -415,10 +415,18 @@ public class RobotContainer {
                         .getPose("Main")
                         .getTranslation()
                         .getDistance(getTarget().getTranslation()));
+                Logger.recordOutput(
+                    "Pole", 
+                    getPoleID())));
               }
             });
   }
-
+  public int getPoleID(){
+    return DistanceManager.getNearestPosition(
+        RobotOdometry.instance.getPose("Main"),
+        AllianceManager.chooseFromAlliance(
+            FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed));
+  }
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
     if (algaeMode) {
       return pose;

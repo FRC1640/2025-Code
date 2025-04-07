@@ -15,7 +15,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.ModuleInfo;
-import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.util.ConfigEnums.TestMode.TestingSetting;
 import frc.robot.util.WPICal.AprilTagPositionSwitcher.AprilTagSetting;
 import frc.robot.util.logging.MotorLoggingManager;
@@ -278,11 +277,11 @@ public class RobotConstants {
       }
 
       public double getLift() {
-        return lift - getReefOffset(this, FollowPathNearest.reefFaceSelected);
+        return lift;
       }
 
       public double getLiftAlgae() {
-        return liftAlgae - getReefOffset(this, FollowPathNearest.reefFaceSelected);
+        return liftAlgae;
       }
 
       public double getGantry(boolean dsSide) {
@@ -327,8 +326,8 @@ public class RobotConstants {
         idReturn++;
       }
       return AllianceManager.chooseFromAlliance(
-        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[idReturn],
-        FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[idReturn]);
+          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightBlue[idReturn],
+          FieldConstants.reefPoleRegularHeight - FieldConstants.reefPoleHeightRed[idReturn]);
     }
 
     public static double getReefOffset(int reefPole) {

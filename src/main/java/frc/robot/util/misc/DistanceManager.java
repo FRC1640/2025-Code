@@ -3,7 +3,6 @@ package frc.robot.util.misc;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
@@ -60,41 +59,6 @@ public class DistanceManager {
         nearestPos = pos;
       }
     }
-    return nearestPos;
-  }
-
-  public static Pose2d getNearestPositionDriveReef(
-      Pose2d robotPos, Pose2d[] checkPoints, Function<Pose2d, Pose2d> poseFunction) {
-    double distance = Double.MAX_VALUE;
-    int id = 0;
-    Pose2d nearestPos = new Pose2d();
-    for (int i = 0; checkPoints.length > i; i++) {
-      Pose2d pos = poseFunction.apply(checkPoints[i]);
-      double distanceLocalPos = robotPos.getTranslation().getDistance(pos.getTranslation());
-      if (distance > distanceLocalPos) {
-        distance = distanceLocalPos;
-        nearestPos = pos;
-        id = i;
-      }
-      FollowPathNearest.reefFaceSelected = id;
-    }
-    return nearestPos;
-  }
-
-  public static Pose2d getNearestPositionDriveReef(Pose2d robotPos, Pose2d[] checkPoints) {
-    double distance = Double.MAX_VALUE;
-    Pose2d nearestPos = new Pose2d();
-    int id = 0;
-    for (int i = 0; checkPoints.length > i; i++) {
-      double distanceLocalPos =
-          robotPos.getTranslation().getDistance(checkPoints[i].getTranslation());
-      if (distance > distanceLocalPos) {
-        distance = distanceLocalPos;
-        nearestPos = checkPoints[i];
-        id = i;
-      }
-    }
-    FollowPathNearest.reefFaceSelected = id;
     return nearestPos;
   }
 

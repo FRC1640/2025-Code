@@ -14,14 +14,12 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.misc.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class FollowPathNearest extends FollowPath {
   Supplier<Pose2d[]> positions;
   Function<Pose2d, Pose2d> poseFunction;
   private PIDController rotPid =
       RobotPIDConstants.constructPID(RobotPIDConstants.angleFollowPath, "FollowPathNearest");
-  public static int reefFaceSelected = 0;
 
   public FollowPathNearest(
       Supplier<Pose2d> robotPose,
@@ -49,15 +47,13 @@ public class FollowPathNearest extends FollowPath {
 
   private Pose2d findNearest(Pose2d[] pos) {
     if (poseFunction != null) {
-      return DistanceManager.getNearestPositionDriveReef(robotPose.get(), pos, poseFunction);
+      return DistanceManager.getNearestPosition(robotPose.get(), pos, poseFunction);
     }
-    return DistanceManager.getNearestPositionDriveReef(robotPose.get(), pos);
+    return DistanceManager.getNearestPosition(robotPose.get(), pos);
   }
 
   @Override
   public void startPath() {
-    Logger.recordOutput("ReefFaceSelected", reefFaceSelected);
-
     Pose2d nearestPos =
         new Pose2d(
             findNearest(positions.get()).getTranslation(),

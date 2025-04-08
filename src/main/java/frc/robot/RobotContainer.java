@@ -144,6 +144,8 @@ public class RobotContainer {
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 
+  private boolean premoveLift = false;
+
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
 
@@ -518,6 +520,16 @@ public class RobotContainer {
         () -> driveHID.getAButton() && !followPathReef.isAutoalignComplete());
     followPathCoral.generateTrigger(
         () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+
+    new Trigger(
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    && coralOuttakeCommandFactory.ranBack
+                    && !coralOuttakeSubsystem.guillotineCheck())
+        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove).onlyIf(() -> premoveLift));
+
+    driveController.povDown().onTrue(new InstantCommand(() -> premoveLift = true));
+    driveController.povUp().onTrue(new InstantCommand(() -> premoveLift = false));
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()
@@ -633,7 +645,6 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().onTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(
@@ -857,6 +868,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return homing()
         .andThen(new InstantCommand(() -> autoRampPos = true))
+        .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }
@@ -1000,7 +1012,7 @@ public class RobotContainer {
             .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.1)
+        new WaitCommand(0)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(

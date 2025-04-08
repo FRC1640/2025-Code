@@ -30,7 +30,7 @@ public class AprilTagVision extends PeriodicBase {
   private Optional<Translation2d> lastLocalVector = Optional.empty();
   private int staleCount = 0;
   private int staleThreshold = 3;
-
+  int lastID = -1;
   Optional<Translation2d> output = Optional.empty();
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
@@ -214,6 +214,11 @@ public class AprilTagVision extends PeriodicBase {
     TrigTargetObservation[] trigObservations = inputs.trigTargetObservations;
     Logger.recordOutput("tagID", id);
     Logger.recordOutput("observationlength", inputs.trigTargetObservations.length);
+    if (lastID != id) {
+      lastLocalVector = Optional.empty();
+      staleCount = 0;
+      lastID = id;
+    }
     Optional<TrigTargetObservation> observation = Optional.empty();
     for (int i = 0; i <= trigObservations.length - 1; i++) {
       if (trigObservations[i].fiducialId() == id) {

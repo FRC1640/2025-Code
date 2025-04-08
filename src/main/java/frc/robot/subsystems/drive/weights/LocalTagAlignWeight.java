@@ -25,11 +25,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   private DriveSubsystem driveSubsystem;
   private DriveCommandFactory driveCommandFactory;
   private Gyro gyro;
-  Optional<Translation2d> localAlignVector = Optional.empty();
-  int maxIterations = 3;
-  int currentIterations = 0;
-
-  private Optional<Translation2d> lastVector = Optional.empty();
 
   public LocalTagAlignWeight(
       Supplier<Pose2d> targetPose,
@@ -50,20 +45,12 @@ public class LocalTagAlignWeight implements DriveWeight {
   @Override
   public ChassisSpeeds getSpeeds() {
     // average vectors across cameras
-
-    Translation2d usedVector = null;
-    if (localAlignVector.isPresent()) {
-      usedVector = localAlignVector.get();
-    } else {
-      if (lastVector.isPresent()) {
-        usedVector = lastVector.get();
-      } else {
-        return new ChassisSpeeds();
-      }
+    Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isEmpty()) {
+      return new ChassisSpeeds();
     }
-
     return autoAlignHelper.getLocalAlignSpeedsLine(
-        usedVector,
+        vector.get(),
         gyro,
         new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
         new Rotation2d(
@@ -83,10 +70,9 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    if (localAlignVector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(localAlignVector.get(), driveSubsystem);
-    } else if (lastVector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(lastVector.get(), driveSubsystem);
+    Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isPresent()) {
+      autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
     } else {
       autoAlignHelper.resetLocalMotionProfile(new Translation2d(), driveSubsystem);
     }

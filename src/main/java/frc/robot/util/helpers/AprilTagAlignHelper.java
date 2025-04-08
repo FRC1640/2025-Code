@@ -38,7 +38,8 @@ public class AprilTagAlignHelper {
   private static ArrayList<Translation2d> getLocalAlignVectors(int id, AprilTagVision[] visions) {
     ArrayList<Translation2d> vectors = new ArrayList<>();
     for (AprilTagVision vision : visions) {
-      Optional<Translation2d> vector = vision.getLocalAlignVector(id);
+      vision.setIDToUse(id);
+      Optional<Translation2d> vector = vision.getLocalAlignVector();
       if (vector.isPresent()) {
         vectors.add(vector.get());
       }

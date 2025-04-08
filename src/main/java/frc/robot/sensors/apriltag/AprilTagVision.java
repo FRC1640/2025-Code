@@ -28,9 +28,11 @@ public class AprilTagVision extends PeriodicBase {
   private Transform3d cameraTransform;
 
   private Optional<Translation2d> lastLocalVector = Optional.empty();
+  private Optional<Translation2d> localVector = Optional.empty();
   private int staleCount = 0;
   private int staleThreshold = 3;
   int lastID = -1;
+  int idToUse = -1;
   Optional<Translation2d> output = Optional.empty();
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
@@ -210,7 +212,15 @@ public class AprilTagVision extends PeriodicBase {
         observation.cameraToTarget().getTranslation().getNorm());
   }
 
-  public Optional<Translation2d> getLocalAlignVector(int id) {
+  public Optional<Translation2d> getLocalAlignVector() {
+    return localVector;
+  }
+
+  public void setIDToUse(int id) {
+    idToUse = id;
+  }
+
+  private Optional<Translation2d> getLocalAlignVector(int id) {
     TrigTargetObservation[] trigObservations = inputs.trigTargetObservations;
     Logger.recordOutput("tagID", id);
     Logger.recordOutput("observationlength", inputs.trigTargetObservations.length);
@@ -281,6 +291,7 @@ public class AprilTagVision extends PeriodicBase {
         tagPoses.add(pose.get());
       }
     }
+    localVector = getLocalAlignVector(idToUse);
     Logger.recordOutput(
         "Sensors/AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
   }

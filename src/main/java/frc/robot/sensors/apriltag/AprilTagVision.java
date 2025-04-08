@@ -293,6 +293,15 @@ public class AprilTagVision extends PeriodicBase {
     }
     localVector = getLocalAlignVector(idToUse);
     Logger.recordOutput(
+        "AprilTagVisionLocal/" + displayName + "/IsPresent", localVector.isPresent());
+    if (localVector.isPresent()) {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVector", localVector.get());
+    } else {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVector", new Translation2d());
+    }
+    Logger.recordOutput(
         "Sensors/AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));
   }
 }

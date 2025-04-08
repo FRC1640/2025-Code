@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.37238446477125,
-        "y": 6.006865646057453
+        "x": 3.8933974358974357,
+        "y": 6.7908974358974366
       },
       "isLocked": false,
       "linkedName": "ReefTopRight"
@@ -20,8 +20,8 @@
         "y": 7.1959659090909085
       },
       "prevControl": {
-        "x": 2.582642045454545,
-        "y": 6.368323863636363
+        "x": 3.934679487179486,
+        "y": 6.894102564102565
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8256467941507301,
+      "minWaypointRelativePos": 0.76,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,

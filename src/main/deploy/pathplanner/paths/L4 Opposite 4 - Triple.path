@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.442221590909091,
-        "y": 5.524778409090909
+        "x": 3.5706888415494373,
+        "y": 5.453794471819768
       },
       "isLocked": false,
       "linkedName": "ReefTopLeft_OffsetLeft"
@@ -20,8 +20,8 @@
         "y": 7.1959659090909085
       },
       "prevControl": {
-        "x": 2.0940340909090915,
-        "y": 6.747244318181817
+        "x": 1.5135940806973887,
+        "y": 6.9834800083435375
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7984234234234222,
+      "minWaypointRelativePos": 0.74,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,

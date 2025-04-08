@@ -206,8 +206,10 @@ public class AprilTagVision extends PeriodicBase {
 
   public Optional<Translation2d> getLocalAlignVector(int id) {
     TrigTargetObservation[] trigObservations = inputs.trigTargetObservations;
+    Logger.recordOutput("tagID", id);
+    Logger.recordOutput("observationlength", inputs.trigTargetObservations.length);
     Optional<TrigTargetObservation> observation = Optional.empty();
-    for (int i = trigObservations.length - 1; i >= 0; i--) {
+    for (int i = 0; i <= trigObservations.length - 1; i++) {
       if (trigObservations[i].fiducialId() == id) {
         observation = Optional.of(trigObservations[i]);
         break;

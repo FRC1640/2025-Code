@@ -33,7 +33,7 @@ public class FieldConstants {
   public static final int kSouthWest = 4;
   public static final int kNorthWest = 5;
 
-  public static final double reefPoleRegularHeight = 0.568;
+  public static final double reefPoleRegularHeight = 0.568; // TODO Switch from fake units to meters
   public static final Pose2d[] reefPositionsRed =
       new Pose2d[] {
         new Pose2d(13.890498, 4.0259, Rotation2d.fromDegrees(180)), // id 7
@@ -77,9 +77,9 @@ public class FieldConstants {
       };
   // left is +1 id
   public static final double[] reefPoleHeightBlue = {
-    0.556, 0.534, 0.558, 0.563, 0.512, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
-  };
+    0.586, 0.559, 0.558, 0.563, 0.512, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
+  }; // TODO Switch from fake units to meters
   public static final double[] reefPoleHeightRed = {
-    0.534, 0.569, 0.694, 0.531, 0.595, 0.548, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
-  };
+    0.534, 0.578, 0.694, 0.531, 0.595, 0.548, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
+  }; // TODO Switch from fake units to meters
 }

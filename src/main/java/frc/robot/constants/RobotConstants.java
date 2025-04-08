@@ -113,15 +113,15 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
-        new PathConstraints(2.5, 2.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(3, 3.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints coralStationPathConstraintsSlow =
-        new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(2, 3, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
+        new PathConstraints(3, 3.5, Math.PI, 4 * Math.PI);
 
     // local align
     public static final Constraints localAlignPpidConstraints =
-        new Constraints(DriveConstants.maxSpeed, 1);
+        new Constraints(DriveConstants.maxSpeed, 3);
     public static final double profiledDistThreshold = 0.4;
   }
 

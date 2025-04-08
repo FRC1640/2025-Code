@@ -168,17 +168,17 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-                CameraConstants.frontCameraRight));
+                CameraConstants.frontCameraRight, driveSubsystem));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-                CameraConstants.frontCameraLeft));
+                CameraConstants.frontCameraLeft, driveSubsystem));
 
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraCenter),
-                CameraConstants.frontCameraCenter));
+                CameraConstants.frontCameraCenter, driveSubsystem));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -232,7 +232,7 @@ public class RobotContainer {
                 new AprilTagVisionIOSim(
                     CameraConstants.frontCameraLeft,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCameraLeft));
+                CameraConstants.frontCameraLeft, driveSubsystem));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled

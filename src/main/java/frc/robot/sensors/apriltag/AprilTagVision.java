@@ -11,7 +11,9 @@ import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
+import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.util.alerts.AlertsManager;
+import frc.robot.util.logging.VelocityLogStorage;
 import frc.robot.util.periodic.PeriodicBase;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -22,14 +24,16 @@ public class AprilTagVision extends PeriodicBase {
   AprilTagVisionIOInputsAutoLogged inputs;
   private String cameraName;
   private String displayName;
+  DriveSubsystem driveSubsystem;
   public final double standardDeviation;
 
-  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
+  public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants, DriveSubsystem driveSubsystem) {
     this.io = io;
     cameraName = cameraConstants.networkName;
     displayName = cameraConstants.displayName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
     this.standardDeviation = cameraConstants.standardDevConstant;
+    this.driveSubsystem = driveSubsystem;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
   }
@@ -67,10 +71,27 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public double getTrigDistFactor(PoseObservation observation) {
-    double distFactor =
-        Math.pow(observation.averageTagDistance(), 2)
-            / observation.tagCount()
-            * getStandardDeviation();
+    // double distFactor =
+    //     Math.pow(observation.averageTagDistance(), 2)
+    //         / observation.tagCount()
+    //         * getStandardDeviation();
+    double tagMultiplier = 1;
+    switch (observation.tagCount()) {
+      case 0:
+        tagMultiplier = 1000;
+      case 1:
+        tagMultiplier = 1;
+        break;
+      case 2:
+        tagMultiplier = 0.6;
+        break;
+      case 3:
+        tagMultiplier = 0.45;
+        break;
+    }
+    double velWeight = (-0.075*Math.pow((observation.minimumTagDistance()-3.5), 2))+1;
+    double distWeight = 1-velWeight;
+    double distFactor = tagMultiplier*1.4*(driveSubsystem.chassisSpeedsMagnitude()*velWeight+observation.minimumTagDistance()*distWeight);
     Logger.recordOutput("AprilTagVision/" + displayName + "/Stddevs/distFactorTrig", distFactor);
     return distFactor;
   }

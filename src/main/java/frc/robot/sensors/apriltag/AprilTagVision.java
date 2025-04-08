@@ -232,8 +232,8 @@ public class AprilTagVision extends PeriodicBase {
               .plus(vector)
               .toTranslation2d()
               .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
-      lastLocalVector = output;
       output = Optional.of(frontToTag);
+      lastLocalVector = output;
       return output;
     } else if (lastLocalVector.isPresent()) {
       output = Optional.empty();

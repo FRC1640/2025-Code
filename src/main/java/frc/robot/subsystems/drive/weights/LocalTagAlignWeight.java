@@ -25,11 +25,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   private DriveSubsystem driveSubsystem;
   private DriveCommandFactory driveCommandFactory;
   private Gyro gyro;
-  Optional<Translation2d> localAlignVector = Optional.empty();
-  int maxIterations = 3;
-  int currentIterations = 0;
-
-  private Optional<Translation2d> lastVector = Optional.empty();
 
   public LocalTagAlignWeight(
       Supplier<Pose2d> targetPose,
@@ -50,20 +45,13 @@ public class LocalTagAlignWeight implements DriveWeight {
   @Override
   public ChassisSpeeds getSpeeds() {
     // average vectors across cameras
-
-    Translation2d usedVector = null;
-    if (localAlignVector.isPresent()) {
-      usedVector = localAlignVector.get();
-    } else {
-      if (lastVector.isPresent()) {
-        usedVector = lastVector.get();
-      } else {
-        return new ChassisSpeeds();
-      }
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isEmpty()) {
+      return new ChassisSpeeds();
     }
-
     return autoAlignHelper.getLocalAlignSpeedsLine(
-        usedVector,
+        vector.get(),
         gyro,
         new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
         new Rotation2d(
@@ -83,51 +71,33 @@ public class LocalTagAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    if (localAlignVector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(localAlignVector.get(), driveSubsystem);
-    } else if (lastVector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(lastVector.get(), driveSubsystem);
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    if (vector.isPresent()) {
+      autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
     } else {
       autoAlignHelper.resetLocalMotionProfile(new Translation2d(), driveSubsystem);
     }
   }
 
   public boolean isReady() {
-    if (localAlignVector.isEmpty()
-        && lastVector.isPresent()
-        && currentIterations <= maxIterations) {
-      currentIterations++;
-    } else {
-      lastVector = localAlignVector;
-      currentIterations = 0;
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    boolean ready = false;
+    if (vector.isPresent()) {
+      double goalAngle =
+          MathUtil.angleModulus(
+              FieldConstants.aprilTagLayout
+                  .getTagPose(getTargetTagId())
+                  .get()
+                  .toPose2d()
+                  .getRotation()
+                  .unaryMinus()
+                  .getRadians());
+      ready =
+          vector.get().getNorm() < 1
+              && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
     }
-    localAlignVector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    // log vector presence
-    // Logger.recordOutput("LocalTagAlign/isVectorPresent", localAlignVector.isPresent());
-    // Logger.recordOutput("LocalVector", localAlignVector.get());
-    // Logger.recordOutput("LastVector", lastVector.get());
-    Optional<Translation2d> vector = Optional.empty();
-    if (localAlignVector.isPresent()) {
-      vector = localAlignVector;
-    } else if (lastVector.isPresent()) {
-      vector = lastVector;
-    } else {
-      Logger.recordOutput("vecpresent", vector.isPresent());
-      return false;
-    }
-    Logger.recordOutput("vecpresent", vector.isPresent());
-    double goalAngle =
-        MathUtil.angleModulus(
-            FieldConstants.aprilTagLayout
-                .getTagPose(getTargetTagId())
-                .get()
-                .toPose2d()
-                .getRotation()
-                .unaryMinus()
-                .getRadians());
-    boolean ready =
-        vector.get().getNorm() < 1
-            && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
     return ready;
   }
@@ -140,14 +110,8 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public boolean isAutoalignComplete() {
-    Optional<Translation2d> vector = Optional.empty();
-    if (localAlignVector.isPresent()) {
-      vector = localAlignVector;
-    } else if (lastVector.isPresent()) {
-      vector = lastVector;
-    } else {
-      return false;
-    }
+    Optional<Translation2d> vector =
+        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
       return vectorDeadband(vector.get());
     } else {

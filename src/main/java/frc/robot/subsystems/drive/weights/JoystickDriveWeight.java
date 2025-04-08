@@ -63,14 +63,14 @@ public class JoystickDriveWeight implements DriveWeight {
       linearVelocity = linearVelocity.div(linearVelocity.getNorm());
     }
     omega = MathUtil.clamp(omega, -1, 1);
-    double xyMult = 0.65;
+    double xyMult = 0.75;
     double omegaMult = 0.5;
     if (slowMode.getAsBoolean()) {
       xyMult = 0.3;
       omegaMult = 0.2;
     } else if (fastMode.getAsBoolean()) {
       xyMult = 0.98;
-      omegaMult = 0.75;
+      omegaMult = 0.9;
     }
     double scale = isLimited.getAsBoolean() ? 0.45 : 1;
     ChassisSpeeds speeds =

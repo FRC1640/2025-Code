@@ -283,6 +283,10 @@ public class RobotConstants {
         return liftAlgae;
       }
 
+      public boolean isL4() {
+        return this == LeftL4 || this == RightL4;
+      }
+
       public double getGantry(boolean dsSide) {
         switch (gantrySetpoint) {
           case LEFT:

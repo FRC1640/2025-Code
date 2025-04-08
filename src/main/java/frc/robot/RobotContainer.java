@@ -912,9 +912,10 @@ public class RobotContainer {
               (new InstantCommand(
                           () -> {
                             presetActive =
-                                algaeMode
-                                    ? coralPreset.get().getLiftAlgae()
-                                    : coralPreset.get().getLift();
+                                (algaeMode
+                                        ? coralPreset.get().getLiftAlgae()
+                                        : coralPreset.get().getLift())
+                                    + (coralPreset.get().isL4() ? getCoralOffset(getPoleID()) : 0);
                             gantryPresetActive = coralPreset.get();
                           })
                       .andThen(

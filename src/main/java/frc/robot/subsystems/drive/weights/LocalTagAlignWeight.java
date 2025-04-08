@@ -113,7 +113,18 @@ public class LocalTagAlignWeight implements DriveWeight {
     Optional<Translation2d> vector =
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
-      return vectorDeadband(vector.get());
+      Rotation2d rotationError =
+          new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians()))
+              .minus(
+                  new Rotation2d(
+                      FieldConstants.aprilTagLayout
+                          .getTagPose(getTargetTagId())
+                          .get()
+                          .getRotation()
+                          .toRotation2d()
+                          .minus(Rotation2d.kPi)
+                          .getRadians()));
+      return vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 2;
     } else {
       return false;
     }

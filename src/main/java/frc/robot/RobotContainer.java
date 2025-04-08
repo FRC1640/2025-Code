@@ -302,7 +302,6 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
-    generateNamedCommands();
     driveSubsystem = new DriveSubsystem(gyro);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
@@ -440,6 +439,9 @@ public class RobotContainer {
                 Logger.recordOutput("target", getTarget());
               }
             });
+
+    generateNamedCommands();
+    driveSubsystem.configurePathplanner();
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
@@ -1010,13 +1012,12 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
 
-    // NamedCommands.registerCommand(
-    //     "LocalAlign",
-    //     localAlign
-    //         .getAutoCommand()
-    //         .deadlineFor(autonAutoPlace(() -> coralPreset))
-    //         .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()));
-    // NamedCommands.registerCommand("WaitForLocal", new WaitUntilCommand(() ->
-    // localAlign.isReady()));
+    NamedCommands.registerCommand(
+        "LocalAlign",
+        localAlign
+            .getAutoCommand()
+            .deadlineFor(autonAutoPlace(() -> coralPreset))
+            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()));
+    NamedCommands.registerCommand("WaitForLocal", new WaitUntilCommand(() -> localAlign.isReady()));
   }
 }

@@ -43,6 +43,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+  RobotConfig config;
   Gyro gyro;
   SysIdRoutine sysIdRoutine;
   private final SwerveSetpointGenerator setpointGenerator;
@@ -88,7 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
                     Seconds.of(15),
                     (state) -> Logger.recordOutput("SysIdTestState", state.toString())));
 
-    RobotConfig config;
     try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
@@ -96,6 +96,16 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
       config = null;
     }
+    setpointGenerator =
+        new SwerveSetpointGenerator(
+            config, // The robot configuration. This is the same config used for generating
+            // trajectories and running path following commands.
+            DriveConstants.maxSteerSpeed);
+    previousSetpoint =
+        new SwerveSetpoint(getChassisSpeeds(), getActualSwerveStates(), DriveFeedforwards.zeros(4));
+  }
+
+  public void configurePathplanner() {
     AutoBuilder.configure(
         () -> RobotOdometry.instance.getPose("Main"),
         (x) -> {
@@ -120,13 +130,6 @@ public class DriveSubsystem extends SubsystemBase {
           PathplannerWeight.setpoint = targetPose;
           Logger.recordOutput("Drive/Path/TrajectorySetpoint", targetPose);
         });
-    setpointGenerator =
-        new SwerveSetpointGenerator(
-            config, // The robot configuration. This is the same config used for generating
-            // trajectories and running path following commands.
-            DriveConstants.maxSteerSpeed);
-    previousSetpoint =
-        new SwerveSetpoint(getChassisSpeeds(), getActualSwerveStates(), DriveFeedforwards.zeros(4));
   }
 
   @Override

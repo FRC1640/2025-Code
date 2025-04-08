@@ -50,17 +50,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   @Override
   public ChassisSpeeds getSpeeds() {
     // average vectors across cameras
-    if (localAlignVector.isEmpty()
-        && lastVector.isPresent()
-        && currentIterations <= maxIterations) {
-      currentIterations++;
-    } else {
-      lastVector = localAlignVector;
-      currentIterations = 0;
-    }
-    localAlignVector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    // log vector presence
-    Logger.recordOutput("LocalTagAlign/isVectorPresent", localAlignVector.isPresent());
 
     Translation2d usedVector = null;
     if (localAlignVector.isPresent()) {
@@ -104,6 +93,19 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public boolean isReady() {
+    if (localAlignVector.isEmpty()
+        && lastVector.isPresent()
+        && currentIterations <= maxIterations) {
+      currentIterations++;
+    } else {
+      lastVector = localAlignVector;
+      currentIterations = 0;
+    }
+    localAlignVector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+    // log vector presence
+    // Logger.recordOutput("LocalTagAlign/isVectorPresent", localAlignVector.isPresent());
+    // Logger.recordOutput("LocalVector", localAlignVector.get());
+    // Logger.recordOutput("LastVector", lastVector.get());
     Optional<Translation2d> vector = Optional.empty();
     if (localAlignVector.isPresent()) {
       vector = localAlignVector;

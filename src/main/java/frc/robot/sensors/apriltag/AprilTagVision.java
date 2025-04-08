@@ -31,6 +31,8 @@ public class AprilTagVision extends PeriodicBase {
   private int staleCount = 0;
   private int staleThreshold = 3;
 
+  Optional<Translation2d> output = Optional.empty();
+
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
     cameraName = cameraConstants.networkName;
@@ -219,7 +221,6 @@ public class AprilTagVision extends PeriodicBase {
         break;
       }
     }
-    Optional<Translation2d> output = Optional.empty();
     if (observation.isPresent()) {
       // calculate camera vector
       Translation3d vector = calculateCameraVector(observation.get());
@@ -231,16 +232,21 @@ public class AprilTagVision extends PeriodicBase {
               .plus(vector)
               .toTranslation2d()
               .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
+      lastLocalVector = output;
       output = Optional.of(frontToTag);
+      return output;
     } else if (lastLocalVector.isPresent()) {
+      output = Optional.empty();
       staleCount++;
       if (staleCount > staleThreshold) {
         lastLocalVector = Optional.empty();
         staleCount = 0;
       }
-      output = lastLocalVector;
+      return lastLocalVector;
+    } else {
+      output = Optional.empty();
+      return Optional.empty();
     }
-    return output;
   }
 
   public PoseObservation[] getPhotonResults() {

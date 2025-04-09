@@ -171,15 +171,15 @@ public class RobotContainer {
       case REAL:
         new CoProcessInput(new OrangePILogger());
         gyro = new Gyro(new GyroIONavX());
-        aprilTagVisions.add(
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-                CameraConstants.frontCameraRight));
+        // aprilTagVisions.add(
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
+        //         CameraConstants.frontCameraRight));
 
-        aprilTagVisions.add(
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-                CameraConstants.frontCameraLeft));
+        // aprilTagVisions.add(
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+        //         CameraConstants.frontCameraLeft));
 
         aprilTagVisions.add(
             new AprilTagVision(
@@ -387,7 +387,7 @@ public class RobotContainer {
             driveSubsystem,
             driveCommandFactory,
             gyro,
-            Robot.getMode() == Mode.SIM ? visionArray : new AprilTagVision[] {visionArray[2]});
+            visionArray);
 
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
 

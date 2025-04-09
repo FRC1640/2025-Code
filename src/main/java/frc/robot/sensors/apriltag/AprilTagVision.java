@@ -30,7 +30,7 @@ public class AprilTagVision extends PeriodicBase {
   private Optional<Translation2d> lastLocalVector = Optional.empty();
   private Optional<Translation2d> localVector = Optional.empty();
   private int staleCount = 0;
-  private int staleThreshold = 3;
+  private int staleThreshold = 4;
   int lastID = -1;
   int idToUse = -1;
   Optional<Translation2d> output = Optional.empty();
@@ -249,6 +249,7 @@ public class AprilTagVision extends PeriodicBase {
               .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
       output = Optional.of(frontToTag);
       lastLocalVector = output;
+      staleCount = 0;
       return output;
     } else if (lastLocalVector.isPresent()) {
       output = Optional.empty();
@@ -294,6 +295,14 @@ public class AprilTagVision extends PeriodicBase {
     localVector = getLocalAlignVector(idToUse);
     Logger.recordOutput(
         "AprilTagVisionLocal/" + displayName + "/IsPresent", localVector.isPresent());
+
+    if (lastLocalVector.isPresent()) {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVectorLast", lastLocalVector.get());
+    } else {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVectorLast", new Translation2d());
+    }
     if (localVector.isPresent()) {
       Logger.recordOutput(
           "AprilTagVisionLocal/" + displayName + "/LocalAlignVector", localVector.get());

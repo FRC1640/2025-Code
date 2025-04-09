@@ -91,6 +91,8 @@ public class AutoAlignHelper {
     double dist = vector.getDistance(target);
     Rotation2d angle = vector.minus(target).getAngle();
     // calculate output
+
+    Logger.recordOutput("localaligndist", dist);
     double linear =
         dist < 0.05 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
     Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.05);

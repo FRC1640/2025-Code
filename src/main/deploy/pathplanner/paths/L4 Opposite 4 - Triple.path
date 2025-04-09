@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5706888415494373,
-        "y": 5.453794471819768
+        "x": 3.3257692307692306,
+        "y": 5.4698717948717945
       },
       "isLocked": false,
       "linkedName": "ReefTopLeft_OffsetLeft"
@@ -20,8 +20,8 @@
         "y": 7.1959659090909085
       },
       "prevControl": {
-        "x": 1.5135940806973887,
-        "y": 6.9834800083435375
+        "x": 2.1698717948717943,
+        "y": 6.625769230769231
       },
       "nextControl": null,
       "isLocked": false,

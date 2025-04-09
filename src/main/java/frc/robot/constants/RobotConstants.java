@@ -172,6 +172,19 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
+    // public static final CameraConstant frontCameraLeft =
+    //     new CameraConstant(
+    //         new SimCameraProperties(),
+    //         new Transform3d(
+    //             new Translation3d(
+    //                 Units.inchesToMeters(13.95),
+    //                 Units.inchesToMeters(11.9),
+    //                 Units.inchesToMeters(12.125)),
+    //             new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
+    //         1,
+    //         "Sommar",
+    //         "Front Left");
+
     public static final CameraConstant frontCameraLeft =
         new CameraConstant(
             new SimCameraProperties(),
@@ -182,8 +195,21 @@ public class RobotConstants {
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
             1,
-            "Sommar",
+            "Park",
             "Front Left");
+
+    // public static final CameraConstant frontCameraRight =
+    //     new CameraConstant(
+    //         new SimCameraProperties(),
+    //         new Transform3d(
+    //             new Translation3d(
+    //                 Units.inchesToMeters(13.95),
+    //                 -Units.inchesToMeters(11.9),
+    //                 Units.inchesToMeters(12.125)),
+    //             new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
+    //         1.1,
+    //         "Dodds",
+    //         "Front Right");
 
     public static final CameraConstant frontCameraRight =
         new CameraConstant(
@@ -195,7 +221,7 @@ public class RobotConstants {
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
             1.1,
-            "Dodds",
+            "Arducam_OV2311_USB_Camera",
             "Front Right");
 
     public static final CameraConstant frontCameraCenter =

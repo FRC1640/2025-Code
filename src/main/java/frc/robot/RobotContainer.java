@@ -305,16 +305,6 @@ public class RobotContainer {
     driveSubsystem = new DriveSubsystem(gyro);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard =
-        new Dashboard(
-            driveSubsystem,
-            liftSubsystem,
-            gantrySubsystem,
-            climberSubsystem,
-            algaeIntakeSubsystem,
-            coralOuttakeSubsystem,
-            winchSubsystem,
-            driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
@@ -442,6 +432,16 @@ public class RobotContainer {
 
     generateNamedCommands();
     driveSubsystem.configurePathplanner();
+    dashboard =
+        new Dashboard(
+            driveSubsystem,
+            liftSubsystem,
+            gantrySubsystem,
+            climberSubsystem,
+            algaeIntakeSubsystem,
+            coralOuttakeSubsystem,
+            winchSubsystem,
+            driveController);
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {

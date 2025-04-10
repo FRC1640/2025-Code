@@ -78,9 +78,9 @@ public class FieldConstants {
       };
   // left is +1 id
   public static final double[] reefPoleHeightBlue = {
-    0.586, 0.559, 0.558, 0.563, 0.512, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
-  }; // TODO Switch from fake units to meters
+    1.825, 1.821, 1.816, 1.812, 1.806, 1.811, 1.820, 1.820, 1.825, 1.825, 1.822, 1.825,
+  }; // TODO Convert the lift from FakeUnit to Meters
   public static final double[] reefPoleHeightRed = {
-    0.534, 0.578, 0.694, 0.531, 0.595, 0.548, 0.568, 0.568, 0.568, 0.568, 0.568, 0.568,
-  }; // TODO Switch from fake units to meters
+    1.825, 1.821, 1.816, 1.812, 1.806, 1.811, 1.820, 1.820, 1.825, 1.825, 1.822, 1.825,
+  }; /// TODO Convert the lift from FakeUnit to Meters
 }

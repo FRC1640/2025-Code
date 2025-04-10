@@ -52,13 +52,22 @@ public class CStationAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    // create target
+    // create targetPose
     Pose2d nearest = findNearest(positions.get());
     Pose2d end =
         new Pose2d(nearest.getTranslation(), nearest.getRotation().plus(new Rotation2d(Math.PI)));
     // override rotation
     targetPose = findNearest(positions.get());
     autoAlignHelper.resetCStationMotionProfile(robotPose.get(), driveSubsystem);
+  }
+
+  public boolean isAutoalignComplete() {
+    boolean complete =
+        (targetPose.getTranslation().getDistance(targetPose.getTranslation()) < 0.15
+            && Math.abs(targetPose.getRotation().minus(targetPose.getRotation()).getDegrees()) < 6);
+    ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
+    complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
+    return complete;
   }
 
   public Command getAutoCommand() {

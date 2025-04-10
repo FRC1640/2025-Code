@@ -19,4 +19,8 @@ public interface DriveWeight {
   public default boolean isEnabled() {
     return true;
   }
+
+  public default void onStart() {}
+
+  public default void onFinish() {}
 }

@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.sensors.resolvers.ResolverVoltageInfo;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -29,6 +30,7 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.81;
     public static final double robotLength = 0.81; // 0.927
+    public static final double robotLengthLocalAlign = 0.79;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -111,11 +113,16 @@ public class RobotConstants {
   public static class AutoAlignConfig {
     public static final double maxDistanceFromTarget = 0.3;
     public static final PathConstraints coralStationPathConstraints =
-        new PathConstraints(2.5, 2.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(3, 3.5, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints coralStationPathConstraintsSlow =
-        new PathConstraints(1.3, 2.5, Math.PI + 0.75, 4 * Math.PI);
+        new PathConstraints(2, 3, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
-        new PathConstraints(2, 2, Math.PI, 4 * Math.PI);
+        new PathConstraints(3, 3.5, Math.PI, 4 * Math.PI);
+
+    // local align
+    public static final Constraints localAlignPpidConstraints =
+        new Constraints(DriveConstants.maxSpeed, 3);
+    public static final double profiledDistThreshold = 0.4;
   }
 
   public static class DriveConstants {
@@ -168,6 +175,19 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
+    // public static final CameraConstant frontCameraLeft =
+    //     new CameraConstant(
+    //         new SimCameraProperties(),
+    //         new Transform3d(
+    //             new Translation3d(
+    //                 Units.inchesToMeters(13.95),
+    //                 Units.inchesToMeters(11.9),
+    //                 Units.inchesToMeters(12.125)),
+    //             new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
+    //         1,
+    //         "Sommar",
+    //         "Front Left");
+
     public static final CameraConstant frontCameraLeft =
         new CameraConstant(
             new SimCameraProperties(),
@@ -178,8 +198,21 @@ public class RobotConstants {
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
             1,
-            "Sommar",
+            "Park",
             "Front Left");
+
+    // public static final CameraConstant frontCameraRight =
+    //     new CameraConstant(
+    //         new SimCameraProperties(),
+    //         new Transform3d(
+    //             new Translation3d(
+    //                 Units.inchesToMeters(13.95),
+    //                 -Units.inchesToMeters(11.9),
+    //                 Units.inchesToMeters(12.125)),
+    //             new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
+    //         1.1,
+    //         "Dodds",
+    //         "Front Right");
 
     public static final CameraConstant frontCameraRight =
         new CameraConstant(
@@ -191,7 +224,7 @@ public class RobotConstants {
                     Units.inchesToMeters(12.125)),
                 new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
             1.1,
-            "Dodds",
+            "Arducam_OV2311_USB_Camera",
             "Front Right");
 
     public static final CameraConstant frontCameraCenter =
@@ -236,9 +269,15 @@ public class RobotConstants {
     public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
-      LEFT,
-      RIGHT,
-      CENTER;
+      LEFT(Units.inchesToMeters(13 / 2)),
+      RIGHT(-Units.inchesToMeters(13 / 2)),
+      CENTER(0);
+
+      public double alignOffset;
+
+      private GantrySetpoint(double alignOffset) {
+        this.alignOffset = alignOffset;
+      }
     }
 
     public enum CoralPreset {
@@ -373,7 +412,7 @@ public class RobotConstants {
         Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(1));
-    public static final double gantryLimitCenter = 0.198;
+    public static final double gantryLimitCenter = 0.223; // 0.198
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;

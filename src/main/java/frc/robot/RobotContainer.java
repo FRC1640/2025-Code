@@ -356,7 +356,7 @@ public class RobotContainer {
         new CStationAlignWeight(
             () ->
                 AllianceManager.chooseFromAlliance(
-                    FieldConstants.cStationAlignPosBlue, FieldConstants.cStationAlignPosRed),
+                    FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
             (x) ->
                 DistanceManager.addRotatedDim(
                     x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),

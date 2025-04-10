@@ -174,8 +174,8 @@ public class RobotConstants {
     public static final double minTipDegrees = 3;
 
     public static final TrapezoidProfile.Constraints cStationDriveConstraints =
-        new TrapezoidProfile.Constraints(maxSpeed, accelLimit);
-    public static final double slowAlignDistance = 0.05;
+        new TrapezoidProfile.Constraints(10, accelLimit);
+    public static final double cStationSlowAlignDistance = 0.05;
   }
 
   public static class CameraConstants {

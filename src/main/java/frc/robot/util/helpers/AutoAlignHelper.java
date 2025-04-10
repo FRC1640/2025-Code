@@ -175,11 +175,11 @@ public class AutoAlignHelper {
 
     Logger.recordOutput("cStationaligndist", dist);
     double linear =
-        dist < DriveConstants.slowAlignDistance
+        dist < DriveConstants.cStationSlowAlignDistance
             ? cStationDrivePid.calculate(dist, 0)
             : cStationDriveProfiledPid.calculate(dist, 0);
     Logger.recordOutput(
-        "cStationAlign/profiledcStationAlign", dist > DriveConstants.slowAlignDistance);
+        "cStationAlign/profiledcStationAlign", dist > DriveConstants.cStationSlowAlignDistance);
     double rotational =
         cStationRotationPid.calculate(
             robot.getRotation().minus(target.getRotation()).getRadians(), 0);

@@ -25,7 +25,7 @@
       },
       "nextControl": {
         "x": 5.765910511678188,
-        "y": 1.9794382807939017
+        "y": 1.9794382807939013
       },
       "isLocked": false,
       "linkedName": null
@@ -89,7 +89,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 3.3018656744349655
+    "rotation": 30.96
   },
   "reversed": false,
   "folder": "SpitSpit",

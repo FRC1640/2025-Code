@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.688451745004224,
-        "y": 1.7484124571750401
+        "x": 5.394630681818183,
+        "y": 2.604048295454545
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight"
+    },
+    {
+      "anchor": {
+        "x": 5.8333806818181815,
+        "y": 1.606889204545455
+      },
+      "prevControl": {
+        "x": 5.770515885677244,
+        "y": 1.9062453766451555
+      },
+      "nextControl": {
+        "x": 6.042784090909091,
+        "y": 0.6097301136363625
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -30,19 +46,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.19607843137254902,
+      "waypointRelativePos": 0.15985790408525874,
       "rotationDegrees": 119.99999999999999
     },
     {
-      "waypointRelativePos": 0.8061002178649236,
+      "waypointRelativePos": 1.6,
       "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 1.921259842519686,
+      "maxWaypointRelativePos": 1.9482564679415084,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 0.8,
@@ -57,7 +73,7 @@
   "eventMarkers": [
     {
       "name": "lift down",
-      "waypointRelativePos": 0.35320584926883786,
+      "waypointRelativePos": 0.7,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

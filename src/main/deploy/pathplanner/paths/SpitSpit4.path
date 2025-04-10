@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9845,
-        "y": 1.8391818181818178
+        "x": 6.069550998423062,
+        "y": 2.4128263891349206
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight_Center"
     },
     {
       "anchor": {
-        "x": 6.651051136363637,
-        "y": 2.1503409090909087
+        "x": 6.7906534090909085,
+        "y": 2.1852414772727276
       },
       "prevControl": {
-        "x": 6.112585227272728,
-        "y": 1.9608806818181812
+        "x": 5.132728427051213,
+        "y": 2.693089014410469
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SpitShot"
+      "linkedName": "2nd spit shot"
     }
   ],
   "rotationTargets": [
@@ -73,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.963756532073674
+    "rotation": 3.3018656744349655
   },
   "reversed": false,
   "folder": "SpitSpit",

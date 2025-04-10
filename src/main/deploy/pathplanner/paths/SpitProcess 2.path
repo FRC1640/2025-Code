@@ -8,32 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.799784090909091,
-        "y": 4.045829545454544
+        "x": 6.501477272727272,
+        "y": 3.75078125
       },
       "isLocked": false,
       "linkedName": "ReefCenterRight_OffsetLeft"
     },
     {
       "anchor": {
-        "x": 6.651051136363637,
-        "y": 2.1503409090909087
+        "x": 7.199488636363637,
+        "y": 3.002911931818182
       },
       "prevControl": {
-        "x": 6.611164772727271,
-        "y": 2.7486363636363635
+        "x": 6.960170454545455,
+        "y": 3.292088068181818
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SpitShot"
+      "linkedName": "1spitshot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.19893428063943186,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -73,7 +68,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.963756532073674
+    "rotation": -27.248789968812815
   },
   "reversed": false,
   "folder": "SpitProcess",

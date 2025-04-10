@@ -20,8 +20,8 @@
         "y": 0.57
       },
       "prevControl": {
-        "x": 6.010028409090909,
-        "y": 1.7366761363636374
+        "x": 6.012869318181819,
+        "y": 0.8689914772727275
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   "eventMarkers": [
     {
       "name": "lift down",
-      "waypointRelativePos": 0.1619797525309359,
+      "waypointRelativePos": 0.35320584926883786,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

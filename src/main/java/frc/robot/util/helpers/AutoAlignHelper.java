@@ -192,7 +192,7 @@ public class AutoAlignHelper {
     rotational = MathUtil.applyDeadband(rotational, 0.01);
     rotational *= DriveConstants.maxOmega;
     // limit rate
-    linear = cStationAccel.calculate(linear);
+    // linear = cStationAccel.calculate(linear);
     // find component vectors
     double vx = -linear * angleToTarget.getCos();
     double vy = -linear * angleToTarget.getSin();

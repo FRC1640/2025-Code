@@ -11,6 +11,8 @@ import frc.robot.util.misc.DistanceManager;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class CStationAlignWeight implements DriveWeight {
   private Supplier<Pose2d[]> positions;
   private Function<Pose2d, Pose2d> poseFunction;
@@ -40,8 +42,10 @@ public class CStationAlignWeight implements DriveWeight {
   @Override
   public ChassisSpeeds getSpeeds() {
     targetPose = findNearest(positions.get());
-    return autoAlignHelper.getCStationAlignSpeedsLine(
-        robotPose.get(), targetPose, gyro, driveSubsystem);
+    ChassisSpeeds speeds = autoAlignHelper.getCStationAlignSpeedsLine(
+      robotPose.get(), targetPose, gyro, driveSubsystem);
+    Logger.recordOutput("cStationAlign/speeds", speeds);
+    return speeds;
   }
 
   private Pose2d findNearest(Pose2d[] pos) {

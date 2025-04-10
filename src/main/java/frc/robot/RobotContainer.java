@@ -67,7 +67,6 @@ import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
 import frc.robot.subsystems.drive.weights.CStationAlignWeight;
 import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
-import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
@@ -150,7 +149,7 @@ public class RobotContainer {
   private boolean premoveLift = false;
 
   private FollowPathNearest followPathReef;
-  private FollowPathDirect followPathCoral;
+  // private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
   private DynamicAlignWeight dynamicAlign;
   private CStationAlignWeight cStationAlignWeight;
@@ -339,18 +338,18 @@ public class RobotContainer {
                     () -> coralPreset),
             driveSubsystem);
 
-    followPathCoral =
-        new FollowPathDirect(
-            () ->
-                AllianceManager.chooseFromAlliance(
-                    FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
-            (x) ->
-                DistanceManager.addRotatedDim(
-                    x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
-            gyro,
-            () -> RobotOdometry.instance.getPose("Main"),
-            AutoAlignConfig.coralStationPathConstraints,
-            driveSubsystem);
+    // followPathCoral =
+    //     new FollowPathDirect(
+    //         () ->
+    //             AllianceManager.chooseFromAlliance(
+    //                 FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
+    //         (x) ->
+    //             DistanceManager.addRotatedDim(
+    //                 x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
+    //         gyro,
+    //         () -> RobotOdometry.instance.getPose("Main"),
+    //         AutoAlignConfig.coralStationPathConstraints,
+    //         driveSubsystem);
 
     cStationAlignWeight =
         new CStationAlignWeight(
@@ -524,8 +523,11 @@ public class RobotContainer {
     DriveWeightCommand.createWeightTrigger(
         dynamicAlign,
         () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
-    followPathCoral.generateTrigger(
-        () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+    // followPathCoral.generateTrigger(
+    //     () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+    DriveWeightCommand.createWeightTrigger(
+        cStationAlignWeight,
+        () -> driveHID.getLeftBumperButton() && !cStationAlignWeight.isAutoalignComplete());
 
     new Trigger(
             () ->

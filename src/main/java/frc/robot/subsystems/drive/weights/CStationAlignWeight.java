@@ -28,6 +28,7 @@ public class CStationAlignWeight implements DriveWeight {
       DriveSubsystem driveSubsystem,
       DriveCommandFactory driveCommandFactory,
       Gyro gyro) {
+    this.positions = positions;
     this.robotPose = robotPose;
     this.targetPose = new Pose2d();
     this.autoAlignHelper = new AutoAlignHelper();
@@ -58,8 +59,9 @@ public class CStationAlignWeight implements DriveWeight {
 
   public boolean isAutoalignComplete() {
     boolean complete =
-        (targetPose.getTranslation().getDistance(targetPose.getTranslation()) < 0.15
-            && Math.abs(targetPose.getRotation().minus(targetPose.getRotation()).getDegrees()) < 6);
+        (robotPose.get().getTranslation().getDistance(targetPose.getTranslation()) < 0.15
+            && Math.abs(robotPose.get().getRotation().minus(targetPose.getRotation()).getDegrees())
+                < 6);
     ChassisSpeeds chassisSpeeds = driveSubsystem.getChassisSpeeds();
     complete &= Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond) < 0.01;
     return complete;

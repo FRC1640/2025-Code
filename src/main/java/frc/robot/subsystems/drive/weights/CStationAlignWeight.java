@@ -29,6 +29,7 @@ public class CStationAlignWeight implements DriveWeight {
       DriveSubsystem driveSubsystem,
       DriveCommandFactory driveCommandFactory,
       Gyro gyro) {
+    this.positions = positions;
     this.robotPose = robotPose;
     this.targetPose = new Pose2d();
     this.autoAlignHelper = new AutoAlignHelper();

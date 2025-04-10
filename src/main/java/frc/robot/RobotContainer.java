@@ -441,6 +441,7 @@ public class RobotContainer {
                         .getTranslation()
                         .getDistance(getTarget().getTranslation()));
                 Logger.recordOutput("target", getTarget());
+                Logger.recordOutput("StationAlignDone", cStationAlignWeight.isAutoalignComplete());
               }
             });
 

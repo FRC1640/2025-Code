@@ -163,11 +163,14 @@ public class AutoAlignHelper {
 
   public ChassisSpeeds getCStationAlignSpeedsLine(
       Pose2d robotPose, Pose2d targetPose, Gyro gyro, DriveSubsystem driveSubsystem) {
+    cStationRotationPid.enableContinuousInput(-Math.PI, Math.PI);
+
     Pose2d robot = robotPose;
     Pose2d target = targetPose;
+    Logger.recordOutput("cStationAlign/targetPos", target);
     // take measurements
     double dist = robot.getTranslation().getDistance(target.getTranslation());
-    Rotation2d angleToTarget = robot.getTranslation().minus(target.getTranslation()).getAngle();
+    Rotation2d angleToTarget = target.getTranslation().minus(robot.getTranslation()).getAngle();
     // calculate output
 
     Logger.recordOutput("cStationaligndist", dist);
@@ -195,7 +198,7 @@ public class AutoAlignHelper {
     double vy = -linear * angleToTarget.getSin();
     // convert chassis speeds
     ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
-    return convertToFieldRelative(robotRelative, gyro, new Pose2d());
+    return convertToFieldRelative(robotRelative, gyro, robot);
   }
 
   public void resetCStationMotionProfile(Pose2d robot, DriveSubsystem driveSubsystem) {

@@ -65,6 +65,7 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
+import frc.robot.subsystems.drive.weights.CStationAlignWeight;
 import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
@@ -152,6 +153,7 @@ public class RobotContainer {
   private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
   private DynamicAlignWeight dynamicAlign;
+  private CStationAlignWeight cStationAlignWeight;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -349,6 +351,19 @@ public class RobotContainer {
             () -> RobotOdometry.instance.getPose("Main"),
             AutoAlignConfig.coralStationPathConstraints,
             driveSubsystem);
+
+    cStationAlignWeight =
+        new CStationAlignWeight(
+            () ->
+                AllianceManager.chooseFromAlliance(
+                    FieldConstants.cStationAlignPosBlue, FieldConstants.cStationAlignPosRed),
+            (x) ->
+                DistanceManager.addRotatedDim(
+                    x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
+            () -> RobotOdometry.instance.getPose("Main"),
+            driveSubsystem,
+            driveCommandFactory,
+            gyro);
 
     DriveWeightCommand.addPersistentWeight(joystickDriveWeight);
 

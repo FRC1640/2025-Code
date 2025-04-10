@@ -123,6 +123,9 @@ public class RobotConstants {
     public static final Constraints localAlignPpidConstraints =
         new Constraints(DriveConstants.maxSpeed, 3);
     public static final double profiledDistThreshold = 0.4;
+    // cStation align
+    public static final Constraints cStationPpidConstraints =
+        new Constraints(DriveConstants.maxSpeed, 3);
   }
 
   public static class DriveConstants {

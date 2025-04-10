@@ -266,9 +266,9 @@ public class RobotConstants {
     public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
-      LEFT(),
-      RIGHT(),
-      CENTER();
+      LEFT,
+      RIGHT,
+      CENTER;
     }
 
     public enum CoralPreset {

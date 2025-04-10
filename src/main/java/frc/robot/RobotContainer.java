@@ -409,9 +409,9 @@ public class RobotContainer {
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
                 Logger.recordOutput("AutoAlignDone", dynamicAlign.isAutoalignComplete());
                 Logger.recordOutput("LocalTagAlign/alignStage", dynamicAlign.getStage());
-                Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
+                Logger.recordOutput("Lift/LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
-                    "LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
+                    "Lift/LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
                 Logger.recordOutput(
                     "GantryDone",
                     gantrySubsystem.isAtPreset(gantryPresetActive, true) || algaeMode);

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.drive.weights;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sensors.gyro.Gyro;
@@ -39,6 +38,7 @@ public class CStationAlignWeight implements DriveWeight {
 
   @Override
   public ChassisSpeeds getSpeeds() {
+    targetPose = findNearest(positions.get());
     return autoAlignHelper.getCStationAlignSpeedsLine(
         robotPose.get(), targetPose, gyro, driveSubsystem);
   }
@@ -52,11 +52,6 @@ public class CStationAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    // create targetPose
-    Pose2d nearest = findNearest(positions.get());
-    Pose2d end =
-        new Pose2d(nearest.getTranslation(), nearest.getRotation().plus(new Rotation2d(Math.PI)));
-    // override rotation
     targetPose = findNearest(positions.get());
     autoAlignHelper.resetCStationMotionProfile(robotPose.get(), driveSubsystem);
   }

@@ -186,7 +186,7 @@ public class AutoAlignHelper {
     // convert to percentage
     linear = MathUtil.clamp(linear, -1, 1);
     linear = MathUtil.applyDeadband(linear, 0.01);
-    linear *= DriveConstants.maxSpeed; // TODO scale max speed for acceleration?
+    linear *= DriveConstants.cStationDriveMaxSpeed; // TODO scale max speed for acceleration?
 
     rotational = MathUtil.clamp(rotational, -1, 1);
     rotational = MathUtil.applyDeadband(rotational, 0.01);

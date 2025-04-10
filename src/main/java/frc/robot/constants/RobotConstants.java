@@ -30,7 +30,7 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.81;
     public static final double robotLength = 0.81; // 0.927
-    public static final double robotLengthLocalAlign = 0.79;
+    public static final double robotLengthLocalAlign = 0.79 + 0.16;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 

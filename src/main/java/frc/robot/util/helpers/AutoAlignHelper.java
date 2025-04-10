@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
   SlewRateLimiter accel = new SlewRateLimiter(3);
+  SlewRateLimiter cStationAccel = new SlewRateLimiter(3);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
@@ -187,7 +188,7 @@ public class AutoAlignHelper {
     rotational = MathUtil.applyDeadband(rotational, 0.01);
     rotational *= DriveConstants.maxOmega;
     // limit rate
-    linear = accel.calculate(linear);
+    linear = cStationAccel.calculate(linear);
     // find component vectors
     double vx = -linear * angleToTarget.getCos();
     double vy = -linear * angleToTarget.getSin();

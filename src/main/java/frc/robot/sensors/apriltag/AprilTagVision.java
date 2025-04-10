@@ -5,10 +5,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.constants.CameraConstant;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants.RobotDimensions;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.PoseObservation;
 import frc.robot.sensors.apriltag.AprilTagVisionIO.TrigTargetObservation;
 import frc.robot.util.alerts.AlertsManager;
@@ -23,6 +25,15 @@ public class AprilTagVision extends PeriodicBase {
   private String cameraName;
   private String displayName;
   public final double standardDeviation;
+  private Transform3d cameraTransform;
+
+  private Optional<Translation2d> lastLocalVector = Optional.empty();
+  private Optional<Translation2d> localVector = Optional.empty();
+  private int staleCount = 0;
+  private int staleThreshold = 4;
+  int lastID = -1;
+  int idToUse = -1;
+  Optional<Translation2d> output = Optional.empty();
 
   public AprilTagVision(AprilTagVisionIO io, CameraConstant cameraConstants) {
     this.io = io;
@@ -30,8 +41,13 @@ public class AprilTagVision extends PeriodicBase {
     displayName = cameraConstants.displayName;
     this.inputs = new AprilTagVisionIOInputsAutoLogged();
     this.standardDeviation = cameraConstants.standardDevConstant;
+    this.cameraTransform = cameraConstants.transform;
     AlertsManager.addAlert(
         () -> !inputs.connected, "April tag vision disconnected.", AlertType.kError);
+  }
+
+  public Transform3d getCameraTransform() {
+    return cameraTransform;
   }
 
   public double getStandardDeviation() {
@@ -88,7 +104,8 @@ public class AprilTagVision extends PeriodicBase {
       return Optional.empty();
     }
     for (TrigTargetObservation observation : inputs.trigTargetObservations) {
-      PoseObservation result = calculateTrigResult(observation, gyroRotation);
+      Translation3d cameraToTag = calculateCameraVector(observation);
+      PoseObservation result = calculateTrigResult(observation, cameraToTag, gyroRotation);
       trigPoses.add(result);
     }
     // double bestDist = Double.MAX_VALUE;
@@ -132,13 +149,10 @@ public class AprilTagVision extends PeriodicBase {
     return Optional.of(observation);
   }
 
-  public PoseObservation calculateTrigResult(
-      TrigTargetObservation observation, Rotation2d gyroRotation) {
+  private Translation3d calculateCameraVector(TrigTargetObservation observation) {
 
     // Get camera displacement details
-    Transform3d cameraDisplacement = inputs.cameraDisplacement;
-    Translation3d cameraToRobot = cameraDisplacement.getTranslation();
-    Rotation3d cameraRotation = cameraDisplacement.getRotation();
+    Translation3d cameraToRobot = inputs.cameraDisplacement.getTranslation();
 
     // Calculate vertical offset between camera and tag
     double deltaZ =
@@ -154,9 +168,19 @@ public class AprilTagVision extends PeriodicBase {
     Translation3d cameraToTagCameraFrame =
         new Translation3d(distance2d * Math.cos(tx), distance2d * Math.sin(tx), -deltaZ);
 
+    return cameraToTagCameraFrame;
+  }
+
+  private PoseObservation calculateTrigResult(
+      TrigTargetObservation observation, Translation3d cameraToTag, Rotation2d gyroRotation) {
+    // Get camera displacement details
+    Transform3d cameraDisplacement = inputs.cameraDisplacement;
+    Translation3d cameraToRobot = cameraDisplacement.getTranslation();
+    Rotation3d cameraRotation = cameraDisplacement.getRotation();
+
     // Rotate through coordinate systems:
     Translation3d cameraToTagFieldFrame =
-        cameraToTagCameraFrame
+        cameraToTag
             .rotateBy(cameraRotation)
             .rotateBy(new Rotation3d(0, 0, gyroRotation.getRadians()));
 
@@ -188,6 +212,59 @@ public class AprilTagVision extends PeriodicBase {
         observation.cameraToTarget().getTranslation().getNorm());
   }
 
+  public Optional<Translation2d> getLocalAlignVector() {
+    return localVector;
+  }
+
+  public void setIDToUse(int id) {
+    idToUse = id;
+  }
+
+  private Optional<Translation2d> getLocalAlignVector(int id) {
+    TrigTargetObservation[] trigObservations = inputs.trigTargetObservations;
+    Logger.recordOutput("tagID", id);
+    Logger.recordOutput("observationlength", inputs.trigTargetObservations.length);
+    if (lastID != id) {
+      lastLocalVector = Optional.empty();
+      staleCount = 0;
+      lastID = id;
+    }
+    Optional<TrigTargetObservation> observation = Optional.empty();
+    for (int i = 0; i <= trigObservations.length - 1; i++) {
+      if (trigObservations[i].fiducialId() == id) {
+        observation = Optional.of(trigObservations[i]);
+        break;
+      }
+    }
+    if (observation.isPresent()) {
+      // calculate camera vector
+      Translation3d vector = calculateCameraVector(observation.get());
+      // update local vectors
+      Translation2d frontToTag =
+          inputs
+              .cameraDisplacement
+              .getTranslation()
+              .plus(vector)
+              .toTranslation2d()
+              .minus(new Translation2d(RobotDimensions.robotLengthLocalAlign / 2, 0));
+      output = Optional.of(frontToTag);
+      lastLocalVector = output;
+      staleCount = 0;
+      return output;
+    } else if (lastLocalVector.isPresent()) {
+      output = Optional.empty();
+      staleCount++;
+      if (staleCount > staleThreshold) {
+        lastLocalVector = Optional.empty();
+        staleCount = 0;
+      }
+      return lastLocalVector;
+    } else {
+      output = Optional.empty();
+      return Optional.empty();
+    }
+  }
+
   public PoseObservation[] getPhotonResults() {
     return inputs.photonPoseObservations;
   }
@@ -214,6 +291,26 @@ public class AprilTagVision extends PeriodicBase {
       if (pose.isPresent()) {
         tagPoses.add(pose.get());
       }
+    }
+    localVector = getLocalAlignVector(idToUse);
+    Logger.recordOutput(
+        "AprilTagVisionLocal/" + displayName + "/IsPresent", localVector.isPresent());
+
+    Logger.recordOutput("idtouse", idToUse);
+
+    if (lastLocalVector.isPresent()) {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVectorLast", lastLocalVector.get());
+    } else {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVectorLast", new Translation2d());
+    }
+    if (localVector.isPresent()) {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVector", localVector.get());
+    } else {
+      Logger.recordOutput(
+          "AprilTagVisionLocal/" + displayName + "/LocalAlignVector", new Translation2d());
     }
     Logger.recordOutput(
         "Sensors/AprilTagVision/" + displayName + "/TagPoses", tagPoses.toArray(Pose3d[]::new));

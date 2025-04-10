@@ -65,9 +65,11 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
+import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
@@ -144,8 +146,12 @@ public class RobotContainer {
   double presetActive = 0;
   CoralPreset gantryPresetActive = CoralPreset.Safe;
 
+  private boolean premoveLift = false;
+
   private FollowPathNearest followPathReef;
   private FollowPathDirect followPathCoral;
+  private LocalTagAlignWeight localAlign;
+  private DynamicAlignWeight dynamicAlign;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -165,15 +171,15 @@ public class RobotContainer {
       case REAL:
         new CoProcessInput(new OrangePILogger());
         gyro = new Gyro(new GyroIONavX());
-        aprilTagVisions.add(
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-                CameraConstants.frontCameraRight));
+        // aprilTagVisions.add(
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
+        //         CameraConstants.frontCameraRight));
 
-        aprilTagVisions.add(
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-                CameraConstants.frontCameraLeft));
+        // aprilTagVisions.add(
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+        //         CameraConstants.frontCameraLeft));
 
         aprilTagVisions.add(
             new AprilTagVision(
@@ -296,20 +302,9 @@ public class RobotContainer {
             algaeCommandFactory,
             algaeIntakeSubsystem);
     AprilTagVision[] visionArray = aprilTagVisions.toArray(AprilTagVision[]::new);
-    generateNamedCommands();
     driveSubsystem = new DriveSubsystem(gyro);
     driveCommandFactory = new DriveCommandFactory(driveSubsystem);
     robotOdometry = new RobotOdometry(driveSubsystem, gyro, visionArray);
-    dashboard =
-        new Dashboard(
-            driveSubsystem,
-            liftSubsystem,
-            gantrySubsystem,
-            climberSubsystem,
-            algaeIntakeSubsystem,
-            coralOuttakeSubsystem,
-            winchSubsystem,
-            driveController);
     alertsManager = new AlertsManager();
     AlertsManager.addAlert(
         () -> RobotController.getBatteryVoltage() < WarningThresholdConstants.minBatteryVoltage,
@@ -381,6 +376,21 @@ public class RobotContainer {
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
 
+    localAlign =
+        new LocalTagAlignWeight(
+            () ->
+                DistanceManager.getNearestPosition(
+                    RobotOdometry.instance.getPose("Main"),
+                    AllianceManager.chooseFromAlliance(
+                        FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
+            () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            driveSubsystem,
+            driveCommandFactory,
+            gyro,
+            visionArray);
+
+    dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
+
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *
     // 4));
@@ -397,7 +407,8 @@ public class RobotContainer {
                 Logger.recordOutput("AlgaeMode", algaeMode);
                 Logger.recordOutput("CoralPreset", coralPreset);
                 Logger.recordOutput("TargetPosAutoalign", getTarget());
-                Logger.recordOutput("AutoAlignDone", followPathReef.isAutoalignComplete());
+                Logger.recordOutput("AutoAlignDone", dynamicAlign.isAutoalignComplete());
+                Logger.recordOutput("LocalTagAlign/alignStage", dynamicAlign.getStage());
                 Logger.recordOutput("LiftDone", liftSubsystem.isAtPreset(presetActive));
                 Logger.recordOutput(
                     "LiftDoneAuto", liftSubsystem.isAtPreset(coralPreset.getLift()));
@@ -418,6 +429,19 @@ public class RobotContainer {
                 Logger.recordOutput("target", getTarget());
               }
             });
+
+    generateNamedCommands();
+    driveSubsystem.configurePathplanner();
+    dashboard =
+        new Dashboard(
+            driveSubsystem,
+            liftSubsystem,
+            gantrySubsystem,
+            climberSubsystem,
+            algaeIntakeSubsystem,
+            coralOuttakeSubsystem,
+            winchSubsystem,
+            driveController);
   }
 
   public Pose2d coralAdjust(Pose2d pose, Supplier<CoralPreset> preset) {
@@ -472,16 +496,31 @@ public class RobotContainer {
                             .getTranslation()
                             .getDistance(getTarget().getTranslation())
                         < 1.3
-                    && followPathReef.isEnabled()
+                    && dynamicAlign.isEnabled()
                     && Robot.getState() != RobotState.AUTONOMOUS)
         .onTrue(setupAutoPlace(() -> coralPreset));
     // coral place routine for autoalign
     // new Trigger(() -> coralAutoAlignWeight.isAutoalignComplete())
     //     .onTrue(new InstantCommand(() -> driveController.setRumble(RumbleType.kRightRumble, 1)));
-    followPathReef.generateTrigger(
-        () -> driveHID.getAButton() && !followPathReef.isAutoalignComplete());
+    // followPathReef.generateTrigger(
+    //     () ->
+    //         driveController.a().getAsBoolean()
+    //             && !followPathReef.isAutoalignComplete());
+    DriveWeightCommand.createWeightTrigger(
+        dynamicAlign,
+        () -> driveController.a().getAsBoolean() && !dynamicAlign.globalAlignComplete());
     followPathCoral.generateTrigger(
         () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
+
+    new Trigger(
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    && coralOuttakeCommandFactory.ranBack
+                    && !coralOuttakeSubsystem.guillotineCheck())
+        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove).onlyIf(() -> premoveLift));
+
+    driveController.povDown().onTrue(new InstantCommand(() -> premoveLift = true));
+    driveController.povUp().onTrue(new InstantCommand(() -> premoveLift = false));
     new Trigger(
             () ->
                 followPathReef.isAutoalignComplete()
@@ -597,7 +636,6 @@ public class RobotContainer {
     operatorController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
     // intake button bindings:
     coralOuttakeCommandFactory.constructTriggers();
-    driveController.povUp().onTrue(autoScoringCommandFactory.outtakeCoralCommand());
     // preset board
     new Trigger(() -> presetBoard.getLl2())
         .onTrue(
@@ -821,6 +859,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return homing()
         .andThen(new InstantCommand(() -> autoRampPos = true))
+        .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }
@@ -963,7 +1002,7 @@ public class RobotContainer {
             .deadlineFor(new PrintCommand("waiting...").repeatedly()));
     NamedCommands.registerCommand(
         "AutoReef",
-        new WaitCommand(0.1)
+        new WaitCommand(0)
             .andThen(getPlaceCommand())
             .deadlineFor(
                 liftCommandFactory.runLiftMotionProfile(
@@ -972,5 +1011,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("PlaceTrough", autoScoringCommandFactory.placeTrough());
     NamedCommands.registerCommand(
         "logtest", new InstantCommand(() -> Logger.recordOutput("logtest", true)));
+
+    NamedCommands.registerCommand(
+        "LocalAlign",
+        localAlign
+            .getAutoCommand()
+            .deadlineFor(autonAutoPlace(() -> coralPreset))
+            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()));
+    NamedCommands.registerCommand("WaitForLocal", new WaitUntilCommand(() -> localAlign.isReady()));
   }
 }

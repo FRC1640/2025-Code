@@ -8,29 +8,45 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9845,
-        "y": 1.8391818181818178
+        "x": 5.574119318181818,
+        "y": 2.3447869318181827
       },
       "isLocked": false,
       "linkedName": "ReefLowerRight_Center"
     },
     {
       "anchor": {
-        "x": 6.651051136363637,
-        "y": 2.1503409090909087
+        "x": 5.623977272727273,
+        "y": 2.1852414772727276
       },
       "prevControl": {
-        "x": 6.112585227272728,
-        "y": 1.9608806818181812
+        "x": 5.424545454545455,
+        "y": 2.4744176136363625
+      },
+      "nextControl": {
+        "x": 5.765910511678188,
+        "y": 1.9794382807939017
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.800625,
+        "y": 1.616860795454545
+      },
+      "prevControl": {
+        "x": 6.282102272727273,
+        "y": 1.7265482954545461
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SpitShot"
+      "linkedName": "2nd spit shot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.19715808170515017,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 119.99999999999999
     }
   ],
@@ -38,7 +54,7 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.11248593925759799,
+      "maxWaypointRelativePos": 0.2,
       "constraints": {
         "maxVelocity": 0.9,
         "maxAcceleration": 1.0,
@@ -53,7 +69,7 @@
   "eventMarkers": [
     {
       "name": "Safe",
-      "waypointRelativePos": 0.22722159730033764,
+      "waypointRelativePos": 0.45,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -73,7 +89,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.963756532073674
+    "rotation": 3.3018656744349655
   },
   "reversed": false,
   "folder": "SpitSpit",

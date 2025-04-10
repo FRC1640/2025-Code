@@ -266,15 +266,9 @@ public class RobotConstants {
     public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
-      LEFT(Units.inchesToMeters(13 / 2)),
-      RIGHT(-Units.inchesToMeters(13 / 2)),
-      CENTER(0);
-
-      public double alignOffset;
-
-      private GantrySetpoint(double alignOffset) {
-        this.alignOffset = alignOffset;
-      }
+      LEFT(),
+      RIGHT(),
+      CENTER();
     }
 
     public enum CoralPreset {

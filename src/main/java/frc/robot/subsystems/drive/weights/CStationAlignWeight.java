@@ -53,7 +53,6 @@ public class CStationAlignWeight implements DriveWeight {
 
   @Override
   public void onStart() {
-    targetPose = findNearest(positions.get());
     autoAlignHelper.resetCStationMotionProfile(robotPose.get(), driveSubsystem);
   }
 

@@ -91,7 +91,8 @@ public class RobotPIDConstants {
   }
 
   public static final PIDConstants drivePID = new PIDConstants(0.17189, 0.0, 0);
-  public static final FeedForwardConstants driveFF = new FeedForwardConstants(0.12506, 2, 0.27879);
+  public static final FeedForwardConstants driveFF =
+      new FeedForwardConstants(0.12506, 2.3, 0.27879);
 
   public static final PIDConstants steerPID = new PIDConstants(0.725, 0.0, 0.005);
 
@@ -125,7 +126,7 @@ public class RobotPIDConstants {
 
   public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
 
-  public static final PIDConstants localTagAlign = new PIDConstants(0.8, 0.000, 0.0005);
+  public static final PIDConstants localTagAlign = new PIDConstants(0.9, 0.000, 0.0005);
   public static final PIDConstants localTagAlignVelocity = new PIDConstants(0.25, 0, 0);
   // public static final PIDConstants localTagAlignY = new PIDConstants(0.25, 0, 0);
   public static final PIDConstants localAnglePid = new PIDConstants(0.5, 0.001, 0.001);

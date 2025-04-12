@@ -173,10 +173,10 @@ public class RobotConstants {
     public static final double maxAntiTipCorrectionSpeed = 1.5;
     public static final double minTipDegrees = 3;
 
-    public static final double cStationDriveMaxSpeed = 10;
+    // public static final double cStationDriveMaxSpeed = 4.5;
     public static final double cStationSlowAlignDistance = 0.05;
     public static final TrapezoidProfile.Constraints cStationDriveConstraints =
-        new TrapezoidProfile.Constraints(cStationDriveMaxSpeed, accelLimit);
+        new TrapezoidProfile.Constraints(maxSpeed, accelLimit);
   }
 
   public static class CameraConstants {

@@ -107,7 +107,7 @@ public class AutoAlignHelper {
 
     Logger.recordOutput("localaligndist", dist);
     double linear =
-        dist < 0.05 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
+        dist < 0.2 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
     Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.05);
     double rotational =
         localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
@@ -186,7 +186,7 @@ public class AutoAlignHelper {
     // convert to percentage
     linear = MathUtil.clamp(linear, -1, 1);
     linear = MathUtil.applyDeadband(linear, 0.01);
-    linear *= DriveConstants.cStationDriveMaxSpeed; // TODO scale max speed for acceleration?
+    linear *= DriveConstants.maxSpeed; // TODO scale max speed for acceleration?
 
     rotational = MathUtil.clamp(rotational, -1, 1);
     rotational = MathUtil.applyDeadband(rotational, 0.01);

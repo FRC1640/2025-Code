@@ -124,8 +124,7 @@ public class RobotPIDConstants {
   public static final PIDConstants climberWinchPIDFast = new PIDConstants(0.75, 0, 0);
 
   public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
-
-  public static final PIDConstants localTagAlign = new PIDConstants(0.9, 0.01, 0.005);
+  public static final PIDConstants localTagAlign = new PIDConstants(1.1, 0.005, 0.005);
   public static final PIDConstants localTagAlignVelocity = new PIDConstants(0.25, 0, 0);
   // public static final PIDConstants localTagAlignY = new PIDConstants(0.25, 0, 0);
   public static final PIDConstants localAnglePid = new PIDConstants(0.85, 0, 0);

@@ -133,6 +133,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   private boolean vectorDeadband(Translation2d vector) {
-    return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.02;
+    return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.025;
   }
 }

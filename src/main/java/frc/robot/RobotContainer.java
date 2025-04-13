@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotController;
@@ -363,7 +364,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 348).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 342).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> -5.8).onlyIf(() -> autoRampPos).repeatedly());
@@ -967,7 +968,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetupL4",
         new InstantCommand(
-            () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4));
+            () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(
@@ -1017,7 +1018,10 @@ public class RobotContainer {
         localAlign
             .getAutoCommand()
             .deadlineFor(autonAutoPlace(() -> coralPreset))
-            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()));
-    NamedCommands.registerCommand("WaitForLocal", new WaitUntilCommand(() -> localAlign.isReady()));
+            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
+            .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
+    NamedCommands.registerCommand(
+        "WaitForLocal",
+        new WaitCommand(0.1).andThen(new WaitUntilCommand(() -> localAlign.isReady())));
   }
 }

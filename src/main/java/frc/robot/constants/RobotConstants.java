@@ -123,6 +123,9 @@ public class RobotConstants {
     public static final Constraints localAlignPpidConstraints =
         new Constraints(DriveConstants.maxSpeed, 3);
     public static final double profiledDistThreshold = 0.4;
+    // cStation align
+    public static final Constraints cStationPpidConstraints =
+        new Constraints(DriveConstants.maxSpeed, 2);
   }
 
   public static class DriveConstants {
@@ -169,6 +172,11 @@ public class RobotConstants {
 
     public static final double maxAntiTipCorrectionSpeed = 1.5;
     public static final double minTipDegrees = 3;
+
+    // public static final double cStationDriveMaxSpeed = 4.5;
+    public static final double cStationSlowAlignDistance = 0.05;
+    public static final TrapezoidProfile.Constraints cStationDriveConstraints =
+        new TrapezoidProfile.Constraints(maxSpeed, accelLimit);
   }
 
   public static class CameraConstants {

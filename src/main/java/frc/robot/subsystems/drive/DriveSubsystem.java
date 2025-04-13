@@ -162,6 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
     return DriveConstants.kinematics.toChassisSpeeds(getActualSwerveStates());
   }
 
+  @AutoLogOutput(key = "Drive/MeasuredVelocity")
   public double chassisSpeedsMagnitude() {
     return ChassisSpeedHelper.magnitude(getChassisSpeeds());
   }

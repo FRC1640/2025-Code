@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLocal"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -21,6 +27,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {
@@ -39,6 +51,12 @@
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -55,19 +73,26 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "deadline",
                 "data": {
-                  "pathName": "L4 Opposite 3 - Triple"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "L4 Opposite 3 - Triple"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -77,6 +102,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {
@@ -96,6 +127,12 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "L4 Opposite 4 - Triple"
@@ -111,19 +148,26 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "deadline",
                 "data": {
-                  "pathName": "L4 Opposite 5 - Triple"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "L4 Opposite 5 - Triple"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -133,6 +177,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {

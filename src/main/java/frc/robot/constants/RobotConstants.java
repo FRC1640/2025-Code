@@ -136,7 +136,8 @@ public class RobotConstants {
 
     public static final double maxSpeed = 4.5;
     public static final double maxNorm =
-        DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
+        DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d())
+            .getDistance(new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
     public static final double wheelRadius = Units.inchesToMeters(2);
 

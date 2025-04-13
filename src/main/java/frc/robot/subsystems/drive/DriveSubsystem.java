@@ -33,8 +33,6 @@ import frc.robot.util.helpers.ChassisSpeedHelper;
 import frc.robot.util.misc.RequirementHandler;
 import frc.robot.util.pathplanning.LocalADStarAK;
 import frc.robot.util.sysid.SwerveDriveSysidRoutine;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BooleanSupplier;
@@ -229,28 +227,36 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeed = speedsPercent.vxMetersPerSecond;
     double ySpeed = speedsPercent.vyMetersPerSecond;
     double rot = speedsPercent.omegaRadiansPerSecond;
-    double translationalSpeed = Math.hypot(xSpeed, ySpeed);
-    double linearRotSpeed =
-        Math.abs(rot * computeMaxNorm(DriveConstants.positions, centerOfRotation));
+    Translation2d translationalSpeed = new Translation2d(xSpeed, ySpeed);
+    Translation2d linearRotSpeed =
+        computeMaxNorm(DriveConstants.positions, centerOfRotation).times(rot);
     double k;
-    if (linearRotSpeed == 0 || translationalSpeed == 0) {
+    if (linearRotSpeed.getDistance(new Translation2d()) == 0
+        || translationalSpeed.getDistance(new Translation2d()) == 0) {
       k = 1;
     } else {
       k =
           Math.pow(
-              Math.max(linearRotSpeed, translationalSpeed) / (linearRotSpeed + translationalSpeed),
+              Math.max(
+                      linearRotSpeed.getDistance(new Translation2d()),
+                      translationalSpeed.getDistance(new Translation2d()))
+                  / (linearRotSpeed.plus(translationalSpeed).getDistance(new Translation2d())),
               dreamLevel);
     }
     return new ChassisSpeeds(k * xSpeed, k * ySpeed, k * rot);
   }
 
-  public static double computeMaxNorm(
+  public static Translation2d computeMaxNorm(
       Translation2d[] translations, Translation2d centerOfRotation) {
-    return Arrays.stream(translations)
-        .map((translation) -> translation.minus(centerOfRotation))
-        .mapToDouble(Translation2d::getNorm)
-        .max()
-        .orElseThrow(() -> new NoSuchElementException("No max norm."));
+    Translation2d translation = translations[0].minus(centerOfRotation);
+    for (int i = 1; i < 4; i++) {
+      if (translations[i].minus(centerOfRotation).getDistance(new Translation2d())
+          > translation.getDistance(new Translation2d())) {
+        translation = translations[i].minus(centerOfRotation);
+      }
+    }
+
+    return translation;
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

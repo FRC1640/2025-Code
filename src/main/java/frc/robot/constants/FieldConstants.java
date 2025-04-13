@@ -67,8 +67,8 @@ public class FieldConstants {
   // Based off of the 2025-reefscape.json
   public static final Pose2d[] coralStationPosBlue =
       new Pose2d[] {
-        new Pose2d(0.851154, 0.65532, Rotation2d.fromDegrees(54)), // 12
-        new Pose2d(0.851154, 7.3964799999999995, Rotation2d.fromDegrees(306)) // 13
+        new Pose2d(1.526, 0.914, Rotation2d.fromDegrees(50)), // 12
+        new Pose2d(1.645, 7.196, Rotation2d.fromDegrees(-50.000)) // 13
       };
   public static final Pose2d[] coralStationPosRed =
       new Pose2d[] {

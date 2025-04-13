@@ -296,6 +296,8 @@ public class AprilTagVision extends PeriodicBase {
     Logger.recordOutput(
         "AprilTagVisionLocal/" + displayName + "/IsPresent", localVector.isPresent());
 
+    Logger.recordOutput("idtouse", idToUse);
+
     if (lastLocalVector.isPresent()) {
       Logger.recordOutput(
           "AprilTagVisionLocal/" + displayName + "/LocalAlignVectorLast", lastLocalVector.get());

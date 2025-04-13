@@ -1,6 +1,5 @@
 package frc.robot.subsystems.drive.weights;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -53,7 +52,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     return autoAlignHelper.getLocalAlignSpeedsLine(
         vector.get(),
         gyro,
-        new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians())),
+        new Rotation2d((robotRotation.get().getRadians())),
         new Rotation2d(
             FieldConstants.aprilTagLayout
                 .getTagPose(getTargetTagId())
@@ -86,17 +85,20 @@ public class LocalTagAlignWeight implements DriveWeight {
     boolean ready = false;
     if (vector.isPresent()) {
       double goalAngle =
-          MathUtil.angleModulus(
-              FieldConstants.aprilTagLayout
-                  .getTagPose(getTargetTagId())
-                  .get()
-                  .toPose2d()
-                  .getRotation()
-                  .unaryMinus()
-                  .getRadians());
+          FieldConstants.aprilTagLayout
+              .getTagPose(getTargetTagId())
+              .get()
+              .toPose2d()
+              .getRotation()
+              .plus(Rotation2d.k180deg)
+              .getRadians();
+
+      Logger.recordOutput(
+          "angledelta",
+          Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
       ready =
           vector.get().getNorm() < 1
-              && MathUtil.angleModulus(robotRotation.get().getRadians()) - goalAngle < Math.PI / 18;
+              && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
     }
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
     return ready;
@@ -114,7 +116,7 @@ public class LocalTagAlignWeight implements DriveWeight {
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
       Rotation2d rotationError =
-          new Rotation2d(MathUtil.angleModulus(robotRotation.get().getRadians()))
+          new Rotation2d((robotRotation.get().getRadians()))
               .minus(
                   new Rotation2d(
                       FieldConstants.aprilTagLayout
@@ -131,6 +133,6 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   private boolean vectorDeadband(Translation2d vector) {
-    return Math.abs(vector.getX()) < 0.03 && Math.abs(vector.getY()) < 0.03;
+    return Math.abs(vector.getX()) < 0.015 && Math.abs(vector.getY()) < 0.015;
   }
 }

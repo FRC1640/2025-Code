@@ -22,10 +22,11 @@ public class AutoAlignHelper {
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
-  private PIDController localDrivePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign);
-  private PIDController localVelocityPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignVelocity);
+  private PIDController localDrivePid_x =
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignPID_x");
+
+  private PIDController localDrivePid_y =
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignPID_y");
   // private PIDController localYLinearDrivePid =
   //     RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
   private PIDController localRotationPid =
@@ -106,24 +107,34 @@ public class AutoAlignHelper {
     // calculate output
 
     Logger.recordOutput("localaligndist", dist);
-    double linear =
-        dist < 0.2 ? localDrivePid.calculate(dist, 0) : localDriveProfiledPid.calculate(dist, 0);
-    Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.05);
+    double vx =
+        (dist < 0.1
+            ? -localDrivePid_x.calculate(vector.getX(), 0)
+            : -localDriveProfiledPid.calculate(dist, 0) * angle.getCos());
+
+    double vy =
+        (dist < 0.1
+            ? -localDrivePid_y.calculate(vector.getY(), 0)
+            : -localDriveProfiledPid.calculate(dist, 0) * angle.getSin());
+    Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.1);
     double rotational =
         localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
     // convert to percentage
-    linear = MathUtil.clamp(linear, -1, 1);
-    linear = MathUtil.applyDeadband(linear, 0.01);
-    linear *= DriveConstants.maxSpeed; // TODO scale max speed for acceleration?
+    vx = MathUtil.clamp(vx, -1, 1);
+    vx = MathUtil.applyDeadband(vx, 0.01);
+    vx *= DriveConstants.maxSpeed;
+
+    vy = MathUtil.clamp(vy, -1, 1);
+    vy = MathUtil.applyDeadband(vy, 0.01);
+    vy *= DriveConstants.maxSpeed;
 
     rotational = MathUtil.clamp(rotational, -1, 1);
     rotational = MathUtil.applyDeadband(rotational, 0.01);
     rotational *= DriveConstants.maxOmega;
     // limit rate
-    linear = accel.calculate(linear);
-    // find component vectors
-    double vx = -linear * angle.getCos();
-    double vy = -linear * angle.getSin();
+    // vx = accel.calculate(vx);
+    // vy = accel.calculate(vy);
+    Logger.recordOutput("actualvector", vector);
     // convert chassis speeds
     ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
     return convertToFieldRelative(robotRelative, gyro, new Pose2d());

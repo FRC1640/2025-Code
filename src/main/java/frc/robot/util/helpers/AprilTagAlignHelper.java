@@ -4,7 +4,6 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.constants.FieldConstants;
-import frc.robot.constants.RobotConstants.LiftConstants.CoralPreset;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.util.misc.AllianceManager;
 import java.util.ArrayList;
@@ -67,19 +66,5 @@ public class AprilTagAlignHelper {
       }
     }
     return nearestTag;
-  }
-
-  @Deprecated
-  public static Optional<Translation2d> getPoleAlignVector(
-      int id, CoralPreset preset, AprilTagVision... visions) {
-    Optional<Translation2d> averageVector = getAverageLocalAlignVector(id, visions);
-    if (averageVector.isPresent()) {
-      averageVector =
-          Optional.of(
-              averageVector
-                  .get()
-                  .plus(new Translation2d(0, preset.getGantrySetpoint(true).alignOffset)));
-    }
-    return averageVector;
   }
 }

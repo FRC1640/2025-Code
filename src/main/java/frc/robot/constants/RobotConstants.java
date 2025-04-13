@@ -30,7 +30,7 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.81;
     public static final double robotLength = 0.81; // 0.927
-    public static final double robotLengthLocalAlign = 0.79;
+    public static final double robotLengthLocalAlign = 0.79 + 0.16;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -144,7 +144,7 @@ public class RobotConstants {
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
-    public static final double maxSpeed = 4.5;
+    public static final double maxSpeed = 4.25;
     public static final double maxNorm =
         DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
@@ -274,15 +274,9 @@ public class RobotConstants {
     public static final double emaPeriod = 21;
 
     public enum GantrySetpoint {
-      LEFT(Units.inchesToMeters(13 / 2)),
-      RIGHT(-Units.inchesToMeters(13 / 2)),
-      CENTER(0);
-
-      public double alignOffset;
-
-      private GantrySetpoint(double alignOffset) {
-        this.alignOffset = alignOffset;
-      }
+      LEFT,
+      RIGHT,
+      CENTER;
     }
 
     public enum CoralPreset {
@@ -416,7 +410,7 @@ public class RobotConstants {
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(1));
+    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(4));
     public static final double gantryLimitCenter = 0.223; // 0.198
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();

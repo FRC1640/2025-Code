@@ -4,10 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "L1 Spam Opposite",
+    "L4 Opposite - 3.5",
     "L4 Opposite - Double",
+    "L4 Opposite - Triple",
     "L4 Processor - Double",
     "L4 Processor - Triple",
-    "L4 Opposite - Triple",
+    "L4 Processor - 3.5",
     "Process",
     "SpitProcess",
     "SpitSpit"

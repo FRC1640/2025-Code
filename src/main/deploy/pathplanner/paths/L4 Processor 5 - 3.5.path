@@ -1,0 +1,105 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.525653409090909,
+        "y": 0.9138636363636362
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.214118278693663,
+        "y": 1.5713212895165647
+      },
+      "isLocked": false,
+      "linkedName": "BottomSource"
+    },
+    {
+      "anchor": {
+        "x": 3.871,
+        "y": 2.956
+      },
+      "prevControl": {
+        "x": 3.3325340909090913,
+        "y": 2.4175340909090908
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8413948256467988,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.4,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.5196850393700834,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetModeCoral"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetGantryLeft"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SetupL4"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunToPreset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 3.25,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "L4 Processor - 3.5",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 50.0
+  },
+  "useDefaultConstraints": false
+}

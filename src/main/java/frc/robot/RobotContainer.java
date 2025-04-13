@@ -523,7 +523,7 @@ public class RobotContainer {
     driveController.povUp().onTrue(new InstantCommand(() -> premoveLift = false));
     new Trigger(
             () ->
-                followPathReef.isAutoalignComplete()
+                dynamicAlign.isAutoalignComplete()
                     && liftSubsystem.isAtPreset(presetActive)
                     && gantryPresetActive != CoralPreset.Safe
                     && Robot.getState() != RobotState.AUTONOMOUS)

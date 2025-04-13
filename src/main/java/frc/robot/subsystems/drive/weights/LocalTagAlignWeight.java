@@ -126,13 +126,13 @@ public class LocalTagAlignWeight implements DriveWeight {
                           .toRotation2d()
                           .minus(Rotation2d.kPi)
                           .getRadians()));
-      return vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 2;
+      return vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
     } else {
       return false;
     }
   }
 
   private boolean vectorDeadband(Translation2d vector) {
-    return Math.abs(vector.getX()) < 0.015 && Math.abs(vector.getY()) < 0.015;
+    return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.02;
   }
 }

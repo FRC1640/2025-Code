@@ -255,7 +255,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 1.75;
+    public static final double liftMaxAccel = 1.75 * 0.9;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -287,9 +287,9 @@ public class RobotConstants {
       RightL2(0.12, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.3, 0.486, GantrySetpoint.LEFT),
       RightL3(0.3, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.574, GantrySetpoint.LEFT),
+      LeftL4(0.575, GantrySetpoint.LEFT),
       PreMove(0.1, 0.1, GantrySetpoint.CENTER),
-      RightL4(0.574, GantrySetpoint.RIGHT),
+      RightL4(0.575, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;

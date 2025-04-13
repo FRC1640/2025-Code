@@ -356,9 +356,7 @@ public class RobotContainer {
             () ->
                 AllianceManager.chooseFromAlliance(
                     FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
-            (x) ->
-                DistanceManager.addRotatedDim(
-                    x, ((-RobotDimensions.robotLength - 0.08) / 2), x.getRotation()),
+            (x) -> x,
             () -> RobotOdometry.instance.getPose("Main"),
             driveSubsystem,
             driveCommandFactory,

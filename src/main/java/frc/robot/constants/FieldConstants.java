@@ -72,7 +72,7 @@ public class FieldConstants {
       };
   public static final Pose2d[] coralStationPosRed =
       new Pose2d[] {
-        new Pose2d(16.697198, 0.65532, Rotation2d.fromDegrees(126)), // 1
-        new Pose2d(16.697198, 7.3964799999999995, Rotation2d.fromDegrees(234)) // 2
+        new Pose2d(16.54 - 1.526, .914, Rotation2d.fromDegrees(50)), // 1
+        new Pose2d(16.54 - 1.645, 7.196, Rotation2d.fromDegrees(234)) // 2
       };
 }

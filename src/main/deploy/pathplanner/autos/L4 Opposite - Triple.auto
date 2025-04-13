@@ -52,6 +52,12 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "L4 Opposite 2 - Triple"
@@ -64,12 +70,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {
@@ -127,6 +127,12 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "L4 Opposite 4 - Triple"
@@ -139,12 +145,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {

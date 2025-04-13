@@ -171,15 +171,15 @@ public class RobotContainer {
       case REAL:
         new CoProcessInput(new OrangePILogger());
         gyro = new Gyro(new GyroIONavX());
-        // aprilTagVisions.add(
-        //     new AprilTagVision(
-        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
-        //         CameraConstants.frontCameraRight));
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraRight),
+                CameraConstants.frontCameraRight));
 
-        // aprilTagVisions.add(
-        //     new AprilTagVision(
-        //         new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
-        //         CameraConstants.frontCameraLeft));
+        aprilTagVisions.add(
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonvision(CameraConstants.frontCameraLeft),
+                CameraConstants.frontCameraLeft));
 
         aprilTagVisions.add(
             new AprilTagVision(

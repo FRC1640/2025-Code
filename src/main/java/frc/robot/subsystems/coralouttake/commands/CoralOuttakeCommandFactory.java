@@ -35,7 +35,7 @@ public class CoralOuttakeCommandFactory {
                             !intakeSubsystem.isCoralDetected()
                                 && intakeSubsystem.hasCoral()
                                 && !intakeSubsystem.guillotineCheck()))
-            .andThen(setIntakeVoltage(() -> -0.75).until(() -> intakeSubsystem.isCoralDetected()))
+            .andThen(setIntakeVoltage(() -> -1.1).until(() -> intakeSubsystem.isCoralDetected()))
             .andThen(new InstantCommand(() -> runningBack = false)))
         .andThen(new InstantCommand(() -> intakeSubsystem.setHasCoral(true)));
   }
@@ -80,7 +80,7 @@ public class CoralOuttakeCommandFactory {
   }
 
   public Command outtake() {
-    return setIntakeVoltage(() -> setHasCoral ? 3.5 : 2)
+    return setIntakeVoltage(() -> setHasCoral ? 5.5 : 3.5)
         .beforeStarting(
             () -> {
               if (intakeSubsystem.hasCoral()) {

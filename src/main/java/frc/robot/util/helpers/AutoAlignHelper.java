@@ -95,15 +95,15 @@ public class AutoAlignHelper {
 
     Logger.recordOutput("localaligndist", dist);
     double vx =
-        (dist < 0.1
+        (dist < 0.14
             ? -localDrivePid_x.calculate(vector.getX(), 0)
             : -localDriveProfiledPid.calculate(dist, 0) * angle.getCos());
 
     double vy =
-        (dist < 0.1
+        (dist < 0.14
             ? -localDrivePid_y.calculate(vector.getY(), 0)
             : -localDriveProfiledPid.calculate(dist, 0) * angle.getSin());
-    Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.1);
+    Logger.recordOutput("LocalTagAlign/profiledLocalAlign", dist > 0.14);
     double rotational =
         localRotationPid.calculate(robotRotation.getRadians(), endRotation.getRadians());
     // convert to percentage

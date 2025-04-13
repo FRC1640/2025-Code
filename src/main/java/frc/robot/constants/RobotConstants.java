@@ -30,7 +30,7 @@ public class RobotConstants {
   public class RobotDimensions {
     public static final double robotWidth = 0.81;
     public static final double robotLength = 0.81; // 0.927
-    public static final double robotLengthLocalAlign = 0.79 + 0.16;
+    public static final double robotLengthLocalAlign = 0.79 + 0.16 + 0.005 * 2;
     public static final Translation2d robotXY = new Translation2d(robotWidth / 2, robotLength / 2);
   }
 
@@ -117,11 +117,10 @@ public class RobotConstants {
     public static final PathConstraints coralStationPathConstraintsSlow =
         new PathConstraints(2, 3, Math.PI + 0.75, 4 * Math.PI);
     public static final PathConstraints pathConstraints =
-        new PathConstraints(3, 3.5, Math.PI, 4 * Math.PI);
+        new PathConstraints(2, 3, Math.PI, 4 * Math.PI);
 
     // local align
-    public static final Constraints localAlignPpidConstraints =
-        new Constraints(DriveConstants.maxSpeed, 3);
+    public static final Constraints localAlignPpidConstraints = new Constraints(2, 2.5);
     public static final double profiledDistThreshold = 0.4;
   }
 
@@ -190,12 +189,12 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(13.95),
-                    Units.inchesToMeters(11.9),
-                    Units.inchesToMeters(12.125)),
-                new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
+                    Units.inchesToMeters(6.5),
+                    Units.inchesToMeters(13.3125),
+                    Units.inchesToMeters(13)),
+                new Rotation3d(0, 0, 0)),
             1,
-            "Park",
+            "Arducam_OV2311_USB_Camera",
             "Front Left");
 
     // public static final CameraConstant frontCameraRight =
@@ -216,12 +215,12 @@ public class RobotConstants {
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(13.95),
-                    -Units.inchesToMeters(11.9),
-                    Units.inchesToMeters(12.125)),
-                new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
+                    Units.inchesToMeters(6.5),
+                    -Units.inchesToMeters(13.3125),
+                    Units.inchesToMeters(14.5)),
+                new Rotation3d(0, 0, 0)),
             1.1,
-            "Arducam_OV2311_USB_Camera",
+            "Park",
             "Front Right");
 
     public static final CameraConstant frontCameraCenter =
@@ -288,9 +287,9 @@ public class RobotConstants {
       RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.573, GantrySetpoint.LEFT),
+      LeftL4(0.574, GantrySetpoint.LEFT),
       PreMove(0.1, 0.1, GantrySetpoint.CENTER),
-      RightL4(0.573, GantrySetpoint.RIGHT),
+      RightL4(0.574, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
@@ -402,7 +401,7 @@ public class RobotConstants {
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(4));
+    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(2));
     public static final double gantryLimitCenter = 0.223; // 0.198
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();

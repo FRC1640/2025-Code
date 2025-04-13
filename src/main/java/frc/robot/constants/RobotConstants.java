@@ -141,7 +141,7 @@ public class RobotConstants {
     public static final double driveGearRatio = 116.0 / 15.0;
     public static final double steerGearRatio = ((480.0 / 11.0)) * 1.0166667 * 0.99790377777778;
 
-    public static final double maxSpeed = 4.5;
+    public static final double maxSpeed = 4.25;
     public static final double maxNorm =
         DriveSubsystem.computeMaxNorm(DriveConstants.positions, new Translation2d());
     public static final double maxOmega = (maxSpeed / maxNorm);
@@ -402,7 +402,7 @@ public class RobotConstants {
     public static final double pulleyRadius =
         Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
-    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(1));
+    public static final Limits gantryLimits = new Limits(0.01, 0.36 + Units.inchesToMeters(4));
     public static final double gantryLimitCenter = 0.223; // 0.198
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();

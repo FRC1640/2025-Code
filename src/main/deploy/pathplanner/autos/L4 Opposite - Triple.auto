@@ -11,15 +11,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "WaitForLocal"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -27,12 +21,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {
@@ -77,22 +65,9 @@
           "data": {
             "commands": [
               {
-                "type": "deadline",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitForLocal"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "L4 Opposite 3 - Triple"
-                      }
-                    }
-                  ]
+                  "pathName": "L4 Opposite 3 - Triple"
                 }
               },
               {
@@ -102,12 +77,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {
@@ -152,22 +121,9 @@
           "data": {
             "commands": [
               {
-                "type": "deadline",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitForLocal"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "L4 Opposite 5 - Triple"
-                      }
-                    }
-                  ]
+                  "pathName": "L4 Opposite 5 - Triple"
                 }
               },
               {
@@ -177,12 +133,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {

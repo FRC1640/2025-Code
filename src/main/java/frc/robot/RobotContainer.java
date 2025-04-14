@@ -968,7 +968,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetupL4",
         new InstantCommand(
-            () -> coralPreset = gantryAuto ? CoralPreset.RightL2 : CoralPreset.LeftL2));
+            () -> coralPreset = gantryAuto ? CoralPreset.RightL4 : CoralPreset.LeftL4));
     NamedCommands.registerCommand(
         "SetupL3",
         new InstantCommand(

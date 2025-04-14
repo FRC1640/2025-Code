@@ -11,15 +11,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "WaitForLocal"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -27,12 +21,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {
@@ -77,37 +65,18 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Processor 3"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "RunBackCoral"
                 }
-              },
-              {
-                "type": "deadline",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitForLocal"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "L4 Processor 3"
-                      }
-                    }
-                  ]
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {
@@ -158,31 +127,12 @@
                 }
               },
               {
-                "type": "deadline",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitForLocal"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "L4 Processor 5"
-                      }
-                    }
-                  ]
+                  "pathName": "L4 Processor 5"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LocalAlign"
           }
         },
         {

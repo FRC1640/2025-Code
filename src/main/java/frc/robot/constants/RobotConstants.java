@@ -171,57 +171,57 @@ public class RobotConstants {
   }
 
   public static class CameraConstants {
-    // public static final CameraConstant frontCameraLeft =
-    //     new CameraConstant(
-    //         new SimCameraProperties(),
-    //         new Transform3d(
-    //             new Translation3d(
-    //                 Units.inchesToMeters(13.95),
-    //                 Units.inchesToMeters(11.9),
-    //                 Units.inchesToMeters(12.125)),
-    //             new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
-    //         1,
-    //         "Sommar",
-    //         "Front Left");
-
     public static final CameraConstant frontCameraLeft =
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(6.5),
-                    Units.inchesToMeters(13.3125),
-                    Units.inchesToMeters(13)),
-                new Rotation3d(0, 0, 0)),
+                    Units.inchesToMeters(13.95),
+                    Units.inchesToMeters(11.9),
+                    Units.inchesToMeters(12.125)),
+                new Rotation3d(0, Math.toRadians(10.5), -Math.toRadians(15))),
             1,
-            "Arducam_OV2311_USB_Camera",
+            "Sommar",
             "Front Left");
 
-    // public static final CameraConstant frontCameraRight =
+    // public static final CameraConstant frontCameraLeft =
     //     new CameraConstant(
     //         new SimCameraProperties(),
     //         new Transform3d(
     //             new Translation3d(
-    //                 Units.inchesToMeters(13.95),
-    //                 -Units.inchesToMeters(11.9),
-    //                 Units.inchesToMeters(12.125)),
-    //             new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
-    //         1.1,
-    //         "Dodds",
-    //         "Front Right");
+    //                 Units.inchesToMeters(6.5),
+    //                 Units.inchesToMeters(13.3125),
+    //                 Units.inchesToMeters(13)),
+    //             new Rotation3d(0, 0, 0)),
+    //         1,
+    //         "Arducam_OV2311_USB_Camera",
+    //         "Front Left");
 
     public static final CameraConstant frontCameraRight =
         new CameraConstant(
             new SimCameraProperties(),
             new Transform3d(
                 new Translation3d(
-                    Units.inchesToMeters(6.5),
-                    -Units.inchesToMeters(13.3125),
-                    Units.inchesToMeters(14.5)),
-                new Rotation3d(0, 0, 0)),
+                    Units.inchesToMeters(13.95),
+                    -Units.inchesToMeters(11.9),
+                    Units.inchesToMeters(12.125)),
+                new Rotation3d(0, Math.toRadians(10.5), Math.toRadians(15))),
             1.1,
-            "Park",
+            "Dodds",
             "Front Right");
+
+    // public static final CameraConstant frontCameraRight =
+    //     new CameraConstant(
+    //         new SimCameraProperties(),
+    //         new Transform3d(
+    //             new Translation3d(
+    //                 Units.inchesToMeters(6.5),
+    //                 -Units.inchesToMeters(13.3125),
+    //                 Units.inchesToMeters(14.5)),
+    //             new Rotation3d(0, 0, 0)),
+    //         1.1,
+    //         "Park",
+    //         "Front Right");
 
     public static final CameraConstant frontCameraCenter =
         new CameraConstant(
@@ -255,7 +255,7 @@ public class RobotConstants {
     public static final double gearRatio = 5;
     public static final Limits liftLimits = new Limits(0.0, 0.575);
     public static final double liftMaxSpeed = 2;
-    public static final double liftMaxAccel = 1.75 * 0.9;
+    public static final double liftMaxAccel = 1.75;
     public static final TrapezoidProfile.Constraints constraints =
         new TrapezoidProfile.Constraints(liftMaxSpeed, liftMaxAccel);
     public static final double sprocketRadius = Units.inchesToMeters(1.5 / 2);
@@ -283,13 +283,13 @@ public class RobotConstants {
       //   TODO:SWITCH THIS BACK IMPORTANT!!!!!!!
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.12, 0.3, GantrySetpoint.LEFT),
-      RightL2(0.12, 0.3, GantrySetpoint.RIGHT),
-      LeftL3(0.3, 0.486, GantrySetpoint.LEFT),
-      RightL3(0.3, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.575, GantrySetpoint.LEFT),
+      LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
+      RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
+      LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
+      LeftL4(0.568, GantrySetpoint.LEFT),
       PreMove(0.1, 0.1, GantrySetpoint.CENTER),
-      RightL4(0.575, GantrySetpoint.RIGHT),
+      RightL4(0.568, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;

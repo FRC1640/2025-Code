@@ -287,9 +287,9 @@ public class RobotConstants {
       RightL2(0.13, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.295, 0.486, GantrySetpoint.LEFT),
       RightL3(0.295, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.568, GantrySetpoint.LEFT),
+      LeftL4(0.572, GantrySetpoint.LEFT),
       PreMove(0.1, 0.1, GantrySetpoint.CENTER),
-      RightL4(0.568, GantrySetpoint.RIGHT),
+      RightL4(0.572, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;

@@ -623,6 +623,10 @@ public class RobotContainer {
     driveController.start().onTrue(gyro.resetGyroCommand());
 
     // gantry button bindings:
+    driveController
+        .x()
+        .onTrue(
+            RobotOdometry.instance.setPose("Main", aprilTagVisions.get(2).getPhotonResults()[0]));
     operatorController.x().whileTrue(getAutoPlaceCommand());
     // operatorController
     //     .x()

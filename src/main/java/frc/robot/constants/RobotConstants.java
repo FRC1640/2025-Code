@@ -231,7 +231,7 @@ public class RobotConstants {
                     Units.inchesToMeters(8.4405),
                     Units.inchesToMeters(2.6609),
                     Units.inchesToMeters(8.3501)),
-                new Rotation3d(0, Math.toRadians(12.68), 0)),
+                new Rotation3d(0, Math.toRadians(11), 0)),
             0.2,
             "OV9281",
             "Front Center");

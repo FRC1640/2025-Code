@@ -626,7 +626,7 @@ public class RobotContainer {
     driveController
         .x()
         .onTrue(
-            RobotOdometry.instance.setPose("Main", aprilTagVisions.get(2).getPhotonResults()[0]));
+            RobotOdometry.instance.setPose("Main", aprilTagVisions.get(2).getPhotonResults()[0].pose()));
     operatorController.x().whileTrue(getAutoPlaceCommand());
     // operatorController
     //     .x()

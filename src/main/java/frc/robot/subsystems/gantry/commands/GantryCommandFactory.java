@@ -120,7 +120,7 @@ public class GantryCommandFactory {
     if (coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.CENTER) {
       return GantryConstants.gantryLimitCenter;
     }
-    return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.RIGHT ? 0.047 : 0.371;
+    return coralPreset.get().getGantrySetpoint(true) == GantrySetpoint.RIGHT ? 0.006 : 0.35;
   }
 
   public double getSetpointOdometry(

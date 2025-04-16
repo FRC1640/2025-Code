@@ -79,7 +79,7 @@ public class AprilTagVision extends PeriodicBase {
   }
 
   public boolean getRotationValidPhotonObservation(PoseObservation observation) {
-    return (observation.ambiguity() < 0.05 && observation.tagCount() > 0);
+    return (observation.ambiguity() < 0.05 && observation.tagCount() > 1);
   }
 
   public double getTrigDistFactor(PoseObservation observation) {

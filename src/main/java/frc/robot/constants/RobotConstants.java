@@ -283,8 +283,8 @@ public class RobotConstants {
       //   TODO:SWITCH THIS BACK IMPORTANT!!!!!!!
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
-      RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
+      LeftL2(0.13, 0.3, GantrySetpoint.LEFT),
+      RightL2(0.13, 0.3, GantrySetpoint.RIGHT),
       LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
       RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
       LeftL4(0.568, GantrySetpoint.LEFT),

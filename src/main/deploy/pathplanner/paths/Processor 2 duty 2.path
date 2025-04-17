@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.653892045454545,
+        "y": 4.005056818181817
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.973509933774834,
+        "y": 4.068584437086092
+      },
+      "isLocked": false,
+      "linkedName": "ReefCenterRight_OffsetLeft"
+    },
+    {
+      "anchor": {
+        "x": 6.283423013245033,
+        "y": 3.981415562913907
+      },
+      "prevControl": {
+        "x": 5.941241181801482,
+        "y": 3.9635935925262227
+      },
+      "nextControl": {
+        "x": 6.980774006622516,
+        "y": 4.017735927152317
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.02,
+        "y": 0.57
+      },
+      "prevControl": {
+        "x": 7.009830298013245,
+        "y": 1.8966266556291385
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.07067137809186269,
+      "maxWaypointRelativePos": 0.8056537102473555,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.8,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.8233215547703183,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.8,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Processor duty 2 times",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

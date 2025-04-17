@@ -226,7 +226,7 @@ public class GantryCommandFactory {
                                             Math.abs(
                                                     gantrySubsystem.getCarriagePosition()
                                                         - GantryConstants.gantryLimitCenter
-                                                        + (direction ? 0.05 : -0.05))
+                                                        + (direction ? -0.1 : 0.1))
                                                 < GantryConstants.gantryPadding)))
                     .andThen(new InstantCommand(() -> direction = !direction)))
                 .repeatedly()

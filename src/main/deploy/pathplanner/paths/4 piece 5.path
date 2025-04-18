@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6851988636363635,
+        "y": 7.185994318181818
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1933887248658195,
+        "y": 6.61973718398221
+      },
+      "isLocked": false,
+      "linkedName": "TopSource"
+    },
+    {
+      "anchor": {
+        "x": 3.8988920454545455,
+        "y": 5.141818181818182
+      },
+      "prevControl": {
+        "x": 3.82440925361446,
+        "y": 5.38046502072393
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefTopLeft_OffsetRight"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8452296819787964,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4Left",
+      "waypointRelativePos": 0.52,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "parallel",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetModeCoral"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetGantryLeft"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "SetupL4"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "RunToPreset"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "4 piece",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -50.0
+  },
+  "useDefaultConstraints": false
+}

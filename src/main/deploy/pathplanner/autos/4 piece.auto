@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Explode the processor 1"
+                  "pathName": "4 piece 1"
                 }
               }
             ]
@@ -36,72 +36,28 @@
           }
         },
         {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetModeAlgae"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetupL2"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "WaitForPreset"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "Explode the processor 2"
+                  "pathName": "4 piece 2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "HoldAlgae"
+                  "name": "Safe"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Process"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
@@ -111,42 +67,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Explode the processor 3"
+                  "pathName": "4 piece 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunBackCoral"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetModeAlgae"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "SetupL3"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "WaitForPreset"
-                }
-              }
-            ]
+            "name": "WaitForPreset"
           }
         },
         {
@@ -160,15 +96,40 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "Explode the processor 4"
+                  "pathName": "4 piece 4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "HoldAlgae"
+                  "name": "Safe"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4 piece 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunBackCoral"
                 }
               }
             ]
@@ -177,7 +138,50 @@
         {
           "type": "named",
           "data": {
-            "name": "Process"
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4 piece 6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Safe"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReef"
           }
         }
       ]

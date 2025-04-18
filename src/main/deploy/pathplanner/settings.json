@@ -3,13 +3,13 @@
   "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
+    "3.5 ",
     "Explode the processor",
     "L1 Spam Opposite",
     "L4 Opposite - Double",
     "L4 Opposite - Triple",
     "L4 Processor - Double",
     "L4 Processor - Triple",
-    "4 piece",
     "Process",
     "SpitProcess",
     "SpitSpit"

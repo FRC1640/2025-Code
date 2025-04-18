@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.6062057455978485,
-        "y": 3.8795761951435117
+        "x": 6.501345198675495,
+        "y": 3.901510761589404
       },
       "isLocked": false,
       "linkedName": "MidStart"
@@ -20,8 +20,8 @@
         "y": 4.005056818181817
       },
       "prevControl": {
-        "x": 5.21677095325603,
-        "y": 4.0335531618103415
+        "x": 6.188990066225166,
+        "y": 3.9378311258278145
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7265017667844536,
+      "minWaypointRelativePos": 0.9512367491166107,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.8,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -103,7 +103,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Processor duty 2 times",
+  "folder": "Explode the processor",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

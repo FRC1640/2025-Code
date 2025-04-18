@@ -1,0 +1,84 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.02,
+        "y": 0.57
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.002897727272727,
+        "y": 1.0634375
+      },
+      "isLocked": false,
+      "linkedName": "Processor"
+    },
+    {
+      "anchor": {
+        "x": 5.982954545454545,
+        "y": 1.1332386363636362
+      },
+      "prevControl": {
+        "x": 6.042174605962294,
+        "y": 0.7779182733171415
+      },
+      "nextControl": {
+        "x": 5.903181818181818,
+        "y": 1.611875
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.125397727272728,
+        "y": 2.9281249999999988
+      },
+      "prevControl": {
+        "x": 5.364715909090909,
+        "y": 2.5591761363636363
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefLowerRight"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.7017667844523117,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Explode the processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

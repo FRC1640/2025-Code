@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.1054545454545455,
+        "y": 2.938096590909091
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.557015728476821,
+        "y": 2.10728476821192
+      },
+      "isLocked": false,
+      "linkedName": "ReefLowerRight_Center"
+    },
+    {
+      "anchor": {
+        "x": 5.353621688741722,
+        "y": 2.3469991721854297
+      },
+      "prevControl": {
+        "x": 5.2045874245579835,
+        "y": 2.6808359239570043
+      },
+      "nextControl": {
+        "x": 5.5352235099337745,
+        "y": 1.9402110927152307
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.02,
+        "y": 0.57
+      },
+      "prevControl": {
+        "x": 6.00012417218543,
+        "y": 1.0467301324503309
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.22897526501767346,
+      "maxWaypointRelativePos": 0.7265017667844504,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.8,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.8939929328621874,
+      "maxWaypointRelativePos": 1.786572438162541,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.6,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Safe",
+      "waypointRelativePos": 0.49469964664310906,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Safe"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Explode the processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

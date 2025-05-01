@@ -18,6 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class AutoAlignHelper {
   PIDController linearDrivePID = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
   SlewRateLimiter accel = new SlewRateLimiter(3);
+  SlewRateLimiter cStationAccel = new SlewRateLimiter(3);
   PIDController rotatePID =
       RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
 
@@ -35,6 +36,18 @@ public class AutoAlignHelper {
           RobotPIDConstants.localDriveProfiledPid,
           AutoAlignConfig.localAlignPpidConstraints,
           "LocalAlignPPID");
+
+  private PIDController cStationDrivePid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.cStationDrivePID);
+  // private PIDController cStationYLinearDrivePid =
+  //     RobotPIDConstants.constructPID(RobotPIDConstants.cStationTagAlignY);
+  private PIDController cStationRotationPid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.cStationAnglePid);
+  private ProfiledPIDController cStationDriveProfiledPid =
+      RobotPIDConstants.constructProfiledPIDController(
+          RobotPIDConstants.cStationDrivePPID,
+          AutoAlignConfig.cStationPpidConstraints,
+          "cStationAlignPPID");
 
   public ChassisSpeeds getPoseSpeedsLine(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;
@@ -129,7 +142,7 @@ public class AutoAlignHelper {
 
   public void resetLocalMotionProfile(Translation2d vector, DriveSubsystem driveSubsystem) {
     ChassisSpeeds speeds = driveSubsystem.getChassisSpeeds();
-    System.out.println(speeds);
+    // System.out.println(speeds); // goofy stuff
     Translation2d velocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
     double parallelVel =
         -driveSubsystem.chassisSpeedsMagnitude()
@@ -158,4 +171,54 @@ public class AutoAlignHelper {
     // convert to field-centric
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
   } */
+
+  public ChassisSpeeds getCStationAlignSpeedsLine(
+      Pose2d robotPose, Pose2d targetPose, Gyro gyro, DriveSubsystem driveSubsystem) {
+    cStationRotationPid.enableContinuousInput(-Math.PI, Math.PI);
+
+    Pose2d robot = robotPose;
+    Pose2d target = targetPose;
+    Logger.recordOutput("cStationAlign/targetPos", target);
+    // take measurements
+    double dist = robot.getTranslation().getDistance(target.getTranslation());
+    Rotation2d angleToTarget = target.getTranslation().minus(robot.getTranslation()).getAngle();
+    // calculate output
+
+    Logger.recordOutput("cStationaligndist", dist);
+    double linear =
+        dist < DriveConstants.cStationSlowAlignDistance
+            ? cStationDrivePid.calculate(dist, 0)
+            : cStationDriveProfiledPid.calculate(dist, 0);
+    Logger.recordOutput(
+        "cStationAlign/profiledcStationAlign", dist > DriveConstants.cStationSlowAlignDistance);
+    double rotational =
+        cStationRotationPid.calculate(
+            robot.getRotation().minus(target.getRotation()).getRadians(), 0);
+    // convert to percentage
+    linear = MathUtil.clamp(linear, -1, 1);
+    linear = MathUtil.applyDeadband(linear, 0.01);
+    linear *= DriveConstants.maxSpeed; // TODO scale max speed for acceleration?
+
+    rotational = MathUtil.clamp(rotational, -1, 1);
+    rotational = MathUtil.applyDeadband(rotational, 0.01);
+    rotational *= DriveConstants.maxOmega;
+    // limit rate
+    // linear = cStationAccel.calculate(linear);
+    // find component vectors
+    double vx = -linear * angleToTarget.getCos();
+    double vy = -linear * angleToTarget.getSin();
+    // convert chassis speeds
+    ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
+    return convertToFieldRelative(robotRelative, gyro, robot);
+  }
+
+  public void resetCStationMotionProfile(Pose2d robot, DriveSubsystem driveSubsystem) {
+    ChassisSpeeds speeds = driveSubsystem.getChassisSpeeds();
+    // System.out.println(speeds); // goofy stuff
+    Translation2d velocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    double parallelVel =
+        -driveSubsystem.chassisSpeedsMagnitude()
+            * (velocity.getAngle().minus(robot.getRotation())).getCos();
+    cStationDriveProfiledPid.reset(robot.getRotation().getRadians(), parallelVel);
+  }
 }

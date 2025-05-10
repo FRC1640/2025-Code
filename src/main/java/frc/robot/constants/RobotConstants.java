@@ -231,7 +231,7 @@ public class RobotConstants {
                     Units.inchesToMeters(8.4405),
                     Units.inchesToMeters(2.6609),
                     Units.inchesToMeters(8.3501)),
-                new Rotation3d(0, Math.toRadians(12.68), 0)),
+                new Rotation3d(0, Math.toRadians(11), 0)),
             0.2,
             "OV9281",
             "Front Center");
@@ -283,13 +283,13 @@ public class RobotConstants {
       //   TODO:SWITCH THIS BACK IMPORTANT!!!!!!!
       Pickup(0, GantrySetpoint.CENTER),
       Safe(0, 0.1, GantrySetpoint.CENTER),
-      LeftL2(0.115, 0.3, GantrySetpoint.LEFT),
-      RightL2(0.115, 0.3, GantrySetpoint.RIGHT),
-      LeftL3(0.289, 0.486, GantrySetpoint.LEFT),
-      RightL3(0.289, 0.486, GantrySetpoint.RIGHT),
-      LeftL4(0.568, GantrySetpoint.LEFT),
+      LeftL2(0.13, 0.3, GantrySetpoint.LEFT),
+      RightL2(0.13, 0.3, GantrySetpoint.RIGHT),
+      LeftL3(0.295, 0.486, GantrySetpoint.LEFT),
+      RightL3(0.295, 0.486, GantrySetpoint.RIGHT),
+      LeftL4(0.573, GantrySetpoint.LEFT),
       PreMove(0.1, 0.1, GantrySetpoint.CENTER),
-      RightL4(0.568, GantrySetpoint.RIGHT),
+      RightL4(0.573, GantrySetpoint.RIGHT),
       Trough(0.06, GantrySetpoint.CENTER);
 
       public final double lift;
@@ -402,7 +402,7 @@ public class RobotConstants {
         Units.inchesToMeters(0.5) * 1.13278894472 * 0.60103626943 * 1.58904109589 * 1.03571428571;
     // left -> right limit
     public static final Limits gantryLimits = new Limits(0.01, 0.38 + Units.inchesToMeters(2));
-    public static final double gantryLimitCenter = 0.198;
+    public static final double gantryLimitCenter = 0.196;
     public static final double gantryPadding = 0.02;
     public static final int gantryLimitSwitchDIOPort = new RobotSwitch<Integer>(4).get();
     public static final double alignSpeed = 0.2;

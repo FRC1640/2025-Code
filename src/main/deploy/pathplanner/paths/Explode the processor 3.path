@@ -3,40 +3,56 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.125397727272728,
-        "y": 2.9281249999999988
+        "x": 6.02,
+        "y": 0.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.414573863636364,
-        "y": 2.040653409090908
+        "x": 6.002897727272727,
+        "y": 1.0634375
       },
       "isLocked": false,
-      "linkedName": "ReefLowerRight"
+      "linkedName": "Processor"
     },
     {
       "anchor": {
-        "x": 1.525653409090909,
-        "y": 0.9138636363636362
+        "x": 5.982954545454545,
+        "y": 1.1332386363636362
       },
       "prevControl": {
-        "x": 2.0042897727272724,
-        "y": 1.980823863636365
+        "x": 6.042174605962294,
+        "y": 0.7779182733171415
+      },
+      "nextControl": {
+        "x": 5.903181818181818,
+        "y": 1.611875
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.125397727272728,
+        "y": 2.9281249999999988
+      },
+      "prevControl": {
+        "x": 5.364715909090909,
+        "y": 2.5591761363636363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BottomSource"
+      "linkedName": "ReefLowerRight"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 1.7017667844523117,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -48,7 +64,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,13 +72,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 50.0
-  },
-  "reversed": false,
-  "folder": "L4 Processor - Double",
-  "idealStartingState": {
-    "velocity": 0,
     "rotation": 119.99999999999999
   },
-  "useDefaultConstraints": false
+  "reversed": false,
+  "folder": "Explode the processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
 }

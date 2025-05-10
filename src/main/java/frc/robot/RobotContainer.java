@@ -1030,6 +1030,12 @@ public class RobotContainer {
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
     NamedCommands.registerCommand(
         "WaitForLocal",
-        new WaitCommand(0.1).andThen(new WaitUntilCommand(() -> localAlign.isReady())));
+        new WaitCommand(0.1)
+            .andThen(new WaitUntilCommand(() -> localAlign.isReady()))
+            .andThen(new InstantCommand(() -> beans())));
+  }
+
+  public void beans() {
+    System.out.println("beans");
   }
 }

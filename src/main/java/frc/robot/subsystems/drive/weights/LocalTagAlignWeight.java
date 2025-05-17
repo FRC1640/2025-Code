@@ -107,8 +107,14 @@ public class LocalTagAlignWeight implements DriveWeight {
   public Command getAutoCommand() {
     return driveCommandFactory
         .runVelocityCommand(() -> getSpeeds(), () -> true)
+        .andThen(() -> beans())
         .finallyDo(
             () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
+  }
+
+  public void beans() {
+    System.out.println("BeforeBEnassn");
+    System.out.println("beans");
   }
 
   public boolean isAutoalignComplete() {

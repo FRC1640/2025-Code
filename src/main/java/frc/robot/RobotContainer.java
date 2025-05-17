@@ -869,7 +869,7 @@ public class RobotContainer {
     return homing()
         .andThen(new InstantCommand(() -> autoRampPos = true))
         .andThen(new InstantCommand(() -> premoveLift = true))
-        .andThen(dashboard.getAutoChooserCommand());
+        .andThen(dashboard.getAutoChooserCommand().finallyDo(() -> beans()));
     // return new InstantCommand();
   }
 
@@ -1031,11 +1031,11 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "WaitForLocal",
         new WaitCommand(0.1)
-            .andThen(new WaitUntilCommand(() -> localAlign.isReady()))
-            .andThen(new InstantCommand(() -> beans())));
+            .andThen(new WaitUntilCommand(() -> localAlign.isReady()).finallyDo(() -> beans())));
   }
 
   public void beans() {
+    System.out.println("BeforeBEnassn");
     System.out.println("beans");
   }
 }

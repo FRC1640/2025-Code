@@ -11,26 +11,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "deadline",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitForLocal"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "L4 Opposite 1 - Triple"
-                      }
-                    }
-                  ]
+                  "name": "WaitForLocal"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 Opposite 1 - Triple"
                 }
               }
             ]

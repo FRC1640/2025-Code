@@ -36,6 +36,11 @@ public class AutoAlignHelper {
           AutoAlignConfig.localAlignPpidConstraints,
           "LocalAlignPPID");
 
+  private PIDController localPassivePidX = RobotPIDConstants.constructPID(RobotPIDConstants.localXPid);
+  private PIDController localPassivePidY = RobotPIDConstants.constructPID(RobotPIDConstants.localYPid);
+  private PIDController localAnglePidPassive =
+      RobotPIDConstants.constructPID(RobotPIDConstants.localAnglePidXy);
+
   public ChassisSpeeds getPoseSpeedsLine(Pose2d robotPose, Pose2d targetPose, Gyro gyro) {
     Pose2d robot = robotPose;
     Pose2d target = targetPose;
@@ -158,4 +163,32 @@ public class AutoAlignHelper {
     // convert to field-centric
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
   } */
+
+  public ChassisSpeeds getPassiveLocalSpeeds(
+      Translation2d vector,
+      Gyro gyro,
+      Rotation2d robotRotation,
+      Rotation2d endRotation) {
+    localRotationPid.enableContinuousInput(-Math.PI, Math.PI);
+    // calculate output
+    double vx = -localPassivePidX.calculate(vector.getX(), 0);
+    double vy = -localPassivePidY.calculate(vector.getY(), 0);
+    double rotational =
+        localAnglePidPassive.calculate(robotRotation.getRadians(), endRotation.getRadians());
+    // convert to percentage
+    vx = MathUtil.clamp(vx, -1, 1);
+    vx = MathUtil.applyDeadband(vx, 0.01);
+    vx *= DriveConstants.maxSpeed;
+
+    vy = MathUtil.clamp(vy, -1, 1);
+    vy = MathUtil.applyDeadband(vy, 0.01);
+    vy *= DriveConstants.maxSpeed;
+
+    rotational = MathUtil.clamp(rotational, -1, 1);
+    rotational = MathUtil.applyDeadband(rotational, 0.01);
+    rotational *= DriveConstants.maxOmega;
+    // convert chassis speeds
+    ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, rotational);
+    return convertToFieldRelative(robotRelative, gyro, new Pose2d());
+  }
 }

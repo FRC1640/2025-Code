@@ -10,6 +10,10 @@ public interface DriveWeight {
     return 1;
   }
 
+  public default double getWeightPersistent() {
+    return getWeight();
+  }
+
   public default void setWeight(double weight) {}
 
   public default boolean cancelCondition() {

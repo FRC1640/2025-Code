@@ -70,6 +70,7 @@ import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
+import frc.robot.subsystems.drive.weights.LocalPassiveAlignWeight;
 import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
@@ -153,6 +154,7 @@ public class RobotContainer {
   private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
   private DynamicAlignWeight dynamicAlign;
+  private LocalPassiveAlignWeight localAlignPassive;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -237,9 +239,9 @@ public class RobotContainer {
         aprilTagVisions.add(
             new AprilTagVision(
                 new AprilTagVisionIOSim(
-                    CameraConstants.frontCameraLeft,
+                    CameraConstants.frontCameraCenter,
                     () -> new Pose3d(RobotOdometry.instance.getPose("Main"))),
-                CameraConstants.frontCameraLeft));
+                CameraConstants.frontCameraCenter));
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
@@ -358,6 +360,8 @@ public class RobotContainer {
     DriveWeightCommand.addPersistentWeight(
         new PathplannerWeight(gyro, () -> RobotOdometry.instance.getPose("Main")));
 
+    
+
     // liftSubsystem.setDefaultCommand(
     //     liftCommandFactory.liftApplyVoltageCommand(() -> -4 * operatorController.getRightY()));
 
@@ -389,6 +393,22 @@ public class RobotContainer {
             driveCommandFactory,
             gyro,
             visionArray);
+
+    localAlignPassive =
+        new LocalPassiveAlignWeight(
+            () ->
+                DistanceManager.getNearestPosition(
+                    RobotOdometry.instance.getPose("Main"),
+                    AllianceManager.chooseFromAlliance(
+                        FieldConstants.reefPositionsBlue, FieldConstants.reefPositionsRed)),
+            () -> RobotOdometry.instance.getPose("Main").getRotation(),
+            driveSubsystem,
+            driveCommandFactory,
+            gyro,
+            () -> coralOuttakeSubsystem.hasCoral(),
+            visionArray);
+    
+    DriveWeightCommand.addPersistentWeight(localAlignPassive);
 
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
 

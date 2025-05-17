@@ -67,8 +67,8 @@ public class DriveWeightCommand {
       weightSum += driveWeight.getWeight();
     }
     for (DriveWeight driveWeight : persistentWeights) {
-      speeds = speeds.plus(driveWeight.getSpeeds().times(driveWeight.getWeight()));
-      weightSum += driveWeight.getWeight();
+      speeds = speeds.plus(driveWeight.getSpeeds().times(driveWeight.getWeightPersistent()));
+      weightSum += driveWeight.getWeightPersistent();
     }
     speeds.div(weightSum);
     return decreaseSpeeds(speeds);

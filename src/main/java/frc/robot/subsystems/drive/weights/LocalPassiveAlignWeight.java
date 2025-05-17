@@ -14,10 +14,11 @@ import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.util.helpers.AprilTagAlignHelper;
 import frc.robot.util.helpers.AutoAlignHelper;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class LocalTagAlignWeight implements DriveWeight {
+public class LocalPassiveAlignWeight implements DriveWeight {
   private Supplier<Pose2d> targetPose;
   private Supplier<Rotation2d> robotRotation;
   private AutoAlignHelper autoAlignHelper;
@@ -25,15 +26,17 @@ public class LocalTagAlignWeight implements DriveWeight {
   private DriveSubsystem driveSubsystem;
   private DriveCommandFactory driveCommandFactory;
   private Gyro gyro;
+  private BooleanSupplier hasCoral;
 
-  private static final double ASSIST_THRESH_BASE = 0.25;
+  private static final double ASSIST_THRESH_BASE = 0.3;
 
-  public LocalTagAlignWeight(
+  public LocalPassiveAlignWeight(
       Supplier<Pose2d> targetPose,
       Supplier<Rotation2d> robotRotation,
       DriveSubsystem driveSubsystem,
       DriveCommandFactory driveCommandFactory,
       Gyro gyro,
+      BooleanSupplier hasCoral,
       AprilTagVision... visions) {
     this.robotRotation = robotRotation;
     this.targetPose = targetPose;
@@ -42,6 +45,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     this.driveSubsystem = driveSubsystem;
     this.driveCommandFactory = driveCommandFactory;
     this.gyro = gyro;
+    this.hasCoral = hasCoral;
   }
 
   @Override
@@ -52,7 +56,7 @@ public class LocalTagAlignWeight implements DriveWeight {
     if (vector.isEmpty()) {
       return new ChassisSpeeds();
     }
-    return autoAlignHelper.getLocalAlignSpeedsLine(
+    return autoAlignHelper.getPassiveLocalSpeeds(
         vector.get(),
         gyro,
         new Rotation2d((robotRotation.get().getRadians())),
@@ -63,23 +67,11 @@ public class LocalTagAlignWeight implements DriveWeight {
                 .getRotation()
                 .toRotation2d()
                 .minus(Rotation2d.kPi)
-                .getRadians()),
-        driveSubsystem);
+                .getRadians()));
   }
 
   public int getTargetTagId() {
     return AprilTagAlignHelper.getAutoalignTagId(targetPose.get()).ID;
-  }
-
-  @Override
-  public void onStart() {
-    Optional<Translation2d> vector =
-        AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    if (vector.isPresent()) {
-      autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
-    } else {
-      autoAlignHelper.resetLocalMotionProfile(new Translation2d(), driveSubsystem);
-    }
   }
 
   public boolean isReady() {
@@ -95,23 +87,12 @@ public class LocalTagAlignWeight implements DriveWeight {
               .getRotation()
               .plus(Rotation2d.k180deg)
               .getRadians();
-
-      Logger.recordOutput(
-          "angledelta",
-          Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
       ready =
           vector.get().getNorm() < 1
               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
     }
-    Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
+    Logger.recordOutput("LocalTagAlign/isPassiveAlignReady", ready);
     return ready;
-  }
-
-  public Command getAutoCommand() {
-    return driveCommandFactory
-        .runVelocityCommand(() -> getSpeeds(), () -> true)
-        .finallyDo(
-            () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
   }
 
   public boolean isAutoalignComplete() {
@@ -140,18 +121,15 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   @Override
-  public double getWeightPersistent() {
+  public double getWeight() {
     double weight;
     Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     if (vector.isPresent()) {
-      if (vector.get().getNorm() > AutoAlignConfig.reefAssistDistThresh) {
+      if (vector.get().getNorm() > AutoAlignConfig.reefAssistDistThresh || hasCoral.getAsBoolean()) {
         weight = 0;
       } else {
         double dist = vector.get().getNorm();
-        if (Math.abs(dist - AutoAlignConfig.reefAssistDistThresh) < 0.05) {
-          autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
-        }
-        weight = ASSIST_THRESH_BASE / (Math.pow(dist, 2));
+        weight = ASSIST_THRESH_BASE * (1 - 1 / (1 + Math.pow(Math.E, dist)));
       }
     } else {
       weight = 0;

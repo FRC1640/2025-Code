@@ -124,9 +124,16 @@ public class RobotPIDConstants {
   public static final PIDConstants climberWinchPIDFast = new PIDConstants(0.75, 0, 0);
 
   public static final PIDConstants driveAntiTip = new PIDConstants(1, 0, 0);
+
+  // local align constants
   public static final PIDConstants localTagAlign = new PIDConstants(1.1, 0.005, 0.005);
   public static final PIDConstants localTagAlignVelocity = new PIDConstants(0.25, 0, 0);
   // public static final PIDConstants localTagAlignY = new PIDConstants(0.25, 0, 0);
   public static final PIDConstants localAnglePid = new PIDConstants(0.85, 0, 0);
   public static final PIDConstants localDriveProfiledPid = new PIDConstants(0.5, 0, 0);
+
+  // local align xy constants
+  public static final PIDConstants localXPid = new PIDConstants(0.75, 0, 0);
+  public static final PIDConstants localYPid = new PIDConstants(2, 0, 0);
+  public static final PIDConstants localAnglePidXy = new PIDConstants(1, 0, 0);
 }

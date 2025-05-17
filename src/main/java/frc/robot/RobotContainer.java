@@ -959,7 +959,9 @@ public class RobotContainer {
 
   public void generateNamedCommands() {
     NamedCommands.registerCommand(
-        "EnableAprilTags", new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(true)));
+        "EnableAprilTags",
+        new InstantCommand(() -> System.out.println("before all of it"))
+            .andThen(() -> RobotOdometry.instance.setAutoApriltags(true)));
     NamedCommands.registerCommand(
         "DisableAprilTags",
         new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(false)));
@@ -1023,8 +1025,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "LocalAlign",
-        localAlign
-            .getAutoCommand()
+        new InstantCommand(() -> System.out.println("before local cluster"))
+            .andThen(localAlign.getAutoCommand())
             .deadlineFor(autonAutoPlace(() -> coralPreset))
             .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
@@ -1037,5 +1039,15 @@ public class RobotContainer {
   public void beans() {
     System.out.println("BeforeBEnassn");
     System.out.println("beans");
+  }
+
+  // public void isAuto() {
+  //   return Robot.getState() = RobotState.AUTONOMOUS;
+  // }
+
+  public void isTrue() {
+    if (localAlign.isReady()) {
+      System.out.println("visible!");
+    }
   }
 }

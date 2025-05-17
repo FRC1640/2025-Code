@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
@@ -84,7 +85,8 @@ public class LocalTagAlignWeight implements DriveWeight {
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     boolean ready = false;
     if (vector.isPresent()) {
-      double goalAngle =
+      double goalAngle = // a break point triggers here as soon as the robot is connected -- as in,
+          // when disabled, not just auto!
           FieldConstants.aprilTagLayout
               .getTagPose(getTargetTagId())
               .get()
@@ -97,17 +99,54 @@ public class LocalTagAlignWeight implements DriveWeight {
           "angledelta",
           Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
       ready =
-          vector.get().getNorm() < 1
+          vector.get().getNorm()
+                  < 1 // and then ready is still false because the vector to the reef is still
+              // greater than one
               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
+    } else {
+      System.out.println("no lo veo");
     }
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
+    Logger.recordOutput(
+        "LocalTagAlign/vectorNorm", vector.isPresent() ? vector.get().getNorm() : -1);
     return ready;
   }
 
+  // public boolean isReady() {
+  //   Optional<Translation2d> vector =
+  //       AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
+  //   boolean ready = false;
+  //   if (Robot.getState() == RobotState.AUTONOMOUS) {
+  //     if (vector.isPresent()) {
+  //       double goalAngle =
+  //           FieldConstants.aprilTagLayout
+  //               .getTagPose(getTargetTagId())
+  //               .get()
+  //               .toPose2d()
+  //               .getRotation()
+  //               .plus(Rotation2d.k180deg)
+  //               .getRadians();
+
+  //       Logger.recordOutput(
+  //           "angledelta",
+  //           Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
+  //       ready =
+  //           vector.get().getNorm() < 1
+  //               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees())
+  //                   < 15;
+  //     }
+
+  //   } else {
+  //     ready = false;
+  //   }
+  //   Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
+  //   return ready;
+  // }
+
   public Command getAutoCommand() {
-    return driveCommandFactory
-        .runVelocityCommand(() -> getSpeeds(), () -> true)
-        .andThen(() -> beans())
+    return new InstantCommand(() -> System.out.println("Before runVelocityCommand"))
+        .andThen(driveCommandFactory.runVelocityCommand(() -> getSpeeds(), () -> true))
+        .andThen(() -> System.out.println("After runVelocityCommand"))
         .finallyDo(
             () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
   }

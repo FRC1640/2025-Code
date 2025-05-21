@@ -1041,10 +1041,6 @@ public class RobotContainer {
     System.out.println("beans");
   }
 
-  // public void isAuto() {
-  //   return Robot.getState() = RobotState.AUTONOMOUS;
-  // }
-
   public void isTrue() {
     if (localAlign.isReady()) {
       System.out.println("visible!");

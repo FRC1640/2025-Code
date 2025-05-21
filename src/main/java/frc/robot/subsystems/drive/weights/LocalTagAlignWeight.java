@@ -103,45 +103,12 @@ public class LocalTagAlignWeight implements DriveWeight {
                   < 1 // and then ready is still false because the vector to the reef is still
               // greater than one
               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
-    } else {
-      System.out.println("no lo veo");
     }
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
     Logger.recordOutput(
         "LocalTagAlign/vectorNorm", vector.isPresent() ? vector.get().getNorm() : -1);
     return ready;
   }
-
-  // public boolean isReady() {
-  //   Optional<Translation2d> vector =
-  //       AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-  //   boolean ready = false;
-  //   if (Robot.getState() == RobotState.AUTONOMOUS) {
-  //     if (vector.isPresent()) {
-  //       double goalAngle =
-  //           FieldConstants.aprilTagLayout
-  //               .getTagPose(getTargetTagId())
-  //               .get()
-  //               .toPose2d()
-  //               .getRotation()
-  //               .plus(Rotation2d.k180deg)
-  //               .getRadians();
-
-  //       Logger.recordOutput(
-  //           "angledelta",
-  //           Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
-  //       ready =
-  //           vector.get().getNorm() < 1
-  //               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees())
-  //                   < 15;
-  //     }
-
-  //   } else {
-  //     ready = false;
-  //   }
-  //   Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
-  //   return ready;
-  // }
 
   public Command getAutoCommand() {
     return new InstantCommand(() -> System.out.println("Before runVelocityCommand"))

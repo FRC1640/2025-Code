@@ -32,6 +32,12 @@
         {
           "type": "named",
           "data": {
+            "name": "LocalAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "WaitForPreset"
           }
         },

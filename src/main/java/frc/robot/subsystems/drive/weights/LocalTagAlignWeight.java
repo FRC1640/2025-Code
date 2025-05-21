@@ -85,8 +85,7 @@ public class LocalTagAlignWeight implements DriveWeight {
         AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
     boolean ready = false;
     if (vector.isPresent()) {
-      double goalAngle = // a break point triggers here as soon as the robot is connected -- as in,
-          // when disabled, not just auto!
+      double goalAngle =
           FieldConstants.aprilTagLayout
               .getTagPose(getTargetTagId())
               .get()
@@ -99,9 +98,7 @@ public class LocalTagAlignWeight implements DriveWeight {
           "angledelta",
           Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()));
       ready =
-          vector.get().getNorm()
-                  < 1 // and then ready is still false because the vector to the reef is still
-              // greater than one
+          vector.get().getNorm() < 1
               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
     }
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
@@ -111,16 +108,10 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public Command getAutoCommand() {
-    return new InstantCommand(() -> System.out.println("Before runVelocityCommand"))
-        .andThen(driveCommandFactory.runVelocityCommand(() -> getSpeeds(), () -> true))
-        .andThen(() -> System.out.println("After runVelocityCommand"))
+    return new InstantCommand(
+            () -> driveCommandFactory.runVelocityCommand(() -> getSpeeds(), () -> true))
         .finallyDo(
             () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
-  }
-
-  public void beans() {
-    System.out.println("BeforeBEnassn");
-    System.out.println("beans");
   }
 
   public boolean isAutoalignComplete() {

@@ -963,9 +963,7 @@ public class RobotContainer {
 
   public void generateNamedCommands() {
     NamedCommands.registerCommand(
-        "EnableAprilTags",
-        new InstantCommand(() -> System.out.println("before all of it"))
-            .andThen(() -> RobotOdometry.instance.setAutoApriltags(true)));
+        "EnableAprilTags", new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(true)));
     NamedCommands.registerCommand(
         "DisableAprilTags",
         new InstantCommand(() -> RobotOdometry.instance.setAutoApriltags(false)));

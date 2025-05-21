@@ -81,6 +81,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "L4 Opposite 3 - Triple"
@@ -96,6 +102,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {
@@ -144,6 +156,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "L4 Opposite 5 - Triple"
@@ -159,6 +177,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {

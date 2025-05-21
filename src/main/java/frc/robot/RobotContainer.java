@@ -1040,10 +1040,4 @@ public class RobotContainer {
     System.out.println("BeforeBEnassn");
     System.out.println("beans");
   }
-
-  public void isTrue() {
-    if (localAlign.isReady()) {
-      System.out.println("visible!");
-    }
-  }
 }

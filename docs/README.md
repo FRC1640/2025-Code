@@ -13,3 +13,9 @@
 [Autos](/docs/autos/CalculatedFieldPos.md)
 
 [WPILib rotations](/docs/rotations/rotations.md)
+
+[CANID](/docs/CANID/CANID.md)
+
+[Controller Mappings](/docs/ControllerMapping/controller-mapping.md)
+
+[Reef Standard Names/Id Given](/docs/reefFaceStandard/reef.md)

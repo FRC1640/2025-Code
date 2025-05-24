@@ -167,8 +167,6 @@ public class RobotContainer {
 
   boolean homed = false;
 
-  boolean autoLocal = false;
-
   public RobotContainer() {
 
     switch (Robot.getMode()) {
@@ -423,8 +421,6 @@ public class RobotContainer {
                 Logger.recordOutput("autoramppos", autoRampPos);
 
                 Logger.recordOutput("WeightSize", DriveWeightCommand.getWeightsSize());
-
-                Logger.recordOutput("AutonLocalaligned", autoLocal);
 
                 Logger.recordOutput(
                     "DistFromTarget",
@@ -1036,10 +1032,5 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "WaitForLocal",
         new WaitCommand(0.1).andThen(new WaitUntilCommand(() -> localAlign.isReady())));
-  }
-
-  public boolean autoLocal() {
-    autoLocal = true;
-    return autoLocal;
   }
 }

@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
@@ -108,8 +109,9 @@ public class LocalTagAlignWeight implements DriveWeight {
   }
 
   public Command getAutoCommand() {
-    return new InstantCommand(
-            () -> driveCommandFactory.runVelocityCommand(() -> getSpeeds(), () -> true))
+    return driveCommandFactory
+        .runVelocityCommand(() -> getSpeeds(), () -> true)
+        .alongWith(new InstantCommand(() -> System.out.println("getAutoCommand is running")))
         .finallyDo(
             () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
   }

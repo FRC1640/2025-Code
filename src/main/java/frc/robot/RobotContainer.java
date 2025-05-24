@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -1027,10 +1028,10 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "LocalAlign",
-        new InstantCommand(() -> autoLocal())
-            .andThen(() -> localAlign.getAutoCommand())
-            .deadlineFor(autonAutoPlace(() -> coralPreset))
-            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
+        (new ProxyCommand(localAlign::getAutoCommand)) // it just explodes as soon as this happens?
+            .deadlineFor(autonAutoPlace(() -> coralPreset)) // this is not the problem
+            .until(
+                () -> localAlign.isAutoalignComplete() || !localAlign.isReady()) // never gets here
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
     NamedCommands.registerCommand(
         "WaitForLocal",

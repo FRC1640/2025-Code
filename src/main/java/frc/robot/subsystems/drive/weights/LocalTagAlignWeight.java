@@ -138,25 +138,4 @@ public class LocalTagAlignWeight implements DriveWeight {
   private boolean vectorDeadband(Translation2d vector) {
     return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.025;
   }
-
-  @Override
-  public double getWeightPersistent() {
-    double weight;
-    Optional<Translation2d> vector = AprilTagAlignHelper.getAverageLocalAlignVector(getTargetTagId(), visions);
-    if (vector.isPresent()) {
-      if (vector.get().getNorm() > AutoAlignConfig.reefAssistDistThresh) {
-        weight = 0;
-      } else {
-        double dist = vector.get().getNorm();
-        if (Math.abs(dist - AutoAlignConfig.reefAssistDistThresh) < 0.05) {
-          autoAlignHelper.resetLocalMotionProfile(vector.get(), driveSubsystem);
-        }
-        weight = ASSIST_THRESH_BASE / (Math.pow(dist, 2));
-      }
-    } else {
-      weight = 0;
-    }
-    Logger.recordOutput("LocalTagAlign/persistentWeight", weight);
-    return weight;
-  }
 }

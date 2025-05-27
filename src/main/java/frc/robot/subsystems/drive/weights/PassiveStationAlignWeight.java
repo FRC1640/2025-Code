@@ -43,7 +43,7 @@ public class PassiveStationAlignWeight implements DriveWeight {
   public ChassisSpeeds getSpeeds() {
     Pose2d target = getTarget();
     Pose2d robot = getRobotPose.get();
-    return autoAlignHelper.getPassiveStationSpeedsLine(robot, target, gyro);
+    return autoAlignHelper.getPassiveStationSpeedsXY(robot, target, gyro);
   }
 
   private Pose2d getTarget() {

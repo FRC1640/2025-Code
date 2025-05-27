@@ -15,59 +15,86 @@ import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * Utility class with helper methods for autoalign.
+ */
 public class AutoAlignHelper {
   SlewRateLimiter accel = new SlewRateLimiter(3);
 
-  // pose speeds line PIDs
-  PIDController linearDrivePid = RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID);
+  /* ---- linear align PIDs ---- */
+  /** Distance error control for linear align */
+  PIDController linearDrivePid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.linearDrivePID, "LinearAlignDrive");
+  /** Angle error control for linear align */
   PIDController linearRotatePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.rotateToAnglePIDRadians);
+      RobotPIDConstants.constructPID(
+          RobotPIDConstants.rotateToAnglePIDRadians, "LinearAlignRotate");
 
-  // local align PIDs
+  /* ---- local align PIDs ---- */
+  /** X-error control for late-stage local align */
   private PIDController localXPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignPID_x");
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignX");
+  /** Y-error control for late-stage local align */
   private PIDController localYPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignPID_y");
+      RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlign, "LocalAlignY");
+  /** Angle control for local align */
   private PIDController localThetaPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.localAnglePid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.localAnglePid, "LocalAlignTheta");
+  /** Profiled PID for early-stage local align */
   private ProfiledPIDController localDrivePpid =
       RobotPIDConstants.constructProfiledPIDController(
           RobotPIDConstants.localDriveProfiledPid,
           AutoAlignConfig.localAlignPpidConstraints,
-          "LocalAlignPPID");
-  // private PIDController localYLinearDrivePid =
-  //     RobotPIDConstants.constructPID(RobotPIDConstants.localTagAlignY);
+          "LocalAlignDrivePPID");
 
-  // passive align PIDs
+  /* ---- passive align PIDs ---- */
+  /** X-error control for passive align */
   private PIDController passiveXPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.passiveXPid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveXPid, "PassiveAlignX");
+  /** Y-error control for passive align */
   private PIDController passiveYPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.passiveYPid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveYPid, "PassiveAlignY");
+  /** Angle error control for passive align */
   private PIDController passiveThetaPid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.passiveThetaPid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveThetaPid, "PassiveAlignTheta");
+  /** Distance error control for passive align */
   private PIDController passiveDrivePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.passiveDrivePid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveDrivePid, "PassiveAlignDrive");
+  /** Secondary angle error control; tunable separately for greater freedom between XY and linear control. */
   private PIDController passiveRotatePid =
-      RobotPIDConstants.constructPID(RobotPIDConstants.passiveRotatePid);
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveRotatePid, "PassiveAlignRotate");
 
+  /** Constructs a new AutoAlignHelper with fresh PID controllers. */
   public AutoAlignHelper() {}
 
+  /**
+   * Converts robot-relative {@code ChassisSpeeds}
+   * to an equivalent field-centric measurement.
+   * 
+   * @param robotRelative Robot-relative speeds.
+   * @param gyro Gyro.
+   * @param robot Robot's pose. Only robot rotation
+   * is necessary for method function, so if only
+   * rotation is known, this can be passed to a
+   * new {@code Pose2d}.
+   * @return Equivalent field-relative {@code ChassisSpeeds.}
+   */
   private static ChassisSpeeds convertToFieldRelative(
-      ChassisSpeeds fieldRelative, Gyro gyro, Pose2d robot) {
+      ChassisSpeeds robotRelative, Gyro gyro, Pose2d robot) {
     Translation2d xy =
-        new Translation2d(fieldRelative.vxMetersPerSecond, fieldRelative.vyMetersPerSecond);
+        new Translation2d(robotRelative.vxMetersPerSecond, robotRelative.vyMetersPerSecond);
     Translation2d rotated =
         xy.rotateBy(
             new Rotation2d(
                     gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
                 .unaryMinus());
-    // Logger.recordOutput(
-    //     "A_DEBUG/speedConversionRotation",
-    //     new Rotation2d(
-    //             gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
-    //         .unaryMinus());
-    // Logger.recordOutput("A_DEBUG/gyroOffset", gyro.getOffset());
-    return new ChassisSpeeds(rotated.getX(), rotated.getY(), fieldRelative.omegaRadiansPerSecond);
+    /* Logger.recordOutput(
+        "A_DEBUG/speedConversionRotation",
+        new Rotation2d(
+                gyro.getOffset() - gyro.getRawAngleRadians() + robot.getRotation().getRadians())
+            .unaryMinus());
+    Logger.recordOutput("A_DEBUG/gyroOffset", gyro.getOffset()); */
+    return new ChassisSpeeds(rotated.getX(), rotated.getY(), robotRelative.omegaRadiansPerSecond);
   }
 
   // ---- Linear Align ---- //
@@ -160,9 +187,9 @@ public class AutoAlignHelper {
     // for angle control
     passiveThetaPid.enableContinuousInput(-Math.PI, Math.PI);
     // rotate axes
+    Rotation2d thetaFace = new Rotation2d(2 * Math.PI).minus(targetPose.getRotation());
     Translation2d delta = robotPose.minus(targetPose).getTranslation();
-    Translation2d deltaRotated =
-        delta.rotateBy(new Rotation2d(delta.getAngle().getRadians() - Math.PI / 4)); // TODO
+    Translation2d deltaRotated = delta.rotateBy(Rotation2d.kCW_Pi_2.minus(thetaFace).unaryMinus());
     // calculate outputs
     double vx = passiveXPid.calculate(deltaRotated.getX(), 0);
     double vy = passiveYPid.calculate(deltaRotated.getY(), 0);

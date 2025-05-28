@@ -187,9 +187,8 @@ public class AutoAlignHelper {
     // for angle control
     passiveThetaPid.enableContinuousInput(-Math.PI, Math.PI);
     // rotate axes
-    Rotation2d thetaFace = new Rotation2d(2 * Math.PI).minus(targetPose.getRotation());
     Translation2d delta = robotPose.minus(targetPose).getTranslation();
-    Translation2d deltaRotated = delta.rotateBy(Rotation2d.kCW_Pi_2.minus(thetaFace).unaryMinus());
+    Translation2d deltaRotated = delta.rotateBy(delta.getAngle());
     // calculate outputs
     double vx = passiveXPid.calculate(deltaRotated.getX(), 0);
     double vy = passiveYPid.calculate(deltaRotated.getY(), 0);

@@ -47,7 +47,7 @@ public class PassiveStationAlignWeight implements DriveWeight {
   }
 
   private Pose2d getTarget() {
-    return poseFunction == null
+    Pose2d target = poseFunction == null
         ? DistanceManager.getNearestPosition(
             getRobotPose.get(),
             AllianceManager.chooseFromAlliance(
@@ -57,6 +57,8 @@ public class PassiveStationAlignWeight implements DriveWeight {
             AllianceManager.chooseFromAlliance(
                 FieldConstants.coralStationPosBlue, FieldConstants.coralStationPosRed),
             poseFunction);
+    Logger.recordOutput("PassiveStationAlign/target", target);
+    return target;
   }
 
   @Override

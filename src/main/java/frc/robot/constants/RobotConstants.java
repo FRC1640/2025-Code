@@ -122,6 +122,9 @@ public class RobotConstants {
     // local align
     public static final Constraints localAlignPpidConstraints = new Constraints(2, 2.5);
     public static final double profiledDistThreshold = 0.4;
+
+    // passive align
+    public static final double stationAssistDistThresh = 1.5;
   }
 
   public static class DriveConstants {

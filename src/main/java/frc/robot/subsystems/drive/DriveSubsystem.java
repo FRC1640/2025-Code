@@ -184,7 +184,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void runVelocity(
-      ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel, BooleanSupplier limitSpeeds) {
+      ChassisSpeeds speeds, boolean fieldCentric, double dreamLevel) {
 
     double scale = 1;
     ChassisSpeeds percent =

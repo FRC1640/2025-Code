@@ -375,7 +375,7 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
-            driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
+            driveCommandFactory/*, () -> liftSubsystem.getMotorPosition() > 0.3 */));
 
     localAlign =
         new LocalTagAlignWeight(

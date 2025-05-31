@@ -75,7 +75,7 @@ public class PassiveStationAlignWeight implements DriveWeight {
             Math.PI / 2)) {
       weight = 0;
     } else {
-      weight = ASSIST_WEIGHT_BASE * (1 - 1 / (1 + Math.pow(Math.E, distance)));
+      weight = ASSIST_WEIGHT_BASE * (1 - 1 / (1 + Math.exp(distance)));
     }
     Logger.recordOutput("LocalTagAlign/persistentWeight", weight);
     return weight;

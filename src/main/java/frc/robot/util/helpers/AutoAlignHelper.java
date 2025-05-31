@@ -15,9 +15,7 @@ import frc.robot.sensors.gyro.Gyro;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import org.littletonrobotics.junction.Logger;
 
-/**
- * Utility class with helper methods for autoalign.
- */
+/** Utility class with helper methods for autoalign. */
 public class AutoAlignHelper {
   SlewRateLimiter accel = new SlewRateLimiter(3);
 
@@ -54,13 +52,19 @@ public class AutoAlignHelper {
   /** Y-error control for passive align */
   private PIDController passiveYPid =
       RobotPIDConstants.constructPID(RobotPIDConstants.passiveYPid, "PassiveAlignY");
+  /** Velocity dampening control for passive align. */
+  private PIDController passiveVelocityPid =
+      RobotPIDConstants.constructPID(RobotPIDConstants.passiveVelocityPid, "PassiveAlignVelocity");
   /** Angle error control for passive align */
   private PIDController passiveThetaPid =
       RobotPIDConstants.constructPID(RobotPIDConstants.passiveThetaPid, "PassiveAlignTheta");
   /** Distance error control for passive align */
   private PIDController passiveDrivePid =
       RobotPIDConstants.constructPID(RobotPIDConstants.passiveDrivePid, "PassiveAlignDrive");
-  /** Secondary angle error control; tunable separately for greater freedom between XY and linear control. */
+  /**
+   * Secondary angle error control; tunable separately for greater freedom between XY and linear
+   * control.
+   */
   private PIDController passiveRotatePid =
       RobotPIDConstants.constructPID(RobotPIDConstants.passiveRotatePid, "PassiveAlignRotate");
 
@@ -68,15 +72,12 @@ public class AutoAlignHelper {
   public AutoAlignHelper() {}
 
   /**
-   * Converts robot-relative {@code ChassisSpeeds}
-   * to an equivalent field-centric measurement.
-   * 
+   * Converts robot-relative {@code ChassisSpeeds} to an equivalent field-centric measurement.
+   *
    * @param robotRelative Robot-relative speeds.
    * @param gyro Gyro.
-   * @param robot Robot's pose. Only robot rotation
-   * is necessary for method function, so if only
-   * rotation is known, this can be passed to a
-   * new {@code Pose2d}.
+   * @param robot Robot's pose. Only robot rotation is necessary for method function, so if only
+   *     rotation is known, this can be passed to a new {@code Pose2d}.
    * @return Equivalent field-relative {@code ChassisSpeeds.}
    */
   private static ChassisSpeeds convertToFieldRelative(
@@ -190,15 +191,20 @@ public class AutoAlignHelper {
     Translation2d delta = robotPose.minus(targetPose).getTranslation();
     Translation2d deltaRotated = delta.rotateBy(delta.getAngle());
     // calculate outputs
-    double vx = passiveXPid.calculate(deltaRotated.getX(), 0);
-    double vy = passiveYPid.calculate(deltaRotated.getY(), 0);
+    double distance = robotPose.getTranslation().getDistance(targetPose.getTranslation());
+    // double vx = AutoAlignConfig.velocityScalar
+    // * (DriveConstants.maxSpeed
+    //     - (AutoAlignConfig.velocityStrength + 1)
+    //         * DriveConstants.maxSpeed
+    //         * (Math.exp(-AutoAlignConfig.velocityDamp * distance)));
+    double vy = passiveYPid.calculate(deltaRotated.getX(), 0);
     double vth =
         passiveThetaPid.calculate(
             robotPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
     // clamp within constraints
-    vx = MathUtil.clamp(vx, -1, 1);
-    vx = MathUtil.applyDeadband(vx, 0.01);
-    vx *= DriveConstants.maxSpeed;
+    // vx = MathUtil.clamp(vx, -1, 1);
+    // vx = MathUtil.applyDeadband(vx, 0.01);
+    // vx *= DriveConstants.maxSpeed;
 
     vy = MathUtil.clamp(vy, -1, 1);
     vy = MathUtil.applyDeadband(vy, 0.01);
@@ -207,8 +213,12 @@ public class AutoAlignHelper {
     vth = MathUtil.clamp(vth, -1, 1);
     vth = MathUtil.applyDeadband(vth, 0.01);
     vth *= DriveConstants.maxOmega;
+    // reverse axis rotation
+    Translation2d output = new Translation2d(0, vy);
+    Translation2d reversedRotate = output.rotateBy(delta.getAngle().unaryMinus());
     // convert chassis speeds
-    ChassisSpeeds robotRelative = new ChassisSpeeds(vx, vy, vth);
+    ChassisSpeeds robotRelative =
+        new ChassisSpeeds(reversedRotate.getX(), reversedRotate.getY(), vth);
     return convertToFieldRelative(robotRelative, gyro, robotPose);
   }
 

@@ -135,7 +135,8 @@ public class RobotPIDConstants {
   // local align xy constants
   public static final PIDConstants passiveXPid = new PIDConstants(0.75, 0, 0);
   public static final PIDConstants passiveYPid = new PIDConstants(4, 0, 0);
-  public static final PIDConstants passiveThetaPid = new PIDConstants(1.5, 0, 0);
+  public static final PIDConstants passiveVelocityPid = new PIDConstants(1, 0, 0);
+  public static final PIDConstants passiveThetaPid = new PIDConstants(3, 0, 0);
   public static final PIDConstants passiveDrivePid = new PIDConstants(2, 0, 0);
   public static final PIDConstants passiveRotatePid = new PIDConstants(1.5, 0, 0);
 }

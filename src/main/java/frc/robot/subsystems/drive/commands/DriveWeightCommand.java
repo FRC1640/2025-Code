@@ -6,7 +6,10 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -134,20 +137,26 @@ public class DriveWeightCommand {
 
   private static class DriveSpeedFilterer {
     private BooleanSupplier hasCoral;
-    private DoubleSupplier getCoralStationDistance;
+    private Supplier<Pose2d> getStationPose;
     private Supplier<Pose2d> getRobotPose;
 
     private DriveSpeedFilterer() {}
 
-    public void configure(BooleanSupplier hasCoral, DoubleSupplier getCoralStationDistance, Supplier<Pose2d> getRobotPose) {
+    public void configure(BooleanSupplier hasCoral, Supplier<Pose2d> getStationPose, Supplier<Pose2d> getRobotPose) {
       this.hasCoral = hasCoral;
-      this.getCoralStationDistance = getCoralStationDistance;
+      this.getStationPose = getStationPose;
       this.getRobotPose = getRobotPose;
     }
 
     public ChassisSpeeds restrictSpeeds(ChassisSpeeds speeds) {
+      
+    }
+
+    public boolean isStrafing(Rotation2d normal, ChassisSpeeds speeds, double threshold) {
       Translation2d velocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-      if (velocity.getAngle())
+      boolean strafing = Math.abs(velocity.getAngle().minus(normal).getRadians()) < threshold;
+      Logger.recordOutput("PassiveStationAlign/strafing", strafing);
+      return strafing;
     }
   }
 }

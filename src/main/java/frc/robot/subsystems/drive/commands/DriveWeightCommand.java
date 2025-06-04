@@ -1,30 +1,21 @@
 package frc.robot.subsystems.drive.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.constants.RobotConstants.AutoAlignConfig;
 import frc.robot.constants.RobotConstants.DriveConstants;
 import frc.robot.subsystems.drive.weights.DriveWeight;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveWeightCommand {
   static ArrayList<DriveWeight> persistentWeights = new ArrayList<>();
 
   static ArrayList<DriveWeight> weights = new ArrayList<>();
 
-  private static DriveSpeedFilterer filter = new DriveSpeedFilterer();
-
   public static Command create(DriveCommandFactory driveCommandFactory) {
-    filter.configure();
     Command c = driveCommandFactory.runVelocityCommand(() -> getAllSpeeds());
     return c;
   }
@@ -130,39 +121,5 @@ public class DriveWeightCommand {
 
   public static boolean checkWeight(DriveWeight weight) {
     return weights.contains(weight) || persistentWeights.contains(weight);
-  }
-
-  private static class DriveSpeedFilterer {
-    private BooleanSupplier hasCoral;
-    private Supplier<Pose2d> getStationPose;
-    private Supplier<Pose2d> getRobotPose;
-
-    private DriveSpeedFilterer() {}
-
-    public void configure(
-        BooleanSupplier hasCoral, Supplier<Pose2d> getStationPose, Supplier<Pose2d> getRobotPose) {
-      this.hasCoral = hasCoral;
-      this.getStationPose = getStationPose;
-      this.getRobotPose = getRobotPose;
-    }
-
-    public ChassisSpeeds restrictSpeeds(ChassisSpeeds speeds) {
-      Pose2d station = getStationPose.get();
-      Pose2d robot = getRobotPose.get();
-      double distance = robot.getTranslation().getDistance(station.getTranslation());
-      if (distance < AutoAlignConfig.stationAssistDistThresh
-          && !hasCoral.getAsBoolean()
-          && !isStrafing(station.getRotation(), speeds, Math.PI / 2)) {
-            
-      }
-    }
-
-    public boolean isStrafing(Rotation2d normal, ChassisSpeeds speeds, double threshold) {
-      Translation2d velocity =
-          new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-      boolean strafing = Math.abs(velocity.getAngle().minus(normal).getRadians()) < threshold;
-      Logger.recordOutput("PassiveStationAlign/strafing", strafing);
-      return strafing;
-    }
   }
 }

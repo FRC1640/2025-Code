@@ -159,5 +159,10 @@ public class AutoAlignHelper {
     return convertToFieldRelative(new ChassisSpeeds(x, y, rot), robotRotation);
   } */
 
-  
+  public static boolean isStrafing(Rotation2d normal, ChassisSpeeds speeds, double threshold) {
+    Translation2d velocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    boolean strafing = Math.abs(velocity.getAngle().minus(normal).getRadians()) < threshold;
+    Logger.recordOutput("PassiveStationAlign/strafing", strafing);
+    return strafing;
+  }
 }

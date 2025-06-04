@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -66,6 +67,7 @@ import frc.robot.subsystems.drive.commands.AutoScoringCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveCommandFactory;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.AntiTipWeight;
+import frc.robot.subsystems.drive.weights.DriveToPointWeight;
 import frc.robot.subsystems.drive.weights.DynamicAlignWeight;
 import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
@@ -92,7 +94,6 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
-import frc.robot.util.helpers.AutoAlignHelper;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
@@ -396,11 +397,20 @@ public class RobotContainer {
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
     passiveAssist =
         new PassiveAssistWeight(
-            null /* TODO */,
+            new DriveToPointWeight(
+                () -> RobotOdometry.instance.getPose("Main"),
+                () -> new Pose2d(new Translation2d(3, 3), new Rotation2d()),
+                gyro),
             () ->
-                coralOuttakeSubsystem.hasCoral()
-                    || AutoAlignHelper.isStrafing(
-                        target.getRotation(), driveSubsystem.getChassisSpeeds(), Math.PI / 2));
+                RobotOdometry.instance
+                    .getPose("Main")
+                    .getTranslation()
+                    .getDistance(new Translation2d(3, 3)),
+            () -> {
+              return coralOuttakeSubsystem.hasCoral();
+              /* || AutoAlignHelper.isStrafing(
+              target.getRotation(), driveSubsystem.getChassisSpeeds(), Math.PI / 2) */
+            }); // TODO
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

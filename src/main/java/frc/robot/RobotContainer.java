@@ -71,6 +71,7 @@ import frc.robot.subsystems.drive.weights.FollowPathDirect;
 import frc.robot.subsystems.drive.weights.FollowPathNearest;
 import frc.robot.subsystems.drive.weights.JoystickDriveWeight;
 import frc.robot.subsystems.drive.weights.LocalTagAlignWeight;
+import frc.robot.subsystems.drive.weights.PassiveAssistWeight;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.subsystems.gantry.GantryIO;
 import frc.robot.subsystems.gantry.GantryIOSim;
@@ -91,6 +92,7 @@ import frc.robot.util.alerts.AlertsManager;
 import frc.robot.util.controller.PresetBoard;
 import frc.robot.util.dashboard.Dashboard;
 import frc.robot.util.dashboard.PIDInfo.PIDCommandRegistry;
+import frc.robot.util.helpers.AutoAlignHelper;
 import frc.robot.util.logging.LogRunner;
 import frc.robot.util.misc.AllianceManager;
 import frc.robot.util.misc.DistanceManager;
@@ -153,6 +155,7 @@ public class RobotContainer {
   private FollowPathDirect followPathCoral;
   private LocalTagAlignWeight localAlign;
   private DynamicAlignWeight dynamicAlign;
+  private PassiveAssistWeight passiveAssist;
 
   private final JoystickDriveWeight joystickDriveWeight;
 
@@ -375,7 +378,7 @@ public class RobotContainer {
             .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
-            driveCommandFactory/*, () -> liftSubsystem.getMotorPosition() > 0.3 */));
+            driveCommandFactory /*, () -> liftSubsystem.getMotorPosition() > 0.3 */));
 
     localAlign =
         new LocalTagAlignWeight(
@@ -391,6 +394,13 @@ public class RobotContainer {
             visionArray);
 
     dynamicAlign = new DynamicAlignWeight(followPathReef, localAlign);
+    passiveAssist =
+        new PassiveAssistWeight(
+            null /* TODO */,
+            () ->
+                coralOuttakeSubsystem.hasCoral()
+                    || AutoAlignHelper.isStrafing(
+                        target.getRotation(), driveSubsystem.getChassisSpeeds(), Math.PI / 2));
 
     // winchSubsystem.setDefaultCommand(
     //     climberCommandFactory.winchApplyVoltageCommand(() -> -operatorController.getLeftY() *

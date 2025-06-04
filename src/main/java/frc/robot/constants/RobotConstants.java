@@ -124,7 +124,8 @@ public class RobotConstants {
     public static final double profiledDistThreshold = 0.4;
 
     // passive align
-    public static final double stationAssistDistThresh = 1.5;
+    public static final double passiveDistThresh = 1.5;
+    public static final double passiveWeightBase = 0.5;
   }
 
   public static class DriveConstants {

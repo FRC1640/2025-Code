@@ -126,6 +126,10 @@ public class RobotConstants {
     // passive align
     public static final double passiveDistThresh = 1.5;
     public static final double passiveWeightBase = 0.5;
+
+    public static final double velocityDamp = 0.7;
+    public static final double velocityScalar = 3.5;
+    public static final double velocityStrength = 2;
   }
 
   public static class DriveConstants {

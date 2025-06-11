@@ -9,6 +9,7 @@ import frc.robot.constants.RobotPIDConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import java.util.function.DoubleFunction;
 import java.util.function.Supplier;
+import frc.robot.constants.RobotConstants.AutoAlignConfig;
 
 public class StationControlWeight implements DriveWeight {
   private PIDController velocityController =
@@ -47,7 +48,7 @@ public class StationControlWeight implements DriveWeight {
   }
 
   private double getDesiredVelocity(double distance) {
-    
-    -\left(s+1\right)v_{max}e^{-cx}+v_{max}
+
+    -(s+1) * DriveConstants.maxSpeed * Math.exp(-) + vmax
   }
 }

@@ -243,27 +243,27 @@ public class RobotContainer {
         reefDetector =
             new ReefDetector(
                 RobotConfigConstants.reefDetectorEnabled
-                    ? new ReefDetectorIOSim(() -> presetBoard.getTrough())
+                    ? new ReefDetectorIOSim(presetBoard::getTrough)
                     : new ReefDetectorIO() {});
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(() -> simBoard.getLl2())
+                    ? new GantryIOSim(simBoard::getLl2)
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
                 RobotConfigConstants.liftSubsystemEnabled
-                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    ? new LiftIOSim(simBoard::getLl3)
                     : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
+                    ? new CoralOuttakeIOSim(simBoard::getRl2)
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim(() -> simBoard.getRl4())
+                    ? new ClimberIOSim(simBoard::getRl4)
                     : new ClimberIO() {});
         winchSubsystem =
             new WinchSubsystem(
@@ -271,7 +271,7 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled
-                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    ? new AlgaeIOSim(simBoard::getLl4)
                     : new AlgaeIO() {});
         break;
       default:
@@ -329,7 +329,7 @@ public class RobotContainer {
         new FollowPathNearest(
             () -> RobotOdometry.instance.getPose("Main"),
             gyro,
-            () -> chooseAlignPos(),
+            this::chooseAlignPos,
             AutoAlignConfig.pathConstraints,
             (x) ->
                 coralAdjust(

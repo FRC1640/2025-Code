@@ -129,4 +129,6 @@ public class RobotPIDConstants {
   // public static final PIDConstants localTagAlignY = new PIDConstants(0.25, 0, 0);
   public static final PIDConstants localAnglePid = new PIDConstants(0.85, 0, 0);
   public static final PIDConstants localDriveProfiledPid = new PIDConstants(0.5, 0, 0);
+
+  public static final PIDConstants velocityControlPid = new PIDConstants(1, 0, 0);
 }

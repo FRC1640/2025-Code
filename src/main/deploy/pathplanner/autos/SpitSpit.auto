@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLocal"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -21,6 +27,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {
@@ -99,9 +111,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "SpitProcess 3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLocal"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SpitProcess 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LocalAlign"
           }
         },
         {

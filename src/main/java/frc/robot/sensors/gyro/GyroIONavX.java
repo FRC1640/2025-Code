@@ -57,7 +57,7 @@ public class GyroIONavX implements GyroIO {
   @Override
   public void resetGyro(GyroIOInputs inputs) {
     rollOffset = inputs.roll.plus(new Rotation2d(rollOffset)).getRadians();
-    pitchOffset = inputs.pitch.plus(new Rotation2d(rollOffset)).getRadians();
+    pitchOffset = inputs.pitch.plus(new Rotation2d(pitchOffset)).getRadians();
     offset = inputs.angleRadiansRaw;
   }
 

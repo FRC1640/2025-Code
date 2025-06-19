@@ -119,15 +119,15 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
-  private final CommandXboxController pitController = new CommandXboxController(4);
+  // private final CommandXboxController pitController = new CommandXboxController(4);
 
   private final XboxController driveHID = driveController.getHID();
   private final XboxController opHID = operatorController.getHID();
 
   private final XboxController operatorControllerHID = operatorController.getHID();
   private final PresetBoard presetBoard = new PresetBoard(2);
-  private final PresetBoard simBoard = new PresetBoard(3);
-  private final PresetBoard motorBoard = new PresetBoard(5);
+  // private final PresetBoard simBoard = new PresetBoard(3);
+  // private final PresetBoard motorBoard = new PresetBoard(5);
 
   private final AlertsManager alertsManager;
 
@@ -249,22 +249,22 @@ public class RobotContainer {
         gantrySubsystem =
             new GantrySubsystem(
                 RobotConfigConstants.gantrySubsystemEnabled
-                    ? new GantryIOSim(() -> simBoard.getLl2())
+                    ? new GantryIOSim(() -> /*simBoard.getLl2()*/false)
                     : new GantryIO() {});
         liftSubsystem =
             new LiftSubsystem(
                 RobotConfigConstants.liftSubsystemEnabled
-                    ? new LiftIOSim(() -> simBoard.getLl3())
+                    ? new LiftIOSim(() -> /*simBoard.getLl3()*/false)
                     : new LiftIO() {});
         coralOuttakeSubsystem =
             new CoralOuttakeSubsystem(
                 RobotConfigConstants.coralOuttakeSubsystemEnabled
-                    ? new CoralOuttakeIOSim(() -> simBoard.getRl2())
+                    ? new CoralOuttakeIOSim(() -> /*simBoard.getRl2()*/false)
                     : new CoralOuttakeIO() {});
         climberSubsystem =
             new ClimberSubsystem(
                 RobotConfigConstants.climberSubsystemEnabled
-                    ? new ClimberIOSim(() -> simBoard.getRl4())
+                    ? new ClimberIOSim(() -> /*simBoard.getRl4(*/false)
                     : new ClimberIO() {});
         winchSubsystem =
             new WinchSubsystem(
@@ -272,7 +272,7 @@ public class RobotContainer {
         algaeIntakeSubsystem =
             new AlgaeSubsystem(
                 RobotConfigConstants.algaeIntakeEnabled
-                    ? new AlgaeIOSim(() -> simBoard.getLl4())
+                    ? new AlgaeIOSim(() -> /*simBoard.getLl4()*/false)
                     : new AlgaeIO() {});
         break;
       default:
@@ -317,8 +317,8 @@ public class RobotContainer {
     // Otherwise we wouldn't have a drive controller during the match
     joystickDriveWeight =
         new JoystickDriveWeight(
-            () -> -driveController.getLeftY() - 1 * pitController.getLeftY(),
-            () -> -driveController.getLeftX() - 1 * pitController.getLeftX(),
+            () -> -driveController.getLeftY(), //- 1 * pitController.getLeftY(),
+            () -> -driveController.getLeftX(), //- 1 * pitController.getLeftX(),
             () -> -driveController.getRightX(),
             driveController.rightBumper(),
             driveController.leftTrigger(),
@@ -760,18 +760,18 @@ public class RobotContainer {
                 .setSolenoidState(() -> true)
                 .andThen(algaeCommandFactory.processCommand()));
     // motor board
-    new Trigger(() -> motorBoard.getLl2())
-        .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
-    new Trigger(() -> motorBoard.getLl3())
-        .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
-    new Trigger(() -> motorBoard.getLl4())
-        .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
-    new Trigger(() -> motorBoard.getRl4())
-        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
-    new Trigger(() -> motorBoard.getRl3())
-        .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -1));
-    new Trigger(() -> motorBoard.getTrough())
-        .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
+    // new Trigger(() -> motorBoard.getLl2())
+    //     .whileTrue(liftCommandFactory.liftApplyVoltageCommand(() -> 2));
+    // new Trigger(() -> motorBoard.getLl3())
+    //     .whileTrue(gantryCommandFactory.gantryApplyVoltageCommand(() -> 1));
+    // new Trigger(() -> motorBoard.getLl4())
+    //     .whileTrue(coralOuttakeCommandFactory.setIntakeVoltage(() -> 4));
+    // new Trigger(() -> motorBoard.getRl4())
+    //     .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 10, () -> 10));
+    // new Trigger(() -> motorBoard.getRl3())
+    //     .whileTrue(climberCommandFactory.elevatorApplyVoltageCommand(() -> -1));
+    // new Trigger(() -> motorBoard.getTrough())
+    //     .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 
     new Trigger(operatorController.leftTrigger())
         .whileTrue(new InstantCommand(() -> algaeIntakeSubsystem.setHasAlgae(false)));
@@ -802,69 +802,69 @@ public class RobotContainer {
             new InstantCommand(() -> operatorControllerHID.setRumble(RumbleType.kBothRumble, 0)));
     mapPIDtoCommand();
     if (TestConfig.testingMode == TestingSetting.pit) {
-      configurePitBindings();
+      // configurePitBindings();
     } else {
       // put in TESTBOARD triggers here
     }
   }
 
-  private void configurePitBindings() {
-    new Trigger(() -> (pitController.getHID().getPOV() == 0))
-        .whileTrue(
-            climberCommandFactory.winchApplyVoltageCommand(
-                (pitController.getHID().getPOV() == 0 ? () -> -2.5 : () -> 2.5)));
-    new Trigger(() -> (pitController.getHID().getPOV() == 180))
-        .whileTrue(
-            climberCommandFactory.winchApplyVoltageCommand(
-                (pitController.getHID().getPOV() == 180 ? () -> 2.5 : () -> -2.5)));
+  // private void configurePitBindings() {
+    // new Trigger(() -> (pitController.getHID().getPOV() == 0))
+    //     .whileTrue(
+    //         climberCommandFactory.winchApplyVoltageCommand(
+    //             (pitController.getHID().getPOV() == 0 ? () -> -2.5 : () -> 2.5)));
+    // new Trigger(() -> (pitController.getHID().getPOV() == 180))
+    //     .whileTrue(
+    //         climberCommandFactory.winchApplyVoltageCommand(
+    //             (pitController.getHID().getPOV() == 180 ? () -> 2.5 : () -> -2.5)));
 
-    new Trigger(() -> pitController.getHID().getPOV() == 270)
-        .whileTrue(new InstantCommand(() -> autoRampPos = false));
-    new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
-        .whileTrue(
-            climberCommandFactory.elevatorApplyVoltageCommand(
-                () -> -pitController.getRightY() * 4));
-    pitController
-        .rightBumper()
-        .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
-    pitController
-        .leftBumper()
-        .whileTrue(
-            gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
-    pitController
-        .rightTrigger()
-        .and(() -> !algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)));
-    pitController
-        .leftTrigger()
-        .and(() -> algaeIntakeSubsystem.hasAlgae())
-        .whileTrue(
-            algaeCommandFactory
-                .setSolenoidState(() -> true)
-                .andThen(algaeCommandFactory.processCommand()));
-    pitController
-        .start()
-        .whileTrue(
-            new InstantCommand(() -> liftSubsystem.resetEncoder())
-                .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder()))
-                .alongWith(new InstantCommand(() -> autoRampPos = true)));
-    pitController
-        .b()
-        .whileTrue(
-            coralOuttakeCommandFactory
-                .outtake()
-                .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
-    pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
-    pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
-    pitController
-        .povRight()
-        .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
-    pitController.a().onTrue(setupAutoPlace(() -> coralPreset));
-    pitController.x().onTrue(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)));
-  }
+    // new Trigger(() -> pitController.getHID().getPOV() == 270)
+    //     .whileTrue(new InstantCommand(() -> autoRampPos = false));
+    // new Trigger(() -> Math.abs(pitController.getRightY()) > 0.03)
+    //     .whileTrue(
+    //         climberCommandFactory.elevatorApplyVoltageCommand(
+    //             () -> -pitController.getRightY() * 4));
+    // pitController
+    //     .rightBumper()
+    //     .whileTrue(gantryCommandFactory.gantrySetVelocityCommand(() -> GantryConstants.alignSpeed));
+    // pitController
+    //     .leftBumper()
+    //     .whileTrue(
+    //         gantryCommandFactory.gantrySetVelocityCommand(() -> -GantryConstants.alignSpeed));
+    // pitController
+    //     .rightTrigger()
+    //     .and(() -> !algaeIntakeSubsystem.hasAlgae())
+    //     .whileTrue(
+    //         algaeCommandFactory
+    //             .setSolenoidState(() -> true)
+    //             .andThen(algaeCommandFactory.setMotorVoltages(() -> 4, () -> 4)));
+    // pitController
+    //     .leftTrigger()
+    //     .and(() -> algaeIntakeSubsystem.hasAlgae())
+    //     .whileTrue(
+    //         algaeCommandFactory
+    //             .setSolenoidState(() -> true)
+    //             .andThen(algaeCommandFactory.processCommand()));
+    // pitController
+    //     .start()
+    //     .whileTrue(
+    //         new InstantCommand(() -> liftSubsystem.resetEncoder())
+    //             .alongWith(new InstantCommand(() -> climberSubsystem.resetEncoder()))
+    //             .alongWith(new InstantCommand(() -> autoRampPos = true)));
+    // pitController
+    //     .b()
+    //     .whileTrue(
+    //         coralOuttakeCommandFactory
+    //             .outtake()
+    //             .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false));
+    // pitController.y().and(() -> !coralOuttakeCommandFactory.outtaking).onTrue(runLiftToSafe());
+    // pitController.back().whileTrue(gantryCommandFactory.gantryHomeCommand());
+    // pitController
+    //     .povRight()
+    //     .onTrue(climberCommandFactory.setClampState(() -> !climberSubsystem.getSolenoidState()));
+    // pitController.a().onTrue(setupAutoPlace(() -> coralPreset));
+    // pitController.x().onTrue(new InstantCommand(() -> AntiTipWeight.setAntiTipEnabled(false)));
+  // }
 
   public Command getAutonomousCommand() {
     return homing()

@@ -514,12 +514,12 @@ public class RobotContainer {
     followPathCoral.generateTrigger(
         () -> driveHID.getLeftBumperButton() && !followPathCoral.isAutoalignComplete());
 
-    new Trigger(
-            () ->
-                coralOuttakeSubsystem.hasCoral()
-                    && coralOuttakeCommandFactory.ranBack
-                    && !coralOuttakeSubsystem.guillotineCheck())
-        .onTrue(setupAutoPlace(() -> CoralPreset.PreMove).onlyIf(() -> premoveLift));
+    // new Trigger(
+    //         () ->
+    //             coralOuttakeSubsystem.hasCoral()
+    //                 && coralOuttakeCommandFactory.ranBack
+    //                 && !coralOuttakeSubsystem.guillotineCheck())
+    //     .onTrue(setupAutoPlace(() -> CoralPreset.PreMove).onlyIf(() -> premoveLift));
 
     driveController.povDown().onTrue(new InstantCommand(() -> premoveLift = true));
     driveController.povUp().onTrue(new InstantCommand(() -> premoveLift = false));
@@ -869,7 +869,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return homing()
         .andThen(new InstantCommand(() -> autoRampPos = true))
-        .andThen(new InstantCommand(() -> premoveLift = true))
+        // .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();
   }

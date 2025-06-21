@@ -24,7 +24,7 @@
   "[java]": {
     "editor.tabSize": 2,
     "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "spotlessGradle.diagnostics.enable": true
+    "spotlessGradle.diagnostics.enable": false
   },
   "[json]": {
     "editor.tabSize": 2

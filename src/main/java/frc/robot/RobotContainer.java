@@ -872,7 +872,7 @@ public class RobotContainer {
         .andThen(new InstantCommand(() -> autoRampPos = true))
         // .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand())
-        .andThen(new InstantCommand(() -> Logger.recordOutput("AutoDone", true)));
+        .finallyDo(() -> Logger.recordOutput("AutoDone", true));
     // return new InstantCommand();
   }
 

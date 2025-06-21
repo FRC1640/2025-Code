@@ -1062,9 +1062,12 @@ public class RobotContainer {
         "LocalAlign",
         (localAlign
                 .getAutoCommand()
-                .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()))
+                .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
+                .finallyDo(() -> System.out.println("Finished local align in LocalAlign")))
             .asProxy()
-            .alongWith(autonAutoPlaceProxy(() -> coralPreset))
+            .alongWith(
+                autonAutoPlaceProxy(() -> coralPreset)
+                    .finallyDo(() -> System.out.println("Finished autonAutoPlace in LocalAlign")))
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
     NamedCommands.registerCommand(
         "WaitForLocal",

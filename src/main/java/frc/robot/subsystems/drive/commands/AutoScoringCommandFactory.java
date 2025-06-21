@@ -48,7 +48,7 @@ public class AutoScoringCommandFactory {
     return coralOuttakeCommandFactory
         .outtake()
         .repeatedly()
-        .until(() -> !coralOuttakeSubsystem.hasCoral())
+        .until(() -> /*!coralOuttakeSubsystem.hasCoral()*/ true)
         .andThen(coralOuttakeCommandFactory.outtake().repeatedly().withTimeout(0.3))
         .finallyDo(() -> coralOuttakeCommandFactory.outtaking = false);
   }

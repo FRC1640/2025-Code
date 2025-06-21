@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -928,8 +928,10 @@ public class RobotContainer {
             .handleInterrupt(() -> System.out.println("Lift interrupted in autonAutoPlace")))
         .asProxy()
         .alongWith(
-            autoScoringCommandFactory.gantryAlignCommand(
-                coralPreset, () -> RobotOdometry.instance.getPose("MainTrig")))
+            autoScoringCommandFactory
+                .gantryAlignCommand(coralPreset, () -> RobotOdometry.instance.getPose("MainTrig"))
+                .until(() -> gantrySubsystem.isAtPreset(coralPreset.get(), true))
+                .finallyDo(() -> System.out.println("Done aligning gantry in autonAutoPlaceProxy")))
         .alongWith(climberCommandFactory.setClampState(() -> false))
         .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck());
   }
@@ -1034,9 +1036,14 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "PassiveWaitForPreset",
         new WaitUntilCommand(
-            () ->
-                liftSubsystem.isAtPreset(
-                    algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift())));
+                () ->
+                    liftSubsystem.isAtPreset(
+                        algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
+            .deadlineFor(
+                new RunCommand(() -> System.out.println("Waiting in PassiveWaitForPreset...")))
+            .finallyDo(
+                () ->
+                    System.out.println("Command finished or interrupted in PassiveWaitForPreset")));
     NamedCommands.registerCommand(
         "AutoReef",
         new WaitCommand(0)
@@ -1053,8 +1060,10 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "LocalAlign",
-        (new ProxyCommand(localAlign::getAutoCommand))
-            .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
+        (localAlign
+                .getAutoCommand()
+                .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()))
+            .asProxy()
             .alongWith(autonAutoPlaceProxy(() -> coralPreset))
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
     NamedCommands.registerCommand(

@@ -869,7 +869,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return homing()
-        .andThen(new InstantCommand(() -> autoRampPos = true))
+        // .andThen(new InstantCommand(() -> autoRampPos = true))
         // .andThen(new InstantCommand(() -> premoveLift = true))
         .andThen(dashboard.getAutoChooserCommand());
     // return new InstantCommand();

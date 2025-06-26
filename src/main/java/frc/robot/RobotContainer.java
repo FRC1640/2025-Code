@@ -922,18 +922,24 @@ public class RobotContainer {
   }
 
   public Command autonAutoPlaceProxy(Supplier<CoralPreset> coralPreset) {
-    return (liftCommandFactory
-            .runLiftMotionProfile(
-                () -> algaeMode ? coralPreset.get().getLiftAlgae() : coralPreset.get().getLift())
-            .handleInterrupt(() -> System.out.println("Lift interrupted in autonAutoPlace")))
-        .asProxy()
+    return (new InstantCommand(
+            () ->
+                liftCommandFactory
+                    .runLiftMotionProfile(
+                        () ->
+                            algaeMode
+                                ? coralPreset.get().getLiftAlgae()
+                                : coralPreset.get().getLift())
+                    .handleInterrupt(() -> System.out.println("Lift interrupted in autonAutoPlace"))
+                    .schedule()))
         .alongWith(
             autoScoringCommandFactory
                 .gantryAlignCommand(coralPreset, () -> RobotOdometry.instance.getPose("MainTrig"))
                 .until(() -> gantrySubsystem.isAtPreset(coralPreset.get(), true))
                 .finallyDo(() -> System.out.println("Done aligning gantry in autonAutoPlaceProxy")))
         .alongWith(climberCommandFactory.setClampState(() -> false))
-        .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck());
+        .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck())
+        .finallyDo(() -> System.out.println("Finished autonAutoPlaceProxy"));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -1068,7 +1074,8 @@ public class RobotContainer {
             .alongWith(
                 autonAutoPlaceProxy(() -> coralPreset)
                     .finallyDo(() -> System.out.println("Finished autonAutoPlace in LocalAlign")))
-            .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds()))));
+            .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds())))
+            .finallyDo(() -> System.out.println("Finished LocalAlign")));
     NamedCommands.registerCommand(
         "WaitForLocal",
         new WaitCommand(0.1).andThen(new WaitUntilCommand(() -> localAlign.isReady())));

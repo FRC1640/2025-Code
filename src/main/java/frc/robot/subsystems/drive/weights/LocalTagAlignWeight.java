@@ -131,13 +131,17 @@ public class LocalTagAlignWeight implements DriveWeight {
                           .toRotation2d()
                           .minus(Rotation2d.kPi)
                           .getRadians()));
-      return vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
+      boolean complete =  vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
+      Logger.recordOutput("LocalTagAlign/isAlignComplete", complete);
+      return complete;
     } else {
       return false;
     }
   }
 
   private boolean vectorDeadband(Translation2d vector) {
+    Logger.recordOutput("LocalTagAlign/vectorX", vector.getX());
+    Logger.recordOutput("LocalTagAlign/vectorY", vector.getY());
     return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.025;
   }
 }

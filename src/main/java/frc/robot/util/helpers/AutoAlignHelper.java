@@ -93,7 +93,7 @@ public class AutoAlignHelper {
     Rotation2d angle = vector.minus(target).getAngle();
     // calculate output
 
-    Logger.recordOutput("localaligndist", dist);
+    Logger.recordOutput("LocalTagAlign/localaligndist", dist);
     double vx =
         (dist < 0.14
             ? -localDrivePid_x.calculate(vector.getX(), 0)

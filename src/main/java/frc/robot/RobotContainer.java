@@ -365,7 +365,7 @@ public class RobotContainer {
     new Trigger(() -> Robot.getState() == RobotState.TELEOP && !homed).onTrue(homing());
 
     winchSubsystem.setDefaultCommand(
-        climberCommandFactory.setWinchPosPID(() -> 349).onlyIf(() -> autoRampPos).repeatedly());
+        climberCommandFactory.setWinchPosPID(() -> 351).onlyIf(() -> autoRampPos).repeatedly());
 
     climberSubsystem.setDefaultCommand(
         climberCommandFactory.setElevatorPosPID(() -> -5.8).onlyIf(() -> autoRampPos).repeatedly());
@@ -930,16 +930,16 @@ public class RobotContainer {
                             algaeMode
                                 ? coralPreset.get().getLiftAlgae()
                                 : coralPreset.get().getLift())
-                    .handleInterrupt(() -> System.out.println("Lift interrupted in autonAutoPlace"))
+                    .handleInterrupt(() -> Logger.recordOutput("AutoDebug", "Lift interrupted in autonAutoPlace"))
                     .schedule()))
         .alongWith(
             autoScoringCommandFactory
                 .gantryAlignCommand(coralPreset, () -> RobotOdometry.instance.getPose("MainTrig"))
                 .until(() -> gantrySubsystem.isAtPreset(coralPreset.get(), true))
-                .finallyDo(() -> System.out.println("Done aligning gantry in autonAutoPlaceProxy")))
+                .finallyDo(() -> Logger.recordOutput("AutoDebug", "Done aligning gantry in autonAutoPlaceProxy")))
         .alongWith(climberCommandFactory.setClampState(() -> false))
         .onlyIf(() -> !coralOuttakeSubsystem.guillotineCheck())
-        .finallyDo(() -> System.out.println("Finished autonAutoPlaceProxy"));
+        .finallyDo(() -> Logger.recordOutput("AutoDebug", "Finished autonAutoPlaceProxy"));
   }
 
   public Command setupAutoPlace(Supplier<CoralPreset> coralPreset) {
@@ -1046,10 +1046,10 @@ public class RobotContainer {
                     liftSubsystem.isAtPreset(
                         algaeMode ? coralPreset.getLiftAlgae() : coralPreset.getLift()))
             .deadlineFor(
-                new RunCommand(() -> System.out.println("Waiting in PassiveWaitForPreset...")))
+                new RunCommand(() -> Logger.recordOutput("AutoDebug", "Waiting in PassiveWaitForPreset...")))
             .finallyDo(
                 () ->
-                    System.out.println("Command finished or interrupted in PassiveWaitForPreset")));
+                    Logger.recordOutput("AutoDebug", "Command finished or interrupted in PassiveWaitForPreset")));
     NamedCommands.registerCommand(
         "AutoReef",
         new WaitCommand(0)
@@ -1068,14 +1068,14 @@ public class RobotContainer {
         "LocalAlign",
         (localAlign
                 .getAutoCommand()
-                .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady())
-                .finallyDo(() -> System.out.println("Finished local align in LocalAlign")))
+                .until(() -> localAlign.isAutoalignComplete() || !localAlign.isReady()) // TODO isready check could be better
+                .finallyDo(() -> Logger.recordOutput("AutoDebug", "Finished local align in LocalAlign")))
             .asProxy()
-            .alongWith(
-                autonAutoPlaceProxy(() -> coralPreset)
-                    .finallyDo(() -> System.out.println("Finished autonAutoPlace in LocalAlign")))
+            // .alongWith(
+            //     autonAutoPlaceProxy(() -> coralPreset)
+            //         .finallyDo(() -> Logger.recordOutput("AutoDebug", "Finished autonAutoPlace in LocalAlign")))
             .alongWith(new InstantCommand(() -> PathplannerWeight.setSpeeds(new ChassisSpeeds())))
-            .finallyDo(() -> System.out.println("Finished LocalAlign")));
+            .finallyDo(() -> Logger.recordOutput("AutoDebug", "Finished LocalAlign")));
     NamedCommands.registerCommand(
         "WaitForLocal",
         new WaitCommand(0.1).andThen(new WaitUntilCommand(() -> localAlign.isReady())));

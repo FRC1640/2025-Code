@@ -30,27 +30,53 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "LocalAlign"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         },
         {
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -60,16 +86,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
+                  "name": "SafeProxy"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {
@@ -105,27 +125,53 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "LocalAlign"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         },
         {
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForCoral"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -139,12 +185,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForCoral"
           }
         },
         {
@@ -180,21 +220,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "LocalAlign"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         }
       ]

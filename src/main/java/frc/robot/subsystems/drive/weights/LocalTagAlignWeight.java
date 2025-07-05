@@ -131,7 +131,7 @@ public class LocalTagAlignWeight implements DriveWeight {
                           .toRotation2d()
                           .minus(Rotation2d.kPi)
                           .getRadians()));
-      boolean complete =  vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
+      boolean complete = vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
       Logger.recordOutput("LocalTagAlign/isAlignComplete", complete);
       return complete;
     } else {

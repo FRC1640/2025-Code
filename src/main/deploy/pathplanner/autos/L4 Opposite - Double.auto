@@ -181,7 +181,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
+                  "name": "SafeProxy"
                 }
               }
             ]

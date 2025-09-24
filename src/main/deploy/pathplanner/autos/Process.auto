@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLocal"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -24,19 +30,7 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -46,13 +40,19 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "SetModeAlgae"
+                        "name": "LocalAlign"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "SetupL2"
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
                       }
                     }
                   ]
@@ -61,7 +61,26 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "WaitForPreset"
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetModeAlgae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetupL2"
                 }
               }
             ]
@@ -70,7 +89,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoReef"
+            "name": "RunToPresetProxy"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PassiveWaitForPreset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReefNoLift"
           }
         },
         {

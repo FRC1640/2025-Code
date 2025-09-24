@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.FieldConstants;
 import frc.robot.sensors.apriltag.AprilTagVision;
 import frc.robot.sensors.gyro.Gyro;
@@ -101,12 +103,15 @@ public class LocalTagAlignWeight implements DriveWeight {
               && Math.abs((robotRotation.get().minus(new Rotation2d(goalAngle))).getDegrees()) < 15;
     }
     Logger.recordOutput("LocalTagAlign/isAlignReady", ready);
+    Logger.recordOutput(
+        "LocalTagAlign/vectorNorm", vector.isPresent() ? vector.get().getNorm() : -1);
     return ready;
   }
 
   public Command getAutoCommand() {
     return driveCommandFactory
         .runVelocityCommand(() -> getSpeeds(), () -> true)
+        .alongWith(new InstantCommand(() -> System.out.println("getAutoCommand is running")))
         .finallyDo(
             () -> driveCommandFactory.runVelocityCommand(() -> new ChassisSpeeds(), () -> true));
   }
@@ -126,13 +131,17 @@ public class LocalTagAlignWeight implements DriveWeight {
                           .toRotation2d()
                           .minus(Rotation2d.kPi)
                           .getRadians()));
-      return vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
+      boolean complete = vectorDeadband(vector.get()) && Math.abs(rotationError.getDegrees()) < 3;
+      Logger.recordOutput("LocalTagAlign/isAlignComplete", complete);
+      return complete;
     } else {
       return false;
     }
   }
 
   private boolean vectorDeadband(Translation2d vector) {
+    Logger.recordOutput("LocalTagAlign/vectorX", vector.getX());
+    Logger.recordOutput("LocalTagAlign/vectorY", vector.getY());
     return Math.abs(vector.getX()) < 0.025 && Math.abs(vector.getY()) < 0.025;
   }
 }

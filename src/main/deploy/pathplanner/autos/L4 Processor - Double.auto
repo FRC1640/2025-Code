@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitForLocal"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -24,15 +30,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,7 +86,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
+                  "name": "SafeProxy"
                 }
               }
             ]
@@ -65,9 +97,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "deadline",
                 "data": {
-                  "pathName": "L4 Processor 3 - Double"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "L4 Processor 3 - Double"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -80,15 +125,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         },
         {
@@ -110,7 +181,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Safe"
+                  "name": "SafeProxy"
                 }
               }
             ]
@@ -121,30 +192,69 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "deadline",
                 "data": {
-                  "name": "RunBackCoral"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitForLocal"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "L4 Processor 5 - Double"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "L4 Processor 5 - Double"
+                  "name": "RunBackCoral"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "WaitForPreset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReef"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LocalAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PassiveWaitForPreset"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoReefNoLift"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunToPresetProxy"
+                }
+              }
+            ]
           }
         }
       ]

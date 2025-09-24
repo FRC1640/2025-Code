@@ -19,7 +19,6 @@ import frc.robot.constants.RobotConstants.TestConfig;
 import frc.robot.subsystems.drive.commands.DriveWeightCommand;
 import frc.robot.subsystems.drive.weights.PathplannerWeight;
 import frc.robot.util.dashboard.Dashboard;
-import frc.robot.util.logging.LoggerManager;
 import frc.robot.util.periodic.PeriodicScheduler;
 import frc.robot.util.robotswitch.RobotSwitchManager.RobotType;
 import java.net.InetAddress;
@@ -132,9 +131,18 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
+    // long time0 = System.nanoTime();
     CommandScheduler.getInstance().run();
+    // long time1 = System.nanoTime();
     PeriodicScheduler.getInstance().run();
-    LoggerManager.updateLog();
+    // long time2 = System.nanoTime();
+    // LoggerManager.updateLog();
+    // long time3 = System.nanoTime();
+    // if (time3 - time0 > 15000000) {
+    //   System.out.println("Command scheduler time: " + (time1 - time0));
+    //   System.out.println("Periodic scheduler time: " + (time2 - time1));
+    //   System.out.println("Logger manager time: " + (time3 - time2));
+    // }
   }
 
   @Override

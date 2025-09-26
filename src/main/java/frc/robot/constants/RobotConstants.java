@@ -430,13 +430,13 @@ public class RobotConstants {
   public static class AlgaeConstants {
     public static final int motorLeftChannel = new RobotSwitch<Integer>(11).get();
     public static final int motorRightChannel = new RobotSwitch<Integer>(12).get();
-    public static final int solenoidChannelForward = 0;
-    public static final int solenoidChannelReverse = 1;
+    public static final int solenoidChannelForward = 4;
+    public static final int solenoidChannelReverse = 5;
     public static final double passiveSpeed = 0.1;
     public static final double highSpeed = 0.7;
     public static final double gearRatio = 1;
-    public static final double currentThresh = 22; // for the EMA
-    public static final double emaSmoothing = 8;
-    public static final double emaPeriod = 21; // number of periods to calculate EMA over
+    public static final double currentThresh = 20; // for the EMA
+    public static final double emaSmoothing = 5;
+    public static final double emaPeriod = 12; // number of periods to calculate EMA over
   }
 }

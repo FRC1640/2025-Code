@@ -57,7 +57,8 @@ public class AlgaeCommandFactory {
 
   public Command manualOuttakeCommand() {
     Command c = setSolenoidState(() -> true)
-      .andThen(setMotorVoltages(() -> -5, () -> -5));
+      .andThen(new RunCommand(() -> algaeSubsystem.setVoltage(-5, -5), algaeSubsystem)
+        .finallyDo(() -> algaeSubsystem.setVoltage(0, 0)));
     c.setName("ManualAlgaeOuttake");
     return c;
   }

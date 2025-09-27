@@ -434,7 +434,7 @@ public class RobotContainer {
                 Logger.recordOutput("target", getTarget());
                 Logger.recordOutput("AlgaeCommand",
                   algaeIntakeSubsystem.getCurrentCommand() != null
-                    ? algaeIntakeSubsystem.getCurrentCommand().toString()
+                    ? algaeIntakeSubsystem.getCurrentCommand().getName()
                     : "");
               }
             });

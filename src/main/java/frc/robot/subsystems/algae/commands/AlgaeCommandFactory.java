@@ -48,8 +48,10 @@ public class AlgaeCommandFactory {
   }
 
   public Command manualOuttakeCommand() {
-    return setSolenoidState(() -> true)
+    Command c = setSolenoidState(() -> true)
       .andThen(setMotorVoltages(() -> -5, () -> -5));
+    c.setName("ManualAlgaeOuttake");
+    return c;
   }
 
   public Command manualPassiveCommand() {

@@ -790,8 +790,8 @@ public class RobotContainer {
     // new Trigger(() -> motorBoard.getTrough())
     //     .onTrue(new InstantCommand(() -> liftSubsystem.resetEncoder()));
 
-    new Trigger(operatorController.leftTrigger())
-        .whileTrue(new InstantCommand(() -> algaeIntakeSubsystem.setHasAlgae(false)));
+    // new Trigger(operatorController.leftTrigger())
+    //     .whileTrue(new InstantCommand(() -> algaeIntakeSubsystem.setHasAlgae(false)));
 
     // climber button bindings:
     operatorController

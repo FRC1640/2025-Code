@@ -16,16 +16,20 @@ public class AlgaeCommandFactory {
   }
 
   public Command setMotorVoltages(DoubleSupplier leftVoltage, DoubleSupplier rightVoltage) {
-    return new RunCommand(
+    Command c = new RunCommand(
             () -> {
               algaeSubsystem.setVoltage(leftVoltage.getAsDouble(), rightVoltage.getAsDouble());
             }, algaeSubsystem)
         .finallyDo(() -> algaeSubsystem.setVoltage(0, 0));
+    c.setName("AlgaeSetMotorVoltages");
+    return c;
   }
 
   public Command setSolenoidState(BooleanSupplier state) {
-    return new InstantCommand(
+    Command c = new InstantCommand(
         () -> algaeSubsystem.setSolenoid(state.getAsBoolean()), algaeSubsystem);
+    c.setName("SetSolenoidState");
+    return c;
   }
 
   public Command algaePassiveCommand() {
@@ -37,14 +41,18 @@ public class AlgaeCommandFactory {
   }
 
   public Command processCommand() {
-    return setMotorVoltages(() -> -5, () -> -5)
+    Command c = setMotorVoltages(() -> -5, () -> -5)
         .repeatedly()
         .until(() -> !algaeSubsystem.hasAlgae());
+    c.setName("ProcessCommand");
+    return c;
   }
 
   public Command manualIntakeCommand() {
-    return setSolenoidState(() -> true)
+    Command c = setSolenoidState(() -> true)
       .andThen(setMotorVoltages(() -> 4, () -> 4));
+    c.setName("ManualAlgaeIntake");
+    return c;
   }
 
   public Command manualOuttakeCommand() {
@@ -55,10 +63,14 @@ public class AlgaeCommandFactory {
   }
 
   public Command manualPassiveCommand() {
-    return setMotorVoltages(() -> 1, () -> 1);
+    Command c = setMotorVoltages(() -> 1, () -> 1);
+    c.setName("ManualAlgaePassive");
+    return c;
   }
 
   public Command manualStowCommand() {
-    return setSolenoidState(() -> false);
+    Command c = setSolenoidState(() -> false);
+    c.setName("ManualAlgaeStow");
+    return c;
   }
 }

@@ -376,7 +376,7 @@ public class RobotContainer {
     //     algaeCommandFactory
     //         .setSolenoidState(() -> false)
     //         .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
-    // algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.manualPassiveCommand());
+    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.manualPassiveCommand());
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
@@ -569,8 +569,8 @@ public class RobotContainer {
     new Trigger(() -> presetBoard.povIsDownwards())
         .onTrue(new InstantCommand(() -> algaeMode = false));
 
-    new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
-        .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
+    // new Trigger(() -> algaeIntakeSubsystem.hasAlgae() && Robot.getState() != RobotState.AUTONOMOUS)
+    //     .whileTrue(algaeCommandFactory.setMotorVoltages(() -> 0.5, () -> 0.5));
 
     // new Trigger(
     //         () ->

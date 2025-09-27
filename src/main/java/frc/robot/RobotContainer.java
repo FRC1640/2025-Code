@@ -376,7 +376,7 @@ public class RobotContainer {
     //     algaeCommandFactory
     //         .setSolenoidState(() -> false)
     //         .onlyIf(() -> !algaeIntakeSubsystem.hasAlgae()));
-    algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.manualPassiveCommand());
+    // algaeIntakeSubsystem.setDefaultCommand(algaeCommandFactory.manualPassiveCommand());
     driveSubsystem.setDefaultCommand(
         DriveWeightCommand.create(
             driveCommandFactory, () -> liftSubsystem.getMotorPosition() > 0.3));
